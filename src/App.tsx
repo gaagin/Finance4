@@ -921,6 +921,7 @@ export default function App() {
               onClearPreselectedDate={() => setPreselectedDate(null)}
               editingTransaction={editingTransaction}
               onCancelEditing={() => setEditingTransaction(null)}
+              onAddTransfer={handleAddTransfer}
             />
           )}
 

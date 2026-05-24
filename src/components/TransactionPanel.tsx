@@ -16,6 +16,13 @@ interface TransactionPanelProps {
   onClearPreselectedDate?: () => void;
   editingTransaction?: Transaction | null;
   onCancelEditing?: () => void;
+  onAddTransfer?: (transfer: {
+    fromAccountId: string;
+    toAccountId: string;
+    amount: number;
+    description: string;
+    date: string;
+  }) => void;
 }
 
 export function TransactionPanel({
@@ -29,13 +36,16 @@ export function TransactionPanel({
   preselectedDate = null,
   onClearPreselectedDate,
   editingTransaction = null,
-  onCancelEditing
+  onCancelEditing,
+  onAddTransfer
 }: TransactionPanelProps) {
   
   // New Quick Add Transaction state
   const [amount, setAmount] = useState('');
   const [type, setType] = useState<TransactionType>('expense');
+  const [activeFormType, setActiveFormType] = useState<'expense' | 'income' | 'transfer'>('expense');
   const [accountId, setAccountId] = useState('');
+  const [toAccountId, setToAccountId] = useState('');
   const [categoryId, setCategoryId] = useState('');
   const [date, setDate] = useState('2026-05-23'); // Default lock to 23 May 2026
   const [description, setDescription] = useState('');
@@ -104,47 +114,80 @@ export function TransactionPanel({
     if (preselectedDate) {
       setDate(preselectedDate);
       // Pick first account and category as default
-      if (accounts.length > 0) setAccountId(accounts[0].id);
+      if (accounts.length > 0) {
+        setAccountId(accounts[0].id);
+        if (accounts.length > 1) setToAccountId(accounts[1].id);
+      }
       const options = categories.filter(c => c.type === type);
       if (options.length > 0) setCategoryId(options[0].id);
       setCardId(undefined);
     } else {
       // Setup default form
-      if (accounts.length > 0 && !accountId) setAccountId(accounts[0].id);
+      if (accounts.length > 0 && !accountId) {
+        setAccountId(accounts[0].id);
+        if (accounts.length > 1 && !toAccountId) setToAccountId(accounts[1].id);
+      }
       const options = categories.filter(c => c.type === type);
       if (options.length > 0 && !categoryId) setCategoryId(options[0].id);
       setCardId(undefined);
     }
   }, [preselectedDate]);
 
-  // Handle changing Transaction Type within the creation form (switches suitable categories)
-  const handleFormTypeChange = (newType: TransactionType) => {
-    setType(newType);
-    const filteredCats = categories.filter(c => c.type === newType);
-    if (filteredCats.length > 0) {
-      setCategoryId(filteredCats[0].id);
-    } else {
-      setCategoryId('');
+  // Handle changing Active Form Type within the creation form (switches suitable categories or updates form layout)
+  const handleFormActiveTypeChange = (newType: 'expense' | 'income' | 'transfer') => {
+    setActiveFormType(newType);
+    if (newType !== 'transfer') {
+      setType(newType);
+      const filteredCats = categories.filter(c => c.type === newType);
+      if (filteredCats.length > 0) {
+        setCategoryId(filteredCats[0].id);
+      } else {
+        setCategoryId('');
+      }
     }
   };
 
   // Submission handler
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!amount || isNaN(Number(amount)) || Number(amount) <= 0 || !accountId || !categoryId || !date) {
-      alert('Пожалуйста, заполните необходимые поля корректными значениями.');
-      return;
-    }
 
-    onAddTransaction({
-      accountId,
-      categoryId,
-      amount: Number(amount),
-      type,
-      date,
-      description: description.trim(),
-      cardId: cardId || undefined
-    });
+    if (activeFormType === 'transfer') {
+      if (!amount || isNaN(Number(amount)) || Number(amount) <= 0 || !accountId || !toAccountId || !date) {
+        alert('Пожалуйста, заполните необходимые поля корректными значениями.');
+        return;
+      }
+      if (accountId === toAccountId) {
+        alert('Счет списания и счет зачисления не могут совпадать.');
+        return;
+      }
+      if (onAddTransfer) {
+        onAddTransfer({
+          fromAccountId: accountId,
+          toAccountId,
+          amount: Number(amount),
+          description: description.trim() || 'Перевод между счетами',
+          date
+        });
+      } else {
+        alert('Функция перевода временно недоступна.');
+        return;
+      }
+    } else {
+      if (!amount || isNaN(Number(amount)) || Number(amount) <= 0 || !accountId || !categoryId || !date) {
+        alert('Пожалуйста, заполните необходимые поля корректными значениями.');
+        return;
+      }
+
+      onAddTransaction({
+        accountId,
+        categoryId,
+        amount: Number(amount),
+        type,
+        date,
+        description: description.trim(),
+        cardId: cardId || undefined
+      });
+    }
 
     // Reset Form
     setAmount('');
@@ -286,13 +329,13 @@ export function TransactionPanel({
 
         <form onSubmit={handleFormSubmit} className="space-y-4">
           
-          {/* Inc / Exp selector segment */}
+          {/* Inc / Exp / Transfer selector segment */}
           <div className="flex bg-slate-900/60 p-1 rounded-xl border border-white/10">
             <button
               type="button"
-              onClick={() => handleFormTypeChange('expense')}
-              className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
-                type === 'expense'
+              onClick={() => handleFormActiveTypeChange('expense')}
+              className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1 cursor-pointer ${
+                activeFormType === 'expense'
                   ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30 shadow-xs'
                   : 'text-slate-400 hover:text-white'
               }`}
@@ -302,15 +345,27 @@ export function TransactionPanel({
             </button>
             <button
               type="button"
-              onClick={() => handleFormTypeChange('income')}
-              className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
-                type === 'income'
+              onClick={() => handleFormActiveTypeChange('income')}
+              className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1 cursor-pointer ${
+                activeFormType === 'income'
                   ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 shadow-xs'
                   : 'text-slate-400 hover:text-white'
               }`}
             >
               <ArrowUpRight size={13} />
               Доход
+            </button>
+            <button
+              type="button"
+              onClick={() => handleFormActiveTypeChange('transfer')}
+              className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1 cursor-pointer ${
+                activeFormType === 'transfer'
+                  ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30 shadow-xs'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <ArrowUpDown size={13} />
+              Перевод
             </button>
           </div>
 
@@ -336,11 +391,11 @@ export function TransactionPanel({
             </div>
           </div>
 
-          {/* Account select */}
+          {/* Account select (Source Dev/Inc/Out) */}
           <div>
-            <label className="block text-[11px] font-semibold text-slate-400 mb-1 uppercase tracking-wider flex items-center gap-1.5 select-none">
-              <CreditCard size={12} />
-              Счет списания/внесения
+            <label className="block text-[11px] font-semibold text-slate-400 mb-1 uppercase tracking-wider flex items-center gap-1.5 select-none text-left">
+              <CreditCard size={12} className={activeFormType === 'transfer' ? 'text-amber-450' : ''} />
+              {activeFormType === 'transfer' ? 'Счет списания (Откуда)' : 'Счет списания/внесения'}
             </label>
             <SearchableSelect
               items={accounts}
@@ -362,50 +417,80 @@ export function TransactionPanel({
             />
           </div>
 
-          {/* Category select */}
-          <div>
-            <label className="block text-[11px] font-semibold text-slate-400 mb-1 uppercase tracking-wider flex items-center gap-1.5 select-none">
-              <Tag size={12} />
-              Категория
-            </label>
-            <SearchableSelect
-              items={categories.filter(c => c.type === type)}
-              value={categoryId}
-              onChange={(id) => setCategoryId(id)}
-              placeholder="Выберите категорию..."
-              searchPlaceholder="Поиск категории..."
-              idKey="id"
-              displayValue={(cat) => (
-                <div className="flex items-center gap-2">
-                  <div
-                    className="w-4 h-4 rounded-sm flex items-center justify-center shrink-0"
-                    style={{ backgroundColor: cat.color }}
-                  >
-                    <span className="text-[10px] text-white">
-                      <IconComponent name={cat.icon || 'HelpCircle'} size={10} />
+          {/* Destination account select (FOR TRANSFER ONLY) */}
+          {activeFormType === 'transfer' && (
+            <div className="animate-fade-in text-left">
+              <label className="block text-[11px] font-semibold text-slate-400 mb-1 uppercase tracking-wider flex items-center gap-1.5 select-none">
+                <CreditCard size={12} className="text-emerald-400" />
+                Счет зачисления (Куда)
+              </label>
+              <SearchableSelect
+                items={accounts.filter(acc => acc.id !== accountId)}
+                value={toAccountId}
+                onChange={(id) => setToAccountId(id)}
+                placeholder="Выберите счет зачисления..."
+                searchPlaceholder="Поиск счета зачисления..."
+                idKey="id"
+                displayValue={(acc) => `${acc.name} (${Math.round(acc.balance)} ₼)`}
+                filterValue={(acc) => acc.name}
+                renderItem={(acc) => (
+                  <div className="flex justify-between items-center w-full">
+                    <span className="font-semibold">{acc.name}</span>
+                    <span className="font-mono text-[10px] text-teal-400 bg-teal-500/10 px-1.5 py-0.5 rounded-md font-extrabold shrink-0 ml-2">
+                      {Math.round(acc.balance)} ₼
                     </span>
                   </div>
-                  <span className="truncate">{cat.name}</span>
-                </div>
-              )}
-              filterValue={(cat) => cat.name}
-              renderItem={(cat) => (
-                <div className="flex items-center gap-2.5">
-                  <div
-                    className="w-5 h-5 rounded-md flex items-center justify-center text-white shrink-0"
-                    style={{ backgroundColor: cat.color }}
-                  >
-                    <IconComponent name={cat.icon || 'HelpCircle'} size={11} />
+                )}
+              />
+            </div>
+          )}
+
+          {/* Category select (HIDDEN FOR TRANSFERS) */}
+          {activeFormType !== 'transfer' && (
+            <div>
+              <label className="block text-[11px] font-semibold text-slate-400 mb-1 uppercase tracking-wider flex items-center gap-1.5 select-none text-left">
+                <Tag size={12} />
+                Категория
+              </label>
+              <SearchableSelect
+                items={categories.filter(c => c.type === type)}
+                value={categoryId}
+                onChange={(id) => setCategoryId(id)}
+                placeholder="Выберите категорию..."
+                searchPlaceholder="Поиск категории..."
+                idKey="id"
+                displayValue={(cat) => (
+                  <div className="flex items-center gap-2">
+                    <div
+                      className="w-4 h-4 rounded-sm flex items-center justify-center shrink-0"
+                      style={{ backgroundColor: cat.color }}
+                    >
+                      <span className="text-[10px] text-white">
+                        <IconComponent name={cat.icon || 'HelpCircle'} size={10} />
+                      </span>
+                    </div>
+                    <span className="truncate">{cat.name}</span>
                   </div>
-                  <span className="font-semibold">{cat.name}</span>
-                </div>
-              )}
-            />
-          </div>
+                )}
+                filterValue={(cat) => cat.name}
+                renderItem={(cat) => (
+                  <div className="flex items-center gap-2.5">
+                    <div
+                      className="w-5 h-5 rounded-md flex items-center justify-center text-white shrink-0"
+                      style={{ backgroundColor: cat.color }}
+                    >
+                      <IconComponent name={cat.icon || 'HelpCircle'} size={11} />
+                    </div>
+                    <span className="font-semibold">{cat.name}</span>
+                  </div>
+                )}
+              />
+            </div>
+          )}
 
           {/* Date input */}
           <div>
-            <label className="block text-[11px] font-semibold text-slate-400 mb-1 uppercase tracking-wider flex items-center gap-1">
+            <label className="block text-[11px] font-semibold text-slate-400 mb-1 uppercase tracking-wider flex items-center gap-1 text-left">
               <Calendar size={12} />
               Дата
             </label>
@@ -420,54 +505,58 @@ export function TransactionPanel({
 
           {/* Description input */}
           <div>
-            <label className="block text-[11px] font-semibold text-slate-400 mb-1 uppercase tracking-wider">
+            <label className="block text-[11px] font-semibold text-slate-400 mb-1 uppercase tracking-wider text-left">
               Описание / Примечание
             </label>
             <input
               type="text"
-              placeholder="Например: Покупка продуктов в Bravo"
+              placeholder={activeFormType === 'transfer' ? 'Например: Перевод с карты на m10' : 'Например: Покупка продуктов в Bravo'}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               className="w-full p-2.5 bg-slate-950/60 border border-white/10 rounded-xl text-sm text-slate-200 placeholder-slate-500"
             />
           </div>
 
-          {/* Optional Bank Card linkage */}
-          <div>
-            <label className="block text-[11px] font-semibold text-slate-400 mb-1 uppercase tracking-wider flex items-center gap-1">
-              <CreditCard size={12} className="text-teal-300" />
-              Привязать банковскую карту (Опционально)
-            </label>
-            <select
-              value={cardId || ''}
-              onChange={(e) => setCardId(e.target.value || undefined)}
-              className="w-full p-2.5 bg-slate-950/60 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-teal-400 text-slate-200 cursor-pointer text-ellipsis"
-            >
-              <option value="" className="bg-slate-950 text-slate-400">Без пластиковой карты (m10/Наличные)</option>
-              {cards.map(card => (
-                <option key={card.id} value={card.id} className="bg-slate-950 text-slate-200">
-                  {card.bank} •••• {card.lastFour} ({card.name})
-                </option>
-              ))}
-            </select>
-            {cards.length === 0 && (
-              <span className="text-[10px] text-slate-500 mt-1 block">
-                У вас нет привязанных карт. Их можно добавить на вкладке «Категории и Счета».
-              </span>
-            )}
-          </div>
+          {/* Optional Bank Card linkage (HIDDEN FOR TRANSFERS) */}
+          {activeFormType !== 'transfer' && (
+            <div>
+              <label className="block text-[11px] font-semibold text-slate-400 mb-1 uppercase tracking-wider flex items-center gap-1 text-left">
+                <CreditCard size={12} className="text-teal-300" />
+                Привязать банковскую карту (Опционально)
+              </label>
+              <select
+                value={cardId || ''}
+                onChange={(e) => setCardId(e.target.value || undefined)}
+                className="w-full p-2.5 bg-slate-950/60 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-teal-400 text-slate-200 cursor-pointer text-ellipsis"
+              >
+                <option value="" className="bg-slate-950 text-slate-400">Без пластиковой карты (m10/Наличные)</option>
+                {cards.map(card => (
+                  <option key={card.id} value={card.id} className="bg-slate-950 text-slate-200">
+                    {card.bank} •••• {card.lastFour} ({card.name})
+                  </option>
+                ))}
+              </select>
+              {cards.length === 0 && (
+                <span className="text-[10px] text-slate-500 mt-1 block">
+                  У вас нет привязанных карт. Их можно добавить на вкладке «Категории и Счета».
+                </span>
+              )}
+            </div>
+          )}
 
           {/* Action buttons */}
           <div className="flex gap-2 pt-2">
             <button
               type="submit"
               className={`flex-1 py-3 rounded-xl text-slate-950 font-extrabold text-xs transition-colors shadow-xs uppercase tracking-wider font-display flex items-center justify-center gap-1 cursor-pointer ${
-                type === 'expense' 
-                  ? 'bg-rose-450 hover:bg-rose-400 text-slate-950' 
+                activeFormType === 'transfer'
+                  ? 'bg-amber-500 hover:bg-amber-400 text-slate-950'
+                  : type === 'expense'
+                  ? 'bg-rose-450 hover:bg-rose-400 text-slate-950'
                   : 'bg-teal-500 hover:bg-teal-400 text-slate-950'
               }`}
             >
-              Внести операцию
+              {activeFormType === 'transfer' ? 'Выполнить перевод' : 'Внести операцию'}
             </button>
           </div>
         </form>

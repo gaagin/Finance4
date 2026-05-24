@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { Transaction, Category, Account, BudgetLimit } from '../types';
 import { IconComponent } from './IconComponent';
 import { Wallet, ArrowUpRight, ArrowDownLeft, TrendingUp, AlertTriangle, Filter, Calendar, HelpCircle, FileSpreadsheet, Download, RefreshCw, LogIn, LogOut, CheckCircle, AlertCircle } from 'lucide-react';
@@ -248,6 +248,218 @@ export function DashboardOverview({
 
   // Donut chart interactive tracker
   const [hoveredDonutSlice, setHoveredDonutSlice] = useState<number | null>(null);
+
+  // Total money trend chart interactive states
+  const [hoveredPoint, setHoveredPoint] = useState<{ x: number; y: number; date: string; balance: number } | null>(null);
+  const [selectedTrendDate, setSelectedTrendDate] = useState<string | null>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
+
+  // Helper function to format Date strings to Russian display format
+  const formatRussianDate = (dateStr: string) => {
+    if (!dateStr) return '';
+    try {
+      const parts = dateStr.split('-');
+      if (parts.length !== 3) return dateStr;
+      const year = parseInt(parts[0], 10);
+      const monthIndex = parseInt(parts[1], 10) - 1;
+      const day = parseInt(parts[2], 10);
+      const dateObj = new Date(year, monthIndex, day);
+      return dateObj.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+    } catch (e) {
+      return dateStr;
+    }
+  };
+
+  // 1. All-time sorted unique dates of transactions to find bounds of history and build backward balances
+  const allTimeBalances = useMemo(() => {
+    if (transactions.length === 0) {
+      const todayStr = '2026-05-24';
+      const bal = analyticsAccount === 'all'
+        ? accounts.reduce((sum, a) => sum + a.balance, 0)
+        : accounts.find(a => a.id === analyticsAccount)?.balance || 0;
+      return [{ date: todayStr, balance: bal }];
+    }
+
+    const uniqueDates = Array.from(new Set(transactions.map(t => t.date))).sort();
+    const minDate = uniqueDates[0];
+    const maxDate = '2026-05-24'; // System baseline locked on May 24, 2026
+
+    // Generate all dates from min to max
+    const allDates: string[] = [];
+    let current = new Date(minDate);
+    const end = new Date(maxDate);
+    let limit = 0;
+    while (current <= end && limit < 1000) {
+      allDates.push(current.toISOString().split('T')[0]);
+      current.setDate(current.getDate() + 1);
+      limit++;
+    }
+
+    // Current total balance for accounts
+    let finalBalance = 0;
+    if (analyticsAccount === 'all') {
+      finalBalance = accounts.reduce((sum, a) => sum + a.balance, 0);
+    } else {
+      finalBalance = accounts.find(a => a.id === analyticsAccount)?.balance || 0;
+    }
+
+    // Group transactions by date
+    const txByDate: { [date: string]: Transaction[] } = {};
+    transactions.forEach(t => {
+      if (!txByDate[t.date]) txByDate[t.date] = [];
+      txByDate[t.date].push(t);
+    });
+
+    // Walk backward in time
+    const dailyBalances: { date: string; balance: number }[] = [];
+    let runningBalance = finalBalance;
+
+    for (let i = allDates.length - 1; i >= 0; i--) {
+      const d = allDates[i];
+      dailyBalances.unshift({ date: d, balance: runningBalance });
+
+      const dayTxs = txByDate[d] || [];
+      const filteredDayTxs = analyticsAccount === 'all'
+        ? dayTxs
+        : dayTxs.filter(t => t.accountId === analyticsAccount);
+
+      let netChange = 0;
+      filteredDayTxs.forEach(t => {
+        if (t.type === 'income') {
+          netChange += t.amount;
+        } else if (t.type === 'expense') {
+          netChange -= t.amount;
+        }
+      });
+
+      runningBalance -= netChange;
+    }
+
+    return dailyBalances;
+  }, [transactions, accounts, analyticsAccount]);
+
+  // 2. Filter computed trend to selected timeframe
+  const balanceTrendData = useMemo(() => {
+    if (analyticsTimeframe === 'all') {
+      return allTimeBalances;
+    }
+
+    let startCompare = '2026-05-01';
+    let endCompare = '2026-05-24';
+    if (analyticsTimeframe === 'april') {
+      startCompare = '2026-04-01';
+      endCompare = '2026-04-30';
+    }
+
+    return allTimeBalances.filter(item => item.date >= startCompare && item.date <= endCompare);
+  }, [allTimeBalances, analyticsTimeframe]);
+
+  // SVG Coordinates calculations
+  const trendSvgWidth = 800;
+  const trendSvgHeight = 245;
+  const trendPaddingLeft = 65;
+  const trendPaddingRight = 20;
+  const trendPaddingTop = 20;
+  const trendPaddingBottom = 40;
+  const trendChartWidth = trendSvgWidth - trendPaddingLeft - trendPaddingRight;
+  const trendChartHeight = trendSvgHeight - trendPaddingTop - trendPaddingBottom;
+
+  const trendStats = useMemo(() => {
+    if (balanceTrendData.length === 0) return { min: 0, max: 100, points: [], linePath: '', areaPath: '', zeroPercent: 50, yZero: 100 };
+
+    const balancesList = balanceTrendData.map(d => d.balance);
+    let max = Math.max(...balancesList, 100);
+    let min = Math.min(...balancesList, 0);
+
+    // Give some vertical breathing space in chart
+    const range = max - min;
+    const paddingVal = range * 0.15 || 50;
+    const graphMax = max + paddingVal;
+    const graphMin = min - paddingVal;
+    const graphRange = graphMax - graphMin;
+
+    const zeroPercent = Math.max(0, Math.min(100, ((graphMax - 0) / graphRange) * 100));
+    
+    // Map data points into SVG space
+    const points = balanceTrendData.map((d, index) => {
+      const x = trendPaddingLeft + (balanceTrendData.length > 1 ? (index / (balanceTrendData.length - 1)) : 0.5) * trendChartWidth;
+      const y = trendPaddingTop + trendChartHeight - ((d.balance - graphMin) / graphRange) * trendChartHeight;
+      return { x, y, date: d.date, balance: d.balance };
+    });
+
+    // Zero-line Y coordinate calculation
+    const yZero = trendPaddingTop + trendChartHeight - ((0 - graphMin) / graphRange) * trendChartHeight;
+
+    // Build SVG paths
+    let linePath = '';
+    let areaPath = '';
+
+    if (points.length > 0) {
+      linePath = `M ${points[0].x} ${points[0].y}`;
+      for (let i = 1; i < points.length; i++) {
+        linePath += ` L ${points[i].x} ${points[i].y}`;
+      }
+
+      const yBottom = trendPaddingTop + trendChartHeight;
+      areaPath = `M ${points[0].x} ${yBottom} L ${points[0].x} ${points[0].y}`;
+      for (let i = 1; i < points.length; i++) {
+        areaPath += ` L ${points[i].x} ${points[i].y}`;
+      }
+      areaPath += ` L ${points[points.length - 1].x} ${yBottom} Z`;
+    }
+
+    return {
+      min: graphMin,
+      max: graphMax,
+      points,
+      linePath,
+      areaPath,
+      zeroPercent,
+      yZero
+    };
+  }, [balanceTrendData, trendChartWidth, trendChartHeight]);
+
+  const handleTrendMouseMove = (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
+    if (!svgRef.current || trendStats.points.length === 0) return;
+    try {
+      const rect = svgRef.current.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      
+      const svgWidth = rect.width;
+      const scaleX = trendSvgWidth / svgWidth;
+      const targetX = mouseX * scaleX;
+
+      const relativeX = (targetX - trendPaddingLeft) / trendChartWidth;
+      const index = Math.round(relativeX * (trendStats.points.length - 1));
+      const clampedIndex = Math.max(0, Math.min(trendStats.points.length - 1, index));
+      
+      setHoveredPoint(trendStats.points[clampedIndex]);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleTrendMouseLeave = () => {
+    setHoveredPoint(null);
+  };
+
+  // Filter transactions for clicked trend day
+  const clickedDateTransactions = useMemo(() => {
+    if (!selectedTrendDate) return [];
+    return transactions.filter(t => t.date === selectedTrendDate);
+  }, [selectedTrendDate, transactions]);
+
+  // Helper calculations for displaying start/end balance summaries on top of trend chart
+  const trendPointsCount = trendStats.points.length;
+  const hasTrendPoints = trendPointsCount > 0;
+  const firstPoint = hasTrendPoints ? trendStats.points[0] : null;
+  const lastPoint = hasTrendPoints ? trendStats.points[trendPointsCount - 1] : null;
+  const startBalance = firstPoint ? firstPoint.balance : 0;
+  const endBalance = lastPoint ? lastPoint.balance : 0;
+  const percentChange = startBalance !== 0 
+    ? ((endBalance - startBalance) / Math.abs(startBalance)) * 100 
+    : 0;
+  const changePrefix = percentChange >= 0 ? '+' : '';
 
   // Helper calculation for SVG Donut slices
   let cumulativeAngle = 0;
@@ -541,6 +753,304 @@ export function DashboardOverview({
             </select>
           </div>
         </div>
+
+        {/* Real-time Dynamic Wallet Balance Trend Card (Total Money Over Time) */}
+        <div className="border border-white/5 rounded-2xl p-5 bg-white/5 mb-8 relative group" id="total-assets-trend-card">
+          
+          {/* Header metadata showing start and end balances like the high-fidelity screenshot */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-white/5 pb-4 mb-4">
+            <div>
+              <h4 className="font-semibold text-sm text-teal-300 leading-tight">Баланс и активы с течением времени</h4>
+              <p className="text-[10px] text-slate-400 mt-0.5">Динамический график общего капитала с учетом совершенных транзакций</p>
+            </div>
+            
+            {hasTrendPoints && firstPoint && lastPoint && (
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-x-4 gap-y-1 text-xs text-slate-305 w-full sm:w-auto sm:text-right font-display justify-end">
+                <div className="flex flex-col">
+                  <span className="text-[10px] text-slate-500 uppercase font-semibold text-left sm:text-right">Начало периода ({formatRussianDate(firstPoint.date)})</span>
+                  <span className="font-mono font-bold text-slate-300 text-left sm:text-right">{Math.round(startBalance).toLocaleString('ru-RU')} ₼</span>
+                </div>
+                <div className="w-px h-6 bg-white/10 hidden sm:block" />
+                <div className="flex flex-col">
+                  <span className="text-[10px] text-slate-500 uppercase font-semibold text-left sm:text-right">Итог на сегодня ({formatRussianDate(lastPoint.date)})</span>
+                  <span className="font-mono font-bold text-teal-400 text-[13px] text-left sm:text-right shrink-0">
+                    {Math.round(endBalance).toLocaleString('ru-RU')} ₼ 
+                    <span className={`text-xs ml-1.5 font-sans font-extrabold ${percentChange >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                      ({changePrefix}{percentChange.toFixed(0)}%)
+                    </span>
+                  </span>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="relative w-full aspect-video sm:aspect-auto sm:h-[245px]" id="trend-svg-container">
+            {/* SVG Area Chart */}
+            <svg
+              ref={svgRef}
+              viewBox={`0 0 ${trendSvgWidth} ${trendSvgHeight}`}
+              className="w-full h-full select-none"
+              onMouseMove={handleTrendMouseMove}
+              onMouseLeave={handleTrendMouseLeave}
+              onClick={() => {
+                if (hoveredPoint) {
+                  setSelectedTrendDate(hoveredPoint.date);
+                }
+              }}
+            >
+              <defs>
+                {/* Responsive dynamic bi-directional gradient: green/teal above zero, red/rose below zero */}
+                <linearGradient id="areaFillGrad" x1="0" y1="yZero" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#10b981" stopOpacity="0.25" />
+                  <stop offset={`${trendStats.zeroPercent}%`} stopColor="#10b981" stopOpacity="0.0" />
+                  <stop offset={`${trendStats.zeroPercent}%`} stopColor="#ef4444" stopOpacity="0.0" />
+                  <stop offset="100%" stopColor="#ef4444" stopOpacity="0.25" />
+                </linearGradient>
+
+                <linearGradient id="strokeLineGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#10b981" stopOpacity="1" />
+                  <stop offset={`${trendStats.zeroPercent}%`} stopColor="#14b8a6" stopOpacity="1" />
+                  <stop offset={`${trendStats.zeroPercent}%`} stopColor="#ef4444" stopOpacity="1" />
+                  <stop offset="100%" stopColor="#ef4444" stopOpacity="1" />
+                </linearGradient>
+              </defs>
+
+              {/* Dynamic Y Axis Gridlines and Labels */}
+              {Array.from({ length: 5 }).map((_, i) => {
+                const fraction = i / 4;
+                const val = trendStats.min + fraction * (trendStats.max - trendStats.min);
+                const y = trendPaddingTop + trendChartHeight - fraction * trendChartHeight;
+                const roundedVal = Math.round(val);
+
+                return (
+                  <g key={i} className="font-mono text-[9px] select-none text-slate-500">
+                    {/* Horizontal grid dashline */}
+                    <line
+                      x1={trendPaddingLeft}
+                      y1={y}
+                      x2={trendSvgWidth - trendPaddingRight}
+                      y2={y}
+                      stroke={roundedVal === 0 ? "rgba(255,255,255,0.25)" : "rgba(255,255,255,0.06)"}
+                      strokeWidth={roundedVal === 0 ? 1.5 : 1}
+                      strokeDasharray={roundedVal === 0 ? "none" : "3 3"}
+                    />
+                    {/* Tick Label */}
+                    <text
+                      x={trendPaddingLeft - 10}
+                      y={y + 3}
+                      textAnchor="end"
+                      fill={roundedVal === 0 ? "#94a3b8" : "#64748b"}
+                      className="font-medium"
+                    >
+                      {roundedVal.toLocaleString('ru-RU')} ₼
+                    </text>
+                  </g>
+                );
+              })}
+
+              {/* X-axis tick descriptors (Dates labels at bounds) */}
+              {trendStats.points.length > 1 && (
+                <>
+                  {/* Min start date */}
+                  <text
+                    x={trendStats.points[0].x}
+                    y={trendSvgHeight - 12}
+                    textAnchor="start"
+                    className="font-display font-bold text-[10px] fill-slate-500"
+                  >
+                    {formatRussianDate(trendStats.points[0].date).replace(' г.', '')}
+                  </text>
+                  
+                  {/* Middle descriptor */}
+                  {trendStats.points.length > 5 && (
+                    <text
+                      x={trendStats.points[Math.floor(trendStats.points.length / 2)].x}
+                      y={trendSvgHeight - 12}
+                      textAnchor="middle"
+                      className="font-display text-[9px] fill-slate-500 font-semibold"
+                    >
+                      Июль / Середина
+                    </text>
+                  )}
+
+                  {/* Max end date */}
+                  <text
+                    x={trendStats.points[trendStats.points.length - 1].x}
+                    y={trendSvgHeight - 12}
+                    textAnchor="end"
+                    className="font-display font-bold text-[10px] fill-slate-500"
+                  >
+                    {formatRussianDate(trendStats.points[trendStats.points.length - 1].date).replace(' г.', '')}
+                  </text>
+                </>
+              )}
+
+              {/* Render computed paths (only if data exists) */}
+              {hasTrendPoints && (
+                <>
+                  {/* Shaded Area underneath */}
+                  <path
+                    d={trendStats.areaPath}
+                    fill="url(#areaFillGrad)"
+                    className="transition-all duration-300"
+                  />
+                  {/* Solid stroke curve */}
+                  <path
+                    d={trendStats.linePath}
+                    fill="none"
+                    stroke="url(#strokeLineGrad)"
+                    strokeWidth={2.5}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="transition-all duration-300"
+                  />
+
+                  {/* Highlight start point node */}
+                  <circle
+                    cx={trendStats.points[0].x}
+                    cy={trendStats.points[0].y}
+                    r={3.5}
+                    fill="#10b981"
+                    stroke="#1e293b"
+                    strokeWidth={1.5}
+                  />
+
+                  {/* Highlight end point node */}
+                  <circle
+                    cx={trendStats.points[trendStats.points.length - 1].x}
+                    cy={trendStats.points[trendStats.points.length - 1].y}
+                    r={3.5}
+                    fill="#14b8a6"
+                    stroke="#1e293b"
+                    strokeWidth={1.5}
+                  />
+                </>
+              )}
+
+              {/* Hover highlight line & marker dots */}
+              {hoveredPoint && (
+                <g className="animate-fade-in">
+                  <line
+                    x1={hoveredPoint.x}
+                    y1={trendPaddingTop}
+                    x2={hoveredPoint.x}
+                    y2={trendPaddingTop + trendChartHeight}
+                    stroke="rgba(255,255,255,0.25)"
+                    strokeWidth={1.2}
+                    strokeDasharray="2 2"
+                  />
+                  {/* Outer glow ring */}
+                  <circle
+                    cx={hoveredPoint.x}
+                    cy={hoveredPoint.y}
+                    r={7}
+                    fill="rgba(20, 184, 166, 0.3)"
+                  />
+                  {/* Inner focal core */}
+                  <circle
+                    cx={hoveredPoint.x}
+                    cy={hoveredPoint.y}
+                    r={3.5}
+                    fill={hoveredPoint.balance >= 0 ? "#10b981" : "#ef4444"}
+                    stroke="#fff"
+                    strokeWidth={1.5}
+                  />
+                </g>
+              )}
+            </svg>
+
+            {/* Float overlay information tooltip absolute wrapper */}
+            {hoveredPoint && (
+              <div 
+                className="absolute bg-slate-900 border border-white/10 text-white rounded-2xl p-3 shadow-2xl pointer-events-none z-30 flex flex-col gap-1 min-w-[150px] text-center"
+                style={{ 
+                  left: `${Math.max(12, Math.min(88, (hoveredPoint.x / trendSvgWidth) * 100))}%`, 
+                  top: '40%', 
+                  transform: 'translate(-50%, -50%)',
+                  boxShadow: '0 10px 30px -10px rgba(0,0,0,0.8), 0 0 15px 1px rgba(255,255,255,0.03)'
+                }}
+              >
+                <b className="text-slate-400 text-[10px] tracking-wider uppercase">{formatRussianDate(hoveredPoint.date)}</b>
+                <span className={`font-mono font-black text-sm ${hoveredPoint.balance >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
+                  {Math.round(hoveredPoint.balance).toLocaleString('ru-RU')} ₼
+                </span>
+                <span className="text-[9px] text-slate-500 font-semibold leading-none mt-1">
+                  Нажмите, чтобы детализировать
+                </span>
+              </div>
+            )}
+          </div>
+
+          <p className="text-center text-[11px] text-slate-400 italic mt-3 flex items-center justify-center gap-1">
+            <Calendar size={12} className="text-teal-400 shrink-0" />
+            Нажмите на точку или график в любой день, чтобы посмотреть доходы и расходы за выбранный день.
+          </p>
+        </div>
+
+        {/* Selected Day Transaction Breakdown Drawer */}
+        {selectedTrendDate && (
+          <div className="bg-slate-900/85 border border-white/10 rounded-2xl p-5 mb-8 animate-fade-in text-left shadow-lg">
+            <div className="flex items-center justify-between border-b border-white/5 pb-3 mb-4">
+              <div className="flex items-center gap-2">
+                <Calendar size={18} className="text-teal-400" />
+                <h4 className="font-extrabold text-xs text-white uppercase tracking-wider font-display">
+                  Анализ операций за {formatRussianDate(selectedTrendDate)}
+                </h4>
+              </div>
+              <button
+                onClick={() => setSelectedTrendDate(null)}
+                className="text-xs bg-white/10 hover:bg-white/20 text-slate-300 px-3 py-1 rounded-xl transition-all font-semibold cursor-pointer"
+              >
+                Закрыть детальный просмотр
+              </button>
+            </div>
+
+            {clickedDateTransactions.length === 0 ? (
+              <div className="text-center py-6">
+                <p className="text-xs text-slate-400 font-medium leading-normal">
+                  В этот день ({formatRussianDate(selectedTrendDate)}) в системе нет зафиксированных операций (транзакций или переводов).
+                </p>
+                <p className="text-[10px] text-slate-500 mt-1">Остаток на балансе оставался неизменным и составлял {Math.round(balanceTrendData.find(d => d.date === selectedTrendDate)?.balance || 0)} ₼.</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[220px] overflow-y-auto pr-1 select-none custom-scrollbar">
+                {clickedDateTransactions.map(tx => {
+                  const cat = categories.find(c => c.id === tx.categoryId);
+                  const acc = accounts.find(a => a.id === tx.accountId);
+                  const isInc = tx.type === 'income';
+
+                  return (
+                    <div
+                      key={tx.id}
+                      className="flex items-center justify-between p-3.5 bg-slate-950/60 rounded-xl border border-white/5 hover:border-white/10 transition-colors"
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div
+                          className="w-8 h-8 rounded-lg flex items-center justify-center text-white shrink-0 shadow-xs"
+                          style={{ backgroundColor: cat?.color || '#3b82f6' }}
+                        >
+                          <IconComponent name={cat?.icon || 'HelpCircle'} size={14} />
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-xs font-bold text-slate-200 truncate">{tx.description || cat?.name || 'Операция'}</p>
+                          <span className="text-[10px] text-slate-400 font-medium block mt-0.5">
+                            Счет: <b className="text-slate-300">{acc?.name || 'Неизвестно'}</b> • Категория: <b className="text-slate-300">{cat?.name || 'Прочее'}</b>
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="text-right shrink-0 pl-3">
+                        <span className={`font-mono text-xs font-black select-all ${isInc ? 'text-emerald-400' : 'text-rose-400'}`}>
+                          {isInc ? '+' : '-'}{Math.round(tx.amount)} ₼
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Charts Grid: Bar chart + Donut chart side-by-side */}
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
