@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Transaction, Category, Account } from '../types';
 import { IconComponent } from './IconComponent';
 import { ChevronLeft, ChevronRight, Plus, Calendar as CalendarIcon, Info } from 'lucide-react';
+import { AddTransactionModal } from './AddTransactionModal';
 
 interface CalendarPanelProps {
   transactions: Transaction[];
@@ -9,6 +10,14 @@ interface CalendarPanelProps {
   accounts: Account[];
   onAddTransactionOnDate: (date: string) => void;
   onEditTransaction: (transaction: Transaction) => void;
+  onAddTransaction: (tx: Omit<Transaction, 'id'>) => void;
+  onAddTransfer: (transfer: {
+    fromAccountId: string;
+    toAccountId: string;
+    amount: number;
+    description: string;
+    date: string;
+  }) => void;
 }
 
 const MONTHS_RU = [
@@ -23,11 +32,15 @@ export function CalendarPanel({
   categories,
   accounts,
   onAddTransactionOnDate,
-  onEditTransaction
+  onEditTransaction,
+  onAddTransaction,
+  onAddTransfer
 }: CalendarPanelProps) {
   // Default to May 2026, based on user's current date context
   const [currentDate, setCurrentDate] = useState(new Date(2026, 4, 1)); // Month index 4 is May
   const [selectedDayData, setSelectedDayData] = useState<{ date: string; txs: Transaction[] } | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [clickedDate, setClickedDate] = useState('2026-05-23');
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
@@ -168,9 +181,15 @@ export function CalendarPanel({
               return (
                 <div
                   key={`${cell.dateString}-${idx}`}
-                  className={`min-h-[105px] sm:min-h-[140px] flex flex-col justify-between p-1.5 rounded-xl border transition-all group ${
+                  onClick={() => {
+                    if (cell.isCurrentMonth) {
+                      setClickedDate(cell.dateString);
+                      setIsModalOpen(true);
+                    }
+                  }}
+                  className={`min-h-[105px] sm:min-h-[140px] flex flex-col justify-between p-1.5 rounded-xl border transition-all group cursor-pointer ${
                     cell.isCurrentMonth
-                      ? 'bg-white/5 border-white/10 hover:border-teal-400/50 hover:bg-white/10 hover:shadow-md'
+                      ? 'bg-white/5 border-white/10 hover:border-teal-400/50 hover:bg-white/15 hover:shadow-md'
                       : 'bg-transparent border-white/5 text-slate-500'
                   } ${isTodayStr ? 'ring-2 ring-teal-400 bg-teal-400/10' : ''}`}
                 >
@@ -190,8 +209,12 @@ export function CalendarPanel({
 
                     {cell.isCurrentMonth && (
                       <button
-                        onClick={() => onAddTransactionOnDate(cell.dateString)}
-                        className="opacity-0 group-hover:opacity-100 md:opacity-0 hover:opacity-100 p-0.5 hover:bg-white/10 rounded text-slate-400 hover:text-white transition-all cursor-pointer"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setClickedDate(cell.dateString);
+                          setIsModalOpen(true);
+                        }}
+                        className="opacity-100 md:opacity-0 group-hover:opacity-100 p-0.5 hover:bg-white/10 rounded text-slate-400 hover:text-white transition-all cursor-pointer"
                         title="Добавить расход/доход"
                       >
                         <Plus size={12} />
@@ -252,9 +275,20 @@ export function CalendarPanel({
       <div className="mt-4 flex items-start gap-2 p-3 bg-white/5 rounded-2xl text-xs text-teal-300 border border-white/10">
         <Info size={14} className="mt-0.5 shrink-0" />
         <div>
-          <span className="font-semibold">Совет по просмотру:</span> На мобильных устройствах календарную сетку можно прокручивать по горизонтали пальцем, чтобы все наименования операций полностью помещались в ячейках. Дополнительно список операций внутри отдельного дня поддерживает обычный вертикальный скролл.
+          <span className="font-semibold">Совет по просмотру:</span> На мобильных устройствах календарную сетку можно прокручивать по горизонтали пальцем, чтобы все наименования операций полностью помещались в ячейках. Дополнительно список операций внутри отдельного дня поддерживает обычный вертикальный скролл. Нажмите на любой день, чтобы мгновенно добавить запись!
         </div>
       </div>
+
+      {/* Modern Add Transaction Modal directly on clicked calendar day */}
+      <AddTransactionModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        date={clickedDate}
+        accounts={accounts}
+        categories={categories}
+        onAddTransaction={onAddTransaction}
+        onAddTransfer={onAddTransfer}
+      />
     </div>
   );
 }

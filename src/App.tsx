@@ -356,6 +356,61 @@ export default function App() {
     saveToFirebaseDirectly(nextData);
   };
 
+  const handleAddTransfer = (transfer: {
+    fromAccountId: string;
+    toAccountId: string;
+    amount: number;
+    description: string;
+    date: string;
+  }) => {
+    const fromAcc = data.accounts.find(a => a.id === transfer.fromAccountId);
+    const toAcc = data.accounts.find(a => a.id === transfer.toAccountId);
+    if (!fromAcc || !toAcc) return;
+
+    const txIdFrom = `tx-transfer-out-${Date.now()}`;
+    const txIdTo = `tx-transfer-in-${Date.now() + 1}`;
+
+    const txFrom: Transaction = {
+      id: txIdFrom,
+      accountId: transfer.fromAccountId,
+      categoryId: 'cat-other-exp',
+      amount: transfer.amount,
+      type: 'expense',
+      date: transfer.date,
+      description: transfer.description.trim() || `Перевод в счет ${toAcc.name}`,
+    };
+
+    const txTo: Transaction = {
+      id: txIdTo,
+      accountId: transfer.toAccountId,
+      categoryId: 'cat-other-inc',
+      amount: transfer.amount,
+      type: 'income',
+      date: transfer.date,
+      description: transfer.description.trim() || `Перевод со счета ${fromAcc.name}`,
+    };
+
+    const updatedAccounts = data.accounts.map(acc => {
+      if (acc.id === transfer.fromAccountId) {
+        return { ...acc, balance: acc.balance - transfer.amount };
+      }
+      if (acc.id === transfer.toAccountId) {
+        return { ...acc, balance: acc.balance + transfer.amount };
+      }
+      return acc;
+    });
+
+    const nextData = {
+      ...data,
+      accounts: updatedAccounts,
+      transactions: [txFrom, txTo, ...data.transactions]
+    };
+
+    setData(nextData);
+    saveToFirebaseDirectly(nextData);
+    addToast(`Перевод на сумму ${transfer.amount} ₼ успешно выполнен! 💸`, 'success');
+  };
+
   const handleDeleteTransaction = (id: string) => {
     const txToDelete = data.transactions.find(t => t.id === id);
     if (!txToDelete) return;
@@ -876,6 +931,8 @@ export default function App() {
               accounts={data.accounts}
               onAddTransactionOnDate={handleAddTransactionOnDate}
               onEditTransaction={handleEditTransactionStart}
+              onAddTransaction={handleAddTransaction}
+              onAddTransfer={handleAddTransfer}
             />
           )}
 
