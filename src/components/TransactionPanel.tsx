@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Transaction, Category, Account, TransactionType, BankCard } from '../types';
 import { IconComponent } from './IconComponent';
-import { PlusCircle, Edit2, Trash2, Search, Filter, Calendar, CreditCard, Tag, ArrowUpRight, ArrowDownLeft, X, ArrowUpDown, Info } from 'lucide-react';
+import { PlusCircle, Edit2, Trash2, Search, Filter, Calendar, CreditCard, Tag, ArrowUpRight, ArrowDownLeft, X, ArrowUpDown, Info, ChevronDown, ChevronUp } from 'lucide-react';
 import { SearchableSelect } from './SearchableSelect';
 
 interface TransactionPanelProps {
@@ -161,6 +161,17 @@ export function TransactionPanel({
   const [filterDateRange, setFilterDateRange] = useState<'all' | 'may' | 'april' | 'custom'>('all');
   const [customStartDate, setCustomStartDate] = useState('2026-05-01');
   const [customEndDate, setCustomEndDate] = useState('2026-05-31');
+  const [isFiltersExpanded, setIsFiltersExpanded] = useState(false);
+
+  // Count active filters (ignoring search text)
+  const activeFiltersCount = useMemo(() => {
+    let count = 0;
+    if (filterType !== 'all') count++;
+    if (filterAccount !== 'all') count++;
+    if (filterCategory !== 'all') count++;
+    if (filterDateRange !== 'all') count++;
+    return count;
+  }, [filterType, filterAccount, filterCategory, filterDateRange]);
 
   // Sorting
   const [sortField, setSortField] = useState<'date' | 'amount'>('date');
@@ -497,103 +508,122 @@ export function TransactionPanel({
           </div>
 
           {/* Filtering Controls Row 1 */}
-          <div className="bg-white/5 border border-white/10 p-4 rounded-2xl mb-4 space-y-4">
-            <div className="flex items-center gap-1.5 text-xs text-slate-300 font-bold uppercase tracking-wider pb-2 border-b border-white/5">
-              <Filter size={12} />
-              <span>Фильтры и сортировка</span>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-              {/* Filter by Type */}
-              <div>
-                <label className="block text-[10px] font-bold text-slate-400 mb-1">ТИП ОПЕРАЦИИ</label>
-                <select
-                  value={filterType}
-                  onChange={(e) => setFilterType(e.target.value as any)}
-                  className="w-full p-2 bg-slate-950 border border-white/10 rounded-lg text-xs text-slate-200 cursor-pointer"
-                >
-                  <option value="all" className="bg-slate-950 text-slate-300">Все записи</option>
-                  <option value="expense" className="bg-slate-950 text-slate-300">Только расходы</option>
-                  <option value="income" className="bg-slate-950 text-slate-300">Только доходы</option>
-                </select>
+          <div className="bg-white/5 border border-white/10 p-4 rounded-2xl mb-4 transition-all duration-300">
+            <button
+              type="button"
+              onClick={() => setIsFiltersExpanded(!isFiltersExpanded)}
+              className="flex items-center justify-between w-full text-xs text-slate-300 font-bold uppercase tracking-wider select-none cursor-pointer focus:outline-none"
+            >
+              <div className="flex items-center gap-1.5">
+                <Filter size={12} className="text-teal-400" />
+                <span>Фильтры и сортировка</span>
+                {activeFiltersCount > 0 && (
+                  <span className="ml-2 bg-teal-500/20 text-teal-400 border border-teal-500/30 font-display font-extrabold text-[9px] px-1.5 py-0.5 rounded-full normal-case animate-pulse">
+                    Активно: {activeFiltersCount}
+                  </span>
+                )}
               </div>
-
-              {/* Filter by Account */}
-              <div>
-                <label className="block text-[10px] font-bold text-slate-400 mb-1">СЧЕТ</label>
-                <select
-                  value={filterAccount}
-                  onChange={(e) => setFilterAccount(e.target.value)}
-                  className="w-full p-2 bg-slate-950 border border-white/10 rounded-lg text-xs text-slate-200 cursor-pointer"
-                >
-                  <option value="all" className="bg-slate-950 text-slate-300">Все счета</option>
-                  {accounts.map(acc => (
-                    <option key={acc.id} value={acc.id} className="bg-slate-950 text-slate-300">{acc.name}</option>
-                  ))}
-                </select>
+              <div className="text-slate-400 hover:text-white transition-colors">
+                {isFiltersExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
               </div>
+            </button>
 
-              {/* Filter by Category */}
-              <div>
-                <label className="block text-[10px] font-bold text-slate-400 mb-1">КАТЕГОРИЯ</label>
-                <select
-                  value={filterCategory}
-                  onChange={(e) => setFilterCategory(e.target.value)}
-                  className="w-full p-2 bg-slate-950 border border-white/10 rounded-lg text-xs text-slate-200 cursor-pointer"
-                >
-                  <option value="all" className="bg-slate-950 text-slate-300">Все категории</option>
-                  {categories.map(cat => (
-                    <option key={cat.id} value={cat.id} className="bg-slate-950 text-slate-300">{cat.name} ({cat.type === 'income' ? 'д' : 'р'})</option>
-                  ))}
-                </select>
-              </div>
+            {isFiltersExpanded && (
+              <div className="mt-4 pt-4 border-t border-white/5 space-y-4 animate-fade-in">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+                  {/* Filter by Type */}
+                  <div>
+                    <label className="block text-[10px] font-bold text-slate-400 mb-1">ТИП ОПЕРАЦИИ</label>
+                    <select
+                      value={filterType}
+                      onChange={(e) => setFilterType(e.target.value as any)}
+                      className="w-full p-2 bg-slate-950 border border-white/10 rounded-lg text-xs text-slate-200 cursor-pointer"
+                    >
+                      <option value="all" className="bg-slate-950 text-slate-300">Все записи</option>
+                      <option value="expense" className="bg-slate-950 text-slate-300">Только расходы</option>
+                      <option value="income" className="bg-slate-950 text-slate-300">Только доходы</option>
+                    </select>
+                  </div>
 
-              {/* Filter by Date Preset */}
-              <div>
-                <label className="block text-[10px] font-bold text-slate-400 mb-1">ПЕРИОД ВРЕМЕНИ</label>
-                <select
-                  value={filterDateRange}
-                  onChange={(e) => setFilterDateRange(e.target.value as any)}
-                  className="w-full p-2 bg-slate-950 border border-white/10 rounded-lg text-xs text-slate-200 cursor-pointer"
-                >
-                  <option value="all" className="bg-slate-950 text-slate-300">За всё время</option>
-                  <option value="may" className="bg-slate-950 text-slate-300">Май 2026</option>
-                  <option value="april" className="bg-slate-950 text-slate-300">Апрель 2026</option>
-                  <option value="custom" className="bg-slate-950 text-slate-300">Указать вручную</option>
-                </select>
-              </div>
-            </div>
+                  {/* Filter by Account */}
+                  <div>
+                    <label className="block text-[10px] font-bold text-slate-400 mb-1">СЧЕТ</label>
+                    <select
+                      value={filterAccount}
+                      onChange={(e) => setFilterAccount(e.target.value)}
+                      className="w-full p-2 bg-slate-950 border border-white/10 rounded-lg text-xs text-slate-200 cursor-pointer"
+                    >
+                      <option value="all" className="bg-slate-950 text-slate-300">Все счета</option>
+                      {accounts.map(acc => (
+                        <option key={acc.id} value={acc.id} className="bg-slate-950 text-slate-300">{acc.name}</option>
+                      ))}
+                    </select>
+                  </div>
 
-            {/* Custom Manual Dates (only visible if filterDateRange is custom) */}
-            {filterDateRange === 'custom' && (
-              <div className="flex flex-wrap items-center gap-3 bg-slate-950/60 p-3 rounded-xl border border-white/10 max-w-lg">
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-slate-400 uppercase font-semibold">С</span>
-                  <input
-                    type="date"
-                    value={customStartDate}
-                    onChange={(e) => setCustomStartDate(e.target.value)}
-                    className="p-1 px-2 border border-white/10 rounded text-xs bg-slate-950 text-slate-200"
-                  />
+                  {/* Filter by Category */}
+                  <div>
+                    <label className="block text-[10px] font-bold text-slate-400 mb-1">КАТЕГОРИЯ</label>
+                    <select
+                      value={filterCategory}
+                      onChange={(e) => setFilterCategory(e.target.value)}
+                      className="w-full p-2 bg-slate-950 border border-white/10 rounded-lg text-xs text-slate-200 cursor-pointer"
+                    >
+                      <option value="all" className="bg-slate-950 text-slate-300">Все категории</option>
+                      {categories.map(cat => (
+                        <option key={cat.id} value={cat.id} className="bg-slate-950 text-slate-300">{cat.name} ({cat.type === 'income' ? 'д' : 'р'})</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Filter by Date Preset */}
+                  <div>
+                    <label className="block text-[10px] font-bold text-slate-400 mb-1">ПЕРИОД ВРЕМЕНИ</label>
+                    <select
+                      value={filterDateRange}
+                      onChange={(e) => setFilterDateRange(e.target.value as any)}
+                      className="w-full p-2 bg-slate-950 border border-white/10 rounded-lg text-xs text-slate-200 cursor-pointer"
+                    >
+                      <option value="all" className="bg-slate-950 text-slate-300">За всё время</option>
+                      <option value="may" className="bg-slate-950 text-slate-300">Май 2026</option>
+                      <option value="april" className="bg-slate-950 text-slate-300">Апрель 2026</option>
+                      <option value="custom" className="bg-slate-950 text-slate-300">Указать вручную</option>
+                    </select>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-slate-400 uppercase font-semibold">ПО</span>
-                  <input
-                    type="date"
-                    value={customEndDate}
-                    onChange={(e) => setCustomEndDate(e.target.value)}
-                    className="p-1 px-2 border border-white/10 rounded text-xs bg-slate-950 text-slate-200"
-                  />
-                </div>
-                <button
-                  onClick={() => {
-                    setCustomStartDate('2026-05-01');
-                    setCustomEndDate('2026-05-31');
-                  }}
-                  className="text-[10px] text-slate-300 hover:text-white border border-white/15 px-2 py-1 rounded bg-white/5 active:bg-white/10 cursor-pointer"
-                >
-                  Сбросить даты
-                </button>
+
+                {/* Custom Manual Dates (only visible if filterDateRange is custom) */}
+                {filterDateRange === 'custom' && (
+                  <div className="flex flex-wrap items-center gap-3 bg-slate-950/60 p-3 rounded-xl border border-white/10 max-w-lg text-left">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-slate-400 uppercase font-semibold">С</span>
+                      <input
+                        type="date"
+                        value={customStartDate}
+                        onChange={(e) => setCustomStartDate(e.target.value)}
+                        className="p-1 px-2 border border-white/10 rounded text-xs bg-slate-950 text-slate-200"
+                      />
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-slate-400 uppercase font-semibold">ПО</span>
+                      <input
+                        type="date"
+                        value={customEndDate}
+                        onChange={(e) => setCustomEndDate(e.target.value)}
+                        className="p-1 px-2 border border-white/10 rounded text-xs bg-slate-950 text-slate-200"
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setCustomStartDate('2026-05-01');
+                        setCustomEndDate('2026-05-31');
+                      }}
+                      className="text-[10px] text-slate-300 hover:text-white border border-white/15 px-2 py-1 rounded bg-white/5 active:bg-white/10 cursor-pointer"
+                    >
+                      Сбросить даты
+                    </button>
+                  </div>
+                )}
               </div>
             )}
           </div>
