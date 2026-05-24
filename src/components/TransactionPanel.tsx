@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Transaction, Category, Account, TransactionType, BankCard } from '../types';
 import { IconComponent } from './IconComponent';
 import { PlusCircle, Edit2, Trash2, Search, Filter, Calendar, CreditCard, Tag, ArrowUpRight, ArrowDownLeft, X, ArrowUpDown, Info } from 'lucide-react';
+import { SearchableSelect } from './SearchableSelect';
 
 interface TransactionPanelProps {
   transactions: Transaction[];
@@ -291,46 +292,69 @@ export function TransactionPanel({
 
           {/* Account select */}
           <div>
-            <label className="block text-[11px] font-semibold text-slate-400 mb-1 uppercase tracking-wider flex items-center gap-1">
+            <label className="block text-[11px] font-semibold text-slate-400 mb-1 uppercase tracking-wider flex items-center gap-1.5 select-none">
               <CreditCard size={12} />
               Счет списания/внесения
             </label>
-            <select
+            <SearchableSelect
+              items={accounts}
               value={accountId}
-              onChange={(e) => setAccountId(e.target.value)}
-              className="w-full p-2.5 bg-slate-950/60 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-teal-400 text-slate-200 cursor-pointer"
-              required
-            >
-              <option value="" className="bg-slate-950 text-slate-300">Выберите счет...</option>
-              {accounts.map(acc => (
-                <option key={acc.id} value={acc.id} className="bg-slate-950 text-slate-200">
-                  {acc.name} ({acc.balance.toFixed(0)} ₼)
-                </option>
-              ))}
-            </select>
+              onChange={(id) => setAccountId(id)}
+              placeholder="Выберите счет..."
+              searchPlaceholder="Поиск счета..."
+              idKey="id"
+              displayValue={(acc) => `${acc.name} (${Math.round(acc.balance)} ₼)`}
+              filterValue={(acc) => acc.name}
+              renderItem={(acc) => (
+                <div className="flex justify-between items-center w-full">
+                  <span className="font-semibold">{acc.name}</span>
+                  <span className="font-mono text-[10px] text-teal-400 bg-teal-500/10 px-1.5 py-0.5 rounded-md font-extrabold shrink-0 ml-2">
+                    {Math.round(acc.balance)} ₼
+                  </span>
+                </div>
+              )}
+            />
           </div>
 
           {/* Category select */}
           <div>
-            <label className="block text-[11px] font-semibold text-slate-400 mb-1 uppercase tracking-wider flex items-center gap-1">
+            <label className="block text-[11px] font-semibold text-slate-400 mb-1 uppercase tracking-wider flex items-center gap-1.5 select-none">
               <Tag size={12} />
               Категория
             </label>
-            <select
+            <SearchableSelect
+              items={categories.filter(c => c.type === type)}
               value={categoryId}
-              onChange={(e) => setCategoryId(e.target.value)}
-              className="w-full p-2.5 bg-slate-950/60 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-teal-400 text-slate-200 cursor-pointer"
-              required
-            >
-              <option value="" className="bg-slate-950 text-slate-300">Выберите категорию...</option>
-              {categories
-                .filter(c => c.type === type)
-                .map(cat => (
-                  <option key={cat.id} value={cat.id} className="bg-slate-950 text-slate-200">
-                    {cat.name}
-                  </option>
-                ))}
-            </select>
+              onChange={(id) => setCategoryId(id)}
+              placeholder="Выберите категорию..."
+              searchPlaceholder="Поиск категории..."
+              idKey="id"
+              displayValue={(cat) => (
+                <div className="flex items-center gap-2">
+                  <div
+                    className="w-4 h-4 rounded-sm flex items-center justify-center shrink-0"
+                    style={{ backgroundColor: cat.color }}
+                  >
+                    <span className="text-[10px] text-white">
+                      <IconComponent name={cat.icon || 'HelpCircle'} size={10} />
+                    </span>
+                  </div>
+                  <span className="truncate">{cat.name}</span>
+                </div>
+              )}
+              filterValue={(cat) => cat.name}
+              renderItem={(cat) => (
+                <div className="flex items-center gap-2.5">
+                  <div
+                    className="w-5 h-5 rounded-md flex items-center justify-center text-white shrink-0"
+                    style={{ backgroundColor: cat.color }}
+                  >
+                    <IconComponent name={cat.icon || 'HelpCircle'} size={11} />
+                  </div>
+                  <span className="font-semibold">{cat.name}</span>
+                </div>
+              )}
+            />
           </div>
 
           {/* Date input */}

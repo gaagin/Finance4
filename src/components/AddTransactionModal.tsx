@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Account, Category, Transaction, TransactionType } from '../types';
 import { X, ArrowUpDown, Coins, CreditCard, Tag, Landmark, FileText, Check } from 'lucide-react';
+import { SearchableSelect } from './SearchableSelect';
+import { IconComponent } from './IconComponent';
 
 interface AddTransactionModalProps {
   isOpen: boolean;
@@ -221,18 +223,24 @@ export function AddTransactionModal({
                   <CreditCard size={12} className="text-teal-400" />
                   Счет {tab === 'expense' ? 'списания' : 'зачисления'}
                 </label>
-                <select
+                <SearchableSelect
+                  items={accounts}
                   value={accountId}
-                  onChange={(e) => setAccountId(e.target.value)}
-                  className="w-full bg-slate-950 border border-white/10 rounded-2xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-teal-400 transition-colors"
-                  id="modal-account-select"
-                >
-                  {accounts.map((acc) => (
-                    <option key={acc.id} value={acc.id}>
-                      {acc.name} ({Math.round(acc.balance)} ₼)
-                    </option>
-                  ))}
-                </select>
+                  onChange={(id) => setAccountId(id)}
+                  placeholder="Выберите счет..."
+                  searchPlaceholder="Поиск счета..."
+                  idKey="id"
+                  displayValue={(acc) => `${acc.name} (${Math.round(acc.balance)} ₼)`}
+                  filterValue={(acc) => acc.name}
+                  renderItem={(acc) => (
+                    <div className="flex justify-between items-center w-full">
+                      <span className="font-semibold">{acc.name}</span>
+                      <span className="font-mono text-[10px] text-teal-400 bg-teal-500/10 px-1.5 py-0.5 rounded-md font-extrabold shrink-0 ml-2">
+                        {Math.round(acc.balance)} ₼
+                      </span>
+                    </div>
+                  )}
+                />
               </div>
 
               {/* Category Dropdown */}
@@ -241,18 +249,39 @@ export function AddTransactionModal({
                   <Tag size={12} className="text-teal-400" />
                   Категория
                 </label>
-                <select
+                <SearchableSelect
+                  items={filteredCategories}
                   value={categoryId}
-                  onChange={(e) => setCategoryId(e.target.value)}
-                  className="w-full bg-slate-950 border border-white/10 rounded-2xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-teal-400 transition-colors"
-                  id="modal-category-select"
-                >
-                  {filteredCategories.map((cat) => (
-                    <option key={cat.id} value={cat.id}>
-                      {cat.name}
-                    </option>
-                  ))}
-                </select>
+                  onChange={(id) => setCategoryId(id)}
+                  placeholder="Выберите категорию..."
+                  searchPlaceholder="Поиск категории..."
+                  idKey="id"
+                  displayValue={(cat) => (
+                    <div className="flex items-center gap-2">
+                      <div
+                        className="w-4 h-4 rounded-sm flex items-center justify-center shrink-0"
+                        style={{ backgroundColor: cat.color }}
+                      >
+                        <span className="text-[10px] text-white">
+                          <IconComponent name={cat.icon || 'HelpCircle'} size={10} />
+                        </span>
+                      </div>
+                      <span className="truncate">{cat.name}</span>
+                    </div>
+                  )}
+                  filterValue={(cat) => cat.name}
+                  renderItem={(cat) => (
+                    <div className="flex items-center gap-2.5">
+                      <div
+                        className="w-5 h-5 rounded-md flex items-center justify-center text-white shrink-0"
+                        style={{ backgroundColor: cat.color }}
+                      >
+                        <IconComponent name={cat.icon || 'HelpCircle'} size={11} />
+                      </div>
+                      <span className="font-semibold">{cat.name}</span>
+                    </div>
+                  )}
+                />
               </div>
             </>
           ) : (
@@ -263,26 +292,31 @@ export function AddTransactionModal({
                   <Landmark size={12} className="text-rose-400" />
                   Откуда перевести (Счет-источник)
                 </label>
-                <select
+                <SearchableSelect
+                  items={accounts}
                   value={transferFromId}
-                  onChange={(e) => {
-                    const selectedSource = e.target.value;
-                    setTransferFromId(selectedSource);
+                  onChange={(id) => {
+                    setTransferFromId(id);
                     // If source matches destination, automatically swap or change destination
-                    if (selectedSource === transferToId) {
-                      const another = accounts.find((a) => a.id !== selectedSource);
+                    if (id === transferToId) {
+                      const another = accounts.find((a) => a.id !== id);
                       if (another) setTransferToId(another.id);
                     }
                   }}
-                  className="w-full bg-slate-950 border border-white/10 rounded-2xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-teal-400 transition-colors"
-                  id="modal-transfer-source"
-                >
-                  {accounts.map((acc) => (
-                    <option key={acc.id} value={acc.id}>
-                      {acc.name} ({Math.round(acc.balance)} ₼)
-                    </option>
-                  ))}
-                </select>
+                  placeholder="Выберите счет..."
+                  searchPlaceholder="Поиск счета..."
+                  idKey="id"
+                  displayValue={(acc) => `${acc.name} (${Math.round(acc.balance)} ₼)`}
+                  filterValue={(acc) => acc.name}
+                  renderItem={(acc) => (
+                    <div className="flex justify-between items-center w-full">
+                      <span className="font-semibold">{acc.name}</span>
+                      <span className="font-mono text-[10px] text-teal-400 bg-teal-500/10 px-1.5 py-0.5 rounded-md font-extrabold shrink-0 ml-2">
+                        {Math.round(acc.balance)} ₼
+                      </span>
+                    </div>
+                  )}
+                />
               </div>
 
               {/* Transfer Target Account */}
@@ -291,20 +325,24 @@ export function AddTransactionModal({
                   <Landmark size={12} className="text-emerald-400" />
                   Куда перевести (Счет-приемник)
                 </label>
-                <select
+                <SearchableSelect
+                  items={accounts.filter((acc) => acc.id !== transferFromId)}
                   value={transferToId}
-                  onChange={(e) => setTransferToId(e.target.value)}
-                  className="w-full bg-slate-950 border border-white/10 rounded-2xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-teal-400 transition-colors"
-                  id="modal-transfer-dest"
-                >
-                  {accounts
-                    .filter((acc) => acc.id !== transferFromId)
-                    .map((acc) => (
-                      <option key={acc.id} value={acc.id}>
-                        {acc.name} ({Math.round(acc.balance)} ₼)
-                      </option>
-                    ))}
-                </select>
+                  onChange={(id) => setTransferToId(id)}
+                  placeholder="Выберите счет..."
+                  searchPlaceholder="Поиск счета..."
+                  idKey="id"
+                  displayValue={(acc) => `${acc.name} (${Math.round(acc.balance)} ₼)`}
+                  filterValue={(acc) => acc.name}
+                  renderItem={(acc) => (
+                    <div className="flex justify-between items-center w-full">
+                      <span className="font-semibold">{acc.name}</span>
+                      <span className="font-mono text-[10px] text-teal-400 bg-teal-500/10 px-1.5 py-0.5 rounded-md font-extrabold shrink-0 ml-2">
+                        {Math.round(acc.balance)} ₼
+                      </span>
+                    </div>
+                  )}
+                />
               </div>
             </>
           )}
