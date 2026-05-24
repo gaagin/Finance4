@@ -1,0 +1,194 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Outfit", "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+body {
+  background-color: #f8fafc; /* Slate 50 Light theme by default */
+  color: #0f172a; /* Slate 900 */
+  font-family: var(--font-sans);
+  transition: background-color 0.35s cubic-bezier(0.4, 0, 0.2, 1), color 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body:has(.dark) {
+  background-color: #020617; /* Dark Slate 950 */
+}
+
+/* Custom Webkit Scrollbars for Calendar and Lists */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 9999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 9999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Custom pulse and glow classes for Frosted Glass theme */
+.glow-success {
+  box-shadow: 0 0 20px -5px rgba(16, 185, 129, 0.3);
+}
+
+.glow-danger {
+  box-shadow: 0 0 20px -5px rgba(244, 63, 94, 0.3);
+}
+
+.glow-primary {
+  box-shadow: 0 0 25px -5px rgba(20, 184, 166, 0.4);
+}
+
+/* ==========================================
+   LIGHT MODE STYLING / CSS OVERRIDES
+   Activates when #main-root-container DOES NOT have the .dark class
+   ========================================== */
+
+#main-root-container:not(.dark) {
+  background-color: #f1f5f9;
+  color: #0f172a;
+}
+
+#main-root-container:not(.dark) header {
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  border-color: #cbd5e1 !important;
+}
+
+#main-root-container:not(.dark) footer {
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  border-color: #e2e8f0 !important;
+}
+
+#main-root-container:not(.dark) .bg-white\/5 {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.04), 0 2px 4px -1px rgba(0, 0, 0, 0.02), inset 0 0 0 1px rgba(255, 255, 255, 0.6) !important;
+}
+
+#main-root-container:not(.dark) .border-white\/5,
+#main-root-container:not(.dark) .border-white\/10 {
+  border-color: #cbd5e1 !important;
+}
+
+#main-root-container:not(.dark) h1,
+#main-root-container:not(.dark) h2,
+#main-root-container:not(.dark) h3,
+#main-root-container:not(.dark) h4 {
+  color: #0a0f1d !important;
+}
+
+#main-root-container:not(.dark) .text-white {
+  color: #0f172a !important;
+}
+
+#main-root-container:not(.dark) .text-slate-100 {
+  color: #1e293b !important;
+}
+
+#main-root-container:not(.dark) .text-slate-200 {
+  color: #334155 !important;
+}
+
+#main-root-container:not(.dark) .text-slate-300 {
+  color: #475569 !important;
+}
+
+#main-root-container:not(.dark) .text-slate-400 {
+  color: #516075 !important;
+}
+
+#main-root-container:not(.dark) .bg-slate-950\/40 {
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+#main-root-container:not(.dark) .bg-slate-950\/60,
+#main-root-container:not(.dark) .bg-slate-950 {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+}
+
+#main-root-container:not(.dark) .bg-slate-900\/60,
+#main-root-container:not(.dark) .bg-slate-900 {
+  background-color: #f1f5f9 !important;
+  border-color: #e2e8f0 !important;
+}
+
+#main-root-container:not(.dark) .bg-white\/15 {
+  background-color: #cbd5e1 !important;
+  color: #0f172a !important;
+  border-color: #94a3b8 !important;
+}
+
+#main-root-container:not(.dark) .text-slate-450,
+#main-root-container:not(.dark) .text-slate-350 {
+  color: #475569 !important;
+}
+
+#main-root-container:not(.dark) .hover\:bg-white\/5:hover {
+  background-color: #f1f5f9 !important;
+}
+
+#main-root-container:not(.dark) .hover\:text-white:hover {
+  color: #0f172a !important;
+}
+
+#main-root-container:not(.dark) input,
+#main-root-container:not(.dark) select,
+#main-root-container:not(.dark) textarea {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+}
+
+#main-root-container:not(.dark) select option {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+}
+
+#main-root-container:not(.dark) footer span,
+#main-root-container:not(.dark) footer p {
+  color: #475569 !important;
+}
+
+#main-root-container:not(.dark) .border-white\/10 {
+  border-color: #cbd5e1 !important;
+}
+
+#main-root-container:not(.dark) .bg-teal-500\/10 {
+  background-color: rgba(20, 184, 166, 0.08) !important;
+  color: #0d9488 !important;
+}
+
+#main-root-container:not(.dark) .text-teal-350,
+#main-root-container:not(.dark) .text-teal-300 {
+  color: #0f766e !important;
+}
+
+#main-root-container:not(.dark) .glow-primary,
+#main-root-container:not(.dark) .glow-success,
+#main-root-container:not(.dark) .glow-danger {
+  box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.1) !important;
+}

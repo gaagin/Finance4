@@ -1,0 +1,50 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User specific financial profile with accounts, cards, categories, transactions, and budget limits",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "The firebase auth user unique identifier"
+        },
+        "email": {
+          "type": "string",
+          "description": "User email address"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "accounts": {
+          "type": "array",
+          "description": "User list of financial accounts"
+        },
+        "categories": {
+          "type": "array",
+          "description": "Financial categories defined by the user"
+        },
+        "transactions": {
+          "type": "array",
+          "description": "Record of transactions"
+        },
+        "budgets": {
+          "type": "array",
+          "description": "Budget limits set per category"
+        },
+        "cards": {
+          "type": "array",
+          "description": "Connected bank cards"
+        }
+      },
+      "required": ["uid", "email"]
+    }
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Host document containing all local storage state synced with the user account"
+    }
+  }
+}
