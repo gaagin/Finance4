@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Transaction, Category, Account, TransactionType, BankCard } from '../types';
 import { IconComponent } from './IconComponent';
 import { PlusCircle, Edit2, Trash2, Search, Filter, Calendar, CreditCard, Tag, ArrowUpRight, ArrowDownLeft, X, ArrowUpDown, Info } from 'lucide-react';
@@ -32,7 +32,7 @@ export function TransactionPanel({
   onCancelEditing
 }: TransactionPanelProps) {
   
-  // New or Edited Transaction state
+  // New Quick Add Transaction state
   const [amount, setAmount] = useState('');
   const [type, setType] = useState<TransactionType>('expense');
   const [accountId, setAccountId] = useState('');
@@ -41,17 +41,67 @@ export function TransactionPanel({
   const [description, setDescription] = useState('');
   const [cardId, setCardId] = useState<string | undefined>(undefined);
 
-  // Local effect-like sync when preselected date or external edit starts
-  useMemo(() => {
+  // Dedicated state variables for the Transaction Edit Modal
+  const [editAmount, setEditAmount] = useState('');
+  const [editType, setEditType] = useState<TransactionType>('expense');
+  const [editAccountId, setEditAccountId] = useState('');
+  const [editCategoryId, setEditCategoryId] = useState('');
+  const [editDate, setEditDate] = useState('');
+  const [editDescription, setEditDescription] = useState('');
+  const [editCardId, setEditCardId] = useState<string | undefined>(undefined);
+
+  // Synchronize Edit Modal state when editingTransaction triggers
+  useEffect(() => {
     if (editingTransaction) {
-      setAmount(editingTransaction.amount.toString());
-      setType(editingTransaction.type);
-      setAccountId(editingTransaction.accountId);
-      setCategoryId(editingTransaction.categoryId);
-      setDate(editingTransaction.date);
-      setDescription(editingTransaction.description);
-      setCardId(editingTransaction.cardId);
-    } else if (preselectedDate) {
+      setEditAmount(editingTransaction.amount.toString());
+      setEditType(editingTransaction.type);
+      setEditAccountId(editingTransaction.accountId);
+      setEditCategoryId(editingTransaction.categoryId);
+      setEditDate(editingTransaction.date);
+      setEditDescription(editingTransaction.description || '');
+      setEditCardId(editingTransaction.cardId);
+    }
+  }, [editingTransaction]);
+
+  // Handle changing Transaction Type within the Edit Modal
+  const handleEditTypeChange = (newType: TransactionType) => {
+    setEditType(newType);
+    const filteredCats = categories.filter(c => c.type === newType);
+    if (filteredCats.length > 0) {
+      setEditCategoryId(filteredCats[0].id);
+    } else {
+      setEditCategoryId('');
+    }
+  };
+
+  // Submit handler for Transaction Edit Modal
+  const handleEditFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editAmount || isNaN(Number(editAmount)) || Number(editAmount) <= 0 || !editAccountId || !editCategoryId || !editDate) {
+      alert('Пожалуйста, заполните необходимые поля корректными значениями.');
+      return;
+    }
+
+    if (editingTransaction) {
+      onUpdateTransaction({
+        id: editingTransaction.id,
+        accountId: editAccountId,
+        categoryId: editCategoryId,
+        amount: Number(editAmount),
+        type: editType,
+        date: editDate,
+        description: editDescription.trim(),
+        cardId: editCardId || undefined
+      });
+    }
+  };
+
+  // Delete Transaction safety confirmation state
+  const [deleteConfirm, setDeleteConfirm] = useState<{ id: string; description: string; amount: number; isIncome: boolean } | null>(null);
+
+  // Local effect-like sync when preselected date begins
+  useMemo(() => {
+    if (preselectedDate) {
       setDate(preselectedDate);
       // Pick first account and category as default
       if (accounts.length > 0) setAccountId(accounts[0].id);
@@ -65,7 +115,7 @@ export function TransactionPanel({
       if (options.length > 0 && !categoryId) setCategoryId(options[0].id);
       setCardId(undefined);
     }
-  }, [editingTransaction, preselectedDate]);
+  }, [preselectedDate]);
 
   // Handle changing Transaction Type within the creation form (switches suitable categories)
   const handleFormTypeChange = (newType: TransactionType) => {
@@ -86,29 +136,15 @@ export function TransactionPanel({
       return;
     }
 
-    if (editingTransaction) {
-      onUpdateTransaction({
-        id: editingTransaction.id,
-        accountId,
-        categoryId,
-        amount: Number(amount),
-        type,
-        date,
-        description: description.trim(),
-        cardId: cardId || undefined
-      });
-      if (onCancelEditing) onCancelEditing();
-    } else {
-      onAddTransaction({
-        accountId,
-        categoryId,
-        amount: Number(amount),
-        type,
-        date,
-        description: description.trim(),
-        cardId: cardId || undefined
-      });
-    }
+    onAddTransaction({
+      accountId,
+      categoryId,
+      amount: Number(amount),
+      type,
+      date,
+      description: description.trim(),
+      cardId: cardId || undefined
+    });
 
     // Reset Form
     setAmount('');
@@ -206,20 +242,19 @@ export function TransactionPanel({
               <PlusCircle size={20} />
             </div>
             <h3 className="font-display font-semibold text-white">
-              {editingTransaction ? 'Редактировать операцию' : 'Быстрая запись'}
+              Быстрая запись
             </h3>
           </div>
 
-          {(editingTransaction || preselectedDate) && (
+          {preselectedDate && (
             <button
               onClick={() => {
-                if (onCancelEditing) onCancelEditing();
                 if (onClearPreselectedDate) onClearPreselectedDate();
                 setAmount('');
                 setDescription('');
               }}
               className="p-1 text-slate-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors cursor-pointer"
-              title="Сбросить режим редактирования"
+              title="Сбросить выбранную дату"
             >
               <X size={16} />
             </button>
@@ -421,22 +456,8 @@ export function TransactionPanel({
                   : 'bg-teal-500 hover:bg-teal-400 text-slate-950'
               }`}
             >
-              {editingTransaction ? 'Сохранить изменения' : 'Внести операцию'}
+              Внести операцию
             </button>
-            
-            {editingTransaction && (
-              <button
-                type="button"
-                onClick={() => {
-                  if (onCancelEditing) onCancelEditing();
-                  setAmount('');
-                  setDescription('');
-                }}
-                className="px-4 py-3 bg-white/10 hover:bg-white/15 text-slate-300 rounded-xl text-xs font-bold uppercase transition-colors cursor-pointer"
-              >
-                Отмена
-              </button>
-            )}
           </div>
         </form>
       </div>
@@ -664,36 +685,36 @@ export function TransactionPanel({
                       </span>
                     </div>
 
-                    {/* Action buttons */}
-                    <div className="col-span-2 flex items-center justify-end gap-1.5">
-                      <button
-                        onClick={() => {
-                          onUpdateTransaction({ ...tx, displayInEditFormOnly: true } as any);
-                          setTimeout(() => {
-                            const elem = document.getElementById('transaction-form-panel');
-                            if (elem) {
-                              elem.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                              elem.classList.add('glow-primary');
-                              setTimeout(() => elem.classList.remove('glow-primary'), 1200);
-                            }
-                          }, 80);
-                        }}
-                        className="p-1.5 px-2.5 text-[11px] font-semibold bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-white/10 rounded-xl hover:bg-teal-500 hover:text-slate-950 dark:hover:bg-teal-450 dark:hover:text-slate-950 transition-all cursor-pointer flex items-center gap-1 shrink-0"
-                        title="Редактировать запись"
-                      >
-                        <Edit2 size={11} />
-                        <span className="md:hidden">Изм</span>
-                      </button>
-
-                      <button
-                        onClick={() => onDeleteTransaction(tx.id)}
-                        className="p-1 px-2 text-[10px] font-semibold bg-white/5 hover:bg-rose-500/15 hover:text-rose-400 text-slate-400 border border-white/5 hover:border-rose-500/35 rounded-lg transition-all cursor-pointer flex items-center gap-1"
-                        title="Удалить запись"
-                      >
-                        <Trash2 size={10} />
-                        <span className="md:hidden">Удал</span>
-                      </button>
-                    </div>
+                     {/* Action buttons */}
+                     <div className="col-span-2 flex items-center justify-end gap-1.5">
+                       <button
+                         onClick={() => {
+                           onUpdateTransaction({ ...tx, displayInEditFormOnly: true } as any);
+                         }}
+                         className="p-1.5 px-2.5 text-[11px] font-semibold bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-white/10 rounded-xl hover:bg-teal-500 hover:text-slate-950 dark:hover:bg-teal-450 dark:hover:text-slate-950 transition-all cursor-pointer flex items-center gap-1 shrink-0"
+                         title="Редактировать запись"
+                       >
+                         <Edit2 size={11} />
+                         <span className="md:hidden font-semibold">Изм</span>
+                       </button>
+ 
+                       <button
+                         onClick={() => {
+                           const associatedCat = categories.find(c => c.id === tx.categoryId);
+                           setDeleteConfirm({
+                             id: tx.id,
+                             description: tx.description || associatedCat?.name || 'Без описания',
+                             amount: tx.amount,
+                             isIncome: tx.type === 'income'
+                           });
+                         }}
+                         className="p-1.5 px-2.5 text-[11px] font-semibold bg-white/5 hover:bg-rose-500/15 hover:text-rose-400 text-slate-400 border border-white/5 hover:border-rose-500/35 rounded-xl transition-all cursor-pointer flex items-center gap-1 shrink-0"
+                         title="Удалить запись"
+                       >
+                         <Trash2 size={11} />
+                         <span className="md:hidden font-semibold">Удал</span>
+                       </button>
+                     </div>
 
                   </div>
                 );
@@ -708,6 +729,253 @@ export function TransactionPanel({
         </div>
       </div>
 
+      {/* TRANSACTION EDIT MODAL */}
+      {editingTransaction && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fade-in">
+          <div className="w-full max-w-md bg-slate-900 border border-white/10 rounded-3xl shadow-2xl overflow-hidden text-left" id="edit-transaction-modal">
+            <div className="flex items-center justify-between px-6 py-5 border-b border-white/10 bg-white/5">
+              <div>
+                <h3 className="text-base font-display font-bold text-white flex items-center gap-2">
+                  <Edit2 className="text-teal-400" size={18} />
+                  Редактировать операцию
+                </h3>
+                <p className="text-xs text-slate-400 mt-1">Изменение деталей платежа</p>
+              </div>
+              <button
+                type="button"
+                onClick={onCancelEditing}
+                className="p-1.5 hover:bg-white/10 text-slate-400 hover:text-white rounded-lg transition-colors cursor-pointer"
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            <form onSubmit={handleEditFormSubmit} className="p-6 space-y-4">
+              {/* Type Toggle switcher */}
+              <div className="flex bg-slate-950 p-1 rounded-xl border border-white/5">
+                <button
+                  type="button"
+                  onClick={() => handleEditTypeChange('expense')}
+                  className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                    editType === 'expense'
+                      ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  <ArrowDownLeft size={13} />
+                  Расход
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleEditTypeChange('income')}
+                  className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                    editType === 'income'
+                      ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  <ArrowUpRight size={13} />
+                  Доход
+                </button>
+              </div>
+
+              {/* Amount input */}
+              <div>
+                <label className="block text-[11px] font-semibold text-slate-400 mb-1 uppercase tracking-wider">
+                  Сумма в Манатах (₼)
+                </label>
+                <div className="relative">
+                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 font-display font-extrabold text-slate-400 text-sm">
+                    ₼
+                  </span>
+                  <input
+                    type="number"
+                    step="any"
+                    min="0.01"
+                    placeholder="0.00"
+                    value={editAmount}
+                    onChange={(e) => setEditAmount(e.target.value)}
+                    className="w-full pl-8 pr-4 py-2 bg-slate-950/60 border border-white/10 rounded-xl text-sm font-display font-bold text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-teal-400"
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Account selection */}
+              <div>
+                <label className="block text-[11px] font-semibold text-slate-400 mb-1 uppercase tracking-wider flex items-center gap-1.5 select-none">
+                  <CreditCard size={12} />
+                  Счет
+                </label>
+                <SearchableSelect
+                  items={accounts}
+                  value={editAccountId}
+                  onChange={(id) => setEditAccountId(id)}
+                  placeholder="Выберите счет..."
+                  searchPlaceholder="Поиск счета..."
+                  idKey="id"
+                  displayValue={(acc) => `${acc.name} (${Math.round(acc.balance)} ₼)`}
+                  filterValue={(acc) => acc.name}
+                  renderItem={(acc) => (
+                    <div className="flex justify-between items-center w-full text-xs">
+                      <span className="font-semibold">{acc.name}</span>
+                      <span className="font-mono text-[9px] text-teal-400 bg-teal-500/10 px-1.5 py-0.5 rounded-md font-extrabold shrink-0 ml-2">
+                        {Math.round(acc.balance)} ₼
+                      </span>
+                    </div>
+                  )}
+                />
+              </div>
+
+              {/* Category selection */}
+              <div>
+                <label className="block text-[11px] font-semibold text-slate-400 mb-1 uppercase tracking-wider flex items-center gap-1.5 select-none">
+                  <Tag size={12} />
+                  Категория
+                </label>
+                <SearchableSelect
+                  items={categories.filter(c => c.type === editType)}
+                  value={editCategoryId}
+                  onChange={(id) => setEditCategoryId(id)}
+                  placeholder="Выберите категорию..."
+                  searchPlaceholder="Поиск категории..."
+                  idKey="id"
+                  displayValue={(cat) => (
+                    <div className="flex items-center gap-2 text-xs">
+                      <div
+                        className="w-4 h-4 rounded-sm flex items-center justify-center shrink-0"
+                        style={{ backgroundColor: cat.color }}
+                      >
+                        <span className="text-[10px] text-white">
+                          <IconComponent name={cat.icon || 'HelpCircle'} size={10} />
+                        </span>
+                      </div>
+                      <span className="truncate">{cat.name}</span>
+                    </div>
+                  )}
+                  filterValue={(cat) => cat.name}
+                  renderItem={(cat) => (
+                    <div className="flex items-center gap-2 text-xs">
+                      <div
+                        className="w-4 h-4 rounded-md flex items-center justify-center text-white shrink-0"
+                        style={{ backgroundColor: cat.color }}
+                      >
+                        <IconComponent name={cat.icon || 'HelpCircle'} size={10} />
+                      </div>
+                      <span className="font-semibold">{cat.name}</span>
+                    </div>
+                  )}
+                />
+              </div>
+
+              {/* Date selection */}
+              <div>
+                <label className="block text-[11px] font-semibold text-slate-400 mb-1 uppercase tracking-wider flex items-center gap-1">
+                  <Calendar size={12} />
+                  Дата
+                </label>
+                <input
+                  type="date"
+                  value={editDate}
+                  onChange={(e) => setEditDate(e.target.value)}
+                  className="w-full p-2 bg-slate-950/60 border border-white/10 rounded-xl text-xs text-slate-200"
+                  required
+                />
+              </div>
+
+              {/* Description selection */}
+              <div>
+                <label className="block text-[11px] font-semibold text-slate-400 mb-1 uppercase tracking-wider">
+                  Описание / Примечание
+                </label>
+                <input
+                  type="text"
+                  placeholder="Примечание..."
+                  value={editDescription}
+                  onChange={(e) => setEditDescription(e.target.value)}
+                  className="w-full p-2 bg-slate-950/60 border border-white/10 rounded-xl text-xs text-slate-200 placeholder-slate-600"
+                />
+              </div>
+
+              {/* Card selection */}
+              <div>
+                <label className="block text-[11px] font-semibold text-slate-400 mb-1 uppercase tracking-wider flex items-center gap-1">
+                  <CreditCard size={12} className="text-teal-300" />
+                  Привязать пластиковую карту (Опционально)
+                </label>
+                <select
+                  value={editCardId || ''}
+                  onChange={(e) => setEditCardId(e.target.value || undefined)}
+                  className="w-full p-2 bg-slate-950/60 border border-white/10 rounded-xl text-xs text-slate-200 cursor-pointer text-ellipsis"
+                >
+                  <option value="" className="bg-slate-950 text-slate-400">Без пластиковой карты (m10/Наличные)</option>
+                  {cards.map(card => (
+                    <option key={card.id} value={card.id} className="bg-slate-950 text-slate-200">
+                      {card.bank} •••• {card.lastFour} ({card.name})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Form Action button block */}
+              <div className="flex gap-3 pt-4 border-t border-white/5">
+                <button
+                  type="button"
+                  onClick={onCancelEditing}
+                  className="flex-1 py-2 bg-white/5 hover:bg-white/10 text-slate-350 text-xs font-semibold rounded-xl border border-white/5 transition-colors cursor-pointer text-center"
+                >
+                  Отмена
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 py-2 bg-teal-500 hover:bg-teal-400 text-slate-950 text-xs font-bold uppercase tracking-wider rounded-xl transition-colors cursor-pointer text-center"
+                >
+                  Сохранить
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* DELETE CONFIRMATION MODAL */}
+      {deleteConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
+          <div className="w-full max-w-sm bg-slate-900 border border-white/10 rounded-3xl shadow-2xl p-6 text-center space-y-4 animate-scale-up" id="delete-transaction-confirm-modal">
+            <div className="w-12 h-12 bg-rose-500/10 text-rose-400 border border-rose-500/20 rounded-full flex items-center justify-center mx-auto">
+              <Trash2 size={22} className="stroke-[2.5px]" />
+            </div>
+            
+            <div className="space-y-1.5 animate-none">
+              <h3 className="text-base font-display font-bold text-white">Удалить операцию?</h3>
+              <p className="text-xs text-slate-400 leading-relaxed text-balance text-left sm:text-center">
+                Вы действительно хотите удалить платежную операцию <span className="text-white font-semibold">"{deleteConfirm.description}"</span> на сумму <span className={deleteConfirm.isIncome ? "text-emerald-400 font-bold" : "text-rose-450 font-bold"}>{deleteConfirm.isIncome ? '+' : '-'}{deleteConfirm.amount.toFixed(2)} ₼</span>? 
+                Баланс связанного счета автоматически пересчитается в обратную сторону.
+              </p>
+            </div>
+
+            <div className="flex gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setDeleteConfirm(null)}
+                className="flex-1 py-2.5 bg-white/5 hover:bg-white/10 text-slate-350 text-xs font-semibold rounded-xl border border-white/5 transition-colors cursor-pointer"
+              >
+                Отмена
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  onDeleteTransaction(deleteConfirm.id);
+                  setDeleteConfirm(null);
+                }}
+                className="flex-1 py-2.5 bg-rose-500 hover:bg-rose-600 text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-md shadow-rose-500/10 hover:shadow-rose-500/20 cursor-pointer"
+              >
+                Удалить
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
