@@ -241,8 +241,22 @@ export function BudgetingPanel({
 
                       <div className="flex items-center gap-3">
                         <button
-                          onClick={() => handleStartEdit(b)}
-                          className="p-1.5 bg-white/10 hover:bg-white/15 text-slate-300 hover:text-white border border-white/5 rounded-lg transition-colors cursor-pointer"
+                          onClick={() => {
+                            handleStartEdit(b);
+                            setTimeout(() => {
+                              const elem = document.getElementById('budgeting-panel-root');
+                              if (elem) {
+                                elem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                // Add a subtle highlight effect to the form column
+                                const formCol = elem.firstElementChild;
+                                if (formCol) {
+                                  formCol.classList.add('glow-primary');
+                                  setTimeout(() => formCol.classList.remove('glow-primary'), 1200);
+                                }
+                              }
+                            }, 80);
+                          }}
+                          className="p-2 bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-white/10 rounded-xl hover:bg-teal-500 hover:text-slate-950 dark:hover:bg-teal-450 dark:hover:text-slate-950 transition-all cursor-pointer flex items-center justify-center shrink-0"
                           title="Редактировать лимит"
                         >
                           <Edit2 size={13} />

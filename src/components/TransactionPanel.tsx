@@ -667,11 +667,21 @@ export function TransactionPanel({
                     {/* Action buttons */}
                     <div className="col-span-2 flex items-center justify-end gap-1.5">
                       <button
-                        onClick={() => onUpdateTransaction({ ...tx, displayInEditFormOnly: true } as any)} // triggers edit state hoist
-                        className="p-1 px-2 text-[10px] font-semibold bg-white/10 hover:bg-white/20 hover:text-white text-slate-300 border border-white/10 rounded-lg transition-all cursor-pointer flex items-center gap-1"
+                        onClick={() => {
+                          onUpdateTransaction({ ...tx, displayInEditFormOnly: true } as any);
+                          setTimeout(() => {
+                            const elem = document.getElementById('transaction-form-panel');
+                            if (elem) {
+                              elem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                              elem.classList.add('glow-primary');
+                              setTimeout(() => elem.classList.remove('glow-primary'), 1200);
+                            }
+                          }, 80);
+                        }}
+                        className="p-1.5 px-2.5 text-[11px] font-semibold bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-white/10 rounded-xl hover:bg-teal-500 hover:text-slate-950 dark:hover:bg-teal-450 dark:hover:text-slate-950 transition-all cursor-pointer flex items-center gap-1 shrink-0"
                         title="Редактировать запись"
                       >
-                        <Edit2 size={10} />
+                        <Edit2 size={11} />
                         <span className="md:hidden">Изм</span>
                       </button>
 

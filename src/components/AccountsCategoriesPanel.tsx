@@ -500,15 +500,25 @@ export function AccountsCategoriesPanel({
                       <div className="flex items-center gap-1 shrink-0 z-10">
                         <button
                           type="button"
-                          onClick={() => handleEditCard(card)}
-                          className={`p-1 mt-0.5 rounded-lg border transition-colors cursor-pointer ${
+                          onClick={() => {
+                            handleEditCard(card);
+                            setTimeout(() => {
+                              const elem = document.getElementById('accounts-management');
+                              if (elem) {
+                                elem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                elem.classList.add('glow-primary');
+                                setTimeout(() => elem.classList.remove('glow-primary'), 1200);
+                              }
+                            }, 80);
+                          }}
+                          className={`p-1.5 mt-0.5 rounded-xl border transition-all cursor-pointer flex items-center justify-center shrink-0 ${
                             isYelo 
-                              ? 'bg-slate-950/10 hover:bg-slate-950/20 border-slate-950/20 text-slate-900' 
-                              : 'bg-white/10 hover:bg-white/20 border-white/10 text-white'
+                              ? 'bg-slate-950/15 hover:bg-slate-950 border-slate-950/30 text-slate-950 hover:text-white' 
+                              : 'bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-slate-200 border-slate-300 dark:border-white/10 hover:bg-teal-500 hover:text-slate-950 dark:hover:bg-teal-450 dark:hover:text-slate-950'
                           }`}
                           title="Редактировать параметры"
                         >
-                          <Edit2 size={11} />
+                          <Edit2 size={12} />
                         </button>
                         <button
                           type="button"
@@ -562,11 +572,21 @@ export function AccountsCategoriesPanel({
 
                       <div className="flex items-center gap-1.5">
                         <button
-                          onClick={() => handleEditAccount(acc)}
-                          className="p-1.5 bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white rounded-lg border border-white/10 transition-colors cursor-pointer"
+                          onClick={() => {
+                            handleEditAccount(acc);
+                            setTimeout(() => {
+                              const elem = document.getElementById('accounts-management');
+                              if (elem) {
+                                elem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                elem.classList.add('glow-primary');
+                                setTimeout(() => elem.classList.remove('glow-primary'), 1200);
+                              }
+                            }, 80);
+                          }}
+                          className="p-2 bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-white/10 rounded-xl hover:bg-teal-500 hover:text-slate-950 dark:hover:bg-teal-450 dark:hover:text-slate-950 transition-all cursor-pointer flex items-center justify-center shrink-0"
                           title="Изменить счет"
                         >
-                          <Edit2 size={12} />
+                          <Edit2 size={13} />
                         </button>
                         
                         <button
@@ -742,11 +762,21 @@ export function AccountsCategoriesPanel({
 
                   <div className="flex items-center gap-1 shrink-0">
                     <button
-                      onClick={() => handleEditCategory(cat)}
-                      className="p-1.5 bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white border border-white/10 rounded-lg transition-colors cursor-pointer"
+                      onClick={() => {
+                        handleEditCategory(cat);
+                        setTimeout(() => {
+                          const elem = document.getElementById('categories-management');
+                          if (elem) {
+                            elem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            elem.classList.add('glow-primary');
+                            setTimeout(() => elem.classList.remove('glow-primary'), 1200);
+                          }
+                        }, 80);
+                      }}
+                      className="p-2 bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-white/10 rounded-xl hover:bg-teal-500 hover:text-slate-950 dark:hover:bg-teal-450 dark:hover:text-slate-950 transition-all cursor-pointer flex items-center justify-center shrink-0"
                       title="Изменить"
                     >
-                      <Edit2 size={11} />
+                      <Edit2 size={13} />
                     </button>
                     
                     <button
