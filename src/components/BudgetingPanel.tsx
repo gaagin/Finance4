@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Transaction, Category, BudgetLimit } from '../types';
 import { IconComponent } from './IconComponent';
-import { Plus, Sliders, Trash2, Edit2, AlertCircle, CheckCircle2, TrendingUp, Info } from 'lucide-react';
+import { Plus, Sliders, Trash2, Edit2, AlertCircle, CheckCircle2, TrendingUp, Info, X, AlertTriangle } from 'lucide-react';
 
 interface BudgetingPanelProps {
   transactions: Transaction[];
@@ -21,6 +21,9 @@ export function BudgetingPanel({
   const [selectedCategory, setSelectedCategory] = useState('');
   const [limitAmount, setLimitAmount] = useState('');
   const [isEditing, setIsEditing] = useState<string | null>(null); // holds categoryId being edited
+
+  // Budget delete confirmation state
+  const [deleteConfirm, setDeleteConfirm] = useState<{ categoryId: string; categoryName: string } | null>(null);
 
   // Budget calculations based on May 2026 operations (the "current" month context)
   const currentMonthTransactions = transactions.filter(t => {
@@ -83,70 +86,61 @@ export function BudgetingPanel({
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">
-              Категория расходов
-            </label>
-            <select
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              disabled={isEditing !== null}
-              className="w-full p-3 bg-slate-950/60 border border-white/10 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-teal-400 text-slate-200 disabled:opacity-60 cursor-pointer"
-            >
-              <option value="" className="bg-slate-950 text-slate-300">Выберите категорию...</option>
-              {isEditing ? (
-                <option value={isEditing} className="bg-slate-950 text-slate-300">
-                  {categories.find(c => c.id === isEditing)?.name || 'Текущая категория'}
-                </option>
-              ) : (
-                unbudgetedCategories.map(cat => (
-                  <option key={cat.id} value={cat.id} className="bg-slate-950 text-slate-300">
-                    {cat.name}
-                  </option>
-                ))
-              )}
-            </select>
-          </div>
+          {!isEditing ? (
+            <>
+              <div>
+                <label className="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">
+                  Категория расходов
+                </label>
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="w-full p-3 bg-slate-950/60 border border-white/10 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-teal-400 text-slate-200 cursor-pointer"
+                >
+                  <option value="" className="bg-slate-950 text-slate-300">Выберите категорию...</option>
+                  {unbudgetedCategories.map(cat => (
+                    <option key={cat.id} value={cat.id} className="bg-slate-950 text-slate-300">
+                      {cat.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-          <div>
-            <label className="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">
-              Месячный Лимит (₼, AZN)
-            </label>
-            <div className="relative">
-              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 font-display font-medium text-sm">
-                ₼
-              </span>
-              <input
-                type="number"
-                step="any"
-                min="1"
-                placeholder="Например: 250"
-                value={limitAmount}
-                onChange={(e) => setLimitAmount(e.target.value)}
-                className="w-full pl-8 pr-4 py-3 bg-slate-950/60 border border-white/10 rounded-xl text-sm font-display font-bold focus:outline-hidden focus:ring-2 focus:ring-teal-400 text-slate-200"
-                required
-              />
+              <div>
+                <label className="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">
+                  Месячный Лимит (₼, AZN)
+                </label>
+                <div className="relative">
+                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 font-display font-medium text-sm">
+                    ₼
+                  </span>
+                  <input
+                    type="number"
+                    step="any"
+                    min="1"
+                    placeholder="Например: 250"
+                    value={limitAmount}
+                    onChange={(e) => setLimitAmount(e.target.value)}
+                    className="w-full pl-8 pr-4 py-3 bg-slate-950/60 border border-white/10 rounded-xl text-sm font-display font-bold focus:outline-hidden focus:ring-2 focus:ring-teal-400 text-slate-200"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="flex gap-2 pt-2">
+                <button
+                  type="submit"
+                  className="flex-1 py-3 bg-teal-500 hover:bg-teal-400 active:bg-teal-600 text-slate-950 rounded-xl text-sm font-bold transition-all shadow-xs flex items-center justify-center gap-1 cursor-pointer"
+                >
+                  Создать лимит
+                </button>
+              </div>
+            </>
+          ) : (
+            <div className="p-4 py-6 border border-dashed border-teal-500/20 bg-teal-500/5 rounded-2xl text-center text-xs text-teal-300">
+              Лимит бюджета редактируется в модальном окне
             </div>
-          </div>
-
-          <div className="flex gap-2 pt-2">
-            <button
-              type="submit"
-              className="flex-1 py-3 bg-teal-500 hover:bg-teal-400 active:bg-teal-600 text-slate-950 rounded-xl text-sm font-bold transition-all shadow-xs flex items-center justify-center gap-1 cursor-pointer"
-            >
-              {isEditing ? 'Сохранить лимит' : 'Создать лимит'}
-            </button>
-            
-            {isEditing && (
-              <button
-                type="button"
-                onClick={handleCancelEdit}
-                className="px-4 py-3 bg-white/10 hover:bg-white/15 text-slate-300 rounded-xl text-sm font-semibold transition-colors cursor-pointer"
-              >
-                Отмена
-              </button>
-            )}
-          </div>
+          )}
         </form>
 
         <div className="mt-6 p-4 bg-amber-500/10 border border-amber-500/20 rounded-2xl text-xs text-amber-300 space-y-1.5">
@@ -241,28 +235,17 @@ export function BudgetingPanel({
 
                       <div className="flex items-center gap-3">
                         <button
-                          onClick={() => {
-                            handleStartEdit(b);
-                            setTimeout(() => {
-                              const elem = document.getElementById('budgeting-panel-root');
-                              if (elem) {
-                                elem.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                                // Add a subtle highlight effect to the form column
-                                const formCol = elem.firstElementChild;
-                                if (formCol) {
-                                  formCol.classList.add('glow-primary');
-                                  setTimeout(() => formCol.classList.remove('glow-primary'), 1200);
-                                }
-                              }
-                            }, 80);
-                          }}
+                          onClick={() => handleStartEdit(b)}
                           className="p-2 bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-white/10 rounded-xl hover:bg-teal-500 hover:text-slate-950 dark:hover:bg-teal-450 dark:hover:text-slate-950 transition-all cursor-pointer flex items-center justify-center shrink-0"
                           title="Редактировать лимит"
                         >
                           <Edit2 size={13} />
                         </button>
                         <button
-                          onClick={() => onDeleteBudget(b.categoryId)}
+                          onClick={() => {
+                            const categoryName = categories.find(c => c.id === b.categoryId)?.name || 'Категория';
+                            setDeleteConfirm({ categoryId: b.categoryId, categoryName });
+                          }}
                           className="p-1.5 bg-white/5 hover:bg-rose-500/15 text-slate-400 hover:text-rose-400 border border-white/5 hover:border-rose-500/35 rounded-lg transition-colors cursor-pointer"
                           title="Удалить бюджетный лимит"
                         >
@@ -306,6 +289,122 @@ export function BudgetingPanel({
           <span>Бюджетирование позволяет контролировать бесконтрольные траты. Установите разумные рамки для «Кафе и Чайхана», продуктов или шопинга!</span>
         </div>
       </div>
+
+      {/* BUDGET EDIT MODAL */}
+      {isEditing && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fade-in">
+          <div className="w-full max-w-sm bg-slate-900 border border-white/10 rounded-3xl shadow-2xl overflow-hidden text-left">
+            <div className="flex items-center justify-between px-6 py-5 border-b border-white/10 bg-white/5">
+              <div>
+                <h3 className="text-base font-display font-bold text-white flex items-center gap-2">
+                  <Sliders className="text-teal-400" size={18} />
+                  Редактировать бюджетный лимит
+                </h3>
+                <p className="text-xs text-slate-400 mt-1">Корректировка месячной суммы</p>
+              </div>
+              <button
+                type="button"
+                onClick={handleCancelEdit}
+                className="p-1.5 hover:bg-white/10 text-slate-400 hover:text-white rounded-lg transition-colors cursor-pointer"
+              >
+                <X size={16} />
+              </button>
+            </div>
+            
+            <form onSubmit={handleSubmit} className="p-6 space-y-4">
+              <div>
+                <label className="block text-[11px] font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">
+                  Категория расходов
+                </label>
+                <select
+                  disabled
+                  value={selectedCategory}
+                  className="w-full p-3 bg-slate-950/40 border border-white/10 rounded-xl text-xs text-slate-400 cursor-not-allowed opacity-60"
+                >
+                  <option value={isEditing}>
+                    {categories.find(c => c.id === isEditing)?.name || 'Текущая категория'}
+                  </option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">
+                  Новый Лимит (₼, AZN)
+                </label>
+                <div className="relative">
+                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 font-display font-medium text-xs">
+                    ₼
+                  </span>
+                  <input
+                    type="number"
+                    step="any"
+                    min="1"
+                    placeholder="Сумма"
+                    value={limitAmount}
+                    onChange={(e) => setLimitAmount(e.target.value)}
+                    className="w-full pl-8 pr-4 py-2.5 bg-slate-950/60 border border-white/10 rounded-xl text-sm font-display font-bold focus:outline-hidden focus:ring-2 focus:ring-teal-400 text-slate-200"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="flex gap-3 pt-4 border-t border-white/5">
+                <button
+                  type="button"
+                  onClick={handleCancelEdit}
+                  className="flex-1 py-2 bg-white/5 hover:bg-white/10 text-slate-350 text-xs font-semibold rounded-xl border border-white/5 transition-colors cursor-pointer"
+                >
+                  Отмена
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 py-2 bg-teal-500 hover:bg-teal-400 text-slate-950 text-xs font-bold uppercase tracking-wider rounded-xl transition-colors cursor-pointer"
+                >
+                  Сохранить
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* DELETE CONFIRMATION MODAL */}
+      {deleteConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
+          <div className="w-full max-w-sm bg-slate-900 border border-white/10 rounded-3xl shadow-2xl p-6 text-center space-y-4 animate-scale-up" id="delete-budget-modal">
+            <div className="w-12 h-12 bg-rose-500/10 text-rose-400 border border-rose-500/20 rounded-full flex items-center justify-center mx-auto">
+              <Trash2 size={22} className="stroke-[2.5px]" />
+            </div>
+            
+            <div className="space-y-1.5 animate-none">
+              <h3 className="text-base font-display font-bold text-white">Удалить лимит бюджета?</h3>
+              <p className="text-xs text-slate-400 leading-relaxed text-balance text-left sm:text-center">
+                Вы действительно хотите удалить бюджетный лимит для категории <span className="text-white font-semibold">"{deleteConfirm.categoryName}"</span>? Статистика расходов не исчезнет, но лимит больше не будет отслеживаться.
+              </p>
+            </div>
+
+            <div className="flex gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setDeleteConfirm(null)}
+                className="flex-1 py-2.5 bg-white/5 hover:bg-white/10 text-slate-350 text-xs font-semibold rounded-xl border border-white/5 transition-colors cursor-pointer"
+              >
+                Отмена
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  onDeleteBudget(deleteConfirm.categoryId);
+                  setDeleteConfirm(null);
+                }}
+                className="flex-1 py-2.5 bg-rose-500 hover:bg-rose-600 text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-md shadow-rose-500/10 hover:shadow-rose-500/20 cursor-pointer"
+              >
+                Удалить
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

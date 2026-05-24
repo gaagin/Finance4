@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Account, Category, TransactionType, BankCard } from '../types';
 import { IconComponent, AVAILABLE_ICONS } from './IconComponent';
-import { Plus, Trash2, Edit2, Wallet, PlusCircle, Check, Info, CreditCard, Sun, Moon } from 'lucide-react';
+import { Plus, Trash2, Edit2, Wallet, PlusCircle, Check, Info, CreditCard, Sun, Moon, X, AlertTriangle } from 'lucide-react';
 
 interface AccountsCategoriesPanelProps {
   accounts: Account[];
@@ -49,6 +49,9 @@ export function AccountsCategoriesPanel({
   theme,
   onThemeChange
 }: AccountsCategoriesPanelProps) {
+  
+  // Delete confirmation overlay state
+  const [deleteConfirm, setDeleteConfirm] = useState<{ id: string; type: 'card' | 'account' | 'category'; name: string } | null>(null);
   
   // Left side sub-tab: accounts vs bank cards
   const [leftTab, setLeftTab] = useState<'accounts' | 'cards'>('accounts');
@@ -299,158 +302,152 @@ export function AccountsCategoriesPanel({
           {/* Conditional Forms rendering */}
           {leftTab === 'cards' ? (
             /* 1B. Bank Card Form */
-            <form onSubmit={handleCardSubmit} className="bg-white/5 border border-white/10 p-4 rounded-2xl mb-6 space-y-4">
-              <h4 className="font-semibold text-xs text-slate-400 uppercase tracking-wider">
-                {editingCardId ? 'Редактировать параметры карты' : 'Добавить пластиковую карту'}
-              </h4>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-[11px] font-semibold text-slate-400 mb-1">Название карты</label>
-                  <input
-                    type="text"
-                    placeholder="Например: Зарплатная Birbank"
-                    value={cardName}
-                    onChange={(e) => setCardName(e.target.value)}
-                    className="w-full px-3 py-2 bg-slate-950/60 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-teal-400 text-slate-200"
-                    required
-                  />
-                </div>
+            !editingCardId ? (
+              <form onSubmit={handleCardSubmit} className="bg-white/5 border border-white/10 p-4 rounded-2xl mb-6 space-y-4">
+                <h4 className="font-semibold text-xs text-slate-400 uppercase tracking-wider">
+                  Добавить пластиковую карту
+                </h4>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-[11px] font-semibold text-slate-400 mb-1">Название карты</label>
+                    <input
+                      type="text"
+                      placeholder="Например: Зарплатная Birbank"
+                      value={cardName}
+                      onChange={(e) => setCardName(e.target.value)}
+                      className="w-full px-3 py-2 bg-slate-950/60 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-teal-400 text-slate-200"
+                      required
+                    />
+                  </div>
 
-                <div>
-                  <label className="block text-[11px] font-semibold text-slate-400 mb-1">Банк-эмитент</label>
-                  <select
-                    value={cardBank}
-                    onChange={(e) => setCardBank(e.target.value)}
-                    className="w-full px-3 py-2 bg-slate-950/60 border border-white/10 rounded-xl text-sm text-slate-200 cursor-pointer"
-                  >
-                    <option value="Kapital Bank" className="bg-slate-950 text-slate-300">Kapital Bank (Birbank)</option>
-                    <option value="ABB" className="bg-slate-950 text-slate-300">ABB (Азербайджанский Международный Банк)</option>
-                    <option value="Pasha Bank" className="bg-slate-950 text-slate-300">Pasha Bank</option>
-                    <option value="Unibank" className="bg-slate-950 text-slate-300">Unibank</option>
-                    <option value="Yelo Bank" className="bg-slate-950 text-slate-300">Yelo Bank</option>
-                    <option value="Leobank" className="bg-slate-950 text-slate-300">Leobank / Unibank</option>
-                    <option value="Другой банк" className="bg-slate-950 text-slate-300">Другой региональный банк</option>
-                  </select>
-                </div>
+                  <div>
+                    <label className="block text-[11px] font-semibold text-slate-400 mb-1">Банк-эмитент</label>
+                    <select
+                      value={cardBank}
+                      onChange={(e) => setCardBank(e.target.value)}
+                      className="w-full px-3 py-2 bg-slate-950/60 border border-white/10 rounded-xl text-sm text-slate-200 cursor-pointer"
+                    >
+                      <option value="Kapital Bank" className="bg-slate-950 text-slate-300">Kapital Bank (Birbank)</option>
+                      <option value="ABB" className="bg-slate-950 text-slate-300">ABB (Азербайджанский Международный Банк)</option>
+                      <option value="Pasha Bank" className="bg-slate-950 text-slate-300">Pasha Bank</option>
+                      <option value="Unibank" className="bg-slate-950 text-slate-300">Unibank</option>
+                      <option value="Yelo Bank" className="bg-slate-950 text-slate-300">Yelo Bank</option>
+                      <option value="Leobank" className="bg-slate-950 text-slate-300">Leobank / Unibank</option>
+                      <option value="Другой банк" className="bg-slate-950 text-slate-300">Другой региональный банк</option>
+                    </select>
+                  </div>
 
-                <div className="sm:col-span-2">
-                  <label className="block text-[11px] font-semibold text-slate-400 mb-1">Последние 4 цифры (на обороте или спереди)</label>
-                  <input
-                    type="text"
-                    maxLength={4}
-                    minLength={4}
-                    placeholder="Например: 5843"
-                    value={cardLastFour}
-                    onChange={(e) => setCardLastFour(e.target.value.replace(/\D/g, ''))}
-                    className="w-full px-3 py-2 bg-slate-950/60 border border-white/10 rounded-xl text-sm font-mono tracking-widest focus:ring-2 focus:ring-teal-400 text-slate-200"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="flex gap-2 justify-end pt-1">
-                {editingCardId && (
-                  <button
-                    type="button"
-                    onClick={handleCancelCardEdit}
-                    className="px-3 py-2 bg-white/10 hover:bg-white/15 text-slate-300 text-xs font-semibold rounded-xl transition-colors cursor-pointer"
-                  >
-                    Отмена
-                  </button>
-                )}
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-teal-500 hover:bg-teal-400 text-slate-950 text-xs font-bold uppercase tracking-wider rounded-xl shadow-xs transition-colors cursor-pointer"
-                >
-                  {editingCardId ? 'Сохранить изменения' : 'Добавить карту'}
-                </button>
-              </div>
-            </form>
-          ) : (
-            /* 1A. Account form rendering */
-            <form onSubmit={handleAccountSubmit} className="bg-white/5 border border-white/10 p-4 rounded-2xl mb-6 space-y-4">
-              <h4 className="font-semibold text-xs text-slate-400 uppercase tracking-wider">
-                {editingAccountId ? 'Редактировать счет' : 'Создать новый счет'}
-              </h4>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-[11px] font-semibold text-slate-400 mb-1">Название счета</label>
-                  <input
-                    type="text"
-                    placeholder="Например: Карта m10"
-                    value={accName}
-                    onChange={(e) => setAccName(e.target.value)}
-                    className="w-full px-3 py-2 bg-slate-950/60 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-teal-400 text-slate-200"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[11px] font-semibold text-slate-400 mb-1">Тип счета</label>
-                  <select
-                    value={accType}
-                    onChange={(e) => setAccType(e.target.value)}
-                    className="w-full px-3 py-2 bg-slate-950/60 border border-white/10 rounded-xl text-sm text-slate-200 cursor-pointer"
-                  >
-                    <option value="card" className="bg-slate-950 text-slate-300">Пластиковая карта ( Birbank / ABB )</option>
-                    <option value="cash" className="bg-slate-950 text-slate-300">Наличные (Манаты)</option>
-                    <option value="savings" className="bg-slate-950 text-slate-300">Копилка / Депозит</option>
-                    <option value="other" className="bg-slate-950 text-slate-300">Другое</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-[11px] font-semibold text-slate-400 mb-1">Начальный Баланс (₼)</label>
-                  <input
-                    type="number"
-                    step="any"
-                    placeholder="Баланс, например: 450"
-                    value={accBalance}
-                    onChange={(e) => setAccBalance(e.target.value)}
-                    className="w-full px-3 py-2 bg-slate-950/60 border border-white/10 rounded-xl text-sm font-display font-medium focus:ring-2 focus:ring-teal-400 text-slate-200"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[11px] font-semibold text-slate-400 mb-1">Цветовой маркер</label>
-                  <div className="flex flex-wrap gap-1.5 items-center mt-1">
-                    {ACCOUNT_COLORS.map(c => (
-                      <button
-                        key={c}
-                        type="button"
-                        onClick={() => setAccColor(c)}
-                        className={`w-6 h-6 rounded-full border flex items-center justify-center transition-all ${
-                          accColor === c ? 'ring-2 ring-teal-400 border-teal-400 scale-110' : 'border-white/10'
-                        }`}
-                      >
-                        <span className={`w-3 h-3 rounded-full bg-current ${c}`} />
-                      </button>
-                    ))}
+                  <div className="sm:col-span-2">
+                    <label className="block text-[11px] font-semibold text-slate-400 mb-1">Последние 4 цифры (на обороте или спереди)</label>
+                    <input
+                      type="text"
+                      maxLength={4}
+                      minLength={4}
+                      placeholder="Например: 5843"
+                      value={cardLastFour}
+                      onChange={(e) => setCardLastFour(e.target.value.replace(/\D/g, ''))}
+                      className="w-full px-3 py-2 bg-slate-950/60 border border-white/10 rounded-xl text-sm font-mono tracking-widest focus:ring-2 focus:ring-teal-400 text-slate-200"
+                      required
+                    />
                   </div>
                 </div>
-              </div>
 
-              <div className="flex gap-2 justify-end pt-1">
-                {editingAccountId && (
+                <div className="flex gap-2 justify-end pt-1">
                   <button
-                    type="button"
-                    onClick={handleCancelAccountEdit}
-                    className="px-3 py-2 bg-white/10 hover:bg-white/15 text-slate-300 text-xs font-semibold rounded-xl transition-colors cursor-pointer"
+                    type="submit"
+                    className="px-4 py-2 bg-teal-500 hover:bg-teal-400 text-slate-950 text-xs font-bold uppercase tracking-wider rounded-xl shadow-xs transition-colors cursor-pointer"
                   >
-                    Отмена
+                    Добавить карту
                   </button>
-                )}
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-teal-500 hover:bg-teal-400 text-slate-950 text-xs font-bold uppercase tracking-wider rounded-xl shadow-xs transition-colors cursor-pointer"
-                >
-                  {editingAccountId ? 'Сохранить изменения' : 'Добавить счет'}
-                </button>
+                </div>
+              </form>
+            ) : (
+              <div className="p-4 py-6 border border-dashed border-teal-500/20 bg-teal-500/5 rounded-2xl mb-6 text-center text-xs text-teal-300">
+                Параметры карты редактируются в модальном окне
               </div>
-            </form>
+            )
+          ) : (
+            /* 1A. Account form rendering */
+            !editingAccountId ? (
+              <form onSubmit={handleAccountSubmit} className="bg-white/5 border border-white/10 p-4 rounded-2xl mb-6 space-y-4">
+                <h4 className="font-semibold text-xs text-slate-400 uppercase tracking-wider">
+                  Создать новый счет
+                </h4>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-[11px] font-semibold text-slate-400 mb-1">Название счета</label>
+                    <input
+                      type="text"
+                      placeholder="Например: Карта m10"
+                      value={accName}
+                      onChange={(e) => setAccName(e.target.value)}
+                      className="w-full px-3 py-2 bg-slate-950/60 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-teal-400 text-slate-200"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-semibold text-slate-400 mb-1">Тип счета</label>
+                    <select
+                      value={accType}
+                      onChange={(e) => setAccType(e.target.value)}
+                      className="w-full px-3 py-2 bg-slate-950/60 border border-white/10 rounded-xl text-sm text-slate-200 cursor-pointer"
+                    >
+                      <option value="card" className="bg-slate-950 text-slate-300">Пластиковая карта ( Birbank / ABB )</option>
+                      <option value="cash" className="bg-slate-950 text-slate-300">Наличные (Манаты)</option>
+                      <option value="savings" className="bg-slate-950 text-slate-300">Копилка / Депозит</option>
+                      <option value="other" className="bg-slate-950 text-slate-300">Другое</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-semibold text-slate-400 mb-1">Начальный Баланс (₼)</label>
+                    <input
+                      type="number"
+                      step="any"
+                      placeholder="Баланс, например: 450"
+                      value={accBalance}
+                      onChange={(e) => setAccBalance(e.target.value)}
+                      className="w-full px-3 py-2 bg-slate-950/60 border border-white/10 rounded-xl text-sm font-display font-medium focus:ring-2 focus:ring-teal-400 text-slate-200"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-semibold text-slate-400 mb-1">Цветовой маркер</label>
+                    <div className="flex flex-wrap gap-1.5 items-center mt-1">
+                      {ACCOUNT_COLORS.map(c => (
+                        <button
+                          key={c}
+                          type="button"
+                          onClick={() => setAccColor(c)}
+                          className={`w-6 h-6 rounded-full border flex items-center justify-center transition-all ${
+                            accColor === c ? 'ring-2 ring-teal-400 border-teal-400 scale-110' : 'border-white/10'
+                          }`}
+                        >
+                          <span className={`w-3 h-3 rounded-full bg-current ${c}`} />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex gap-2 justify-end pt-1">
+                  <button
+                    type="submit"
+                    className="px-4 py-2 bg-teal-500 hover:bg-teal-400 text-slate-950 text-xs font-bold uppercase tracking-wider rounded-xl shadow-xs transition-colors cursor-pointer"
+                  >
+                    Добавить счет
+                  </button>
+                </div>
+              </form>
+            ) : (
+              <div className="p-4 py-6 border border-dashed border-teal-500/20 bg-teal-500/5 rounded-2xl mb-6 text-center text-xs text-teal-300">
+                Параметры счета редактируются в модальном окне
+              </div>
+            )
           )}
 
           {/* Conditional Lists rendering */}
@@ -500,17 +497,7 @@ export function AccountsCategoriesPanel({
                       <div className="flex items-center gap-1 shrink-0 z-10">
                         <button
                           type="button"
-                          onClick={() => {
-                            handleEditCard(card);
-                            setTimeout(() => {
-                              const elem = document.getElementById('accounts-management');
-                              if (elem) {
-                                elem.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                                elem.classList.add('glow-primary');
-                                setTimeout(() => elem.classList.remove('glow-primary'), 1200);
-                              }
-                            }, 80);
-                          }}
+                          onClick={() => handleEditCard(card)}
                           className={`p-1.5 mt-0.5 rounded-xl border transition-all cursor-pointer flex items-center justify-center shrink-0 ${
                             isYelo 
                               ? 'bg-slate-950/15 hover:bg-slate-950 border-slate-950/30 text-slate-950 hover:text-white' 
@@ -522,7 +509,7 @@ export function AccountsCategoriesPanel({
                         </button>
                         <button
                           type="button"
-                          onClick={() => onDeleteCard(card.id)}
+                          onClick={() => setDeleteConfirm({ id: card.id, type: 'card', name: `${card.bank} (•••• ${card.lastFour})` })}
                           className={`p-1 mt-0.5 rounded-lg border transition-colors cursor-pointer ${
                             isYelo
                               ? 'bg-rose-950/10 hover:bg-rose-950/20 border-rose-900/30 text-rose-900'
@@ -572,17 +559,7 @@ export function AccountsCategoriesPanel({
 
                       <div className="flex items-center gap-1.5">
                         <button
-                          onClick={() => {
-                            handleEditAccount(acc);
-                            setTimeout(() => {
-                              const elem = document.getElementById('accounts-management');
-                              if (elem) {
-                                elem.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                                elem.classList.add('glow-primary');
-                                setTimeout(() => elem.classList.remove('glow-primary'), 1200);
-                              }
-                            }, 80);
-                          }}
+                          onClick={() => handleEditAccount(acc)}
                           className="p-2 bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-white/10 rounded-xl hover:bg-teal-500 hover:text-slate-950 dark:hover:bg-teal-450 dark:hover:text-slate-950 transition-all cursor-pointer flex items-center justify-center shrink-0"
                           title="Изменить счет"
                         >
@@ -590,7 +567,11 @@ export function AccountsCategoriesPanel({
                         </button>
                         
                         <button
-                          onClick={() => onDeleteAccount(acc.id)}
+                          onClick={() => {
+                            if (accounts.length > 1) {
+                              setDeleteConfirm({ id: acc.id, type: 'account', name: acc.name });
+                            }
+                          }}
                           disabled={accounts.length <= 1} // Prevent deleting the last remaining account
                           className="p-1.5 bg-white/5 hover:bg-rose-500/15 text-slate-400 hover:text-rose-400 disabled:opacity-50 border border-white/10 hover:border-rose-500/25 rounded-lg transition-colors cursor-pointer"
                           title={accounts.length === 1 ? 'Нельзя удалить единственный счет' : 'Удалить счет'}
@@ -660,86 +641,81 @@ export function AccountsCategoriesPanel({
           </div>
 
           {/* Form */}
-          <form onSubmit={handleCategorySubmit} className="bg-white/5 border border-white/10 p-4 rounded-2xl mb-6 space-y-4">
-            <h4 className="font-semibold text-xs text-slate-400 uppercase tracking-wider">
-              {editingCategoryId 
-                ? `Редактировать категорию ${activeCategoryTab === 'expense' ? 'расходов' : 'доходов'}` 
-                : `Создать категорию ${activeCategoryTab === 'expense' ? 'расходов' : 'доходов'}`}
-            </h4>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-[11px] font-semibold text-slate-400 mb-1">Название категории</label>
-                <input
-                  type="text"
-                  placeholder="Например: Спортзал / Книги"
-                  value={catName}
-                  onChange={(e) => setCatName(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-950/60 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-teal-400 text-slate-200"
-                  required
-                />
+          {!editingCategoryId ? (
+            <form onSubmit={handleCategorySubmit} className="bg-white/5 border border-white/10 p-4 rounded-2xl mb-6 space-y-4">
+              <h4 className="font-semibold text-xs text-slate-400 uppercase tracking-wider">
+                Создать категорию {activeCategoryTab === 'expense' ? 'расходов' : 'доходов'}
+              </h4>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[11px] font-semibold text-slate-400 mb-1">Название категории</label>
+                  <input
+                    type="text"
+                    placeholder="Например: Спортзал / Книги"
+                    value={catName}
+                    onChange={(e) => setCatName(e.target.value)}
+                    className="w-full px-3 py-2 bg-slate-950/60 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-teal-400 text-slate-200"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-slate-400 mb-1 font-sans">Цвет категории</label>
+                  <div className="flex flex-wrap gap-1 items-center mt-1">
+                    {COLOR_OPTIONS.map(c => (
+                      <button
+                        key={c}
+                        type="button"
+                        onClick={() => setCatColor(c)}
+                        className={`w-5.5 h-5.5 rounded-md border flex items-center justify-center transition-all ${
+                          catColor === c ? 'ring-2 ring-white border-transparent scale-110' : 'border-white/10'
+                        }`}
+                        style={{ backgroundColor: c }}
+                      >
+                        {catColor === c && <Check size={10} className="text-slate-950 font-extrabold" />}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
 
+              {/* Icon picker (horizontal scrollable grid) */}
               <div>
-                <label className="block text-[11px] font-semibold text-slate-400 mb-1 font-sans">Цвет категории</label>
-                <div className="flex flex-wrap gap-1 items-center mt-1">
-                  {COLOR_OPTIONS.map(c => (
+                <label className="block text-[11px] font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Значок / Иконка</label>
+                <div className="grid grid-cols-5 sm:grid-cols-9 gap-2 max-h-[105px] overflow-y-auto p-1.5 bg-slate-950/60 border border-white/10 rounded-xl custom-scrollbar">
+                  {AVAILABLE_ICONS.map(ic => (
                     <button
-                      key={c}
+                      key={ic.name}
                       type="button"
-                      onClick={() => setCatColor(c)}
-                      className={`w-5.5 h-5.5 rounded-md border flex items-center justify-center transition-all ${
-                        catColor === c ? 'ring-2 ring-white border-transparent scale-110' : 'border-white/10'
+                      onClick={() => setCatIcon(ic.name)}
+                      className={`p-2 rounded-lg border flex flex-col items-center justify-center transition-all gap-1 cursor-pointer ${
+                        catIcon === ic.name 
+                          ? 'bg-amber-500/20 border-amber-500/40 text-amber-300 scale-105 shadow-xs' 
+                          : 'border-white/5 hover:bg-white/5 text-slate-400 hover:text-white'
                       }`}
-                      style={{ backgroundColor: c }}
+                      title={ic.label}
                     >
-                      {catColor === c && <Check size={10} className="text-slate-950 font-extrabold" />}
+                      <IconComponent name={ic.name} size={16} />
                     </button>
                   ))}
                 </div>
               </div>
-            </div>
 
-            {/* Icon picker (horizontal scrollable grid) */}
-            <div>
-              <label className="block text-[11px] font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Значок / Иконка</label>
-              <div className="grid grid-cols-5 sm:grid-cols-9 gap-2 max-h-[105px] overflow-y-auto p-1.5 bg-slate-950/60 border border-white/10 rounded-xl custom-scrollbar">
-                {AVAILABLE_ICONS.map(ic => (
-                  <button
-                    key={ic.name}
-                    type="button"
-                    onClick={() => setCatIcon(ic.name)}
-                    className={`p-2 rounded-lg border flex flex-col items-center justify-center transition-all gap-1 cursor-pointer ${
-                      catIcon === ic.name 
-                        ? 'bg-amber-500/20 border-amber-500/40 text-amber-300 scale-105 shadow-xs' 
-                        : 'border-white/5 hover:bg-white/5 text-slate-400 hover:text-white'
-                    }`}
-                    title={ic.label}
-                  >
-                    <IconComponent name={ic.name} size={16} />
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="flex gap-2 justify-end pt-1">
-              {editingCategoryId && (
+              <div className="flex gap-2 justify-end pt-1">
                 <button
-                  type="button"
-                  onClick={handleCancelCategoryEdit}
-                  className="px-3 py-2 bg-white/10 hover:bg-white/15 text-slate-300 text-xs font-semibold rounded-xl transition-colors cursor-pointer"
+                  type="submit"
+                  className="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold uppercase tracking-wider rounded-xl shadow-xs transition-colors cursor-pointer"
                 >
-                  Отмена
+                  Создать категорию
                 </button>
-              )}
-              <button
-                type="submit"
-                className="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold uppercase tracking-wider rounded-xl shadow-xs transition-colors cursor-pointer"
-              >
-                {editingCategoryId ? 'Сохранить категорию' : 'Создать категорию'}
-              </button>
+              </div>
+            </form>
+          ) : (
+            <div className="p-4 py-6 border border-dashed border-amber-500/20 bg-amber-500/15 rounded-2xl mb-6 text-center text-xs text-amber-300">
+              Категория редактируется в модальном окне
             </div>
-          </form>
+          )}
 
           {/* List categorized by Active selection */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[295px] overflow-y-auto pr-1 custom-scrollbar">
@@ -762,17 +738,7 @@ export function AccountsCategoriesPanel({
 
                   <div className="flex items-center gap-1 shrink-0">
                     <button
-                      onClick={() => {
-                        handleEditCategory(cat);
-                        setTimeout(() => {
-                          const elem = document.getElementById('categories-management');
-                          if (elem) {
-                            elem.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                            elem.classList.add('glow-primary');
-                            setTimeout(() => elem.classList.remove('glow-primary'), 1200);
-                          }
-                        }, 80);
-                      }}
+                      onClick={() => handleEditCategory(cat)}
                       className="p-2 bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-white/10 rounded-xl hover:bg-teal-500 hover:text-slate-950 dark:hover:bg-teal-450 dark:hover:text-slate-950 transition-all cursor-pointer flex items-center justify-center shrink-0"
                       title="Изменить"
                     >
@@ -780,7 +746,12 @@ export function AccountsCategoriesPanel({
                     </button>
                     
                     <button
-                      onClick={() => onDeleteCategory(cat.id)}
+                      onClick={() => {
+                        const count = categories.filter(c => c.type === activeCategoryTab).length;
+                        if (count > 2) {
+                          setDeleteConfirm({ id: cat.id, type: 'category', name: cat.name });
+                        }
+                      }}
                       disabled={categories.filter(c => c.type === activeCategoryTab).length <= 2}
                       className="p-1.5 bg-white/5 hover:bg-rose-500/15 text-slate-400 hover:text-rose-400 disabled:opacity-30 border border-white/10 hover:border-rose-500/25 rounded-lg transition-colors cursor-pointer"
                       title="Удалить категорию"
@@ -798,6 +769,335 @@ export function AccountsCategoriesPanel({
           <span>Категории помогают вам упорядочить ваши финансы. Изменение значка или цвета поможет мгновенно распознать операции на диаграмме или в календаре.</span>
         </div>
       </div>
+
+      {/* CARD EDIT MODAL overlay */}
+      {editingCardId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
+          <div className="w-full max-w-md bg-slate-900 border border-white/10 rounded-3xl shadow-2xl overflow-hidden text-left" id="edit-card-modal">
+            <div className="flex items-center justify-between px-6 py-5 border-b border-white/10 bg-white/5">
+              <div>
+                <h3 className="text-lg font-display font-extrabold text-white flex items-center gap-2">
+                  <CreditCard className="text-teal-400" size={20} />
+                  Редактировать карту
+                </h3>
+                <p className="text-xs text-slate-400 mt-1">Изменение реквизитов карты</p>
+              </div>
+              <button
+                type="button"
+                onClick={handleCancelCardEdit}
+                className="p-1.5 hover:bg-white/10 text-slate-400 hover:text-white rounded-lg transition-colors cursor-pointer"
+              >
+                <X size={18} />
+              </button>
+            </div>
+            
+            <form onSubmit={handleCardSubmit} className="p-6 space-y-4">
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-[11px] font-semibold text-slate-400 mb-1">Название карты</label>
+                  <input
+                    type="text"
+                    placeholder="Например: Зарплатная Birbank"
+                    value={cardName}
+                    onChange={(e) => setCardName(e.target.value)}
+                    className="w-full px-3 py-2 bg-slate-950/60 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-teal-400 text-slate-200 animate-none"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-slate-400 mb-1">Банк-эмитент</label>
+                  <select
+                    value={cardBank}
+                    onChange={(e) => setCardBank(e.target.value)}
+                    className="w-full px-3 py-2 bg-slate-950/60 border border-white/10 rounded-xl text-sm text-slate-200 cursor-pointer"
+                  >
+                    <option value="Kapital Bank" className="bg-slate-950 text-slate-300">Kapital Bank (Birbank)</option>
+                    <option value="ABB" className="bg-slate-950 text-slate-300">ABB (Азербайджанский Международный Банк)</option>
+                    <option value="Pasha Bank" className="bg-slate-950 text-slate-300">Pasha Bank</option>
+                    <option value="Unibank" className="bg-slate-950 text-slate-300">Unibank</option>
+                    <option value="Yelo Bank" className="bg-slate-950 text-slate-300">Yelo Bank</option>
+                    <option value="Leobank" className="bg-slate-950 text-slate-300">Leobank / Unibank</option>
+                    <option value="Другой банк" className="bg-slate-950 text-slate-300">Другой региональный банк</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-slate-400 mb-1">Последние 4 цифры</label>
+                  <input
+                    type="text"
+                    maxLength={4}
+                    minLength={4}
+                    placeholder="Например: 5843"
+                    value={cardLastFour}
+                    onChange={(e) => setCardLastFour(e.target.value.replace(/\D/g, ''))}
+                    className="w-full px-3 py-2 bg-slate-950/60 border border-white/10 rounded-xl text-sm font-mono tracking-widest focus:ring-2 focus:ring-teal-400 text-slate-200"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="flex gap-3 pt-4 border-t border-white/5">
+                <button
+                  type="button"
+                  onClick={handleCancelCardEdit}
+                  className="flex-1 py-2.5 bg-white/5 hover:bg-white/10 text-slate-350 text-xs font-semibold rounded-xl border border-white/5 transition-colors cursor-pointer"
+                >
+                  Отмена
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 py-2.5 bg-teal-500 hover:bg-teal-400 text-slate-950 text-xs font-bold uppercase tracking-wider rounded-xl shadow-xs transition-colors cursor-pointer"
+                >
+                  Сохранить
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ACCOUNT EDIT MODAL overlay */}
+      {editingAccountId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
+          <div className="w-full max-w-md bg-slate-900 border border-white/10 rounded-3xl shadow-2xl overflow-hidden text-left" id="edit-account-modal">
+            <div className="flex items-center justify-between px-6 py-5 border-b border-white/10 bg-white/5">
+              <div>
+                <h3 className="text-lg font-display font-extrabold text-white flex items-center gap-2">
+                  <Wallet className="text-teal-300" size={20} />
+                  Редактировать счет
+                </h3>
+                <p className="text-xs text-slate-400 mt-1">Изменение реквизитов счета и баланса</p>
+              </div>
+              <button
+                type="button"
+                onClick={handleCancelAccountEdit}
+                className="p-1.5 hover:bg-white/10 text-slate-400 hover:text-white rounded-lg transition-colors cursor-pointer"
+              >
+                <X size={18} />
+              </button>
+            </div>
+            
+            <form onSubmit={handleAccountSubmit} className="p-6 space-y-4">
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-[11px] font-semibold text-slate-400 mb-1">Название счета</label>
+                  <input
+                    type="text"
+                    placeholder="Например: Карта m10"
+                    value={accName}
+                    onChange={(e) => setAccName(e.target.value)}
+                    className="w-full px-3 py-2 bg-slate-950/60 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-teal-400 text-slate-200"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-slate-400 mb-1">Тип счета</label>
+                  <select
+                    value={accType}
+                    onChange={(e) => setAccType(e.target.value)}
+                    className="w-full px-3 py-2 bg-slate-950/60 border border-white/10 rounded-xl text-sm text-slate-200 cursor-pointer"
+                  >
+                    <option value="card" className="bg-slate-950 text-slate-300">Пластиковая карта ( Birbank / ABB )</option>
+                    <option value="cash" className="bg-slate-950 text-slate-300">Наличные (Манаты)</option>
+                    <option value="savings" className="bg-slate-950 text-slate-300">Копилка / Депозит</option>
+                    <option value="other" className="bg-slate-950 text-slate-300">Другое</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-slate-400 mb-1">Текущий Баланс (₼)</label>
+                  <input
+                    type="number"
+                    step="any"
+                    placeholder="Баланс, например: 450"
+                    value={accBalance}
+                    onChange={(e) => setAccBalance(e.target.value)}
+                    className="w-full px-3 py-2 bg-slate-950/60 border border-white/10 rounded-xl text-sm font-display font-medium focus:ring-2 focus:ring-teal-400 text-slate-200"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-slate-400 mb-1">Цветовой маркер</label>
+                  <div className="flex flex-wrap gap-1.5 items-center mt-1">
+                    {ACCOUNT_COLORS.map(c => (
+                      <button
+                        key={c}
+                        type="button"
+                        onClick={() => setAccColor(c)}
+                        className={`w-6 h-6 rounded-full border flex items-center justify-center transition-all ${
+                          accColor === c ? 'ring-2 ring-teal-400 border-teal-400 scale-110' : 'border-white/10'
+                        }`}
+                      >
+                        <span className={`w-3 h-3 rounded-full bg-current ${c}`} />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex gap-3 pt-4 border-t border-white/5">
+                <button
+                  type="button"
+                  onClick={handleCancelAccountEdit}
+                  className="flex-1 py-2.5 bg-white/5 hover:bg-white/10 text-slate-350 text-xs font-semibold rounded-xl border border-white/5 transition-colors cursor-pointer"
+                >
+                  Отмена
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 py-2.5 bg-teal-500 hover:bg-teal-400 text-slate-950 text-xs font-bold uppercase tracking-wider rounded-xl shadow-xs transition-colors cursor-pointer"
+                >
+                  Сохранить
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* CATEGORY EDIT MODAL overlay */}
+      {editingCategoryId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
+          <div className="w-full max-w-md bg-slate-900 border border-white/10 rounded-3xl shadow-2xl overflow-hidden text-left" id="edit-category-modal">
+            <div className="flex items-center justify-between px-6 py-5 border-b border-white/10 bg-white/5">
+              <div>
+                <h3 className="text-lg font-display font-extrabold text-white flex items-center gap-2">
+                  <PlusCircle className="text-amber-400" size={20} />
+                  Редактировать категорию
+                </h3>
+                <p className="text-xs text-slate-400 mt-1">Изменение наименования, цвета и иконки</p>
+              </div>
+              <button
+                type="button"
+                onClick={handleCancelCategoryEdit}
+                className="p-1.5 hover:bg-white/10 text-slate-400 hover:text-white rounded-lg transition-colors cursor-pointer"
+              >
+                <X size={18} />
+              </button>
+            </div>
+            
+            <form onSubmit={handleCategorySubmit} className="p-6 space-y-4">
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-[11px] font-semibold text-slate-400 mb-1">Название категории</label>
+                  <input
+                    type="text"
+                    placeholder="Например: Спортзал / Книги"
+                    value={catName}
+                    onChange={(e) => setCatName(e.target.value)}
+                    className="w-full px-3 py-2 bg-slate-950/60 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-teal-400 text-slate-200"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-slate-400 mb-1">Цвет категории</label>
+                  <div className="flex flex-wrap gap-1 items-center mt-1">
+                    {COLOR_OPTIONS.map(c => (
+                      <button
+                        key={c}
+                        type="button"
+                        onClick={() => setCatColor(c)}
+                        className={`w-5.5 h-5.5 rounded-md border flex items-center justify-center transition-all ${
+                          catColor === c ? 'ring-2 ring-white border-transparent scale-110' : 'border-white/10'
+                        }`}
+                        style={{ backgroundColor: c }}
+                      >
+                        {catColor === c && <Check size={10} className="text-slate-950 font-extrabold" />}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Значок / Иконка</label>
+                  <div className="grid grid-cols-5 gap-2 max-h-[105px] overflow-y-auto p-1.5 bg-slate-950/60 border border-white/10 rounded-xl custom-scrollbar">
+                    {AVAILABLE_ICONS.map(ic => (
+                      <button
+                        key={ic.name}
+                        type="button"
+                        onClick={() => setCatIcon(ic.name)}
+                        className={`p-2 rounded-lg border flex flex-col items-center justify-center transition-all gap-1 cursor-pointer ${
+                          catIcon === ic.name 
+                            ? 'bg-amber-500/20 border-amber-500/40 text-amber-300 scale-105 shadow-xs' 
+                            : 'border-white/5 hover:bg-white/5 text-slate-400 hover:text-white'
+                        }`}
+                        title={ic.label}
+                      >
+                        <IconComponent name={ic.name} size={16} />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex gap-3 pt-4 border-t border-white/5">
+                <button
+                  type="button"
+                  onClick={handleCancelCategoryEdit}
+                  className="flex-1 py-2.5 bg-white/5 hover:bg-white/10 text-slate-350 text-xs font-semibold rounded-xl border border-white/5 transition-colors cursor-pointer"
+                >
+                  Отмена
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold uppercase tracking-wider rounded-xl shadow-xs transition-colors cursor-pointer"
+                >
+                  Сохранить
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* DELETE CONFIRMATION MODAL */}
+      {deleteConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
+          <div className="w-full max-w-sm bg-slate-900 border border-white/10 rounded-3xl shadow-2xl p-6 text-center space-y-4 animate-scale-up" id="delete-confirmation-modal">
+            <div className="w-12 h-12 bg-rose-500/10 text-rose-400 border border-rose-500/20 rounded-full flex items-center justify-center mx-auto">
+              <Trash2 size={22} className="stroke-[2.5px]" />
+            </div>
+            
+            <div className="space-y-1.5 animate-none">
+              <h3 className="text-base font-display font-bold text-white">Удалить безвозвратно?</h3>
+              <p className="text-xs text-slate-400 leading-relaxed text-balance">
+                Вы действительно хотите удалить {deleteConfirm.type === 'card' ? 'карту' : deleteConfirm.type === 'account' ? 'счет' : 'категорию'}{' '}
+                <span className="text-white font-semibold">"{deleteConfirm.name}"</span>? Это действие сотрет элемент и может повлиять на связанные транзакции.
+              </p>
+            </div>
+
+            <div className="flex gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setDeleteConfirm(null)}
+                className="flex-1 py-2.5 bg-white/5 hover:bg-white/10 text-slate-350 text-xs font-semibold rounded-xl border border-white/5 transition-colors cursor-pointer"
+              >
+                Отмена
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  if (deleteConfirm.type === 'card') {
+                    onDeleteCard(deleteConfirm.id);
+                  } else if (deleteConfirm.type === 'account') {
+                    onDeleteAccount(deleteConfirm.id);
+                  } else if (deleteConfirm.type === 'category') {
+                    onDeleteCategory(deleteConfirm.id);
+                  }
+                  setDeleteConfirm(null);
+                }}
+                className="flex-1 py-2.5 bg-rose-500 hover:bg-rose-600 text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-md shadow-rose-500/10 hover:shadow-rose-500/20 cursor-pointer"
+              >
+                Удалить
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );
