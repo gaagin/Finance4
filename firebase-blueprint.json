@@ -2,7 +2,7 @@
   "entities": {
     "UserProfile": {
       "title": "UserProfile",
-      "description": "User specific financial profile with accounts, cards, categories, transactions, and budget limits",
+      "description": "User specific financial profile with accounts, cards, categories, and budget limits",
       "type": "object",
       "properties": {
         "uid": {
@@ -25,10 +25,6 @@
           "type": "array",
           "description": "Financial categories defined by the user"
         },
-        "transactions": {
-          "type": "array",
-          "description": "Record of transactions"
-        },
         "budgets": {
           "type": "array",
           "description": "Budget limits set per category"
@@ -39,12 +35,54 @@
         }
       },
       "required": ["uid", "email"]
+    },
+    "Transaction": {
+      "title": "Transaction",
+      "description": "Single financial operation (expense, income, or transfer)",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "accountId": {
+          "type": "string"
+        },
+        "categoryId": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "number"
+        },
+        "type": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "cardId": {
+          "type": "string"
+        },
+        "transferAccountId": {
+          "type": "string"
+        },
+        "transferType": {
+          "type": "string"
+        }
+      },
+      "required": ["id", "accountId", "categoryId", "amount", "type", "date"]
     }
   },
   "firestore": {
     "users/{userId}": {
       "schema": "UserProfile",
-      "description": "Host document containing all local storage state synced with the user account"
+      "description": "Host document containing basic profile metadata, accounts, categories, and budgets"
+    },
+    "users/{userId}/transactions/{transactionId}": {
+      "schema": "Transaction",
+      "description": "Subcollection holding individual user transactions to scale beyond the 1MB single-document Firestore limit"
     }
   }
 }

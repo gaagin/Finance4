@@ -1,6 +1,15 @@
-import { doc, getDoc, setDoc, getDocFromServer, onSnapshot } from 'firebase/firestore';
+import { 
+  doc, 
+  getDoc, 
+  setDoc, 
+  getDocFromServer, 
+  onSnapshot,
+  collection,
+  getDocs,
+  writeBatch
+} from 'firebase/firestore';
 import { db, auth } from './googleAuth';
-import { FinanceData } from './types';
+import { FinanceData, Transaction } from './types';
 
 export enum OperationType {
   CREATE = 'create',
@@ -55,17 +64,25 @@ export async function getUserFinanceData(uid: string): Promise<FinanceData | nul
   const path = `users/${uid}`;
   try {
     const docSnap = await getDoc(doc(db, 'users', uid));
-    if (docSnap.exists()) {
-      const docData = docSnap.data();
-      return {
-        accounts: docData.accounts || [],
-        categories: docData.categories || [],
-        transactions: docData.transactions || [],
-        budgets: docData.budgets || [],
-        cards: docData.cards || [],
-      } as FinanceData;
+    if (!docSnap.exists()) {
+      return null;
     }
-    return null;
+    const docData = docSnap.data();
+
+    // Fetch transactions from subcollection
+    const txSnap = await getDocs(collection(db, 'users', uid, 'transactions'));
+    const transactions: Transaction[] = [];
+    txSnap.forEach(txDoc => {
+      transactions.push(txDoc.data() as Transaction);
+    });
+
+    return {
+      accounts: docData.accounts || [],
+      categories: docData.categories || [],
+      transactions: transactions,
+      budgets: docData.budgets || [],
+      cards: docData.cards || [],
+    } as FinanceData;
   } catch (error) {
     handleFirestoreError(error, OperationType.GET, path);
   }
@@ -77,60 +94,170 @@ export function subscribeToUserFinanceData(
   onData: (data: FinanceData) => void,
   onError: (error: any) => void
 ) {
-  const path = `users/${uid}`;
-  return onSnapshot(
+  let isProfileLoaded = false;
+  let isTransactionsLoaded = false;
+  let currentProfile: any = null;
+  let currentTransactions: Transaction[] = [];
+
+  const checkAndEmit = () => {
+    if (isProfileLoaded && isTransactionsLoaded) {
+      onData({
+        accounts: currentProfile?.accounts || [],
+        categories: currentProfile?.categories || [],
+        transactions: currentTransactions,
+        budgets: currentProfile?.budgets || [],
+        cards: currentProfile?.cards || [],
+      });
+    }
+  };
+
+  const unsubProfile = onSnapshot(
     doc(db, 'users', uid),
     (docSnap) => {
       if (docSnap.exists()) {
-        const docData = docSnap.data();
-        const financeData: FinanceData = {
-          accounts: docData.accounts || [],
-          categories: docData.categories || [],
-          transactions: docData.transactions || [],
-          budgets: docData.budgets || [],
-          cards: docData.cards || [],
-        };
-        onData(financeData);
+        currentProfile = docSnap.data();
       } else {
-        // Document doesn't exist yet, pass empty lists
-        onData({
+        currentProfile = {
           accounts: [],
           categories: [],
-          transactions: [],
           budgets: [],
           cards: [],
-        });
+        };
       }
+      isProfileLoaded = true;
+      checkAndEmit();
     },
     (error) => {
       onError(error);
     }
   );
+
+  const unsubTransactions = onSnapshot(
+    collection(db, 'users', uid, 'transactions'),
+    (querySnap) => {
+      const txList: Transaction[] = [];
+      querySnap.forEach((txDoc) => {
+        txList.push(txDoc.data() as Transaction);
+      });
+      // Sort transactions by date descending (standard in lists)
+      txList.sort((a, b) => b.date.localeCompare(a.date));
+      currentTransactions = txList;
+      isTransactionsLoaded = true;
+      checkAndEmit();
+    },
+    (error) => {
+      onError(error);
+    }
+  );
+
+  // Return a single cleanup function that unsubscribes both snapshot listeners
+  return () => {
+    unsubProfile();
+    unsubTransactions();
+  };
 }
 
-// 3. Save full customized state of finances
-export async function saveUserFinanceData(uid: string, email: string, data: FinanceData): Promise<void> {
+// 3. Save full customized state of finances with incremental transaction updates
+export async function saveUserFinanceData(
+  uid: string, 
+  email: string, 
+  data: FinanceData,
+  previousData?: FinanceData | null
+): Promise<void> {
   const path = `users/${uid}`;
   try {
+    // 1. Save metadata, accounts, categories, and budgets in the main user document
     const rawPayload = {
       uid,
       email,
       updatedAt: new Date().toISOString(),
       accounts: data.accounts || [],
       categories: data.categories || [],
-      transactions: data.transactions || [],
       budgets: data.budgets || [],
       cards: data.cards || [],
     };
     
-    // Clean up all undefined values recursively since Firestore does not support 'undefined'
+    // Clean up undefined values
     const sanitizedPayload = JSON.parse(JSON.stringify(rawPayload, (_, value) => {
-      // In JS, undefined values in objects are omitted by JSON.stringify anyway,
-      // but in arrays it converts them to null, which is valid for Firestore.
       return value === undefined ? null : value;
     }));
 
     await setDoc(doc(db, 'users', uid), sanitizedPayload);
+
+    // 2. Perform diff on transactions to only update what has changed
+    const prevMap = new Map<string, Transaction>();
+    if (previousData?.transactions) {
+      previousData.transactions.forEach((t) => prevMap.set(t.id, t));
+    }
+
+    const addedOrModified: Transaction[] = [];
+    const deletedIds: string[] = [];
+
+    // If previousData has no transactions (e.g., seeding, first login), write all
+    const hasPreviousTransactions = previousData && previousData.transactions && previousData.transactions.length > 0;
+    
+    if (!hasPreviousTransactions) {
+      // Direct seeding (write all transactions)
+      addedOrModified.push(...(data.transactions || []));
+    } else {
+      // Incremental diff
+      const currentTxIds = new Set((data.transactions || []).map(t => t.id));
+
+      // Find deleted transactions
+      previousData!.transactions.forEach((prevItem) => {
+        if (!currentTxIds.has(prevItem.id)) {
+          deletedIds.push(prevItem.id);
+        }
+      });
+
+      // Find added or modified transactions
+      (data.transactions || []).forEach((t) => {
+        const prev = prevMap.get(t.id);
+        if (!prev) {
+          addedOrModified.push(t);
+        } else {
+          // Compare fields
+          const isDifferent = 
+            t.accountId !== prev.accountId ||
+            t.categoryId !== prev.categoryId ||
+            t.amount !== prev.amount ||
+            t.type !== prev.type ||
+            t.date !== prev.date ||
+            t.description !== prev.description ||
+            t.cardId !== prev.cardId ||
+            t.transferAccountId !== prev.transferAccountId ||
+            t.transferType !== prev.transferType;
+          if (isDifferent) {
+            addedOrModified.push(t);
+          }
+        }
+      });
+    }
+
+    const batchLimit = 500;
+
+    // A. Write added/modified transactions in chunks of 500
+    for (let i = 0; i < addedOrModified.length; i += batchLimit) {
+      const chunk = addedOrModified.slice(i, i + batchLimit);
+      const batch = writeBatch(db);
+      chunk.forEach((item) => {
+        const docRef = doc(db, 'users', uid, 'transactions', item.id);
+        const sanitizedItem = JSON.parse(JSON.stringify(item, (_, v) => v === undefined ? null : v));
+        batch.set(docRef, sanitizedItem);
+      });
+      await batch.commit();
+    }
+
+    // B. Delete removed transactions in chunks of 500
+    for (let i = 0; i < deletedIds.length; i += batchLimit) {
+      const chunk = deletedIds.slice(i, i + batchLimit);
+      const batch = writeBatch(db);
+      chunk.forEach((id) => {
+        const docRef = doc(db, 'users', uid, 'transactions', id);
+        batch.delete(docRef);
+      });
+      await batch.commit();
+    }
   } catch (error) {
     handleFirestoreError(error, OperationType.WRITE, path);
   }

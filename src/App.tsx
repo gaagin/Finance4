@@ -220,7 +220,9 @@ export default function App() {
     if (currentUser) {
       try {
         setIsFirebaseLoading(true);
-        await saveUserFinanceData(currentUser.uid, currentUser.email || "", nextData);
+        const previousDataStr = lastFetchedDataRef.current;
+        const previousData = previousDataStr ? JSON.parse(previousDataStr) : null;
+        await saveUserFinanceData(currentUser.uid, currentUser.email || "", nextData, previousData);
         lastFetchedDataRef.current = JSON.stringify(nextData);
         setFirebaseSyncError(null);
       } catch (err: any) {
