@@ -1,4 +1,4 @@
-import { doc, getDoc, setDoc, getDocFromServer } from 'firebase/firestore';
+import { doc, getDoc, setDoc, getDocFromServer, onSnapshot } from 'firebase/firestore';
 import { db, auth } from './googleAuth';
 import { FinanceData } from './types';
 
@@ -69,6 +69,43 @@ export async function getUserFinanceData(uid: string): Promise<FinanceData | nul
   } catch (error) {
     handleFirestoreError(error, OperationType.GET, path);
   }
+}
+
+// 2b. Subscribe to user finance data in real-time
+export function subscribeToUserFinanceData(
+  uid: string,
+  onData: (data: FinanceData) => void,
+  onError: (error: any) => void
+) {
+  const path = `users/${uid}`;
+  return onSnapshot(
+    doc(db, 'users', uid),
+    (docSnap) => {
+      if (docSnap.exists()) {
+        const docData = docSnap.data();
+        const financeData: FinanceData = {
+          accounts: docData.accounts || [],
+          categories: docData.categories || [],
+          transactions: docData.transactions || [],
+          budgets: docData.budgets || [],
+          cards: docData.cards || [],
+        };
+        onData(financeData);
+      } else {
+        // Document doesn't exist yet, pass empty lists
+        onData({
+          accounts: [],
+          categories: [],
+          transactions: [],
+          budgets: [],
+          cards: [],
+        });
+      }
+    },
+    (error) => {
+      onError(error);
+    }
+  );
 }
 
 // 3. Save full customized state of finances

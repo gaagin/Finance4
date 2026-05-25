@@ -10,7 +10,7 @@ import { LayoutDashboard, ReceiptText, Calendar, SlidersHorizontal, Settings, Fl
 import { initAuth, logout, googleSignIn, db } from './googleAuth';
 import { User } from 'firebase/auth';
 import { doc, onSnapshot, getDoc } from 'firebase/firestore';
-import { getUserFinanceData, saveUserFinanceData, testConnection } from './firebaseService';
+import { getUserFinanceData, saveUserFinanceData, testConnection, subscribeToUserFinanceData } from './firebaseService';
 import firebaseConfig from '../firebase-applet-config.json';
 
 export default function App() {
@@ -77,7 +77,7 @@ export default function App() {
   const [firebaseSyncError, setFirebaseSyncError] = useState<string | null>(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
 
-  // Load data from Firebase Firestore ONCE when page is loaded / user is authenticated (using getDoc)
+  // Subscribe to Firebase Firestore user document for real-time synchronization between multiple devices
   useEffect(() => {
     if (!currentUser) {
       isLoadedFromFirebase.current = false;
@@ -86,50 +86,56 @@ export default function App() {
       return;
     }
 
-    const loadDataOnce = async () => {
-      setIsFirebaseLoading(true);
-      setFirebaseSyncError(null);
-      try {
-        const cloudData = await getUserFinanceData(currentUser.uid);
-        if (cloudData) {
-          const cloudTxCount = cloudData.transactions?.length || 0;
-          const localTxCount = dataRef.current.transactions?.length || 0;
-          const initialTxCount = initialFinanceData.transactions?.length || 0;
+    setIsFirebaseLoading(true);
+    setFirebaseSyncError(null);
 
-          // If either the newly uploaded CSV data or local changes contain more transactions than cloud, upload it to Firebase!
-          if (initialTxCount > cloudTxCount || localTxCount > cloudTxCount) {
-            const bestData = initialTxCount >= localTxCount ? initialFinanceData : dataRef.current;
-            const upgradeSource = initialTxCount >= localTxCount ? "новой версией импорта CSV" : "вашими локальными изменениями";
-            
-            console.log(`Auto-upgrading Firebase cloud data (${cloudTxCount} txs in cloud vs max of ${initialTxCount} in CSV / ${localTxCount} in local).`);
-            setData(bestData);
-            lastFetchedDataRef.current = JSON.stringify(bestData);
-            await saveUserFinanceData(currentUser.uid, currentUser.email || "", bestData);
-            addToast(`Облако Firebase синхронизировано и обновлено: ${upgradeSource}! ☁️🚀`, "success");
-          } else {
-            setData(cloudData);
-            lastFetchedDataRef.current = JSON.stringify(cloudData);
-            addToast("Данные успешно синхронизированы из облака! ☁️", "success");
-          }
-        } else {
-          // If the document does not exist in Firestore, seed it with current local state
+    const unsubscribe = subscribeToUserFinanceData(
+      currentUser.uid,
+      async (cloudData) => {
+        const stringifiedCloud = JSON.stringify(cloudData);
+        
+        // Check if database document is completely fresh/empty
+        const isDbEmpty = 
+          cloudData.accounts.length === 0 && 
+          cloudData.categories.length === 0 && 
+          cloudData.transactions.length === 0;
+
+        if (isDbEmpty) {
+          // If the document does not exist or has no transactions/accounts in Firestore,
+          // seed it with the current local state (from HoneyMoney CSV / local storage)
           const latestLocalData = dataRef.current;
           lastFetchedDataRef.current = JSON.stringify(latestLocalData);
-          await saveUserFinanceData(currentUser.uid, currentUser.email || "", latestLocalData);
-          addToast("Локальные данные сохранены в облако Firebase! ☁️", "success");
+          try {
+            await saveUserFinanceData(currentUser.uid, currentUser.email || "", latestLocalData);
+            addToast("Данные HoneyMoney импортированы в Firebase! ☁️🎉", "success");
+          } catch (err: any) {
+            console.error("Ошибка инициализации данных в Firebase:", err);
+          }
+        } else if (stringifiedCloud !== lastFetchedDataRef.current) {
+          // Only update local state if it differs from what was last loaded/saved to prevent cycles
+          setData(cloudData);
+          lastFetchedDataRef.current = stringifiedCloud;
+          addToast("Синхронизация с облаком успешна! ☁️🔄", "success");
         }
+        setIsFirebaseLoading(false);
         isLoadedFromFirebase.current = true;
-      } catch (err: any) {
-        console.error('Ошибка загрузки данных из Firebase:', err);
+      },
+      (err: any) => {
+        console.error('Ошибка синхронизации данных из Firebase:', err);
         let msg = err?.message || String(err);
+        try {
+          const parsed = JSON.parse(msg);
+          msg = parsed.error || msg;
+        } catch {}
         setFirebaseSyncError(msg);
         addToast(`Ошибка подключения к Firebase: ${msg}`, "warning" as any);
-      } finally {
         setIsFirebaseLoading(false);
       }
-    };
+    );
 
-    loadDataOnce();
+    return () => {
+      unsubscribe();
+    };
   }, [currentUser]);
 
   // Sync state to LocalStorage (purely client-side, zero cost, never triggers loops)
@@ -1070,23 +1076,9 @@ export default function App() {
                     try {
                       const cloudData = await getUserFinanceData(currentUser.uid);
                       if (cloudData) {
-                        const cloudTxCount = cloudData.transactions?.length || 0;
-                        const localTxCount = dataRef.current.transactions?.length || 0;
-                        const initialTxCount = initialFinanceData.transactions?.length || 0;
-
-                        if (initialTxCount > cloudTxCount || localTxCount > cloudTxCount) {
-                          const bestData = initialTxCount >= localTxCount ? initialFinanceData : dataRef.current;
-                          const upgradeSource = initialTxCount >= localTxCount ? "новой версией импорта CSV" : "вашими локальными изменениями";
-                          
-                          setData(bestData);
-                          lastFetchedDataRef.current = JSON.stringify(bestData);
-                          await saveUserFinanceData(currentUser.uid, currentUser.email || "", bestData);
-                          addToast(`Облако Firebase синхронизировано и обновлено: ${upgradeSource}! ☁️🚀`, "success");
-                        } else {
-                          setData(cloudData);
-                          lastFetchedDataRef.current = JSON.stringify(cloudData);
-                          addToast("Данные успешно синхронизированы из облака Firebase! ☁️", "success");
-                        }
+                        setData(cloudData);
+                        lastFetchedDataRef.current = JSON.stringify(cloudData);
+                        addToast("Данные успешно синхронизированы из облака Firebase! ☁️", "success");
                       } else {
                         const latestLocalData = dataRef.current;
                         await saveUserFinanceData(currentUser.uid, currentUser.email || "", latestLocalData);
