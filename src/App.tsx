@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, ChangeEvent } from 'react';
 import { FinanceData, Transaction, Account, Category, BankCard } from './types';
 import { initialFinanceData } from './initialData';
 import { DashboardOverview } from './components/DashboardOverview';
@@ -11,6 +11,7 @@ import { initAuth, logout, googleSignIn, db } from './googleAuth';
 import { User } from 'firebase/auth';
 import { doc, onSnapshot, getDoc } from 'firebase/firestore';
 import { getUserFinanceData, saveUserFinanceData, testConnection, subscribeToUserFinanceData, reinitUserFinanceData } from './firebaseService';
+import { parseAndStandardizeJsonToFinanceData } from './honeyJsonConverter';
 import firebaseConfig from '../firebase-applet-config.json';
 
 export default function App() {
@@ -237,6 +238,70 @@ export default function App() {
       } finally {
         setIsFirebaseLoading(false);
       }
+    }
+  };
+
+  const handleUploadCustomJson = async (e: ChangeEvent<HTMLInputElement>) => {
+    if (!currentUser) {
+      addToast("Пожалуйста, сначала авторизуйтесь для работы с облаком Firebase.", "critical" as any);
+      return;
+    }
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!confirm(`Вы уверены, что хотите загрузить файл "${file.name}" с вашего ПК в облако Firebase? Это ПОЛНОСТЬЮ УДАЛИТ И ПЕРЕЗАПИШЕТ все текущие транзакции и счета в облаке текущими данными из выбранного файла.`)) {
+      e.target.value = '';
+      return;
+    }
+
+    setIsFirebaseLoading(true);
+    setFirebaseSyncError(null);
+    try {
+      const fileReader = new FileReader();
+      
+      fileReader.onload = async (event) => {
+        try {
+          const text = event.target?.result as string;
+          if (!text) {
+            throw new Error("Файл пуст или не удалось прочитать содержимое.");
+          }
+
+          addToast("Парсинг и преобразование данных... ⚙️", "success");
+          const parsedData = parseAndStandardizeJsonToFinanceData(text);
+          const numTxs = parsedData.transactions.length;
+
+          addToast(`Успешно распознано ${numTxs} транзакций! Батч-запись в Firebase Firestore... ⏳`, "success");
+          await reinitUserFinanceData(currentUser.uid, currentUser.email || "", parsedData);
+          lastFetchedDataRef.current = JSON.stringify(parsedData);
+          setData(parsedData);
+
+          addToast(`Успешно загружено: ${numTxs} транзакций из "${file.name}"! 🎉☁️`, "success");
+        } catch (innerErr: any) {
+          console.error("Ошибка импорта загруженного файла:", innerErr);
+          const msg = innerErr?.message || String(innerErr);
+          setFirebaseSyncError(msg);
+          addToast(`Ошибка обработки файла: ${msg}`, "critical" as any);
+        } finally {
+          setIsFirebaseLoading(false);
+          e.target.value = '';
+        }
+      };
+
+      fileReader.onerror = () => {
+        addToast("Не удалось прочитать загруженный файл", "critical" as any);
+        setIsFirebaseLoading(false);
+        e.target.value = '';
+      };
+
+      fileReader.readAsText(file, "utf-8");
+
+    } catch (err: any) {
+      console.error("Ошибка при чтении файла:", err);
+      const msg = err?.message || String(err);
+      setFirebaseSyncError(msg);
+      addToast(`Не удалось обработать файл: ${msg}`, "critical" as any);
+      setIsFirebaseLoading(false);
+      e.target.value = '';
     }
   };
 
@@ -1071,6 +1136,16 @@ export default function App() {
                 </div>
               </div>
               <div className="flex items-center gap-2 w-full sm:w-auto justify-end flex-wrap">
+                <label className="w-full sm:w-auto px-3.5 py-2 bg-gradient-to-r from-teal-500/15 to-emerald-500/15 hover:from-teal-500/25 hover:to-emerald-500/25 border border-teal-500/30 hover:border-teal-500/50 text-teal-600 dark:text-teal-400 text-xs font-bold rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-sm">
+                  <span>📂 Выбрать JSON с ПК</span>
+                  <input
+                    type="file"
+                    accept=".json"
+                    onChange={handleUploadCustomJson}
+                    disabled={isFirebaseLoading}
+                    className="hidden"
+                  />
+                </label>
                 <button
                   onClick={handleForceImportCSVToFirebase}
                   disabled={isFirebaseLoading}
