@@ -6,7 +6,7 @@ import { TransactionPanel } from './components/TransactionPanel';
 import { AccountsCategoriesPanel } from './components/AccountsCategoriesPanel';
 import { BudgetingPanel } from './components/BudgetingPanel';
 import { CalendarPanel } from './components/CalendarPanel';
-import { LayoutDashboard, ReceiptText, Calendar, SlidersHorizontal, Settings, Flame, Bell, AlertTriangle, XCircle, CheckCircle, Info, LogIn, LogOut, ShieldAlert, X, RefreshCw } from 'lucide-react';
+import { LayoutDashboard, ReceiptText, Calendar, SlidersHorizontal, Settings, Flame, Bell, AlertTriangle, XCircle, CheckCircle, Info, LogIn, LogOut, ShieldAlert, X, RefreshCw, FolderOpen } from 'lucide-react';
 import { initAuth, logout, googleSignIn, db } from './googleAuth';
 import { User } from 'firebase/auth';
 import { doc, onSnapshot, getDoc } from 'firebase/firestore';
@@ -878,7 +878,7 @@ export default function App() {
             </span>
           </div>
 
-          <div className="h-8 w-px bg-white/10 hidden sm:block" />
+
 
           <button
             onClick={handleResetData}
@@ -1040,18 +1040,7 @@ export default function App() {
                   {showAuthInstructions ? 'Скрыть инструкцию' : 'Инструкция по настройке'}
                 </button>
 
-                <div className="w-full border-t border-white/5 my-1" />
 
-                <label className="w-full px-4 py-2.5 bg-gradient-to-r from-teal-500/15 to-emerald-500/15 hover:from-teal-500/25 hover:to-emerald-500/25 border border-teal-500/30 hover:border-teal-500/50 text-teal-600 dark:text-teal-400 text-xs font-bold rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-sm text-center">
-                  <span>📂 Выбрать JSON с ПК</span>
-                  <input
-                    type="file"
-                    accept=".json"
-                    onChange={handleUploadCustomJson}
-                    disabled={isFirebaseLoading}
-                    className="hidden"
-                  />
-                </label>
               </div>
             </div>
 
@@ -1172,24 +1161,7 @@ export default function App() {
                 </div>
               </div>
               <div className="flex items-center gap-2 w-full sm:w-auto justify-end flex-wrap">
-                <label className="w-full sm:w-auto px-3.5 py-2 bg-gradient-to-r from-teal-500/15 to-emerald-500/15 hover:from-teal-500/25 hover:to-emerald-500/25 border border-teal-500/30 hover:border-teal-500/50 text-teal-600 dark:text-teal-400 text-xs font-bold rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-sm">
-                  <span>📂 Выбрать JSON с ПК</span>
-                  <input
-                    type="file"
-                    accept=".json"
-                    onChange={handleUploadCustomJson}
-                    disabled={isFirebaseLoading}
-                    className="hidden"
-                  />
-                </label>
-                <button
-                  onClick={handleForceImportCSVToFirebase}
-                  disabled={isFirebaseLoading}
-                  className="w-full sm:w-auto px-3.5 py-2 bg-gradient-to-r from-amber-500/15 to-orange-500/15 hover:from-amber-500/25 hover:to-orange-500/25 border border-orange-500/30 hover:border-orange-500/50 text-amber-600 dark:text-amber-400 text-xs font-bold rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1.5"
-                  title="Принудительно загрузить все транзакции и аккаунты из JSON файла в Firestore"
-                >
-                  <span>📥 Импорт JSON в облако</span>
-                </button>
+
                 <button
                   onClick={async () => {
                     setIsFirebaseLoading(true);

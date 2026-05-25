@@ -171,12 +171,19 @@ export function parseAndStandardizeJsonToFinanceData(rawText: string): FinanceDa
         dateStr = dateStr.replace('201-', '2022-');
       }
 
-      if (realSumVal === null || realSumVal === undefined || realSumVal === 0) {
-        return;
+      let amountVal = 0;
+      if (realSumVal !== null && realSumVal !== undefined && realSumVal !== 0) {
+        amountVal = Number(realSumVal);
+      } else if (description) {
+        const parsedDesc = parseFloat(description);
+        if (!isNaN(parsedDesc) && parsedDesc !== 0) {
+          amountVal = parsedDesc;
+        }
       }
 
-      const amountVal = Number(realSumVal);
-      if (isNaN(amountVal) || amountVal === 0) return;
+      if (amountVal === 0) {
+        return;
+      }
 
       if (transferStr && transferStr.includes('=>')) {
         const parts = transferStr.split('=>').map((s: string) => s.trim());
@@ -227,7 +234,18 @@ export function parseAndStandardizeJsonToFinanceData(rawText: string): FinanceDa
         const acc = accountsMapByName.get(accountName);
         if (!acc) return;
 
-        const type: 'income' | 'expense' = amountVal < 0 ? 'expense' : 'income';
+        let type: 'income' | 'expense' = 'expense';
+        if (realSumVal !== null && realSumVal !== undefined && realSumVal !== 0) {
+          type = Number(realSumVal) < 0 ? 'expense' : 'income';
+        } else {
+          const cat = categoriesMapByName.get(categoryName);
+          if (cat) {
+            type = cat.type === 'income' ? 'income' : 'expense';
+          } else {
+            type = 'expense';
+          }
+        }
+
         const absAmount = Math.abs(amountVal);
 
         const resolvedCategoryName = categoryName || (type === 'income' ? 'Прочие доходы' : 'Прочие расходы');
