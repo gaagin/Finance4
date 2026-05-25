@@ -94,22 +94,18 @@ export default function App() {
       async (cloudData) => {
         const stringifiedCloud = JSON.stringify(cloudData);
         
-        // Check if database document is completely fresh/empty
-        const isDbEmpty = 
-          cloudData.accounts.length === 0 && 
-          cloudData.categories.length === 0 && 
-          cloudData.transactions.length === 0;
+        // If active Firestore collection of transactions is empty, seed it with the parse-time initialFinanceData (derived from CSV)
+        const isDbEmptyOfTransactions = cloudData.transactions.length === 0;
 
-        if (isDbEmpty) {
-          // If the document does not exist or has no transactions/accounts in Firestore,
-          // seed it with the current local state (from HoneyMoney CSV / local storage)
-          const latestLocalData = dataRef.current;
-          lastFetchedDataRef.current = JSON.stringify(latestLocalData);
+        if (isDbEmptyOfTransactions) {
+          lastFetchedDataRef.current = JSON.stringify(initialFinanceData);
+          setData(initialFinanceData);
           try {
-            await saveUserFinanceData(currentUser.uid, currentUser.email || "", latestLocalData);
-            addToast("Данные HoneyMoney импортированы в Firebase! ☁️🎉", "success");
+            await saveUserFinanceData(currentUser.uid, currentUser.email || "", initialFinanceData, null);
+            addToast("Все данные и транзакции из CSV импортированы в Firebase! ☁️🎉", "success");
           } catch (err: any) {
             console.error("Ошибка инициализации данных в Firebase:", err);
+            addToast(`Ошибка автоимпорта CSV: ${err.message || err}`, "warning" as any);
           }
         } else if (stringifiedCloud !== lastFetchedDataRef.current) {
           // Only update local state if it differs from what was last loaded/saved to prevent cycles
@@ -234,6 +230,32 @@ export default function App() {
         } catch {}
         setFirebaseSyncError(msg);
         addToast(`Ошибка сохранения в Firebase: ${msg}`, 'warning' as any);
+      } finally {
+        setIsFirebaseLoading(false);
+      }
+    }
+  };
+
+  const handleForceImportCSVToFirebase = async () => {
+    if (!currentUser) return;
+    if (confirm("Вы уверены, что хотите принудительно залить все данные HoneyMoney из оригинального CSV файла напрямую в базу данных Firebase? Это перезапишет текущий заголовок счетов и все транзакции в облаке на данные из CSV.")) {
+      setIsFirebaseLoading(true);
+      setFirebaseSyncError(null);
+      try {
+        addToast("Старт импорта CSV файла... Запись 2100+ транзакций в Firebase Firestore... ⏳", "success");
+        await saveUserFinanceData(currentUser.uid, currentUser.email || "", initialFinanceData, null);
+        lastFetchedDataRef.current = JSON.stringify(initialFinanceData);
+        setData(initialFinanceData);
+        addToast("Все данные оригинального HoneyMoney CSV файла успешно залиты в Firebase! ☁️🎉", "success");
+      } catch (err: any) {
+        console.error("Ошибка ручного импорта CSV в Firebase:", err);
+        let msg = err?.message || String(err);
+        try {
+          const parsed = JSON.parse(msg);
+          msg = parsed.error || msg;
+        } catch {}
+        setFirebaseSyncError(msg);
+        addToast(`Не удалось залить CSV: ${msg}`, "critical" as any);
       } finally {
         setIsFirebaseLoading(false);
       }
@@ -1070,7 +1092,15 @@ export default function App() {
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+              <div className="flex items-center gap-2 w-full sm:w-auto justify-end flex-wrap">
+                <button
+                  onClick={handleForceImportCSVToFirebase}
+                  disabled={isFirebaseLoading}
+                  className="w-full sm:w-auto px-3.5 py-2 bg-gradient-to-r from-amber-500/15 to-orange-500/15 hover:from-amber-500/25 hover:to-orange-500/25 border border-orange-500/30 hover:border-orange-500/50 text-amber-600 dark:text-amber-400 text-xs font-bold rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1.5"
+                  title="Принудительно загрузить все транзакции и аккаунты из CSV файла в Firestore"
+                >
+                  <span>📥 Импорт CSV в облако</span>
+                </button>
                 <button
                   onClick={async () => {
                     setIsFirebaseLoading(true);
