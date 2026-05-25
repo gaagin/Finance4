@@ -1044,7 +1044,7 @@ export const initialFinanceData: FinanceData = {
       "amount": 45.16,
       "type": "expense",
       "date": "2026-05-07",
-      "description": "45\t16"
+      "description": "45,16"
     },
     {
       "id": "tx-mig-70",
@@ -1405,7 +1405,7 @@ export const initialFinanceData: FinanceData = {
       "amount": 297,
       "type": "expense",
       "date": "2026-04-25",
-      "description": "90 стульчик для Лейлы\t 195 золотые серьги для Лейлы 12 машинка для Руфатика"
+      "description": "90 стульчик для Лейлы, 195 золотые серьги для Лейлы 12 машинка для Руфатика"
     },
     {
       "id": "tx-mig-107",
@@ -3889,7 +3889,7 @@ export const initialFinanceData: FinanceData = {
       "amount": 70,
       "type": "expense",
       "date": "2026-01-29",
-      "description": "30 травмотолог\t 40 рентген"
+      "description": "30 травмотолог, 40 рентген"
     },
     {
       "id": "tx-mig-371",
@@ -5403,7 +5403,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-532",
       "accountId": "acc-parsed-0",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 4,
       "type": "expense",
       "date": "2025-11-30",
@@ -5484,7 +5484,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-541",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 5,
       "type": "expense",
       "date": "2025-11-26",
@@ -5834,7 +5834,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-579",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 10,
       "type": "expense",
       "date": "2025-11-12",
@@ -7744,7 +7744,7 @@ export const initialFinanceData: FinanceData = {
       "amount": 7.12,
       "type": "expense",
       "date": "2025-09-19",
-      "description": "7\t12"
+      "description": "7,12"
     },
     {
       "id": "tx-mig-782",
@@ -8926,7 +8926,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-907",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 52,
       "type": "expense",
       "date": "2025-08-17",
@@ -9314,7 +9314,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-947",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 5,
       "type": "expense",
       "date": "2025-08-12",
@@ -9368,7 +9368,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-953",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 30,
       "type": "expense",
       "date": "2025-08-10",
@@ -9646,7 +9646,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-983",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 20,
       "type": "expense",
       "date": "2025-08-03",
@@ -10153,7 +10153,7 @@ export const initialFinanceData: FinanceData = {
       "id": "tx-mig-1037",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
-      "amount": 27.130000000000003,
+      "amount": 27.13,
       "type": "expense",
       "date": "2025-07-22",
       "description": "7 10 10.13"
@@ -10617,7 +10617,7 @@ export const initialFinanceData: FinanceData = {
       "amount": 130,
       "type": "expense",
       "date": "2025-07-09",
-      "description": "80 УЗИ\t 50 гинеколог"
+      "description": "80 УЗИ, 50 гинеколог"
     },
     {
       "id": "tx-mig-1087",
@@ -11147,7 +11147,7 @@ export const initialFinanceData: FinanceData = {
       "amount": 220,
       "type": "expense",
       "date": "2025-06-25",
-      "description": "120 психотерапевт\t 100 ЭКГ"
+      "description": "120 психотерапевт, 100 ЭКГ"
     },
     {
       "id": "tx-mig-1141",
@@ -11224,7 +11224,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-1149",
       "accountId": "acc-parsed-0",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 102,
       "type": "expense",
       "date": "2025-06-22",
@@ -11552,7 +11552,7 @@ export const initialFinanceData: FinanceData = {
       "id": "tx-mig-1184",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
-      "amount": 22.560000000000002,
+      "amount": 22.56,
       "type": "expense",
       "date": "2025-06-12",
       "description": "14.56 5 3"
@@ -11725,7 +11725,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-1202",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 26,
       "type": "expense",
       "date": "2025-06-07",
@@ -11956,7 +11956,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-1225",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 3,
       "type": "expense",
       "date": "2025-06-02",
@@ -11983,7 +11983,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-1228",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 20,
       "type": "expense",
       "date": "2025-06-01",
@@ -12166,7 +12166,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-1247",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 25,
       "type": "expense",
       "date": "2025-05-27",
@@ -12313,7 +12313,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-1262",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 20,
       "type": "expense",
       "date": "2025-05-22",
@@ -12344,7 +12344,7 @@ export const initialFinanceData: FinanceData = {
       "amount": 58,
       "type": "expense",
       "date": "2025-05-21",
-      "description": "30 обувь Ильгар\t 28 кофта Самира"
+      "description": "30 обувь Ильгар, 28 кофта Самира"
     },
     {
       "id": "tx-mig-1266",
@@ -12595,7 +12595,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-1292",
       "accountId": "acc-parsed-3",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 28,
       "type": "expense",
       "date": "2025-05-12",
@@ -12814,7 +12814,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-1315",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 3,
       "type": "expense",
       "date": "2025-05-07",
@@ -12903,7 +12903,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-1324",
       "accountId": "acc-parsed-7",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 1,
       "type": "expense",
       "date": "2025-05-06",
@@ -13370,7 +13370,7 @@ export const initialFinanceData: FinanceData = {
       "amount": 25.1,
       "type": "expense",
       "date": "2025-04-22",
-      "description": "2\t4 6 6.7 10"
+      "description": "2,4 6 6.7 10"
     },
     {
       "id": "tx-mig-1372",
@@ -13629,7 +13629,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-1398",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 3,
       "type": "expense",
       "date": "2025-04-16",
@@ -14502,7 +14502,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-1487",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 20,
       "type": "expense",
       "date": "2025-03-22",
@@ -15662,7 +15662,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-1603",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 14,
       "type": "expense",
       "date": "2025-02-22",
@@ -15672,7 +15672,7 @@ export const initialFinanceData: FinanceData = {
       "id": "tx-mig-1604",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
-      "amount": 11.399999999999999,
+      "amount": 11.4,
       "type": "expense",
       "date": "2025-02-22",
       "description": "10 0.7 0.7"
@@ -15882,7 +15882,7 @@ export const initialFinanceData: FinanceData = {
       "id": "tx-mig-1626",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
-      "amount": 24.400000000000002,
+      "amount": 24.4,
       "type": "expense",
       "date": "2025-02-15",
       "description": "14.2 5.3 1 3.3 0.6"
@@ -17104,7 +17104,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-1749",
       "accountId": "acc-parsed-7",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 36.7,
       "type": "expense",
       "date": "2025-01-22",
@@ -17154,7 +17154,7 @@ export const initialFinanceData: FinanceData = {
       "id": "tx-mig-1754",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
-      "amount": 25.799999999999997,
+      "amount": 25.8,
       "type": "expense",
       "date": "2025-01-21",
       "description": "8 2 2.4 8 3 2.4"
@@ -17823,7 +17823,7 @@ export const initialFinanceData: FinanceData = {
       "amount": 350,
       "type": "expense",
       "date": "2025-01-08",
-      "description": "320 прожигание эрозии\t 20 анализ крови 10 AQS"
+      "description": "320 прожигание эрозии, 20 анализ крови 10 AQS"
     },
     {
       "id": "tx-mig-1821",
@@ -18015,7 +18015,7 @@ export const initialFinanceData: FinanceData = {
       "id": "tx-mig-1839",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-8",
-      "amount": 118.19999999999999,
+      "amount": 118.2,
       "type": "expense",
       "date": "2025-01-06",
       "description": "37.8 37.8 витамин д 25.6 свечи 17"
@@ -18024,7 +18024,7 @@ export const initialFinanceData: FinanceData = {
       "id": "tx-mig-1840",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-22",
-      "amount": 20.200000000000003,
+      "amount": 20.2,
       "type": "expense",
       "date": "2025-01-06",
       "description": "3.6 16.6"
@@ -18619,7 +18619,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-1900",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 47,
       "type": "expense",
       "date": "2024-12-25",
@@ -19645,7 +19645,7 @@ export const initialFinanceData: FinanceData = {
       "id": "tx-mig-2001",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
-      "amount": 27.049999999999997,
+      "amount": 27.05,
       "type": "expense",
       "date": "2024-12-07",
       "description": "8.75 3 10.9 4.4"
@@ -20386,7 +20386,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-2075",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 7.6,
       "type": "expense",
       "date": "2024-11-24",
@@ -21598,6 +21598,15 @@ export const initialFinanceData: FinanceData = {
     },
     {
       "id": "tx-mig-2196",
+      "accountId": "acc-parsed-0",
+      "categoryId": "cat-parsed-9",
+      "amount": 1.55,
+      "type": "expense",
+      "date": "2024-11-03",
+      "description": "1.55 процент на цифровую карту,"
+    },
+    {
+      "id": "tx-mig-2197",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-0",
       "amount": 29,
@@ -21606,7 +21615,7 @@ export const initialFinanceData: FinanceData = {
       "description": "29 Памперсы"
     },
     {
-      "id": "tx-mig-2197",
+      "id": "tx-mig-2198",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 7,
@@ -21615,7 +21624,7 @@ export const initialFinanceData: FinanceData = {
       "description": "7"
     },
     {
-      "id": "tx-mig-2198",
+      "id": "tx-mig-2199",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-6",
       "amount": 8,
@@ -21624,7 +21633,7 @@ export const initialFinanceData: FinanceData = {
       "description": "Nice Mind 8"
     },
     {
-      "id": "tx-mig-2199",
+      "id": "tx-mig-2200",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 50,
@@ -21635,7 +21644,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2200",
+      "id": "tx-mig-2201",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 50,
@@ -21646,7 +21655,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2201",
+      "id": "tx-mig-2202",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-32",
       "amount": 13,
@@ -21657,7 +21666,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2202",
+      "id": "tx-mig-2203",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 13,
@@ -21668,7 +21677,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2203",
+      "id": "tx-mig-2204",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-15",
       "amount": 30,
@@ -21677,7 +21686,7 @@ export const initialFinanceData: FinanceData = {
       "description": "30 В деревню"
     },
     {
-      "id": "tx-mig-2204",
+      "id": "tx-mig-2205",
       "accountId": "acc-parsed-16",
       "categoryId": "cat-parsed-25",
       "amount": 265,
@@ -21686,7 +21695,7 @@ export const initialFinanceData: FinanceData = {
       "description": "265"
     },
     {
-      "id": "tx-mig-2205",
+      "id": "tx-mig-2206",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-25",
       "amount": 2003,
@@ -21695,7 +21704,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2003"
     },
     {
-      "id": "tx-mig-2206",
+      "id": "tx-mig-2207",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-15",
       "amount": 25,
@@ -21704,7 +21713,7 @@ export const initialFinanceData: FinanceData = {
       "description": "25"
     },
     {
-      "id": "tx-mig-2207",
+      "id": "tx-mig-2208",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 303,
@@ -21713,21 +21722,21 @@ export const initialFinanceData: FinanceData = {
       "description": "Перевод со счета Albali кредитная карта в Albali kart",
       "transferAccountId": "acc-parsed-2",
       "transferType": "out"
-    },
-    {
-      "id": "tx-mig-2208",
-      "accountId": "acc-parsed-2",
-      "categoryId": "cat-parsed-31",
-      "amount": 303,
-      "type": "transfer",
-      "date": "2024-10-31",
-      "description": "Перевод со счета Albali кредитная карта в Albali kart",
-      "transferAccountId": "acc-parsed-20",
-      "transferType": "in"
     },
     {
       "id": "tx-mig-2209",
       "accountId": "acc-parsed-2",
+      "categoryId": "cat-parsed-31",
+      "amount": 303,
+      "type": "transfer",
+      "date": "2024-10-31",
+      "description": "Перевод со счета Albali кредитная карта в Albali kart",
+      "transferAccountId": "acc-parsed-20",
+      "transferType": "in"
+    },
+    {
+      "id": "tx-mig-2210",
+      "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-32",
       "amount": 303,
       "type": "transfer",
@@ -21737,7 +21746,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2210",
+      "id": "tx-mig-2211",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-31",
       "amount": 303,
@@ -21748,7 +21757,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2211",
+      "id": "tx-mig-2212",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-32",
       "amount": 50,
@@ -21759,7 +21768,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2212",
+      "id": "tx-mig-2213",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 50,
@@ -21770,7 +21779,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2213",
+      "id": "tx-mig-2214",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-26",
       "amount": 25,
@@ -21779,7 +21788,7 @@ export const initialFinanceData: FinanceData = {
       "description": "25 ailenet"
     },
     {
-      "id": "tx-mig-2214",
+      "id": "tx-mig-2215",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-26",
       "amount": 6.5,
@@ -21788,7 +21797,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3.5 3 Ильгар Самира"
     },
     {
-      "id": "tx-mig-2215",
+      "id": "tx-mig-2216",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 70,
@@ -21799,7 +21808,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2216",
+      "id": "tx-mig-2217",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 70,
@@ -21810,7 +21819,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2217",
+      "id": "tx-mig-2218",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-9",
       "amount": 3.4,
@@ -21819,7 +21828,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3.4"
     },
     {
-      "id": "tx-mig-2218",
+      "id": "tx-mig-2219",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 25.75,
@@ -21828,7 +21837,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12 4.92 8.83"
     },
     {
-      "id": "tx-mig-2219",
+      "id": "tx-mig-2220",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-23",
       "amount": 10,
@@ -21837,7 +21846,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-2220",
+      "id": "tx-mig-2221",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-32",
       "amount": 49.21,
@@ -21848,7 +21857,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2221",
+      "id": "tx-mig-2222",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 49.21,
@@ -21859,7 +21868,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2222",
+      "id": "tx-mig-2223",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 20.15,
@@ -21868,7 +21877,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20.15"
     },
     {
-      "id": "tx-mig-2223",
+      "id": "tx-mig-2224",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-23",
       "amount": 10,
@@ -21877,7 +21886,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-2224",
+      "id": "tx-mig-2225",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 100,
@@ -21888,7 +21897,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2225",
+      "id": "tx-mig-2226",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 100,
@@ -21899,7 +21908,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2226",
+      "id": "tx-mig-2227",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-23",
       "amount": 11,
@@ -21908,7 +21917,7 @@ export const initialFinanceData: FinanceData = {
       "description": "11"
     },
     {
-      "id": "tx-mig-2227",
+      "id": "tx-mig-2228",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-21",
       "amount": 40,
@@ -21917,7 +21926,7 @@ export const initialFinanceData: FinanceData = {
       "description": "40 салон"
     },
     {
-      "id": "tx-mig-2228",
+      "id": "tx-mig-2229",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-20",
       "amount": 150,
@@ -21926,7 +21935,7 @@ export const initialFinanceData: FinanceData = {
       "description": "150 Свадьба сына Вахида"
     },
     {
-      "id": "tx-mig-2229",
+      "id": "tx-mig-2230",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-32",
       "amount": 60,
@@ -21935,20 +21944,20 @@ export const initialFinanceData: FinanceData = {
       "description": "Перевод со счета Кошелек Самира в Кошелёк",
       "transferAccountId": "acc-parsed-1",
       "transferType": "out"
-    },
-    {
-      "id": "tx-mig-2230",
-      "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-31",
-      "amount": 60,
-      "type": "transfer",
-      "date": "2024-10-28",
-      "description": "Перевод со счета Кошелек Самира в Кошелёк",
-      "transferAccountId": "acc-parsed-7",
-      "transferType": "in"
     },
     {
       "id": "tx-mig-2231",
+      "accountId": "acc-parsed-1",
+      "categoryId": "cat-parsed-31",
+      "amount": 60,
+      "type": "transfer",
+      "date": "2024-10-28",
+      "description": "Перевод со счета Кошелек Самира в Кошелёк",
+      "transferAccountId": "acc-parsed-7",
+      "transferType": "in"
+    },
+    {
+      "id": "tx-mig-2232",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-32",
       "amount": 32,
@@ -21959,7 +21968,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2232",
+      "id": "tx-mig-2233",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 32,
@@ -21970,7 +21979,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2233",
+      "id": "tx-mig-2234",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-1",
       "amount": 8,
@@ -21979,7 +21988,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3 2 3"
     },
     {
-      "id": "tx-mig-2234",
+      "id": "tx-mig-2235",
       "accountId": "acc-parsed-17",
       "categoryId": "cat-parsed-32",
       "amount": 310,
@@ -21990,7 +21999,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2235",
+      "id": "tx-mig-2236",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-31",
       "amount": 310,
@@ -22001,7 +22010,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2236",
+      "id": "tx-mig-2237",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 6,
@@ -22012,7 +22021,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2237",
+      "id": "tx-mig-2238",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 6,
@@ -22023,7 +22032,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2238",
+      "id": "tx-mig-2239",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-32",
       "amount": 15,
@@ -22034,7 +22043,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2239",
+      "id": "tx-mig-2240",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 15,
@@ -22045,16 +22054,16 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2240",
+      "id": "tx-mig-2241",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
-      "amount": 27.740000000000002,
+      "amount": 27.74,
       "type": "expense",
       "date": "2024-10-26",
       "description": "6.4 4.34 15 2"
     },
     {
-      "id": "tx-mig-2241",
+      "id": "tx-mig-2242",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 239,
@@ -22065,7 +22074,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2242",
+      "id": "tx-mig-2243",
       "accountId": "acc-parsed-18",
       "categoryId": "cat-parsed-31",
       "amount": 239,
@@ -22076,7 +22085,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2243",
+      "id": "tx-mig-2244",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 9,
@@ -22087,7 +22096,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2244",
+      "id": "tx-mig-2245",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 9,
@@ -22098,7 +22107,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2245",
+      "id": "tx-mig-2246",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 3,
@@ -22109,7 +22118,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2246",
+      "id": "tx-mig-2247",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 3,
@@ -22120,7 +22129,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2247",
+      "id": "tx-mig-2248",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 11,
@@ -22131,7 +22140,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2248",
+      "id": "tx-mig-2249",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 11,
@@ -22142,7 +22151,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2249",
+      "id": "tx-mig-2250",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-9",
       "amount": 60,
@@ -22151,7 +22160,7 @@ export const initialFinanceData: FinanceData = {
       "description": "60 за автокредит"
     },
     {
-      "id": "tx-mig-2250",
+      "id": "tx-mig-2251",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-5",
       "amount": 4,
@@ -22160,7 +22169,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4 futbol"
     },
     {
-      "id": "tx-mig-2251",
+      "id": "tx-mig-2252",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 1,
@@ -22169,7 +22178,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1"
     },
     {
-      "id": "tx-mig-2252",
+      "id": "tx-mig-2253",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-32",
       "amount": 30,
@@ -22180,7 +22189,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2253",
+      "id": "tx-mig-2254",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 30,
@@ -22191,7 +22200,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2254",
+      "id": "tx-mig-2255",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-15",
       "amount": 27.5,
@@ -22200,7 +22209,7 @@ export const initialFinanceData: FinanceData = {
       "description": "27.5"
     },
     {
-      "id": "tx-mig-2255",
+      "id": "tx-mig-2256",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-32",
       "amount": 200,
@@ -22211,7 +22220,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2256",
+      "id": "tx-mig-2257",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 200,
@@ -22222,7 +22231,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2257",
+      "id": "tx-mig-2258",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 92,
@@ -22233,7 +22242,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2258",
+      "id": "tx-mig-2259",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 92,
@@ -22244,7 +22253,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2259",
+      "id": "tx-mig-2260",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-18",
       "amount": 1,
@@ -22253,7 +22262,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1 Парковка"
     },
     {
-      "id": "tx-mig-2260",
+      "id": "tx-mig-2261",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-32",
       "amount": 3,
@@ -22262,21 +22271,21 @@ export const initialFinanceData: FinanceData = {
       "description": "Перевод со счета Кошелек Самира в Кошелёк",
       "transferAccountId": "acc-parsed-1",
       "transferType": "out"
-    },
-    {
-      "id": "tx-mig-2261",
-      "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-31",
-      "amount": 3,
-      "type": "transfer",
-      "date": "2024-10-24",
-      "description": "Перевод со счета Кошелек Самира в Кошелёк",
-      "transferAccountId": "acc-parsed-7",
-      "transferType": "in"
     },
     {
       "id": "tx-mig-2262",
       "accountId": "acc-parsed-1",
+      "categoryId": "cat-parsed-31",
+      "amount": 3,
+      "type": "transfer",
+      "date": "2024-10-24",
+      "description": "Перевод со счета Кошелек Самира в Кошелёк",
+      "transferAccountId": "acc-parsed-7",
+      "transferType": "in"
+    },
+    {
+      "id": "tx-mig-2263",
+      "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 5,
       "type": "transfer",
@@ -22286,7 +22295,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2263",
+      "id": "tx-mig-2264",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 5,
@@ -22297,7 +22306,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2264",
+      "id": "tx-mig-2265",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-32",
       "amount": 1.4,
@@ -22308,7 +22317,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2265",
+      "id": "tx-mig-2266",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 1.4,
@@ -22319,7 +22328,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2266",
+      "id": "tx-mig-2267",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 20.4,
@@ -22328,7 +22337,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1 2 12.8 4.6"
     },
     {
-      "id": "tx-mig-2267",
+      "id": "tx-mig-2268",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-32",
       "amount": 2,
@@ -22339,7 +22348,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2268",
+      "id": "tx-mig-2269",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 2,
@@ -22350,7 +22359,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2269",
+      "id": "tx-mig-2270",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 7.5,
@@ -22359,7 +22368,7 @@ export const initialFinanceData: FinanceData = {
       "description": "7.5"
     },
     {
-      "id": "tx-mig-2270",
+      "id": "tx-mig-2271",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-32",
       "amount": 2,
@@ -22370,7 +22379,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2271",
+      "id": "tx-mig-2272",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 2,
@@ -22381,7 +22390,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2272",
+      "id": "tx-mig-2273",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 0.6,
@@ -22392,7 +22401,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2273",
+      "id": "tx-mig-2274",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-31",
       "amount": 0.6,
@@ -22403,7 +22412,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2274",
+      "id": "tx-mig-2275",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-32",
       "amount": 2,
@@ -22414,7 +22423,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2275",
+      "id": "tx-mig-2276",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 2,
@@ -22425,7 +22434,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2276",
+      "id": "tx-mig-2277",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-32",
       "amount": 1,
@@ -22436,7 +22445,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2277",
+      "id": "tx-mig-2278",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 1,
@@ -22447,7 +22456,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2278",
+      "id": "tx-mig-2279",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-32",
       "amount": 1,
@@ -22458,7 +22467,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2279",
+      "id": "tx-mig-2280",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 1,
@@ -22469,7 +22478,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2280",
+      "id": "tx-mig-2281",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 5.5,
@@ -22478,7 +22487,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5.5"
     },
     {
-      "id": "tx-mig-2281",
+      "id": "tx-mig-2282",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 25.64,
@@ -22487,7 +22496,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6.8 18.84"
     },
     {
-      "id": "tx-mig-2282",
+      "id": "tx-mig-2283",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-14",
       "amount": 113,
@@ -22496,7 +22505,7 @@ export const initialFinanceData: FinanceData = {
       "description": "45 38 6 3 1 20"
     },
     {
-      "id": "tx-mig-2283",
+      "id": "tx-mig-2284",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-6",
       "amount": 6,
@@ -22505,7 +22514,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6 Yandex Music"
     },
     {
-      "id": "tx-mig-2284",
+      "id": "tx-mig-2285",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 20,
@@ -22516,7 +22525,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2285",
+      "id": "tx-mig-2286",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 20,
@@ -22527,7 +22536,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2286",
+      "id": "tx-mig-2287",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-1",
       "amount": 6,
@@ -22536,7 +22545,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6"
     },
     {
-      "id": "tx-mig-2287",
+      "id": "tx-mig-2288",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-32",
       "amount": 0.35,
@@ -22547,7 +22556,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2288",
+      "id": "tx-mig-2289",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-31",
       "amount": 0.35,
@@ -22558,7 +22567,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2289",
+      "id": "tx-mig-2290",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-32",
       "amount": 3.4,
@@ -22569,7 +22578,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2290",
+      "id": "tx-mig-2291",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 3.4,
@@ -22580,7 +22589,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2291",
+      "id": "tx-mig-2292",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-20",
       "amount": 69.2,
@@ -22589,16 +22598,16 @@ export const initialFinanceData: FinanceData = {
       "description": "6.2 50 Дочке Севиндж 13"
     },
     {
-      "id": "tx-mig-2292",
+      "id": "tx-mig-2293",
       "accountId": "acc-parsed-0",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 27.14,
       "type": "expense",
       "date": "2024-10-19",
       "description": "14.14 13 торт и вино"
     },
     {
-      "id": "tx-mig-2293",
+      "id": "tx-mig-2294",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 19.91,
@@ -22607,7 +22616,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2.91 4 6 7"
     },
     {
-      "id": "tx-mig-2294",
+      "id": "tx-mig-2295",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-20",
       "amount": 77.61,
@@ -22616,7 +22625,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20 3.4 5 49.21 в деревню"
     },
     {
-      "id": "tx-mig-2295",
+      "id": "tx-mig-2296",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-32",
       "amount": 7,
@@ -22627,7 +22636,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2296",
+      "id": "tx-mig-2297",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 7,
@@ -22638,7 +22647,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2297",
+      "id": "tx-mig-2298",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 10,
@@ -22649,7 +22658,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2298",
+      "id": "tx-mig-2299",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 10,
@@ -22660,7 +22669,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2299",
+      "id": "tx-mig-2300",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-15",
       "amount": 25,
@@ -22669,7 +22678,7 @@ export const initialFinanceData: FinanceData = {
       "description": "25"
     },
     {
-      "id": "tx-mig-2300",
+      "id": "tx-mig-2301",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-22",
       "amount": 1,
@@ -22678,7 +22687,7 @@ export const initialFinanceData: FinanceData = {
       "description": "0.65 0.35"
     },
     {
-      "id": "tx-mig-2301",
+      "id": "tx-mig-2302",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-5",
       "amount": 4,
@@ -22687,7 +22696,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4 futbol"
     },
     {
-      "id": "tx-mig-2302",
+      "id": "tx-mig-2303",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 1,
@@ -22696,7 +22705,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1"
     },
     {
-      "id": "tx-mig-2303",
+      "id": "tx-mig-2304",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 1,
@@ -22705,7 +22714,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1"
     },
     {
-      "id": "tx-mig-2304",
+      "id": "tx-mig-2305",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 22.98,
@@ -22714,7 +22723,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3 4.31 4.67 11"
     },
     {
-      "id": "tx-mig-2305",
+      "id": "tx-mig-2306",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-32",
       "amount": 6,
@@ -22723,31 +22732,31 @@ export const initialFinanceData: FinanceData = {
       "description": "Перевод со счета Кошелек Самира в ASB kart",
       "transferAccountId": "acc-parsed-0",
       "transferType": "out"
-    },
-    {
-      "id": "tx-mig-2306",
-      "accountId": "acc-parsed-0",
-      "categoryId": "cat-parsed-31",
-      "amount": 6,
-      "type": "transfer",
-      "date": "2024-10-17",
-      "description": "Перевод со счета Кошелек Самира в ASB kart",
-      "transferAccountId": "acc-parsed-7",
-      "transferType": "in"
     },
     {
       "id": "tx-mig-2307",
-      "accountId": "acc-parsed-7",
-      "categoryId": "cat-parsed-32",
-      "amount": 6.2,
+      "accountId": "acc-parsed-0",
+      "categoryId": "cat-parsed-31",
+      "amount": 6,
       "type": "transfer",
       "date": "2024-10-17",
       "description": "Перевод со счета Кошелек Самира в ASB kart",
-      "transferAccountId": "acc-parsed-0",
-      "transferType": "out"
+      "transferAccountId": "acc-parsed-7",
+      "transferType": "in"
     },
     {
       "id": "tx-mig-2308",
+      "accountId": "acc-parsed-7",
+      "categoryId": "cat-parsed-32",
+      "amount": 6.2,
+      "type": "transfer",
+      "date": "2024-10-17",
+      "description": "Перевод со счета Кошелек Самира в ASB kart",
+      "transferAccountId": "acc-parsed-0",
+      "transferType": "out"
+    },
+    {
+      "id": "tx-mig-2309",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 6.2,
@@ -22758,7 +22767,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2309",
+      "id": "tx-mig-2310",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 7.5,
@@ -22767,20 +22776,20 @@ export const initialFinanceData: FinanceData = {
       "description": "Перевод со счета Кошелёк в ASB kart",
       "transferAccountId": "acc-parsed-0",
       "transferType": "out"
-    },
-    {
-      "id": "tx-mig-2310",
-      "accountId": "acc-parsed-0",
-      "categoryId": "cat-parsed-31",
-      "amount": 7.5,
-      "type": "transfer",
-      "date": "2024-10-17",
-      "description": "Перевод со счета Кошелёк в ASB kart",
-      "transferAccountId": "acc-parsed-1",
-      "transferType": "in"
     },
     {
       "id": "tx-mig-2311",
+      "accountId": "acc-parsed-0",
+      "categoryId": "cat-parsed-31",
+      "amount": 7.5,
+      "type": "transfer",
+      "date": "2024-10-17",
+      "description": "Перевод со счета Кошелёк в ASB kart",
+      "transferAccountId": "acc-parsed-1",
+      "transferType": "in"
+    },
+    {
+      "id": "tx-mig-2312",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 11,
@@ -22791,7 +22800,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2312",
+      "id": "tx-mig-2313",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 11,
@@ -22802,7 +22811,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2313",
+      "id": "tx-mig-2314",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-32",
       "amount": 35,
@@ -22813,7 +22822,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2314",
+      "id": "tx-mig-2315",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 35,
@@ -22824,7 +22833,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2315",
+      "id": "tx-mig-2316",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-8",
       "amount": 27.2,
@@ -22833,7 +22842,7 @@ export const initialFinanceData: FinanceData = {
       "description": "27.2 Лечение Самира"
     },
     {
-      "id": "tx-mig-2316",
+      "id": "tx-mig-2317",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-32",
       "amount": 6,
@@ -22844,7 +22853,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2317",
+      "id": "tx-mig-2318",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 6,
@@ -22855,7 +22864,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2318",
+      "id": "tx-mig-2319",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-20",
       "amount": 200,
@@ -22864,16 +22873,16 @@ export const initialFinanceData: FinanceData = {
       "description": "200 Свадьба дочери Намика"
     },
     {
-      "id": "tx-mig-2319",
+      "id": "tx-mig-2320",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-21",
-      "amount": 104.17999999999999,
+      "amount": 104.18,
       "type": "expense",
       "date": "2024-10-15",
       "description": "3.2 1.4 5.6 7 6 35 салон 8.5 4.88 2.6 30"
     },
     {
-      "id": "tx-mig-2320",
+      "id": "tx-mig-2321",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 40,
@@ -22884,7 +22893,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2321",
+      "id": "tx-mig-2322",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 40,
@@ -22895,7 +22904,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2322",
+      "id": "tx-mig-2323",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 1,
@@ -22904,16 +22913,16 @@ export const initialFinanceData: FinanceData = {
       "description": "1"
     },
     {
-      "id": "tx-mig-2323",
+      "id": "tx-mig-2324",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
-      "amount": 24.740000000000002,
+      "amount": 24.74,
       "type": "expense",
       "date": "2024-10-15",
       "description": "3 2.5 9.8 9.44"
     },
     {
-      "id": "tx-mig-2324",
+      "id": "tx-mig-2325",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 18,
@@ -22922,7 +22931,7 @@ export const initialFinanceData: FinanceData = {
       "description": "13 5"
     },
     {
-      "id": "tx-mig-2325",
+      "id": "tx-mig-2326",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-14",
       "amount": 45.5,
@@ -22931,7 +22940,7 @@ export const initialFinanceData: FinanceData = {
       "description": "45.5 на свадьбу отменили купили Самире одежду"
     },
     {
-      "id": "tx-mig-2326",
+      "id": "tx-mig-2327",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 250,
@@ -22942,7 +22951,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2327",
+      "id": "tx-mig-2328",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 250,
@@ -22953,7 +22962,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2328",
+      "id": "tx-mig-2329",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-12",
       "amount": 22.84,
@@ -22962,7 +22971,7 @@ export const initialFinanceData: FinanceData = {
       "description": "22.84"
     },
     {
-      "id": "tx-mig-2329",
+      "id": "tx-mig-2330",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-26",
       "amount": 13,
@@ -22971,7 +22980,7 @@ export const initialFinanceData: FinanceData = {
       "description": "13 ilqar internet"
     },
     {
-      "id": "tx-mig-2330",
+      "id": "tx-mig-2331",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-8",
       "amount": 104.6,
@@ -22980,7 +22989,7 @@ export const initialFinanceData: FinanceData = {
       "description": "104 Minoksidil 0.6 на почте"
     },
     {
-      "id": "tx-mig-2331",
+      "id": "tx-mig-2332",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 6,
@@ -22989,20 +22998,20 @@ export const initialFinanceData: FinanceData = {
       "description": "Перевод со счета Кошелёк в Кошелек Самира",
       "transferAccountId": "acc-parsed-7",
       "transferType": "out"
-    },
-    {
-      "id": "tx-mig-2332",
-      "accountId": "acc-parsed-7",
-      "categoryId": "cat-parsed-31",
-      "amount": 6,
-      "type": "transfer",
-      "date": "2024-10-13",
-      "description": "Перевод со счета Кошелёк в Кошелек Самира",
-      "transferAccountId": "acc-parsed-1",
-      "transferType": "in"
     },
     {
       "id": "tx-mig-2333",
+      "accountId": "acc-parsed-7",
+      "categoryId": "cat-parsed-31",
+      "amount": 6,
+      "type": "transfer",
+      "date": "2024-10-13",
+      "description": "Перевод со счета Кошелёк в Кошелек Самира",
+      "transferAccountId": "acc-parsed-1",
+      "transferType": "in"
+    },
+    {
+      "id": "tx-mig-2334",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 3,
@@ -23013,7 +23022,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2334",
+      "id": "tx-mig-2335",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 3,
@@ -23024,7 +23033,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2335",
+      "id": "tx-mig-2336",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-1",
       "amount": 19.5,
@@ -23033,16 +23042,16 @@ export const initialFinanceData: FinanceData = {
       "description": "3 4.5 3 3 6"
     },
     {
-      "id": "tx-mig-2336",
+      "id": "tx-mig-2337",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
-      "amount": 30.400000000000002,
+      "amount": 30.4,
       "type": "expense",
       "date": "2024-10-12",
       "description": "2.8 7 3 17.60"
     },
     {
-      "id": "tx-mig-2337",
+      "id": "tx-mig-2338",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-32",
       "amount": 6,
@@ -23051,20 +23060,20 @@ export const initialFinanceData: FinanceData = {
       "description": "Перевод со счета ABB kart Samira в ASB kart",
       "transferAccountId": "acc-parsed-0",
       "transferType": "out"
-    },
-    {
-      "id": "tx-mig-2338",
-      "accountId": "acc-parsed-0",
-      "categoryId": "cat-parsed-31",
-      "amount": 6,
-      "type": "transfer",
-      "date": "2024-10-12",
-      "description": "Перевод со счета ABB kart Samira в ASB kart",
-      "transferAccountId": "acc-parsed-3",
-      "transferType": "in"
     },
     {
       "id": "tx-mig-2339",
+      "accountId": "acc-parsed-0",
+      "categoryId": "cat-parsed-31",
+      "amount": 6,
+      "type": "transfer",
+      "date": "2024-10-12",
+      "description": "Перевод со счета ABB kart Samira в ASB kart",
+      "transferAccountId": "acc-parsed-3",
+      "transferType": "in"
+    },
+    {
+      "id": "tx-mig-2340",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-32",
       "amount": 3,
@@ -23075,7 +23084,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2340",
+      "id": "tx-mig-2341",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 3,
@@ -23086,7 +23095,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2341",
+      "id": "tx-mig-2342",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-32",
       "amount": 2.5,
@@ -23097,7 +23106,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2342",
+      "id": "tx-mig-2343",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 2.5,
@@ -23108,7 +23117,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2343",
+      "id": "tx-mig-2344",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 9.8,
@@ -23119,7 +23128,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2344",
+      "id": "tx-mig-2345",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 9.8,
@@ -23130,7 +23139,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2345",
+      "id": "tx-mig-2346",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 1,
@@ -23139,7 +23148,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1"
     },
     {
-      "id": "tx-mig-2346",
+      "id": "tx-mig-2347",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-15",
       "amount": 25,
@@ -23148,7 +23157,7 @@ export const initialFinanceData: FinanceData = {
       "description": "25"
     },
     {
-      "id": "tx-mig-2347",
+      "id": "tx-mig-2348",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-11",
       "amount": 9,
@@ -23157,7 +23166,7 @@ export const initialFinanceData: FinanceData = {
       "description": "9"
     },
     {
-      "id": "tx-mig-2348",
+      "id": "tx-mig-2349",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-18",
       "amount": 0.6,
@@ -23166,7 +23175,7 @@ export const initialFinanceData: FinanceData = {
       "description": "0.6 Парковка"
     },
     {
-      "id": "tx-mig-2349",
+      "id": "tx-mig-2350",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-32",
       "amount": 7,
@@ -23177,7 +23186,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2350",
+      "id": "tx-mig-2351",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 7,
@@ -23188,7 +23197,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2351",
+      "id": "tx-mig-2352",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-5",
       "amount": 8,
@@ -23197,7 +23206,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8 futbol"
     },
     {
-      "id": "tx-mig-2352",
+      "id": "tx-mig-2353",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 30,
@@ -23208,7 +23217,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2353",
+      "id": "tx-mig-2354",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 30,
@@ -23219,7 +23228,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2354",
+      "id": "tx-mig-2355",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 25,
@@ -23228,7 +23237,7 @@ export const initialFinanceData: FinanceData = {
       "description": "25"
     },
     {
-      "id": "tx-mig-2355",
+      "id": "tx-mig-2356",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 5.5,
@@ -23237,7 +23246,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5.5"
     },
     {
-      "id": "tx-mig-2356",
+      "id": "tx-mig-2357",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-24",
       "amount": 364,
@@ -23246,7 +23255,7 @@ export const initialFinanceData: FinanceData = {
       "description": "364"
     },
     {
-      "id": "tx-mig-2357",
+      "id": "tx-mig-2358",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-32",
       "amount": 2,
@@ -23255,20 +23264,20 @@ export const initialFinanceData: FinanceData = {
       "description": "Перевод со счета Кошелек Самира в ASB kart",
       "transferAccountId": "acc-parsed-0",
       "transferType": "out"
-    },
-    {
-      "id": "tx-mig-2358",
-      "accountId": "acc-parsed-0",
-      "categoryId": "cat-parsed-31",
-      "amount": 2,
-      "type": "transfer",
-      "date": "2024-10-09",
-      "description": "Перевод со счета Кошелек Самира в ASB kart",
-      "transferAccountId": "acc-parsed-7",
-      "transferType": "in"
     },
     {
       "id": "tx-mig-2359",
+      "accountId": "acc-parsed-0",
+      "categoryId": "cat-parsed-31",
+      "amount": 2,
+      "type": "transfer",
+      "date": "2024-10-09",
+      "description": "Перевод со счета Кошелек Самира в ASB kart",
+      "transferAccountId": "acc-parsed-7",
+      "transferType": "in"
+    },
+    {
+      "id": "tx-mig-2360",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 1,
@@ -23279,7 +23288,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2360",
+      "id": "tx-mig-2361",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 1,
@@ -23290,7 +23299,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2361",
+      "id": "tx-mig-2362",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 30,
@@ -23301,7 +23310,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2362",
+      "id": "tx-mig-2363",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 30,
@@ -23312,7 +23321,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2363",
+      "id": "tx-mig-2364",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 22,
@@ -23323,7 +23332,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2364",
+      "id": "tx-mig-2365",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 22,
@@ -23334,7 +23343,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2365",
+      "id": "tx-mig-2366",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 5.5,
@@ -23343,7 +23352,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5.5"
     },
     {
-      "id": "tx-mig-2366",
+      "id": "tx-mig-2367",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-13",
       "amount": 16,
@@ -23352,7 +23361,7 @@ export const initialFinanceData: FinanceData = {
       "description": "16"
     },
     {
-      "id": "tx-mig-2367",
+      "id": "tx-mig-2368",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-3",
       "amount": 64.5,
@@ -23361,7 +23370,7 @@ export const initialFinanceData: FinanceData = {
       "description": "30 27 7.5"
     },
     {
-      "id": "tx-mig-2368",
+      "id": "tx-mig-2369",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-6",
       "amount": 5.6,
@@ -23370,7 +23379,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5.6 ticktick"
     },
     {
-      "id": "tx-mig-2369",
+      "id": "tx-mig-2370",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 25,
@@ -23379,7 +23388,7 @@ export const initialFinanceData: FinanceData = {
       "description": "25"
     },
     {
-      "id": "tx-mig-2370",
+      "id": "tx-mig-2371",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 20,
@@ -23390,7 +23399,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2371",
+      "id": "tx-mig-2372",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-31",
       "amount": 20,
@@ -23401,7 +23410,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2372",
+      "id": "tx-mig-2373",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-32",
       "amount": 10,
@@ -23412,7 +23421,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2373",
+      "id": "tx-mig-2374",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 10,
@@ -23423,7 +23432,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2374",
+      "id": "tx-mig-2375",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 5,
@@ -23432,7 +23441,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-2375",
+      "id": "tx-mig-2376",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 20,
@@ -23443,7 +23452,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2376",
+      "id": "tx-mig-2377",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 20,
@@ -23454,7 +23463,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2377",
+      "id": "tx-mig-2378",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-2",
       "amount": 295,
@@ -23463,16 +23472,16 @@ export const initialFinanceData: FinanceData = {
       "description": "295 Психологу"
     },
     {
-      "id": "tx-mig-2378",
+      "id": "tx-mig-2379",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-1",
       "amount": 13.5,
       "type": "expense",
       "date": "2024-10-06",
-      "description": "4\t5 3 3 3 парикмахер"
+      "description": "4,5 3 3 3 парикмахер"
     },
     {
-      "id": "tx-mig-2379",
+      "id": "tx-mig-2380",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-20",
       "amount": 20,
@@ -23481,16 +23490,16 @@ export const initialFinanceData: FinanceData = {
       "description": "20 Яс Лятифы"
     },
     {
-      "id": "tx-mig-2380",
+      "id": "tx-mig-2381",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-8",
       "amount": 4.2,
       "type": "expense",
       "date": "2024-10-06",
-      "description": "2.5 от гриппа\t 1.7"
+      "description": "2.5 от гриппа, 1.7"
     },
     {
-      "id": "tx-mig-2381",
+      "id": "tx-mig-2382",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-8",
       "amount": 28.1,
@@ -23499,7 +23508,7 @@ export const initialFinanceData: FinanceData = {
       "description": "28.1 Финлипсал Эпинекс и Бисогамма"
     },
     {
-      "id": "tx-mig-2382",
+      "id": "tx-mig-2383",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-6",
       "amount": 22,
@@ -23508,7 +23517,7 @@ export const initialFinanceData: FinanceData = {
       "description": "22 Notion"
     },
     {
-      "id": "tx-mig-2383",
+      "id": "tx-mig-2384",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 395,
@@ -23519,7 +23528,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2384",
+      "id": "tx-mig-2385",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 395,
@@ -23530,7 +23539,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2385",
+      "id": "tx-mig-2386",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 31.8,
@@ -23539,7 +23548,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8.5 6 4.1 6 2 5.2"
     },
     {
-      "id": "tx-mig-2386",
+      "id": "tx-mig-2387",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 6,
@@ -23550,7 +23559,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2387",
+      "id": "tx-mig-2388",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 6,
@@ -23561,7 +23570,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2388",
+      "id": "tx-mig-2389",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 10,
@@ -23570,31 +23579,31 @@ export const initialFinanceData: FinanceData = {
       "description": "Перевод со счета Кошелёк в Кошелек Самира",
       "transferAccountId": "acc-parsed-7",
       "transferType": "out"
-    },
-    {
-      "id": "tx-mig-2389",
-      "accountId": "acc-parsed-7",
-      "categoryId": "cat-parsed-31",
-      "amount": 10,
-      "type": "transfer",
-      "date": "2024-10-04",
-      "description": "Перевод со счета Кошелёк в Кошелек Самира",
-      "transferAccountId": "acc-parsed-1",
-      "transferType": "in"
     },
     {
       "id": "tx-mig-2390",
       "accountId": "acc-parsed-7",
-      "categoryId": "cat-parsed-32",
-      "amount": 4.1,
+      "categoryId": "cat-parsed-31",
+      "amount": 10,
       "type": "transfer",
       "date": "2024-10-04",
-      "description": "Перевод со счета Кошелек Самира в ASB kart",
-      "transferAccountId": "acc-parsed-0",
-      "transferType": "out"
+      "description": "Перевод со счета Кошелёк в Кошелек Самира",
+      "transferAccountId": "acc-parsed-1",
+      "transferType": "in"
     },
     {
       "id": "tx-mig-2391",
+      "accountId": "acc-parsed-7",
+      "categoryId": "cat-parsed-32",
+      "amount": 4.1,
+      "type": "transfer",
+      "date": "2024-10-04",
+      "description": "Перевод со счета Кошелек Самира в ASB kart",
+      "transferAccountId": "acc-parsed-0",
+      "transferType": "out"
+    },
+    {
+      "id": "tx-mig-2392",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 4.1,
@@ -23605,7 +23614,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2392",
+      "id": "tx-mig-2393",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-32",
       "amount": 1.7,
@@ -23614,20 +23623,20 @@ export const initialFinanceData: FinanceData = {
       "description": "Перевод со счета Кошелек Самира в ASB kart",
       "transferAccountId": "acc-parsed-0",
       "transferType": "out"
-    },
-    {
-      "id": "tx-mig-2393",
-      "accountId": "acc-parsed-0",
-      "categoryId": "cat-parsed-31",
-      "amount": 1.7,
-      "type": "transfer",
-      "date": "2024-10-04",
-      "description": "Перевод со счета Кошелек Самира в ASB kart",
-      "transferAccountId": "acc-parsed-7",
-      "transferType": "in"
     },
     {
       "id": "tx-mig-2394",
+      "accountId": "acc-parsed-0",
+      "categoryId": "cat-parsed-31",
+      "amount": 1.7,
+      "type": "transfer",
+      "date": "2024-10-04",
+      "description": "Перевод со счета Кошелек Самира в ASB kart",
+      "transferAccountId": "acc-parsed-7",
+      "transferType": "in"
+    },
+    {
+      "id": "tx-mig-2395",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 320,
@@ -23638,7 +23647,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2395",
+      "id": "tx-mig-2396",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 320,
@@ -23649,7 +23658,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2396",
+      "id": "tx-mig-2397",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 15,
@@ -23658,21 +23667,21 @@ export const initialFinanceData: FinanceData = {
       "description": "Перевод со счета Кошелёк в ASB kart",
       "transferAccountId": "acc-parsed-0",
       "transferType": "out"
-    },
-    {
-      "id": "tx-mig-2397",
-      "accountId": "acc-parsed-0",
-      "categoryId": "cat-parsed-31",
-      "amount": 15,
-      "type": "transfer",
-      "date": "2024-10-03",
-      "description": "Перевод со счета Кошелёк в ASB kart",
-      "transferAccountId": "acc-parsed-1",
-      "transferType": "in"
     },
     {
       "id": "tx-mig-2398",
       "accountId": "acc-parsed-0",
+      "categoryId": "cat-parsed-31",
+      "amount": 15,
+      "type": "transfer",
+      "date": "2024-10-03",
+      "description": "Перевод со счета Кошелёк в ASB kart",
+      "transferAccountId": "acc-parsed-1",
+      "transferType": "in"
+    },
+    {
+      "id": "tx-mig-2399",
+      "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 395,
       "type": "transfer",
@@ -23682,7 +23691,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2399",
+      "id": "tx-mig-2400",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 395,
@@ -23693,7 +23702,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2400",
+      "id": "tx-mig-2401",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-32",
       "amount": 1,
@@ -23704,7 +23713,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2401",
+      "id": "tx-mig-2402",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 1,
@@ -23715,7 +23724,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2402",
+      "id": "tx-mig-2403",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-32",
       "amount": 3,
@@ -23724,21 +23733,21 @@ export const initialFinanceData: FinanceData = {
       "description": "Перевод со счета Кошелек Самира в Кошелёк",
       "transferAccountId": "acc-parsed-1",
       "transferType": "out"
-    },
-    {
-      "id": "tx-mig-2403",
-      "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-31",
-      "amount": 3,
-      "type": "transfer",
-      "date": "2024-10-03",
-      "description": "Перевод со счета Кошелек Самира в Кошелёк",
-      "transferAccountId": "acc-parsed-7",
-      "transferType": "in"
     },
     {
       "id": "tx-mig-2404",
       "accountId": "acc-parsed-1",
+      "categoryId": "cat-parsed-31",
+      "amount": 3,
+      "type": "transfer",
+      "date": "2024-10-03",
+      "description": "Перевод со счета Кошелек Самира в Кошелёк",
+      "transferAccountId": "acc-parsed-7",
+      "transferType": "in"
+    },
+    {
+      "id": "tx-mig-2405",
+      "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 30,
       "type": "transfer",
@@ -23748,7 +23757,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2405",
+      "id": "tx-mig-2406",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 30,
@@ -23759,7 +23768,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2406",
+      "id": "tx-mig-2407",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-0",
       "amount": 28.7,
@@ -23768,7 +23777,7 @@ export const initialFinanceData: FinanceData = {
       "description": "28.7 Памперсы"
     },
     {
-      "id": "tx-mig-2407",
+      "id": "tx-mig-2408",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-15",
       "amount": 25,
@@ -23777,7 +23786,7 @@ export const initialFinanceData: FinanceData = {
       "description": "25"
     },
     {
-      "id": "tx-mig-2408",
+      "id": "tx-mig-2409",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 32,
@@ -23786,7 +23795,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1 31"
     },
     {
-      "id": "tx-mig-2409",
+      "id": "tx-mig-2410",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 10,
@@ -23797,7 +23806,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2410",
+      "id": "tx-mig-2411",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 10,
@@ -23808,7 +23817,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2411",
+      "id": "tx-mig-2412",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 5,
@@ -23817,7 +23826,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-2412",
+      "id": "tx-mig-2413",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-25",
       "amount": 187,
@@ -23826,7 +23835,7 @@ export const initialFinanceData: FinanceData = {
       "description": "187"
     },
     {
-      "id": "tx-mig-2413",
+      "id": "tx-mig-2414",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-32",
       "amount": 4.5,
@@ -23837,7 +23846,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2414",
+      "id": "tx-mig-2415",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 4.5,
@@ -23848,7 +23857,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2415",
+      "id": "tx-mig-2416",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-32",
       "amount": 2.5,
@@ -23859,7 +23868,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2416",
+      "id": "tx-mig-2417",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 2.5,
@@ -23870,7 +23879,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2417",
+      "id": "tx-mig-2418",
       "accountId": "acc-parsed-16",
       "categoryId": "cat-parsed-25",
       "amount": 265,
@@ -23879,7 +23888,7 @@ export const initialFinanceData: FinanceData = {
       "description": "265"
     },
     {
-      "id": "tx-mig-2418",
+      "id": "tx-mig-2419",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-25",
       "amount": 1767,
@@ -23888,7 +23897,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1767"
     },
     {
-      "id": "tx-mig-2419",
+      "id": "tx-mig-2420",
       "accountId": "acc-parsed-17",
       "categoryId": "cat-parsed-25",
       "amount": 310,
@@ -23897,7 +23906,7 @@ export const initialFinanceData: FinanceData = {
       "description": "310"
     },
     {
-      "id": "tx-mig-2420",
+      "id": "tx-mig-2421",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-9",
       "amount": 9.48,
@@ -23906,7 +23915,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4 1.43 1.55 2.5"
     },
     {
-      "id": "tx-mig-2421",
+      "id": "tx-mig-2422",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-32",
       "amount": 5,
@@ -23917,7 +23926,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2422",
+      "id": "tx-mig-2423",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 5,
@@ -23928,7 +23937,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2423",
+      "id": "tx-mig-2424",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 23,
@@ -23939,7 +23948,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2424",
+      "id": "tx-mig-2425",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 23,
@@ -23950,7 +23959,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2425",
+      "id": "tx-mig-2426",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 27.45,
@@ -23959,7 +23968,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1.9 1.55 1 23"
     },
     {
-      "id": "tx-mig-2426",
+      "id": "tx-mig-2427",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 8,
@@ -23968,7 +23977,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8"
     },
     {
-      "id": "tx-mig-2427",
+      "id": "tx-mig-2428",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 7,
@@ -23979,7 +23988,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2428",
+      "id": "tx-mig-2429",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 7,
@@ -23990,7 +23999,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2429",
+      "id": "tx-mig-2430",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-32",
       "amount": 5,
@@ -24001,7 +24010,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2430",
+      "id": "tx-mig-2431",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 5,
@@ -24012,7 +24021,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2431",
+      "id": "tx-mig-2432",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 5,
@@ -24021,7 +24030,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-2432",
+      "id": "tx-mig-2433",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-26",
       "amount": 25,
@@ -24030,7 +24039,7 @@ export const initialFinanceData: FinanceData = {
       "description": "25 ailenet"
     },
     {
-      "id": "tx-mig-2433",
+      "id": "tx-mig-2434",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-26",
       "amount": 4,
@@ -24039,7 +24048,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2 2 Ильгар Самира"
     },
     {
-      "id": "tx-mig-2434",
+      "id": "tx-mig-2435",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-1",
       "amount": 10.5,
@@ -24048,7 +24057,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4.5 3 3"
     },
     {
-      "id": "tx-mig-2435",
+      "id": "tx-mig-2436",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 10,
@@ -24059,7 +24068,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2436",
+      "id": "tx-mig-2437",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 10,
@@ -24070,7 +24079,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2437",
+      "id": "tx-mig-2438",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-23",
       "amount": 15,
@@ -24079,7 +24088,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5 10"
     },
     {
-      "id": "tx-mig-2438",
+      "id": "tx-mig-2439",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-32",
       "amount": 4.9,
@@ -24088,20 +24097,20 @@ export const initialFinanceData: FinanceData = {
       "description": "Перевод со счета Albali kart в ASB kart",
       "transferAccountId": "acc-parsed-0",
       "transferType": "out"
-    },
-    {
-      "id": "tx-mig-2439",
-      "accountId": "acc-parsed-0",
-      "categoryId": "cat-parsed-31",
-      "amount": 4.9,
-      "type": "transfer",
-      "date": "2024-09-29",
-      "description": "Перевод со счета Albali kart в ASB kart",
-      "transferAccountId": "acc-parsed-2",
-      "transferType": "in"
     },
     {
       "id": "tx-mig-2440",
+      "accountId": "acc-parsed-0",
+      "categoryId": "cat-parsed-31",
+      "amount": 4.9,
+      "type": "transfer",
+      "date": "2024-09-29",
+      "description": "Перевод со счета Albali kart в ASB kart",
+      "transferAccountId": "acc-parsed-2",
+      "transferType": "in"
+    },
+    {
+      "id": "tx-mig-2441",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-32",
       "amount": 3.5,
@@ -24112,7 +24121,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2441",
+      "id": "tx-mig-2442",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 3.5,
@@ -24123,7 +24132,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2442",
+      "id": "tx-mig-2443",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 8.5,
@@ -24132,7 +24141,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8.5"
     },
     {
-      "id": "tx-mig-2443",
+      "id": "tx-mig-2444",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-20",
       "amount": 70,
@@ -24141,7 +24150,7 @@ export const initialFinanceData: FinanceData = {
       "description": "70 Ramin kicik toy"
     },
     {
-      "id": "tx-mig-2444",
+      "id": "tx-mig-2445",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-32",
       "amount": 8,
@@ -24152,7 +24161,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2445",
+      "id": "tx-mig-2446",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 8,
@@ -24163,7 +24172,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2446",
+      "id": "tx-mig-2447",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 80,
@@ -24174,7 +24183,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2447",
+      "id": "tx-mig-2448",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 80,
@@ -24185,7 +24194,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2448",
+      "id": "tx-mig-2449",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 1.5,
@@ -24194,7 +24203,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1.5"
     },
     {
-      "id": "tx-mig-2449",
+      "id": "tx-mig-2450",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-5",
       "amount": 4,
@@ -24203,7 +24212,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4 futbol"
     },
     {
-      "id": "tx-mig-2450",
+      "id": "tx-mig-2451",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-32",
       "amount": 1,
@@ -24214,7 +24223,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2451",
+      "id": "tx-mig-2452",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 1,
@@ -24225,7 +24234,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2452",
+      "id": "tx-mig-2453",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-18",
       "amount": 0.2,
@@ -24234,7 +24243,7 @@ export const initialFinanceData: FinanceData = {
       "description": "0.2 Парковка"
     },
     {
-      "id": "tx-mig-2453",
+      "id": "tx-mig-2454",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 5,
@@ -24243,7 +24252,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-2454",
+      "id": "tx-mig-2455",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-32",
       "amount": 240,
@@ -24254,7 +24263,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2455",
+      "id": "tx-mig-2456",
       "accountId": "acc-parsed-18",
       "categoryId": "cat-parsed-31",
       "amount": 240,
@@ -24265,7 +24274,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2456",
+      "id": "tx-mig-2457",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-9",
       "amount": 61.88,
@@ -24274,7 +24283,7 @@ export const initialFinanceData: FinanceData = {
       "description": "58.88 3 за автокредит"
     },
     {
-      "id": "tx-mig-2457",
+      "id": "tx-mig-2458",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 3,
@@ -24285,7 +24294,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2458",
+      "id": "tx-mig-2459",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 3,
@@ -24296,7 +24305,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2459",
+      "id": "tx-mig-2460",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 8,
@@ -24305,7 +24314,7 @@ export const initialFinanceData: FinanceData = {
       "description": "7 1"
     },
     {
-      "id": "tx-mig-2460",
+      "id": "tx-mig-2461",
       "accountId": "acc-parsed-17",
       "categoryId": "cat-parsed-32",
       "amount": 310,
@@ -24316,7 +24325,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2461",
+      "id": "tx-mig-2462",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 310,
@@ -24327,7 +24336,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2462",
+      "id": "tx-mig-2463",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-6",
       "amount": 3,
@@ -24336,7 +24345,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3 Яндекс мульти"
     },
     {
-      "id": "tx-mig-2463",
+      "id": "tx-mig-2464",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 15.5,
@@ -24345,7 +24354,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4.5 2 9"
     },
     {
-      "id": "tx-mig-2464",
+      "id": "tx-mig-2465",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 20,
@@ -24356,7 +24365,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2465",
+      "id": "tx-mig-2466",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 20,
@@ -24367,7 +24376,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2466",
+      "id": "tx-mig-2467",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 5.5,
@@ -24376,7 +24385,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5.5"
     },
     {
-      "id": "tx-mig-2467",
+      "id": "tx-mig-2468",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 22,
@@ -24387,7 +24396,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2468",
+      "id": "tx-mig-2469",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 22,
@@ -24398,7 +24407,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2469",
+      "id": "tx-mig-2470",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-15",
       "amount": 25,
@@ -24407,7 +24416,7 @@ export const initialFinanceData: FinanceData = {
       "description": "25"
     },
     {
-      "id": "tx-mig-2470",
+      "id": "tx-mig-2471",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 50,
@@ -24418,7 +24427,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2471",
+      "id": "tx-mig-2472",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 50,
@@ -24429,7 +24438,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2472",
+      "id": "tx-mig-2473",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-32",
       "amount": 45,
@@ -24440,7 +24449,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2473",
+      "id": "tx-mig-2474",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 45,
@@ -24451,7 +24460,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2474",
+      "id": "tx-mig-2475",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 2,
@@ -24462,7 +24471,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2475",
+      "id": "tx-mig-2476",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 2,
@@ -24473,7 +24482,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2476",
+      "id": "tx-mig-2477",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 4.5,
@@ -24484,7 +24493,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2477",
+      "id": "tx-mig-2478",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 4.5,
@@ -24495,7 +24504,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2478",
+      "id": "tx-mig-2479",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 6.5,
@@ -24504,7 +24513,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6.5"
     },
     {
-      "id": "tx-mig-2479",
+      "id": "tx-mig-2480",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-32",
       "amount": 6,
@@ -24515,7 +24524,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2480",
+      "id": "tx-mig-2481",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 6,
@@ -24526,7 +24535,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2481",
+      "id": "tx-mig-2482",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-32",
       "amount": 3,
@@ -24537,7 +24546,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2482",
+      "id": "tx-mig-2483",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 3,
@@ -24548,7 +24557,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2483",
+      "id": "tx-mig-2484",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-1",
       "amount": 8,
@@ -24557,7 +24566,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3 5"
     },
     {
-      "id": "tx-mig-2484",
+      "id": "tx-mig-2485",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-20",
       "amount": 9,
@@ -24566,7 +24575,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4 5"
     },
     {
-      "id": "tx-mig-2485",
+      "id": "tx-mig-2486",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-32",
       "amount": 17.6,
@@ -24575,20 +24584,20 @@ export const initialFinanceData: FinanceData = {
       "description": "Перевод со счета Albali kart в ASB kart",
       "transferAccountId": "acc-parsed-0",
       "transferType": "out"
-    },
-    {
-      "id": "tx-mig-2486",
-      "accountId": "acc-parsed-0",
-      "categoryId": "cat-parsed-31",
-      "amount": 17.6,
-      "type": "transfer",
-      "date": "2024-09-21",
-      "description": "Перевод со счета Albali kart в ASB kart",
-      "transferAccountId": "acc-parsed-2",
-      "transferType": "in"
     },
     {
       "id": "tx-mig-2487",
+      "accountId": "acc-parsed-0",
+      "categoryId": "cat-parsed-31",
+      "amount": 17.6,
+      "type": "transfer",
+      "date": "2024-09-21",
+      "description": "Перевод со счета Albali kart в ASB kart",
+      "transferAccountId": "acc-parsed-2",
+      "transferType": "in"
+    },
+    {
+      "id": "tx-mig-2488",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-32",
       "amount": 14.3,
@@ -24599,7 +24608,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2488",
+      "id": "tx-mig-2489",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 14.3,
@@ -24610,7 +24619,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2489",
+      "id": "tx-mig-2490",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 50,
@@ -24621,7 +24630,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2490",
+      "id": "tx-mig-2491",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 50,
@@ -24632,7 +24641,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2491",
+      "id": "tx-mig-2492",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-6",
       "amount": 6,
@@ -24641,7 +24650,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6 Yandex Music"
     },
     {
-      "id": "tx-mig-2492",
+      "id": "tx-mig-2493",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 24.6,
@@ -24650,7 +24659,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2 2 17.6 3"
     },
     {
-      "id": "tx-mig-2493",
+      "id": "tx-mig-2494",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-16",
       "amount": 1,
@@ -24659,7 +24668,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1"
     },
     {
-      "id": "tx-mig-2494",
+      "id": "tx-mig-2495",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-18",
       "amount": 0.5,
@@ -24668,7 +24677,7 @@ export const initialFinanceData: FinanceData = {
       "description": "0.5 Парковка"
     },
     {
-      "id": "tx-mig-2495",
+      "id": "tx-mig-2496",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-32",
       "amount": 5,
@@ -24679,7 +24688,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2496",
+      "id": "tx-mig-2497",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 5,
@@ -24690,7 +24699,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2497",
+      "id": "tx-mig-2498",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-32",
       "amount": 65,
@@ -24699,7 +24708,7 @@ export const initialFinanceData: FinanceData = {
       "description": "65 анализы Самиры"
     },
     {
-      "id": "tx-mig-2498",
+      "id": "tx-mig-2499",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-32",
       "amount": 2,
@@ -24710,7 +24719,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2499",
+      "id": "tx-mig-2500",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 2,
@@ -24721,7 +24730,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2500",
+      "id": "tx-mig-2501",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-5",
       "amount": 5,
@@ -24730,7 +24739,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5 futbol"
     },
     {
-      "id": "tx-mig-2501",
+      "id": "tx-mig-2502",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 1.5,
@@ -24739,7 +24748,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1.5"
     },
     {
-      "id": "tx-mig-2502",
+      "id": "tx-mig-2503",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-14",
       "amount": 5,
@@ -24748,7 +24757,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-2503",
+      "id": "tx-mig-2504",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-8",
       "amount": 79.2,
@@ -24757,7 +24766,7 @@ export const initialFinanceData: FinanceData = {
       "description": "79.2 После обследования гинеколога"
     },
     {
-      "id": "tx-mig-2504",
+      "id": "tx-mig-2505",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-32",
       "amount": 8.8,
@@ -24768,7 +24777,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2505",
+      "id": "tx-mig-2506",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 8.8,
@@ -24779,7 +24788,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2506",
+      "id": "tx-mig-2507",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 1.5,
@@ -24790,7 +24799,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2507",
+      "id": "tx-mig-2508",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 1.5,
@@ -24801,7 +24810,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2508",
+      "id": "tx-mig-2509",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 27.9,
@@ -24810,7 +24819,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10.3 6.6 0.8 8.8 1.4"
     },
     {
-      "id": "tx-mig-2509",
+      "id": "tx-mig-2510",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 1.4,
@@ -24821,7 +24830,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2510",
+      "id": "tx-mig-2511",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 1.4,
@@ -24832,7 +24841,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2511",
+      "id": "tx-mig-2512",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 7,
@@ -24841,7 +24850,7 @@ export const initialFinanceData: FinanceData = {
       "description": "7"
     },
     {
-      "id": "tx-mig-2512",
+      "id": "tx-mig-2513",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-22",
       "amount": 3.5,
@@ -24850,7 +24859,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3.5"
     },
     {
-      "id": "tx-mig-2513",
+      "id": "tx-mig-2514",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-7",
       "amount": 50,
@@ -24859,7 +24868,7 @@ export const initialFinanceData: FinanceData = {
       "description": "50 Обследование у гинеколога"
     },
     {
-      "id": "tx-mig-2514",
+      "id": "tx-mig-2515",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-32",
       "amount": 17,
@@ -24870,7 +24879,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2515",
+      "id": "tx-mig-2516",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-31",
       "amount": 17,
@@ -24881,7 +24890,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2516",
+      "id": "tx-mig-2517",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 20,
@@ -24892,7 +24901,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2517",
+      "id": "tx-mig-2518",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 20,
@@ -24903,7 +24912,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2518",
+      "id": "tx-mig-2519",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-9",
       "amount": 162.74,
@@ -24912,7 +24921,7 @@ export const initialFinanceData: FinanceData = {
       "description": "162.74 edv geri al"
     },
     {
-      "id": "tx-mig-2519",
+      "id": "tx-mig-2520",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-32",
       "amount": 180,
@@ -24923,7 +24932,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2520",
+      "id": "tx-mig-2521",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-31",
       "amount": 180,
@@ -24934,7 +24943,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2521",
+      "id": "tx-mig-2522",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 11,
@@ -24943,7 +24952,7 @@ export const initialFinanceData: FinanceData = {
       "description": "11 В Баку к Гюльнар"
     },
     {
-      "id": "tx-mig-2522",
+      "id": "tx-mig-2523",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 25,
@@ -24952,7 +24961,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6 19"
     },
     {
-      "id": "tx-mig-2523",
+      "id": "tx-mig-2524",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 50,
@@ -24963,7 +24972,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2524",
+      "id": "tx-mig-2525",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 50,
@@ -24974,7 +24983,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2525",
+      "id": "tx-mig-2526",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 6,
@@ -24983,7 +24992,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6"
     },
     {
-      "id": "tx-mig-2526",
+      "id": "tx-mig-2527",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 1,
@@ -24992,7 +25001,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1"
     },
     {
-      "id": "tx-mig-2527",
+      "id": "tx-mig-2528",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-32",
       "amount": 56,
@@ -25001,21 +25010,21 @@ export const initialFinanceData: FinanceData = {
       "description": "Перевод со счета Кошелек Самира в ASB kart",
       "transferAccountId": "acc-parsed-0",
       "transferType": "out"
-    },
-    {
-      "id": "tx-mig-2528",
-      "accountId": "acc-parsed-0",
-      "categoryId": "cat-parsed-31",
-      "amount": 56,
-      "type": "transfer",
-      "date": "2024-09-16",
-      "description": "Перевод со счета Кошелек Самира в ASB kart",
-      "transferAccountId": "acc-parsed-7",
-      "transferType": "in"
     },
     {
       "id": "tx-mig-2529",
       "accountId": "acc-parsed-0",
+      "categoryId": "cat-parsed-31",
+      "amount": 56,
+      "type": "transfer",
+      "date": "2024-09-16",
+      "description": "Перевод со счета Кошелек Самира в ASB kart",
+      "transferAccountId": "acc-parsed-7",
+      "transferType": "in"
+    },
+    {
+      "id": "tx-mig-2530",
+      "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 15,
       "type": "transfer",
@@ -25025,7 +25034,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2530",
+      "id": "tx-mig-2531",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 15,
@@ -25036,7 +25045,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2531",
+      "id": "tx-mig-2532",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-32",
       "amount": 6.66,
@@ -25047,7 +25056,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2532",
+      "id": "tx-mig-2533",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 6.66,
@@ -25058,7 +25067,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2533",
+      "id": "tx-mig-2534",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 10.3,
@@ -25069,7 +25078,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2534",
+      "id": "tx-mig-2535",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 10.3,
@@ -25080,7 +25089,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2535",
+      "id": "tx-mig-2536",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-21",
       "amount": 87.2,
@@ -25089,7 +25098,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8.4 8.1 50 салон 12.3 3.5 4.9"
     },
     {
-      "id": "tx-mig-2536",
+      "id": "tx-mig-2537",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-26",
       "amount": 12,
@@ -25098,7 +25107,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12 ilqar internet"
     },
     {
-      "id": "tx-mig-2537",
+      "id": "tx-mig-2538",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-1",
       "amount": 27.5,
@@ -25107,7 +25116,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1.5 5.5 3 6 5.5 5 1"
     },
     {
-      "id": "tx-mig-2538",
+      "id": "tx-mig-2539",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-32",
       "amount": 95,
@@ -25118,7 +25127,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2539",
+      "id": "tx-mig-2540",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 95,
@@ -25129,7 +25138,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2540",
+      "id": "tx-mig-2541",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-0",
       "amount": 18,
@@ -25138,7 +25147,7 @@ export const initialFinanceData: FinanceData = {
       "description": "18 Памперсы"
     },
     {
-      "id": "tx-mig-2541",
+      "id": "tx-mig-2542",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-3",
       "amount": 38,
@@ -25147,7 +25156,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6 32"
     },
     {
-      "id": "tx-mig-2542",
+      "id": "tx-mig-2543",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 24,
@@ -25156,7 +25165,7 @@ export const initialFinanceData: FinanceData = {
       "description": "7.6 15.5 0.9"
     },
     {
-      "id": "tx-mig-2543",
+      "id": "tx-mig-2544",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 32,
@@ -25167,7 +25176,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2544",
+      "id": "tx-mig-2545",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 32,
@@ -25178,7 +25187,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2545",
+      "id": "tx-mig-2546",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-5",
       "amount": 5,
@@ -25187,7 +25196,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4 futbol 1 stoyanka"
     },
     {
-      "id": "tx-mig-2546",
+      "id": "tx-mig-2547",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-32",
       "amount": 7.6,
@@ -25198,7 +25207,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2547",
+      "id": "tx-mig-2548",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 7.6,
@@ -25209,7 +25218,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2548",
+      "id": "tx-mig-2549",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-15",
       "amount": 25,
@@ -25218,7 +25227,7 @@ export const initialFinanceData: FinanceData = {
       "description": "25"
     },
     {
-      "id": "tx-mig-2549",
+      "id": "tx-mig-2550",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 1.5,
@@ -25227,7 +25236,7 @@ export const initialFinanceData: FinanceData = {
       "description": "0.5 1"
     },
     {
-      "id": "tx-mig-2550",
+      "id": "tx-mig-2551",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 9.94,
@@ -25236,7 +25245,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8.34 1.6"
     },
     {
-      "id": "tx-mig-2551",
+      "id": "tx-mig-2552",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 7.5,
@@ -25245,7 +25254,7 @@ export const initialFinanceData: FinanceData = {
       "description": "7.5"
     },
     {
-      "id": "tx-mig-2552",
+      "id": "tx-mig-2553",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-32",
       "amount": 1.6,
@@ -25256,7 +25265,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2553",
+      "id": "tx-mig-2554",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 1.6,
@@ -25267,7 +25276,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2554",
+      "id": "tx-mig-2555",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-22",
       "amount": 30,
@@ -25276,7 +25285,7 @@ export const initialFinanceData: FinanceData = {
       "description": "30 мойка ковров"
     },
     {
-      "id": "tx-mig-2555",
+      "id": "tx-mig-2556",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-32",
       "amount": 2.6,
@@ -25287,7 +25296,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2556",
+      "id": "tx-mig-2557",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 2.6,
@@ -25298,7 +25307,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2557",
+      "id": "tx-mig-2558",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 6,
@@ -25307,7 +25316,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6"
     },
     {
-      "id": "tx-mig-2558",
+      "id": "tx-mig-2559",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 10.2,
@@ -25316,7 +25325,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2 2.6 5.6"
     },
     {
-      "id": "tx-mig-2559",
+      "id": "tx-mig-2560",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-32",
       "amount": 2,
@@ -25327,7 +25336,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2560",
+      "id": "tx-mig-2561",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 2,
@@ -25338,7 +25347,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2561",
+      "id": "tx-mig-2562",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-23",
       "amount": 20,
@@ -25347,7 +25356,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12 8"
     },
     {
-      "id": "tx-mig-2562",
+      "id": "tx-mig-2563",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-24",
       "amount": 364,
@@ -25356,7 +25365,7 @@ export const initialFinanceData: FinanceData = {
       "description": "364"
     },
     {
-      "id": "tx-mig-2563",
+      "id": "tx-mig-2564",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-1",
       "amount": 15,
@@ -25365,7 +25374,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3 3 6 3"
     },
     {
-      "id": "tx-mig-2564",
+      "id": "tx-mig-2565",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-6",
       "amount": 5.6,
@@ -25374,7 +25383,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5.6 ticktick"
     },
     {
-      "id": "tx-mig-2565",
+      "id": "tx-mig-2566",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 3,
@@ -25385,7 +25394,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2566",
+      "id": "tx-mig-2567",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 3,
@@ -25396,7 +25405,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2567",
+      "id": "tx-mig-2568",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 13.52,
@@ -25405,16 +25414,16 @@ export const initialFinanceData: FinanceData = {
       "description": "1.7 11.82"
     },
     {
-      "id": "tx-mig-2568",
+      "id": "tx-mig-2569",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-4",
-      "amount": 6.699999999999999,
+      "amount": 6.7,
       "type": "expense",
       "date": "2024-09-07",
       "description": "5.6 1.1"
     },
     {
-      "id": "tx-mig-2569",
+      "id": "tx-mig-2570",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-13",
       "amount": 16,
@@ -25423,7 +25432,7 @@ export const initialFinanceData: FinanceData = {
       "description": "16"
     },
     {
-      "id": "tx-mig-2570",
+      "id": "tx-mig-2571",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 25,
@@ -25434,7 +25443,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2571",
+      "id": "tx-mig-2572",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 25,
@@ -25445,7 +25454,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2572",
+      "id": "tx-mig-2573",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 0.5,
@@ -25454,7 +25463,7 @@ export const initialFinanceData: FinanceData = {
       "description": "0.5"
     },
     {
-      "id": "tx-mig-2573",
+      "id": "tx-mig-2574",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-8",
       "amount": 51.9,
@@ -25463,7 +25472,7 @@ export const initialFinanceData: FinanceData = {
       "description": "51.9 Финлипсал Эпинекс и Бисогамма"
     },
     {
-      "id": "tx-mig-2574",
+      "id": "tx-mig-2575",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 4.3,
@@ -25472,7 +25481,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4.3"
     },
     {
-      "id": "tx-mig-2575",
+      "id": "tx-mig-2576",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 16,
@@ -25483,7 +25492,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2576",
+      "id": "tx-mig-2577",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 16,
@@ -25494,7 +25503,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2577",
+      "id": "tx-mig-2578",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-18",
       "amount": 2,
@@ -25503,7 +25512,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2 стоянка"
     },
     {
-      "id": "tx-mig-2578",
+      "id": "tx-mig-2579",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-15",
       "amount": 20,
@@ -25512,7 +25521,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-2579",
+      "id": "tx-mig-2580",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-5",
       "amount": 4,
@@ -25521,7 +25530,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4 futbol"
     },
     {
-      "id": "tx-mig-2580",
+      "id": "tx-mig-2581",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 1.1,
@@ -25530,7 +25539,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1.1"
     },
     {
-      "id": "tx-mig-2581",
+      "id": "tx-mig-2582",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 19,
@@ -25539,7 +25548,7 @@ export const initialFinanceData: FinanceData = {
       "description": "19"
     },
     {
-      "id": "tx-mig-2582",
+      "id": "tx-mig-2583",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-2",
       "amount": 265,
@@ -25548,7 +25557,7 @@ export const initialFinanceData: FinanceData = {
       "description": "120 Natevan 145 Gulnar"
     },
     {
-      "id": "tx-mig-2583",
+      "id": "tx-mig-2584",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-11",
       "amount": 9,
@@ -25557,7 +25566,7 @@ export const initialFinanceData: FinanceData = {
       "description": "9"
     },
     {
-      "id": "tx-mig-2584",
+      "id": "tx-mig-2585",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 43,
@@ -25566,7 +25575,7 @@ export const initialFinanceData: FinanceData = {
       "description": "43"
     },
     {
-      "id": "tx-mig-2585",
+      "id": "tx-mig-2586",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-6",
       "amount": 22,
@@ -25575,7 +25584,7 @@ export const initialFinanceData: FinanceData = {
       "description": "22 Notion"
     },
     {
-      "id": "tx-mig-2586",
+      "id": "tx-mig-2587",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-12",
       "amount": 38.52,
@@ -25584,7 +25593,7 @@ export const initialFinanceData: FinanceData = {
       "description": "38.52"
     },
     {
-      "id": "tx-mig-2587",
+      "id": "tx-mig-2588",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 460,
@@ -25595,7 +25604,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2588",
+      "id": "tx-mig-2589",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 460,
@@ -25606,7 +25615,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2589",
+      "id": "tx-mig-2590",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 452,
@@ -25617,7 +25626,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2590",
+      "id": "tx-mig-2591",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 452,
@@ -25628,7 +25637,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2591",
+      "id": "tx-mig-2592",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-23",
       "amount": 18,
@@ -25637,7 +25646,7 @@ export const initialFinanceData: FinanceData = {
       "description": "18"
     },
     {
-      "id": "tx-mig-2592",
+      "id": "tx-mig-2593",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 9.22,
@@ -25646,7 +25655,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1.57 7.65"
     },
     {
-      "id": "tx-mig-2593",
+      "id": "tx-mig-2594",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-2",
       "amount": 117,
@@ -25655,7 +25664,7 @@ export const initialFinanceData: FinanceData = {
       "description": "117 Логопед"
     },
     {
-      "id": "tx-mig-2594",
+      "id": "tx-mig-2595",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 130,
@@ -25664,7 +25673,7 @@ export const initialFinanceData: FinanceData = {
       "description": "130 за мед"
     },
     {
-      "id": "tx-mig-2595",
+      "id": "tx-mig-2596",
       "accountId": "acc-parsed-17",
       "categoryId": "cat-parsed-25",
       "amount": 310,
@@ -25673,7 +25682,7 @@ export const initialFinanceData: FinanceData = {
       "description": "310"
     },
     {
-      "id": "tx-mig-2596",
+      "id": "tx-mig-2597",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-9",
       "amount": 24.13,
@@ -25682,7 +25691,7 @@ export const initialFinanceData: FinanceData = {
       "description": "22.58 1.55"
     },
     {
-      "id": "tx-mig-2597",
+      "id": "tx-mig-2598",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-25",
       "amount": 851,
@@ -25691,7 +25700,7 @@ export const initialFinanceData: FinanceData = {
       "description": "851"
     },
     {
-      "id": "tx-mig-2598",
+      "id": "tx-mig-2599",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 30,
@@ -25702,7 +25711,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2599",
+      "id": "tx-mig-2600",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 30,
@@ -25713,7 +25722,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2600",
+      "id": "tx-mig-2601",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 33,
@@ -25722,7 +25731,7 @@ export const initialFinanceData: FinanceData = {
       "description": "33"
     },
     {
-      "id": "tx-mig-2601",
+      "id": "tx-mig-2602",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-23",
       "amount": 6,
@@ -25731,7 +25740,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6"
     },
     {
-      "id": "tx-mig-2602",
+      "id": "tx-mig-2603",
       "accountId": "acc-parsed-16",
       "categoryId": "cat-parsed-25",
       "amount": 265,
@@ -25740,7 +25749,7 @@ export const initialFinanceData: FinanceData = {
       "description": "265"
     },
     {
-      "id": "tx-mig-2603",
+      "id": "tx-mig-2604",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-26",
       "amount": 6,
@@ -25749,7 +25758,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3 ilqar 3 samira"
     },
     {
-      "id": "tx-mig-2604",
+      "id": "tx-mig-2605",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-25",
       "amount": 1037,
@@ -25758,7 +25767,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1037"
     },
     {
-      "id": "tx-mig-2605",
+      "id": "tx-mig-2606",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-20",
       "amount": 21.51,
@@ -25767,7 +25776,7 @@ export const initialFinanceData: FinanceData = {
       "description": "21.51"
     },
     {
-      "id": "tx-mig-2606",
+      "id": "tx-mig-2607",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 50,
@@ -25778,7 +25787,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2607",
+      "id": "tx-mig-2608",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 50,
@@ -25789,7 +25798,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2608",
+      "id": "tx-mig-2609",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-15",
       "amount": 38,
@@ -25798,7 +25807,7 @@ export const initialFinanceData: FinanceData = {
       "description": "38"
     },
     {
-      "id": "tx-mig-2609",
+      "id": "tx-mig-2610",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 30,
@@ -25809,7 +25818,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2610",
+      "id": "tx-mig-2611",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 30,
@@ -25820,7 +25829,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2611",
+      "id": "tx-mig-2612",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-20",
       "amount": 5,
@@ -25829,7 +25838,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-2612",
+      "id": "tx-mig-2613",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-23",
       "amount": 16,
@@ -25838,7 +25847,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10 6"
     },
     {
-      "id": "tx-mig-2613",
+      "id": "tx-mig-2614",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 3,
@@ -25847,7 +25856,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-2614",
+      "id": "tx-mig-2615",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-26",
       "amount": 25,
@@ -25856,17 +25865,8 @@ export const initialFinanceData: FinanceData = {
       "description": "15 10 ailenet"
     },
     {
-      "id": "tx-mig-2615",
-      "accountId": "acc-parsed-20",
-      "categoryId": "cat-parsed-23",
-      "amount": 10,
-      "type": "expense",
-      "date": "2024-08-29",
-      "description": "10"
-    },
-    {
       "id": "tx-mig-2616",
-      "accountId": "acc-parsed-1",
+      "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-23",
       "amount": 10,
       "type": "expense",
@@ -25875,6 +25875,15 @@ export const initialFinanceData: FinanceData = {
     },
     {
       "id": "tx-mig-2617",
+      "accountId": "acc-parsed-1",
+      "categoryId": "cat-parsed-23",
+      "amount": 10,
+      "type": "expense",
+      "date": "2024-08-29",
+      "description": "10"
+    },
+    {
+      "id": "tx-mig-2618",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 16.9,
@@ -25883,7 +25892,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4.9 12"
     },
     {
-      "id": "tx-mig-2618",
+      "id": "tx-mig-2619",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 1,
@@ -25892,7 +25901,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1"
     },
     {
-      "id": "tx-mig-2619",
+      "id": "tx-mig-2620",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 30,
@@ -25903,7 +25912,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2620",
+      "id": "tx-mig-2621",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 30,
@@ -25914,7 +25923,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2621",
+      "id": "tx-mig-2622",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-23",
       "amount": 26,
@@ -25923,7 +25932,7 @@ export const initialFinanceData: FinanceData = {
       "description": "26"
     },
     {
-      "id": "tx-mig-2622",
+      "id": "tx-mig-2623",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-15",
       "amount": 20,
@@ -25932,7 +25941,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-2623",
+      "id": "tx-mig-2624",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-0",
       "amount": 10.7,
@@ -25941,7 +25950,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10.7"
     },
     {
-      "id": "tx-mig-2624",
+      "id": "tx-mig-2625",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-8",
       "amount": 1.4,
@@ -25950,7 +25959,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1.4"
     },
     {
-      "id": "tx-mig-2625",
+      "id": "tx-mig-2626",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-23",
       "amount": 16,
@@ -25959,7 +25968,7 @@ export const initialFinanceData: FinanceData = {
       "description": "11 5"
     },
     {
-      "id": "tx-mig-2626",
+      "id": "tx-mig-2627",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 30,
@@ -25970,7 +25979,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2627",
+      "id": "tx-mig-2628",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 30,
@@ -25981,7 +25990,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2628",
+      "id": "tx-mig-2629",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-8",
       "amount": 8.7,
@@ -25990,7 +25999,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8.7"
     },
     {
-      "id": "tx-mig-2629",
+      "id": "tx-mig-2630",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 3,
@@ -25999,7 +26008,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-2630",
+      "id": "tx-mig-2631",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 12.6,
@@ -26008,7 +26017,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12.6"
     },
     {
-      "id": "tx-mig-2631",
+      "id": "tx-mig-2632",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-9",
       "amount": 65,
@@ -26017,7 +26026,7 @@ export const initialFinanceData: FinanceData = {
       "description": "61 4 авто кредит"
     },
     {
-      "id": "tx-mig-2632",
+      "id": "tx-mig-2633",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-4",
       "amount": 17.2,
@@ -26026,7 +26035,7 @@ export const initialFinanceData: FinanceData = {
       "description": "17.2"
     },
     {
-      "id": "tx-mig-2633",
+      "id": "tx-mig-2634",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-4",
       "amount": 10,
@@ -26035,7 +26044,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-2634",
+      "id": "tx-mig-2635",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-21",
       "amount": 10.3,
@@ -26044,7 +26053,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10.3"
     },
     {
-      "id": "tx-mig-2635",
+      "id": "tx-mig-2636",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 8.9,
@@ -26053,7 +26062,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8.9"
     },
     {
-      "id": "tx-mig-2636",
+      "id": "tx-mig-2637",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-26",
       "amount": 3,
@@ -26062,7 +26071,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3 Самира"
     },
     {
-      "id": "tx-mig-2637",
+      "id": "tx-mig-2638",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 237.7,
@@ -26073,7 +26082,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2638",
+      "id": "tx-mig-2639",
       "accountId": "acc-parsed-18",
       "categoryId": "cat-parsed-31",
       "amount": 237.7,
@@ -26084,7 +26093,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2639",
+      "id": "tx-mig-2640",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 55,
@@ -26095,7 +26104,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2640",
+      "id": "tx-mig-2641",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 55,
@@ -26106,7 +26115,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2641",
+      "id": "tx-mig-2642",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-4",
       "amount": 32,
@@ -26115,7 +26124,7 @@ export const initialFinanceData: FinanceData = {
       "description": "32"
     },
     {
-      "id": "tx-mig-2642",
+      "id": "tx-mig-2643",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 3,
@@ -26124,7 +26133,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-2643",
+      "id": "tx-mig-2644",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-19",
       "amount": 80,
@@ -26133,7 +26142,7 @@ export const initialFinanceData: FinanceData = {
       "description": "80"
     },
     {
-      "id": "tx-mig-2644",
+      "id": "tx-mig-2645",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 7.3,
@@ -26142,7 +26151,7 @@ export const initialFinanceData: FinanceData = {
       "description": "7.3"
     },
     {
-      "id": "tx-mig-2645",
+      "id": "tx-mig-2646",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 60,
@@ -26153,7 +26162,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2646",
+      "id": "tx-mig-2647",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 60,
@@ -26164,7 +26173,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2647",
+      "id": "tx-mig-2648",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 6,
@@ -26173,7 +26182,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6"
     },
     {
-      "id": "tx-mig-2648",
+      "id": "tx-mig-2649",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-6",
       "amount": 30,
@@ -26182,7 +26191,7 @@ export const initialFinanceData: FinanceData = {
       "description": "30"
     },
     {
-      "id": "tx-mig-2649",
+      "id": "tx-mig-2650",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 4,
@@ -26191,7 +26200,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4"
     },
     {
-      "id": "tx-mig-2650",
+      "id": "tx-mig-2651",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-14",
       "amount": 13,
@@ -26200,7 +26209,7 @@ export const initialFinanceData: FinanceData = {
       "description": "13"
     },
     {
-      "id": "tx-mig-2651",
+      "id": "tx-mig-2652",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 30,
@@ -26211,7 +26220,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2652",
+      "id": "tx-mig-2653",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 30,
@@ -26222,7 +26231,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2653",
+      "id": "tx-mig-2654",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-15",
       "amount": 20,
@@ -26231,7 +26240,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-2654",
+      "id": "tx-mig-2655",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 29,
@@ -26240,16 +26249,16 @@ export const initialFinanceData: FinanceData = {
       "description": "29"
     },
     {
-      "id": "tx-mig-2655",
+      "id": "tx-mig-2656",
       "accountId": "acc-parsed-0",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 1.2,
       "type": "expense",
       "date": "2024-08-21",
       "description": "1.2"
     },
     {
-      "id": "tx-mig-2656",
+      "id": "tx-mig-2657",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-6",
       "amount": 5,
@@ -26258,7 +26267,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5 Яндекс"
     },
     {
-      "id": "tx-mig-2657",
+      "id": "tx-mig-2658",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 5,
@@ -26267,16 +26276,16 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-2658",
+      "id": "tx-mig-2659",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 37,
       "type": "expense",
       "date": "2024-08-19",
       "description": "33 4"
     },
     {
-      "id": "tx-mig-2659",
+      "id": "tx-mig-2660",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-32",
       "amount": 45,
@@ -26287,7 +26296,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2660",
+      "id": "tx-mig-2661",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 45,
@@ -26298,7 +26307,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2661",
+      "id": "tx-mig-2662",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 30,
@@ -26309,7 +26318,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2662",
+      "id": "tx-mig-2663",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 30,
@@ -26320,7 +26329,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2663",
+      "id": "tx-mig-2664",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-20",
       "amount": 21.5,
@@ -26329,7 +26338,7 @@ export const initialFinanceData: FinanceData = {
       "description": "21.5"
     },
     {
-      "id": "tx-mig-2664",
+      "id": "tx-mig-2665",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-20",
       "amount": 10,
@@ -26338,16 +26347,16 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-2665",
+      "id": "tx-mig-2666",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 25,
       "type": "expense",
       "date": "2024-08-18",
       "description": "25"
     },
     {
-      "id": "tx-mig-2666",
+      "id": "tx-mig-2667",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 6,
@@ -26356,7 +26365,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6"
     },
     {
-      "id": "tx-mig-2667",
+      "id": "tx-mig-2668",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-20",
       "amount": 12,
@@ -26365,7 +26374,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12"
     },
     {
-      "id": "tx-mig-2668",
+      "id": "tx-mig-2669",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-14",
       "amount": 11,
@@ -26374,7 +26383,7 @@ export const initialFinanceData: FinanceData = {
       "description": "11"
     },
     {
-      "id": "tx-mig-2669",
+      "id": "tx-mig-2670",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-8",
       "amount": 6,
@@ -26383,7 +26392,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6"
     },
     {
-      "id": "tx-mig-2670",
+      "id": "tx-mig-2671",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-32",
       "amount": 95,
@@ -26394,7 +26403,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2671",
+      "id": "tx-mig-2672",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 95,
@@ -26405,7 +26414,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2672",
+      "id": "tx-mig-2673",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-20",
       "amount": 21,
@@ -26414,7 +26423,7 @@ export const initialFinanceData: FinanceData = {
       "description": "21"
     },
     {
-      "id": "tx-mig-2673",
+      "id": "tx-mig-2674",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-20",
       "amount": 4,
@@ -26423,7 +26432,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4"
     },
     {
-      "id": "tx-mig-2674",
+      "id": "tx-mig-2675",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-15",
       "amount": 40,
@@ -26432,7 +26441,7 @@ export const initialFinanceData: FinanceData = {
       "description": "40"
     },
     {
-      "id": "tx-mig-2675",
+      "id": "tx-mig-2676",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-20",
       "amount": 9,
@@ -26441,7 +26450,7 @@ export const initialFinanceData: FinanceData = {
       "description": "9"
     },
     {
-      "id": "tx-mig-2676",
+      "id": "tx-mig-2677",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 26,
@@ -26450,7 +26459,7 @@ export const initialFinanceData: FinanceData = {
       "description": "26"
     },
     {
-      "id": "tx-mig-2677",
+      "id": "tx-mig-2678",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-20",
       "amount": 38,
@@ -26459,7 +26468,7 @@ export const initialFinanceData: FinanceData = {
       "description": "38"
     },
     {
-      "id": "tx-mig-2678",
+      "id": "tx-mig-2679",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 1,
@@ -26468,7 +26477,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1"
     },
     {
-      "id": "tx-mig-2679",
+      "id": "tx-mig-2680",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 4,
@@ -26477,7 +26486,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4"
     },
     {
-      "id": "tx-mig-2680",
+      "id": "tx-mig-2681",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-5",
       "amount": 4,
@@ -26486,7 +26495,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4"
     },
     {
-      "id": "tx-mig-2681",
+      "id": "tx-mig-2682",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 2.5,
@@ -26495,7 +26504,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2.5"
     },
     {
-      "id": "tx-mig-2682",
+      "id": "tx-mig-2683",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 1.5,
@@ -26504,7 +26513,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1.5"
     },
     {
-      "id": "tx-mig-2683",
+      "id": "tx-mig-2684",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 10,
@@ -26513,7 +26522,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-2684",
+      "id": "tx-mig-2685",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 7.6,
@@ -26522,7 +26531,7 @@ export const initialFinanceData: FinanceData = {
       "description": "7.6"
     },
     {
-      "id": "tx-mig-2685",
+      "id": "tx-mig-2686",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-26",
       "amount": 12,
@@ -26531,7 +26540,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12 Ильгар"
     },
     {
-      "id": "tx-mig-2686",
+      "id": "tx-mig-2687",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 5,
@@ -26540,7 +26549,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-2687",
+      "id": "tx-mig-2688",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-15",
       "amount": 20,
@@ -26549,7 +26558,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-2688",
+      "id": "tx-mig-2689",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 4.45,
@@ -26558,7 +26567,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4.45"
     },
     {
-      "id": "tx-mig-2689",
+      "id": "tx-mig-2690",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 12,
@@ -26567,7 +26576,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12"
     },
     {
-      "id": "tx-mig-2690",
+      "id": "tx-mig-2691",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 6.6,
@@ -26576,7 +26585,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6.6"
     },
     {
-      "id": "tx-mig-2691",
+      "id": "tx-mig-2692",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-8",
       "amount": 18.4,
@@ -26585,7 +26594,7 @@ export const initialFinanceData: FinanceData = {
       "description": "18.4"
     },
     {
-      "id": "tx-mig-2692",
+      "id": "tx-mig-2693",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 7,
@@ -26594,7 +26603,7 @@ export const initialFinanceData: FinanceData = {
       "description": "7"
     },
     {
-      "id": "tx-mig-2693",
+      "id": "tx-mig-2694",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-32",
       "amount": 95,
@@ -26605,7 +26614,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2694",
+      "id": "tx-mig-2695",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 95,
@@ -26616,7 +26625,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2695",
+      "id": "tx-mig-2696",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-16",
       "amount": 3,
@@ -26625,7 +26634,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-2696",
+      "id": "tx-mig-2697",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-18",
       "amount": 45,
@@ -26634,7 +26643,7 @@ export const initialFinanceData: FinanceData = {
       "description": "45 штраф"
     },
     {
-      "id": "tx-mig-2697",
+      "id": "tx-mig-2698",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 1.5,
@@ -26643,7 +26652,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1.5"
     },
     {
-      "id": "tx-mig-2698",
+      "id": "tx-mig-2699",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-13",
       "amount": 16,
@@ -26652,7 +26661,7 @@ export const initialFinanceData: FinanceData = {
       "description": "16"
     },
     {
-      "id": "tx-mig-2699",
+      "id": "tx-mig-2700",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-18",
       "amount": 29,
@@ -26661,7 +26670,7 @@ export const initialFinanceData: FinanceData = {
       "description": "29 sigorta"
     },
     {
-      "id": "tx-mig-2700",
+      "id": "tx-mig-2701",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 3.4,
@@ -26670,7 +26679,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3.4"
     },
     {
-      "id": "tx-mig-2701",
+      "id": "tx-mig-2702",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-8",
       "amount": 8,
@@ -26679,7 +26688,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8"
     },
     {
-      "id": "tx-mig-2702",
+      "id": "tx-mig-2703",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-20",
       "amount": 10,
@@ -26688,7 +26697,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10 Elxan"
     },
     {
-      "id": "tx-mig-2703",
+      "id": "tx-mig-2704",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 26.86,
@@ -26697,7 +26706,7 @@ export const initialFinanceData: FinanceData = {
       "description": "41.86-15"
     },
     {
-      "id": "tx-mig-2704",
+      "id": "tx-mig-2705",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 50,
@@ -26706,16 +26715,16 @@ export const initialFinanceData: FinanceData = {
       "description": "50"
     },
     {
-      "id": "tx-mig-2705",
+      "id": "tx-mig-2706",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-21",
-      "amount": 15.200000000000001,
+      "amount": 15.2,
       "type": "expense",
       "date": "2024-08-11",
       "description": "7 2.6 2.5 2.2 0.9"
     },
     {
-      "id": "tx-mig-2706",
+      "id": "tx-mig-2707",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 9,
@@ -26724,7 +26733,7 @@ export const initialFinanceData: FinanceData = {
       "description": "9"
     },
     {
-      "id": "tx-mig-2707",
+      "id": "tx-mig-2708",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 2,
@@ -26733,7 +26742,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-2708",
+      "id": "tx-mig-2709",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 4,
@@ -26742,7 +26751,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4"
     },
     {
-      "id": "tx-mig-2709",
+      "id": "tx-mig-2710",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 38,
@@ -26751,7 +26760,7 @@ export const initialFinanceData: FinanceData = {
       "description": "38"
     },
     {
-      "id": "tx-mig-2710",
+      "id": "tx-mig-2711",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 11,
@@ -26760,7 +26769,7 @@ export const initialFinanceData: FinanceData = {
       "description": "11"
     },
     {
-      "id": "tx-mig-2711",
+      "id": "tx-mig-2712",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-24",
       "amount": 364,
@@ -26769,7 +26778,7 @@ export const initialFinanceData: FinanceData = {
       "description": "364"
     },
     {
-      "id": "tx-mig-2712",
+      "id": "tx-mig-2713",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 9,
@@ -26778,7 +26787,7 @@ export const initialFinanceData: FinanceData = {
       "description": "9"
     },
     {
-      "id": "tx-mig-2713",
+      "id": "tx-mig-2714",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 2,
@@ -26787,7 +26796,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-2714",
+      "id": "tx-mig-2715",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-5",
       "amount": 5,
@@ -26796,7 +26805,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-2715",
+      "id": "tx-mig-2716",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 5,
@@ -26805,7 +26814,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-2716",
+      "id": "tx-mig-2717",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-23",
       "amount": 17,
@@ -26814,7 +26823,7 @@ export const initialFinanceData: FinanceData = {
       "description": "7 10"
     },
     {
-      "id": "tx-mig-2717",
+      "id": "tx-mig-2718",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-11",
       "amount": 9,
@@ -26823,7 +26832,7 @@ export const initialFinanceData: FinanceData = {
       "description": "9"
     },
     {
-      "id": "tx-mig-2718",
+      "id": "tx-mig-2719",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-6",
       "amount": 5.6,
@@ -26832,7 +26841,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5.6 ticktick"
     },
     {
-      "id": "tx-mig-2719",
+      "id": "tx-mig-2720",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 8,
@@ -26841,7 +26850,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4 4"
     },
     {
-      "id": "tx-mig-2720",
+      "id": "tx-mig-2721",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 10,
@@ -26850,7 +26859,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-2721",
+      "id": "tx-mig-2722",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 150,
@@ -26861,7 +26870,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2722",
+      "id": "tx-mig-2723",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 150,
@@ -26872,7 +26881,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2723",
+      "id": "tx-mig-2724",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-23",
       "amount": 9,
@@ -26881,7 +26890,7 @@ export const initialFinanceData: FinanceData = {
       "description": "9"
     },
     {
-      "id": "tx-mig-2724",
+      "id": "tx-mig-2725",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-15",
       "amount": 20,
@@ -26890,7 +26899,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-2725",
+      "id": "tx-mig-2726",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 4,
@@ -26899,7 +26908,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4"
     },
     {
-      "id": "tx-mig-2726",
+      "id": "tx-mig-2727",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-23",
       "amount": 26,
@@ -26908,7 +26917,7 @@ export const initialFinanceData: FinanceData = {
       "description": "26"
     },
     {
-      "id": "tx-mig-2727",
+      "id": "tx-mig-2728",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 1.1,
@@ -26917,7 +26926,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1.1"
     },
     {
-      "id": "tx-mig-2728",
+      "id": "tx-mig-2729",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 1.5,
@@ -26926,7 +26935,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1.5"
     },
     {
-      "id": "tx-mig-2729",
+      "id": "tx-mig-2730",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 34,
@@ -26935,7 +26944,7 @@ export const initialFinanceData: FinanceData = {
       "description": "34"
     },
     {
-      "id": "tx-mig-2730",
+      "id": "tx-mig-2731",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 165,
@@ -26944,7 +26953,7 @@ export const initialFinanceData: FinanceData = {
       "description": "165 psixoloq"
     },
     {
-      "id": "tx-mig-2731",
+      "id": "tx-mig-2732",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-29",
       "amount": 451,
@@ -26953,7 +26962,7 @@ export const initialFinanceData: FinanceData = {
       "description": "451 Самира зубы"
     },
     {
-      "id": "tx-mig-2732",
+      "id": "tx-mig-2733",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-23",
       "amount": 21,
@@ -26962,7 +26971,7 @@ export const initialFinanceData: FinanceData = {
       "description": "21"
     },
     {
-      "id": "tx-mig-2733",
+      "id": "tx-mig-2734",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 1.5,
@@ -26971,7 +26980,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1.5"
     },
     {
-      "id": "tx-mig-2734",
+      "id": "tx-mig-2735",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 30,
@@ -26980,7 +26989,7 @@ export const initialFinanceData: FinanceData = {
       "description": "30"
     },
     {
-      "id": "tx-mig-2735",
+      "id": "tx-mig-2736",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-21",
       "amount": 11,
@@ -26989,7 +26998,7 @@ export const initialFinanceData: FinanceData = {
       "description": "11"
     },
     {
-      "id": "tx-mig-2736",
+      "id": "tx-mig-2737",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-8",
       "amount": 2.4,
@@ -26998,16 +27007,16 @@ export const initialFinanceData: FinanceData = {
       "description": "2.4"
     },
     {
-      "id": "tx-mig-2737",
+      "id": "tx-mig-2738",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-0",
       "amount": 400,
       "type": "expense",
       "date": "2024-08-04",
-      "description": "400 loqoped\t oyun terapiya"
+      "description": "400 loqoped, oyun terapiya"
     },
     {
-      "id": "tx-mig-2738",
+      "id": "tx-mig-2739",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 2.2,
@@ -27016,7 +27025,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2.2"
     },
     {
-      "id": "tx-mig-2739",
+      "id": "tx-mig-2740",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-9",
       "amount": 3,
@@ -27025,7 +27034,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-2740",
+      "id": "tx-mig-2741",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-6",
       "amount": 22,
@@ -27034,7 +27043,7 @@ export const initialFinanceData: FinanceData = {
       "description": "22 notion"
     },
     {
-      "id": "tx-mig-2741",
+      "id": "tx-mig-2742",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-12",
       "amount": 34.36,
@@ -27043,7 +27052,7 @@ export const initialFinanceData: FinanceData = {
       "description": "34.36"
     },
     {
-      "id": "tx-mig-2742",
+      "id": "tx-mig-2743",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 300,
@@ -27054,7 +27063,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2743",
+      "id": "tx-mig-2744",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 300,
@@ -27065,7 +27074,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2744",
+      "id": "tx-mig-2745",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-8",
       "amount": 3,
@@ -27074,7 +27083,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-2745",
+      "id": "tx-mig-2746",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 20,
@@ -27085,7 +27094,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2746",
+      "id": "tx-mig-2747",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 20,
@@ -27096,7 +27105,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2747",
+      "id": "tx-mig-2748",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 473,
@@ -27107,7 +27116,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2748",
+      "id": "tx-mig-2749",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-31",
       "amount": 473,
@@ -27118,7 +27127,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2749",
+      "id": "tx-mig-2750",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 20,
@@ -27129,7 +27138,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2750",
+      "id": "tx-mig-2751",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 20,
@@ -27140,7 +27149,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2751",
+      "id": "tx-mig-2752",
       "accountId": "acc-parsed-16",
       "categoryId": "cat-parsed-25",
       "amount": 266,
@@ -27149,7 +27158,7 @@ export const initialFinanceData: FinanceData = {
       "description": "266"
     },
     {
-      "id": "tx-mig-2752",
+      "id": "tx-mig-2753",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-9",
       "amount": 57,
@@ -27158,7 +27167,7 @@ export const initialFinanceData: FinanceData = {
       "description": "57"
     },
     {
-      "id": "tx-mig-2753",
+      "id": "tx-mig-2754",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-15",
       "amount": 16,
@@ -27167,7 +27176,7 @@ export const initialFinanceData: FinanceData = {
       "description": "16"
     },
     {
-      "id": "tx-mig-2754",
+      "id": "tx-mig-2755",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-26",
       "amount": 6,
@@ -27176,7 +27185,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3 3 ilqar samira"
     },
     {
-      "id": "tx-mig-2755",
+      "id": "tx-mig-2756",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 50,
@@ -27187,7 +27196,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2756",
+      "id": "tx-mig-2757",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 50,
@@ -27198,7 +27207,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2757",
+      "id": "tx-mig-2758",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-0",
       "amount": 30,
@@ -27207,7 +27216,7 @@ export const initialFinanceData: FinanceData = {
       "description": "30 unikal"
     },
     {
-      "id": "tx-mig-2758",
+      "id": "tx-mig-2759",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-8",
       "amount": 20,
@@ -27216,7 +27225,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-2759",
+      "id": "tx-mig-2760",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 23,
@@ -27225,7 +27234,7 @@ export const initialFinanceData: FinanceData = {
       "description": "23"
     },
     {
-      "id": "tx-mig-2760",
+      "id": "tx-mig-2761",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-23",
       "amount": 35,
@@ -27234,7 +27243,7 @@ export const initialFinanceData: FinanceData = {
       "description": "35"
     },
     {
-      "id": "tx-mig-2761",
+      "id": "tx-mig-2762",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-25",
       "amount": 2271,
@@ -27243,7 +27252,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2271"
     },
     {
-      "id": "tx-mig-2762",
+      "id": "tx-mig-2763",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-23",
       "amount": 33,
@@ -27252,7 +27261,7 @@ export const initialFinanceData: FinanceData = {
       "description": "33"
     },
     {
-      "id": "tx-mig-2763",
+      "id": "tx-mig-2764",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-8",
       "amount": 5,
@@ -27261,7 +27270,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-2764",
+      "id": "tx-mig-2765",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 4,
@@ -27270,7 +27279,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4"
     },
     {
-      "id": "tx-mig-2765",
+      "id": "tx-mig-2766",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-8",
       "amount": 2.3,
@@ -27279,7 +27288,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2.3"
     },
     {
-      "id": "tx-mig-2766",
+      "id": "tx-mig-2767",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-26",
       "amount": 15,
@@ -27288,7 +27297,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15 ailenet"
     },
     {
-      "id": "tx-mig-2767",
+      "id": "tx-mig-2768",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-23",
       "amount": 16,
@@ -27297,7 +27306,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10 6"
     },
     {
-      "id": "tx-mig-2768",
+      "id": "tx-mig-2769",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 3.7,
@@ -27306,7 +27315,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3.7"
     },
     {
-      "id": "tx-mig-2769",
+      "id": "tx-mig-2770",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 15,
@@ -27317,7 +27326,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2770",
+      "id": "tx-mig-2771",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 15,
@@ -27328,7 +27337,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2771",
+      "id": "tx-mig-2772",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-8",
       "amount": 3.7,
@@ -27337,7 +27346,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3.7"
     },
     {
-      "id": "tx-mig-2772",
+      "id": "tx-mig-2773",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 4.2,
@@ -27346,7 +27355,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4.2"
     },
     {
-      "id": "tx-mig-2773",
+      "id": "tx-mig-2774",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-23",
       "amount": 19,
@@ -27355,7 +27364,7 @@ export const initialFinanceData: FinanceData = {
       "description": "11 8"
     },
     {
-      "id": "tx-mig-2774",
+      "id": "tx-mig-2775",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-8",
       "amount": 0.5,
@@ -27364,7 +27373,7 @@ export const initialFinanceData: FinanceData = {
       "description": "0.5"
     },
     {
-      "id": "tx-mig-2775",
+      "id": "tx-mig-2776",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 30,
@@ -27375,7 +27384,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2776",
+      "id": "tx-mig-2777",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 30,
@@ -27386,7 +27395,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2777",
+      "id": "tx-mig-2778",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 3.9,
@@ -27395,7 +27404,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3.9"
     },
     {
-      "id": "tx-mig-2778",
+      "id": "tx-mig-2779",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-16",
       "amount": 7,
@@ -27404,7 +27413,7 @@ export const initialFinanceData: FinanceData = {
       "description": "7"
     },
     {
-      "id": "tx-mig-2779",
+      "id": "tx-mig-2780",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-6",
       "amount": 20,
@@ -27413,7 +27422,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20 flow launcher"
     },
     {
-      "id": "tx-mig-2780",
+      "id": "tx-mig-2781",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-26",
       "amount": 3,
@@ -27422,7 +27431,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3 Samira"
     },
     {
-      "id": "tx-mig-2781",
+      "id": "tx-mig-2782",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-32",
       "amount": 27,
@@ -27433,7 +27442,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2782",
+      "id": "tx-mig-2783",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 27,
@@ -27444,7 +27453,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2783",
+      "id": "tx-mig-2784",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 235,
@@ -27455,7 +27464,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2784",
+      "id": "tx-mig-2785",
       "accountId": "acc-parsed-18",
       "categoryId": "cat-parsed-31",
       "amount": 235,
@@ -27466,7 +27475,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2785",
+      "id": "tx-mig-2786",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-15",
       "amount": 25,
@@ -27475,7 +27484,7 @@ export const initialFinanceData: FinanceData = {
       "description": "25"
     },
     {
-      "id": "tx-mig-2786",
+      "id": "tx-mig-2787",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-23",
       "amount": 10,
@@ -27484,7 +27493,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-2787",
+      "id": "tx-mig-2788",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-9",
       "amount": 67,
@@ -27493,7 +27502,7 @@ export const initialFinanceData: FinanceData = {
       "description": "67 кредит автомобиль"
     },
     {
-      "id": "tx-mig-2788",
+      "id": "tx-mig-2789",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 12,
@@ -27502,7 +27511,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12"
     },
     {
-      "id": "tx-mig-2789",
+      "id": "tx-mig-2790",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-23",
       "amount": 9,
@@ -27511,7 +27520,7 @@ export const initialFinanceData: FinanceData = {
       "description": "9"
     },
     {
-      "id": "tx-mig-2790",
+      "id": "tx-mig-2791",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-0",
       "amount": 23,
@@ -27520,7 +27529,7 @@ export const initialFinanceData: FinanceData = {
       "description": "23 подгузники"
     },
     {
-      "id": "tx-mig-2791",
+      "id": "tx-mig-2792",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-8",
       "amount": 10,
@@ -27529,7 +27538,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-2792",
+      "id": "tx-mig-2793",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 7,
@@ -27538,7 +27547,7 @@ export const initialFinanceData: FinanceData = {
       "description": "7"
     },
     {
-      "id": "tx-mig-2793",
+      "id": "tx-mig-2794",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 2,
@@ -27547,7 +27556,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-2794",
+      "id": "tx-mig-2795",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-32",
       "amount": 65,
@@ -27558,7 +27567,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2795",
+      "id": "tx-mig-2796",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 65,
@@ -27567,15 +27576,6 @@ export const initialFinanceData: FinanceData = {
       "description": "Перевод со счета ABB kart Samira в Кошелёк",
       "transferAccountId": "acc-parsed-3",
       "transferType": "in"
-    },
-    {
-      "id": "tx-mig-2796",
-      "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-23",
-      "amount": 18,
-      "type": "expense",
-      "date": "2024-07-23",
-      "description": "11 7"
     },
     {
       "id": "tx-mig-2797",
@@ -27588,6 +27588,15 @@ export const initialFinanceData: FinanceData = {
     },
     {
       "id": "tx-mig-2798",
+      "accountId": "acc-parsed-1",
+      "categoryId": "cat-parsed-23",
+      "amount": 18,
+      "type": "expense",
+      "date": "2024-07-23",
+      "description": "11 7"
+    },
+    {
+      "id": "tx-mig-2799",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 13,
@@ -27596,7 +27605,7 @@ export const initialFinanceData: FinanceData = {
       "description": "13"
     },
     {
-      "id": "tx-mig-2799",
+      "id": "tx-mig-2800",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-22",
       "amount": 50,
@@ -27605,7 +27614,7 @@ export const initialFinanceData: FinanceData = {
       "description": "50 за плату стиральной машины"
     },
     {
-      "id": "tx-mig-2800",
+      "id": "tx-mig-2801",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 20,
@@ -27614,7 +27623,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-2801",
+      "id": "tx-mig-2802",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 8,
@@ -27623,7 +27632,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8"
     },
     {
-      "id": "tx-mig-2802",
+      "id": "tx-mig-2803",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-23",
       "amount": 10,
@@ -27632,7 +27641,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-2803",
+      "id": "tx-mig-2804",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 6,
@@ -27641,7 +27650,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6"
     },
     {
-      "id": "tx-mig-2804",
+      "id": "tx-mig-2805",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-32",
       "amount": 50,
@@ -27652,7 +27661,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2805",
+      "id": "tx-mig-2806",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 50,
@@ -27663,7 +27672,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2806",
+      "id": "tx-mig-2807",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-20",
       "amount": 8,
@@ -27672,7 +27681,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8"
     },
     {
-      "id": "tx-mig-2807",
+      "id": "tx-mig-2808",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-6",
       "amount": 5,
@@ -27681,7 +27690,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5 yandex"
     },
     {
-      "id": "tx-mig-2808",
+      "id": "tx-mig-2809",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-13",
       "amount": 16,
@@ -27690,7 +27699,7 @@ export const initialFinanceData: FinanceData = {
       "description": "16"
     },
     {
-      "id": "tx-mig-2809",
+      "id": "tx-mig-2810",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-8",
       "amount": 15,
@@ -27699,7 +27708,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15"
     },
     {
-      "id": "tx-mig-2810",
+      "id": "tx-mig-2811",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 12,
@@ -27708,7 +27717,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12"
     },
     {
-      "id": "tx-mig-2811",
+      "id": "tx-mig-2812",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-32",
       "amount": 75,
@@ -27719,7 +27728,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2812",
+      "id": "tx-mig-2813",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 75,
@@ -27730,7 +27739,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2813",
+      "id": "tx-mig-2814",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-21",
       "amount": 15.5,
@@ -27739,7 +27748,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15.5"
     },
     {
-      "id": "tx-mig-2814",
+      "id": "tx-mig-2815",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 2,
@@ -27748,7 +27757,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-2815",
+      "id": "tx-mig-2816",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-5",
       "amount": 4,
@@ -27757,7 +27766,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4"
     },
     {
-      "id": "tx-mig-2816",
+      "id": "tx-mig-2817",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 1.3,
@@ -27766,7 +27775,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1.3"
     },
     {
-      "id": "tx-mig-2817",
+      "id": "tx-mig-2818",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 4,
@@ -27775,7 +27784,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4"
     },
     {
-      "id": "tx-mig-2818",
+      "id": "tx-mig-2819",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-15",
       "amount": 20,
@@ -27784,7 +27793,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-2819",
+      "id": "tx-mig-2820",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-21",
       "amount": 48,
@@ -27793,7 +27802,7 @@ export const initialFinanceData: FinanceData = {
       "description": "48 орифлейм"
     },
     {
-      "id": "tx-mig-2820",
+      "id": "tx-mig-2821",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-23",
       "amount": 10,
@@ -27802,7 +27811,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-2821",
+      "id": "tx-mig-2822",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 22,
@@ -27811,7 +27820,7 @@ export const initialFinanceData: FinanceData = {
       "description": "22"
     },
     {
-      "id": "tx-mig-2822",
+      "id": "tx-mig-2823",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 55,
@@ -27822,7 +27831,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2823",
+      "id": "tx-mig-2824",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 55,
@@ -27833,7 +27842,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2824",
+      "id": "tx-mig-2825",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-0",
       "amount": 2,
@@ -27842,7 +27851,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-2825",
+      "id": "tx-mig-2826",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-23",
       "amount": 9,
@@ -27851,7 +27860,7 @@ export const initialFinanceData: FinanceData = {
       "description": "9"
     },
     {
-      "id": "tx-mig-2826",
+      "id": "tx-mig-2827",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 1,
@@ -27860,7 +27869,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1"
     },
     {
-      "id": "tx-mig-2827",
+      "id": "tx-mig-2828",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-8",
       "amount": 16,
@@ -27869,7 +27878,7 @@ export const initialFinanceData: FinanceData = {
       "description": "16"
     },
     {
-      "id": "tx-mig-2828",
+      "id": "tx-mig-2829",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 38,
@@ -27878,7 +27887,7 @@ export const initialFinanceData: FinanceData = {
       "description": "38"
     },
     {
-      "id": "tx-mig-2829",
+      "id": "tx-mig-2830",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 2,
@@ -27887,7 +27896,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-2830",
+      "id": "tx-mig-2831",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 5,
@@ -27896,7 +27905,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-2831",
+      "id": "tx-mig-2832",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-23",
       "amount": 18,
@@ -27905,7 +27914,7 @@ export const initialFinanceData: FinanceData = {
       "description": "18"
     },
     {
-      "id": "tx-mig-2832",
+      "id": "tx-mig-2833",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 1.5,
@@ -27914,7 +27923,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1.5"
     },
     {
-      "id": "tx-mig-2833",
+      "id": "tx-mig-2834",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 21,
@@ -27923,7 +27932,7 @@ export const initialFinanceData: FinanceData = {
       "description": "21"
     },
     {
-      "id": "tx-mig-2834",
+      "id": "tx-mig-2835",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 85,
@@ -27934,7 +27943,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2835",
+      "id": "tx-mig-2836",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 85,
@@ -27945,7 +27954,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2836",
+      "id": "tx-mig-2837",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 7,
@@ -27954,7 +27963,7 @@ export const initialFinanceData: FinanceData = {
       "description": "7"
     },
     {
-      "id": "tx-mig-2837",
+      "id": "tx-mig-2838",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-23",
       "amount": 11,
@@ -27963,7 +27972,7 @@ export const initialFinanceData: FinanceData = {
       "description": "11"
     },
     {
-      "id": "tx-mig-2838",
+      "id": "tx-mig-2839",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 2,
@@ -27972,7 +27981,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-2839",
+      "id": "tx-mig-2840",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-16",
       "amount": 1,
@@ -27981,7 +27990,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1"
     },
     {
-      "id": "tx-mig-2840",
+      "id": "tx-mig-2841",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-15",
       "amount": 20,
@@ -27990,7 +27999,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-2841",
+      "id": "tx-mig-2842",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-21",
       "amount": 45,
@@ -27999,7 +28008,7 @@ export const initialFinanceData: FinanceData = {
       "description": "40 духи 5 салон"
     },
     {
-      "id": "tx-mig-2842",
+      "id": "tx-mig-2843",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 2,
@@ -28008,7 +28017,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-2843",
+      "id": "tx-mig-2844",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 24,
@@ -28017,7 +28026,7 @@ export const initialFinanceData: FinanceData = {
       "description": "24"
     },
     {
-      "id": "tx-mig-2844",
+      "id": "tx-mig-2845",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 3,
@@ -28026,7 +28035,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-2845",
+      "id": "tx-mig-2846",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 2,
@@ -28035,7 +28044,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-2846",
+      "id": "tx-mig-2847",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-5",
       "amount": 4,
@@ -28044,7 +28053,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4"
     },
     {
-      "id": "tx-mig-2847",
+      "id": "tx-mig-2848",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 12,
@@ -28053,7 +28062,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12"
     },
     {
-      "id": "tx-mig-2848",
+      "id": "tx-mig-2849",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 1.3,
@@ -28062,7 +28071,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1.3"
     },
     {
-      "id": "tx-mig-2849",
+      "id": "tx-mig-2850",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-21",
       "amount": 45,
@@ -28071,7 +28080,7 @@ export const initialFinanceData: FinanceData = {
       "description": "45 салон"
     },
     {
-      "id": "tx-mig-2850",
+      "id": "tx-mig-2851",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-23",
       "amount": 11.5,
@@ -28080,7 +28089,7 @@ export const initialFinanceData: FinanceData = {
       "description": "11 0.5"
     },
     {
-      "id": "tx-mig-2851",
+      "id": "tx-mig-2852",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-20",
       "amount": 3.2,
@@ -28089,7 +28098,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3.2"
     },
     {
-      "id": "tx-mig-2852",
+      "id": "tx-mig-2853",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-29",
       "amount": 300,
@@ -28098,7 +28107,7 @@ export const initialFinanceData: FinanceData = {
       "description": "300 Самира на коронку и мост"
     },
     {
-      "id": "tx-mig-2853",
+      "id": "tx-mig-2854",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 2,
@@ -28107,7 +28116,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-2854",
+      "id": "tx-mig-2855",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 2.5,
@@ -28116,7 +28125,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2.5"
     },
     {
-      "id": "tx-mig-2855",
+      "id": "tx-mig-2856",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-7",
       "amount": 30,
@@ -28125,7 +28134,7 @@ export const initialFinanceData: FinanceData = {
       "description": "30 медсестре"
     },
     {
-      "id": "tx-mig-2856",
+      "id": "tx-mig-2857",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 27,
@@ -28136,7 +28145,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2857",
+      "id": "tx-mig-2858",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-31",
       "amount": 27,
@@ -28147,7 +28156,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2858",
+      "id": "tx-mig-2859",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 45,
@@ -28158,7 +28167,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2859",
+      "id": "tx-mig-2860",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 45,
@@ -28169,7 +28178,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2860",
+      "id": "tx-mig-2861",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-23",
       "amount": 7,
@@ -28178,7 +28187,7 @@ export const initialFinanceData: FinanceData = {
       "description": "7"
     },
     {
-      "id": "tx-mig-2861",
+      "id": "tx-mig-2862",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-24",
       "amount": 364,
@@ -28187,7 +28196,7 @@ export const initialFinanceData: FinanceData = {
       "description": "364"
     },
     {
-      "id": "tx-mig-2862",
+      "id": "tx-mig-2863",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-23",
       "amount": 15,
@@ -28196,7 +28205,7 @@ export const initialFinanceData: FinanceData = {
       "description": "9 6"
     },
     {
-      "id": "tx-mig-2863",
+      "id": "tx-mig-2864",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 9,
@@ -28205,7 +28214,7 @@ export const initialFinanceData: FinanceData = {
       "description": "9"
     },
     {
-      "id": "tx-mig-2864",
+      "id": "tx-mig-2865",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 1,
@@ -28214,7 +28223,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1"
     },
     {
-      "id": "tx-mig-2865",
+      "id": "tx-mig-2866",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 1.1,
@@ -28223,7 +28232,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1.1"
     },
     {
-      "id": "tx-mig-2866",
+      "id": "tx-mig-2867",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 11.3,
@@ -28232,7 +28241,7 @@ export const initialFinanceData: FinanceData = {
       "description": "11.3"
     },
     {
-      "id": "tx-mig-2867",
+      "id": "tx-mig-2868",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-11",
       "amount": 14,
@@ -28241,7 +28250,7 @@ export const initialFinanceData: FinanceData = {
       "description": "14"
     },
     {
-      "id": "tx-mig-2868",
+      "id": "tx-mig-2869",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-23",
       "amount": 13,
@@ -28250,7 +28259,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12 1"
     },
     {
-      "id": "tx-mig-2869",
+      "id": "tx-mig-2870",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-23",
       "amount": 7,
@@ -28259,7 +28268,7 @@ export const initialFinanceData: FinanceData = {
       "description": "7"
     },
     {
-      "id": "tx-mig-2870",
+      "id": "tx-mig-2871",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 5,
@@ -28268,7 +28277,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-2871",
+      "id": "tx-mig-2872",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 29,
@@ -28277,7 +28286,7 @@ export const initialFinanceData: FinanceData = {
       "description": "29"
     },
     {
-      "id": "tx-mig-2872",
+      "id": "tx-mig-2873",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-6",
       "amount": 5.6,
@@ -28286,7 +28295,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5.6 ticktick"
     },
     {
-      "id": "tx-mig-2873",
+      "id": "tx-mig-2874",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 12,
@@ -28295,7 +28304,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12 обувь"
     },
     {
-      "id": "tx-mig-2874",
+      "id": "tx-mig-2875",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 7,
@@ -28304,7 +28313,7 @@ export const initialFinanceData: FinanceData = {
       "description": "7"
     },
     {
-      "id": "tx-mig-2875",
+      "id": "tx-mig-2876",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 2,
@@ -28313,7 +28322,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-2876",
+      "id": "tx-mig-2877",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 15.23,
@@ -28322,7 +28331,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15.23"
     },
     {
-      "id": "tx-mig-2877",
+      "id": "tx-mig-2878",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-21",
       "amount": 8,
@@ -28331,7 +28340,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8"
     },
     {
-      "id": "tx-mig-2878",
+      "id": "tx-mig-2879",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-8",
       "amount": 34.1,
@@ -28340,7 +28349,7 @@ export const initialFinanceData: FinanceData = {
       "description": "34.1"
     },
     {
-      "id": "tx-mig-2879",
+      "id": "tx-mig-2880",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-8",
       "amount": 10.55,
@@ -28349,7 +28358,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10.55"
     },
     {
-      "id": "tx-mig-2880",
+      "id": "tx-mig-2881",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-5",
       "amount": 5,
@@ -28358,7 +28367,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-2881",
+      "id": "tx-mig-2882",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-23",
       "amount": 10,
@@ -28367,7 +28376,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-2882",
+      "id": "tx-mig-2883",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 350,
@@ -28376,7 +28385,7 @@ export const initialFinanceData: FinanceData = {
       "description": "350 aba terapiya"
     },
     {
-      "id": "tx-mig-2883",
+      "id": "tx-mig-2884",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 5,
@@ -28385,7 +28394,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-2884",
+      "id": "tx-mig-2885",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-15",
       "amount": 20,
@@ -28394,7 +28403,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-2885",
+      "id": "tx-mig-2886",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 195,
@@ -28403,7 +28412,7 @@ export const initialFinanceData: FinanceData = {
       "description": "195 loqoped"
     },
     {
-      "id": "tx-mig-2886",
+      "id": "tx-mig-2887",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-20",
       "amount": 2,
@@ -28412,7 +28421,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-2887",
+      "id": "tx-mig-2888",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-6",
       "amount": 20,
@@ -28421,7 +28430,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20 notion"
     },
     {
-      "id": "tx-mig-2888",
+      "id": "tx-mig-2889",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 17,
@@ -28430,7 +28439,7 @@ export const initialFinanceData: FinanceData = {
       "description": "11 6"
     },
     {
-      "id": "tx-mig-2889",
+      "id": "tx-mig-2890",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 4,
@@ -28439,7 +28448,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4"
     },
     {
-      "id": "tx-mig-2890",
+      "id": "tx-mig-2891",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-21",
       "amount": 4.3,
@@ -28448,7 +28457,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4.3"
     },
     {
-      "id": "tx-mig-2891",
+      "id": "tx-mig-2892",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 20,
@@ -28459,7 +28468,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2892",
+      "id": "tx-mig-2893",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 20,
@@ -28470,7 +28479,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2893",
+      "id": "tx-mig-2894",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-12",
       "amount": 19.06,
@@ -28479,7 +28488,7 @@ export const initialFinanceData: FinanceData = {
       "description": "19.06"
     },
     {
-      "id": "tx-mig-2894",
+      "id": "tx-mig-2895",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 3,
@@ -28488,7 +28497,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-2895",
+      "id": "tx-mig-2896",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 14,
@@ -28497,7 +28506,7 @@ export const initialFinanceData: FinanceData = {
       "description": "14"
     },
     {
-      "id": "tx-mig-2896",
+      "id": "tx-mig-2897",
       "accountId": "acc-parsed-16",
       "categoryId": "cat-parsed-25",
       "amount": 264,
@@ -28506,7 +28515,7 @@ export const initialFinanceData: FinanceData = {
       "description": "264"
     },
     {
-      "id": "tx-mig-2897",
+      "id": "tx-mig-2898",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-8",
       "amount": 19,
@@ -28515,7 +28524,7 @@ export const initialFinanceData: FinanceData = {
       "description": "19"
     },
     {
-      "id": "tx-mig-2898",
+      "id": "tx-mig-2899",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-0",
       "amount": 2,
@@ -28524,7 +28533,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-2899",
+      "id": "tx-mig-2900",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 10,
@@ -28533,7 +28542,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-2900",
+      "id": "tx-mig-2901",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 10,
@@ -28542,7 +28551,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-2901",
+      "id": "tx-mig-2902",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 1000,
@@ -28553,7 +28562,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2902",
+      "id": "tx-mig-2903",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 1000,
@@ -28564,7 +28573,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2903",
+      "id": "tx-mig-2904",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 30,
@@ -28575,7 +28584,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2904",
+      "id": "tx-mig-2905",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 30,
@@ -28586,7 +28595,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2905",
+      "id": "tx-mig-2906",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 302,
@@ -28597,7 +28606,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2906",
+      "id": "tx-mig-2907",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-31",
       "amount": 302,
@@ -28608,7 +28617,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2907",
+      "id": "tx-mig-2908",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 17,
@@ -28617,7 +28626,7 @@ export const initialFinanceData: FinanceData = {
       "description": "17"
     },
     {
-      "id": "tx-mig-2908",
+      "id": "tx-mig-2909",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-8",
       "amount": 14,
@@ -28626,7 +28635,7 @@ export const initialFinanceData: FinanceData = {
       "description": "14"
     },
     {
-      "id": "tx-mig-2909",
+      "id": "tx-mig-2910",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-20",
       "amount": 50,
@@ -28635,7 +28644,7 @@ export const initialFinanceData: FinanceData = {
       "description": "50 свадьба дочери Тебриза"
     },
     {
-      "id": "tx-mig-2910",
+      "id": "tx-mig-2911",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-9",
       "amount": 29,
@@ -28644,7 +28653,7 @@ export const initialFinanceData: FinanceData = {
       "description": "29 albali"
     },
     {
-      "id": "tx-mig-2911",
+      "id": "tx-mig-2912",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 95,
@@ -28655,7 +28664,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2912",
+      "id": "tx-mig-2913",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 95,
@@ -28666,7 +28675,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2913",
+      "id": "tx-mig-2914",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-25",
       "amount": 1948,
@@ -28675,7 +28684,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1948"
     },
     {
-      "id": "tx-mig-2914",
+      "id": "tx-mig-2915",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-32",
       "amount": 45,
@@ -28686,7 +28695,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2915",
+      "id": "tx-mig-2916",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 45,
@@ -28697,7 +28706,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2916",
+      "id": "tx-mig-2917",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-26",
       "amount": 15,
@@ -28706,7 +28715,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15 ailent"
     },
     {
-      "id": "tx-mig-2917",
+      "id": "tx-mig-2918",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-22",
       "amount": 5,
@@ -28715,7 +28724,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-2918",
+      "id": "tx-mig-2919",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 15,
@@ -28724,7 +28733,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15"
     },
     {
-      "id": "tx-mig-2919",
+      "id": "tx-mig-2920",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 21,
@@ -28733,7 +28742,7 @@ export const initialFinanceData: FinanceData = {
       "description": "21"
     },
     {
-      "id": "tx-mig-2920",
+      "id": "tx-mig-2921",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-26",
       "amount": 6,
@@ -28742,7 +28751,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3 Ильгар 3 Самира"
     },
     {
-      "id": "tx-mig-2921",
+      "id": "tx-mig-2922",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-15",
       "amount": 20,
@@ -28751,7 +28760,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-2922",
+      "id": "tx-mig-2923",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-29",
       "amount": 50,
@@ -28760,7 +28769,7 @@ export const initialFinanceData: FinanceData = {
       "description": "50 на зубы Самиры"
     },
     {
-      "id": "tx-mig-2923",
+      "id": "tx-mig-2924",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 10,
@@ -28769,7 +28778,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-2924",
+      "id": "tx-mig-2925",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 5,
@@ -28778,7 +28787,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-2925",
+      "id": "tx-mig-2926",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-8",
       "amount": 6,
@@ -28787,7 +28796,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6"
     },
     {
-      "id": "tx-mig-2926",
+      "id": "tx-mig-2927",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-6",
       "amount": 20,
@@ -28796,7 +28805,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20 lightnode"
     },
     {
-      "id": "tx-mig-2927",
+      "id": "tx-mig-2928",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-5",
       "amount": 4,
@@ -28805,7 +28814,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4"
     },
     {
-      "id": "tx-mig-2928",
+      "id": "tx-mig-2929",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 5,
@@ -28814,7 +28823,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-2929",
+      "id": "tx-mig-2930",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 3,
@@ -28823,7 +28832,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-2930",
+      "id": "tx-mig-2931",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 3,
@@ -28832,7 +28841,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-2931",
+      "id": "tx-mig-2932",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-4",
       "amount": 2.5,
@@ -28841,22 +28850,13 @@ export const initialFinanceData: FinanceData = {
       "description": "2.5"
     },
     {
-      "id": "tx-mig-2932",
+      "id": "tx-mig-2933",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 2,
       "type": "expense",
       "date": "2024-06-27",
       "description": "2"
-    },
-    {
-      "id": "tx-mig-2933",
-      "accountId": "acc-parsed-7",
-      "categoryId": "cat-parsed-23",
-      "amount": 7,
-      "type": "expense",
-      "date": "2024-06-27",
-      "description": "7"
     },
     {
       "id": "tx-mig-2934",
@@ -28869,6 +28869,15 @@ export const initialFinanceData: FinanceData = {
     },
     {
       "id": "tx-mig-2935",
+      "accountId": "acc-parsed-7",
+      "categoryId": "cat-parsed-23",
+      "amount": 7,
+      "type": "expense",
+      "date": "2024-06-27",
+      "description": "7"
+    },
+    {
+      "id": "tx-mig-2936",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 235,
@@ -28879,7 +28888,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2936",
+      "id": "tx-mig-2937",
       "accountId": "acc-parsed-18",
       "categoryId": "cat-parsed-31",
       "amount": 235,
@@ -28890,7 +28899,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2937",
+      "id": "tx-mig-2938",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 18,
@@ -28901,7 +28910,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2938",
+      "id": "tx-mig-2939",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 18,
@@ -28912,7 +28921,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2939",
+      "id": "tx-mig-2940",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-0",
       "amount": 30,
@@ -28921,22 +28930,13 @@ export const initialFinanceData: FinanceData = {
       "description": "30 педиатр"
     },
     {
-      "id": "tx-mig-2940",
+      "id": "tx-mig-2941",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 5,
       "type": "expense",
       "date": "2024-06-26",
       "description": "5"
-    },
-    {
-      "id": "tx-mig-2941",
-      "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-4",
-      "amount": 23,
-      "type": "expense",
-      "date": "2024-06-26",
-      "description": "23"
     },
     {
       "id": "tx-mig-2942",
@@ -28949,6 +28949,15 @@ export const initialFinanceData: FinanceData = {
     },
     {
       "id": "tx-mig-2943",
+      "accountId": "acc-parsed-1",
+      "categoryId": "cat-parsed-4",
+      "amount": 23,
+      "type": "expense",
+      "date": "2024-06-26",
+      "description": "23"
+    },
+    {
+      "id": "tx-mig-2944",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-9",
       "amount": 67,
@@ -28957,7 +28966,7 @@ export const initialFinanceData: FinanceData = {
       "description": "64 3кредит авто"
     },
     {
-      "id": "tx-mig-2944",
+      "id": "tx-mig-2945",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-32",
       "amount": 2,
@@ -28968,7 +28977,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2945",
+      "id": "tx-mig-2946",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-31",
       "amount": 2,
@@ -28979,7 +28988,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2946",
+      "id": "tx-mig-2947",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-4",
       "amount": 4.2,
@@ -28988,7 +28997,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4.2"
     },
     {
-      "id": "tx-mig-2947",
+      "id": "tx-mig-2948",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 15,
@@ -28997,7 +29006,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15"
     },
     {
-      "id": "tx-mig-2948",
+      "id": "tx-mig-2949",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-32",
       "amount": 17,
@@ -29008,7 +29017,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2949",
+      "id": "tx-mig-2950",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 17,
@@ -29019,7 +29028,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2950",
+      "id": "tx-mig-2951",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-20",
       "amount": 20,
@@ -29028,7 +29037,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20 цветы маме"
     },
     {
-      "id": "tx-mig-2951",
+      "id": "tx-mig-2952",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-20",
       "amount": 25,
@@ -29037,7 +29046,7 @@ export const initialFinanceData: FinanceData = {
       "description": "25 торт маме"
     },
     {
-      "id": "tx-mig-2952",
+      "id": "tx-mig-2953",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 50,
@@ -29048,7 +29057,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2953",
+      "id": "tx-mig-2954",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 50,
@@ -29059,7 +29068,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2954",
+      "id": "tx-mig-2955",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 11,
@@ -29068,7 +29077,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10 1"
     },
     {
-      "id": "tx-mig-2955",
+      "id": "tx-mig-2956",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-4",
       "amount": 5,
@@ -29077,7 +29086,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-2956",
+      "id": "tx-mig-2957",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 75,
@@ -29088,7 +29097,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2957",
+      "id": "tx-mig-2958",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 75,
@@ -29099,7 +29108,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2958",
+      "id": "tx-mig-2959",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-0",
       "amount": 53,
@@ -29108,7 +29117,7 @@ export const initialFinanceData: FinanceData = {
       "description": "53 подгузники"
     },
     {
-      "id": "tx-mig-2959",
+      "id": "tx-mig-2960",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 75,
@@ -29119,7 +29128,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2960",
+      "id": "tx-mig-2961",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 75,
@@ -29130,7 +29139,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2961",
+      "id": "tx-mig-2962",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-20",
       "amount": 20.2,
@@ -29139,7 +29148,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20.2"
     },
     {
-      "id": "tx-mig-2962",
+      "id": "tx-mig-2963",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-15",
       "amount": 20,
@@ -29148,7 +29157,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-2963",
+      "id": "tx-mig-2964",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 11,
@@ -29157,7 +29166,7 @@ export const initialFinanceData: FinanceData = {
       "description": "11"
     },
     {
-      "id": "tx-mig-2964",
+      "id": "tx-mig-2965",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 3,
@@ -29166,7 +29175,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-2965",
+      "id": "tx-mig-2966",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 63,
@@ -29175,7 +29184,7 @@ export const initialFinanceData: FinanceData = {
       "description": "63"
     },
     {
-      "id": "tx-mig-2966",
+      "id": "tx-mig-2967",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 5,
@@ -29184,7 +29193,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-2967",
+      "id": "tx-mig-2968",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 20,
@@ -29195,7 +29204,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2968",
+      "id": "tx-mig-2969",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 20,
@@ -29206,7 +29215,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-2969",
+      "id": "tx-mig-2970",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 20,
@@ -29215,7 +29224,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-2970",
+      "id": "tx-mig-2971",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 9,
@@ -29224,7 +29233,7 @@ export const initialFinanceData: FinanceData = {
       "description": "9"
     },
     {
-      "id": "tx-mig-2971",
+      "id": "tx-mig-2972",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 15,
@@ -29233,7 +29242,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15"
     },
     {
-      "id": "tx-mig-2972",
+      "id": "tx-mig-2973",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 13,
@@ -29242,7 +29251,7 @@ export const initialFinanceData: FinanceData = {
       "description": "13"
     },
     {
-      "id": "tx-mig-2973",
+      "id": "tx-mig-2974",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 14,
@@ -29251,7 +29260,7 @@ export const initialFinanceData: FinanceData = {
       "description": "14"
     },
     {
-      "id": "tx-mig-2974",
+      "id": "tx-mig-2975",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 9,
@@ -29260,7 +29269,7 @@ export const initialFinanceData: FinanceData = {
       "description": "9"
     },
     {
-      "id": "tx-mig-2975",
+      "id": "tx-mig-2976",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 40,
@@ -29269,7 +29278,7 @@ export const initialFinanceData: FinanceData = {
       "description": "40 одежда"
     },
     {
-      "id": "tx-mig-2976",
+      "id": "tx-mig-2977",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-14",
       "amount": 60,
@@ -29278,7 +29287,7 @@ export const initialFinanceData: FinanceData = {
       "description": "60"
     },
     {
-      "id": "tx-mig-2977",
+      "id": "tx-mig-2978",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-32",
       "amount": 95,
@@ -29287,31 +29296,9 @@ export const initialFinanceData: FinanceData = {
       "description": "Перевод со счета ABB kart Samira в Кошелёк",
       "transferAccountId": "acc-parsed-1",
       "transferType": "out"
-    },
-    {
-      "id": "tx-mig-2978",
-      "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-31",
-      "amount": 95,
-      "type": "transfer",
-      "date": "2024-06-19",
-      "description": "Перевод со счета ABB kart Samira в Кошелёк",
-      "transferAccountId": "acc-parsed-3",
-      "transferType": "in"
     },
     {
       "id": "tx-mig-2979",
-      "accountId": "acc-parsed-3",
-      "categoryId": "cat-parsed-32",
-      "amount": 95,
-      "type": "transfer",
-      "date": "2024-06-19",
-      "description": "Перевод со счета ABB kart Samira в Кошелёк",
-      "transferAccountId": "acc-parsed-1",
-      "transferType": "out"
-    },
-    {
-      "id": "tx-mig-2980",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 95,
@@ -29322,7 +29309,29 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
+      "id": "tx-mig-2980",
+      "accountId": "acc-parsed-3",
+      "categoryId": "cat-parsed-32",
+      "amount": 95,
+      "type": "transfer",
+      "date": "2024-06-19",
+      "description": "Перевод со счета ABB kart Samira в Кошелёк",
+      "transferAccountId": "acc-parsed-1",
+      "transferType": "out"
+    },
+    {
       "id": "tx-mig-2981",
+      "accountId": "acc-parsed-1",
+      "categoryId": "cat-parsed-31",
+      "amount": 95,
+      "type": "transfer",
+      "date": "2024-06-19",
+      "description": "Перевод со счета ABB kart Samira в Кошелёк",
+      "transferAccountId": "acc-parsed-3",
+      "transferType": "in"
+    },
+    {
+      "id": "tx-mig-2982",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 16,
@@ -29331,7 +29340,7 @@ export const initialFinanceData: FinanceData = {
       "description": "16"
     },
     {
-      "id": "tx-mig-2982",
+      "id": "tx-mig-2983",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-21",
       "amount": 12,
@@ -29340,7 +29349,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12"
     },
     {
-      "id": "tx-mig-2983",
+      "id": "tx-mig-2984",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-20",
       "amount": 25,
@@ -29349,7 +29358,7 @@ export const initialFinanceData: FinanceData = {
       "description": "25"
     },
     {
-      "id": "tx-mig-2984",
+      "id": "tx-mig-2985",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-26",
       "amount": 12,
@@ -29358,7 +29367,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12 Ильгар"
     },
     {
-      "id": "tx-mig-2985",
+      "id": "tx-mig-2986",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-20",
       "amount": 46,
@@ -29367,7 +29376,7 @@ export const initialFinanceData: FinanceData = {
       "description": "46"
     },
     {
-      "id": "tx-mig-2986",
+      "id": "tx-mig-2987",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-15",
       "amount": 25,
@@ -29376,7 +29385,7 @@ export const initialFinanceData: FinanceData = {
       "description": "25"
     },
     {
-      "id": "tx-mig-2987",
+      "id": "tx-mig-2988",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-20",
       "amount": 1,
@@ -29385,7 +29394,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1"
     },
     {
-      "id": "tx-mig-2988",
+      "id": "tx-mig-2989",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-8",
       "amount": 16,
@@ -29394,7 +29403,7 @@ export const initialFinanceData: FinanceData = {
       "description": "16"
     },
     {
-      "id": "tx-mig-2989",
+      "id": "tx-mig-2990",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-20",
       "amount": 12,
@@ -29403,7 +29412,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12"
     },
     {
-      "id": "tx-mig-2990",
+      "id": "tx-mig-2991",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 15,
@@ -29412,7 +29421,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15"
     },
     {
-      "id": "tx-mig-2991",
+      "id": "tx-mig-2992",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 2,
@@ -29421,7 +29430,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-2992",
+      "id": "tx-mig-2993",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-20",
       "amount": 6,
@@ -29430,7 +29439,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6"
     },
     {
-      "id": "tx-mig-2993",
+      "id": "tx-mig-2994",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 21,
@@ -29439,7 +29448,7 @@ export const initialFinanceData: FinanceData = {
       "description": "21"
     },
     {
-      "id": "tx-mig-2994",
+      "id": "tx-mig-2995",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 15,
@@ -29448,7 +29457,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15"
     },
     {
-      "id": "tx-mig-2995",
+      "id": "tx-mig-2996",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 10.7,
@@ -29457,7 +29466,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10.7"
     },
     {
-      "id": "tx-mig-2996",
+      "id": "tx-mig-2997",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-20",
       "amount": 29,
@@ -29466,7 +29475,7 @@ export const initialFinanceData: FinanceData = {
       "description": "29 для деревни"
     },
     {
-      "id": "tx-mig-2997",
+      "id": "tx-mig-2998",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 10,
@@ -29475,7 +29484,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-2998",
+      "id": "tx-mig-2999",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 20,
@@ -29486,7 +29495,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-2999",
+      "id": "tx-mig-3000",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 20,
@@ -29497,7 +29506,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3000",
+      "id": "tx-mig-3001",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 14.5,
@@ -29506,7 +29515,7 @@ export const initialFinanceData: FinanceData = {
       "description": "14.5"
     },
     {
-      "id": "tx-mig-3001",
+      "id": "tx-mig-3002",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-13",
       "amount": 16,
@@ -29515,7 +29524,7 @@ export const initialFinanceData: FinanceData = {
       "description": "16"
     },
     {
-      "id": "tx-mig-3002",
+      "id": "tx-mig-3003",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 1.3,
@@ -29524,7 +29533,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1.3"
     },
     {
-      "id": "tx-mig-3003",
+      "id": "tx-mig-3004",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-4",
       "amount": 10,
@@ -29533,7 +29542,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-3004",
+      "id": "tx-mig-3005",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 10,
@@ -29544,7 +29553,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3005",
+      "id": "tx-mig-3006",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 10,
@@ -29555,7 +29564,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3006",
+      "id": "tx-mig-3007",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-20",
       "amount": 50,
@@ -29564,7 +29573,7 @@ export const initialFinanceData: FinanceData = {
       "description": "50 Azadin qardasi oglu"
     },
     {
-      "id": "tx-mig-3007",
+      "id": "tx-mig-3008",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-0",
       "amount": 22.2,
@@ -29573,7 +29582,7 @@ export const initialFinanceData: FinanceData = {
       "description": "22.2 подгузники"
     },
     {
-      "id": "tx-mig-3008",
+      "id": "tx-mig-3009",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 36,
@@ -29582,7 +29591,7 @@ export const initialFinanceData: FinanceData = {
       "description": "36"
     },
     {
-      "id": "tx-mig-3009",
+      "id": "tx-mig-3010",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 8,
@@ -29591,7 +29600,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8"
     },
     {
-      "id": "tx-mig-3010",
+      "id": "tx-mig-3011",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 95,
@@ -29602,7 +29611,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3011",
+      "id": "tx-mig-3012",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 95,
@@ -29613,7 +29622,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3012",
+      "id": "tx-mig-3013",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 5,
@@ -29622,7 +29631,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-3013",
+      "id": "tx-mig-3014",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-14",
       "amount": 31,
@@ -29631,7 +29640,7 @@ export const initialFinanceData: FinanceData = {
       "description": "31"
     },
     {
-      "id": "tx-mig-3014",
+      "id": "tx-mig-3015",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 2,
@@ -29640,7 +29649,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-3015",
+      "id": "tx-mig-3016",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-6",
       "amount": 5.6,
@@ -29649,7 +29658,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5.6 ticktick"
     },
     {
-      "id": "tx-mig-3016",
+      "id": "tx-mig-3017",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 28.1,
@@ -29658,7 +29667,7 @@ export const initialFinanceData: FinanceData = {
       "description": "28.1"
     },
     {
-      "id": "tx-mig-3017",
+      "id": "tx-mig-3018",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-15",
       "amount": 30,
@@ -29667,7 +29676,7 @@ export const initialFinanceData: FinanceData = {
       "description": "30"
     },
     {
-      "id": "tx-mig-3018",
+      "id": "tx-mig-3019",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-8",
       "amount": 100,
@@ -29676,7 +29685,7 @@ export const initialFinanceData: FinanceData = {
       "description": "100"
     },
     {
-      "id": "tx-mig-3019",
+      "id": "tx-mig-3020",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 10,
@@ -29685,7 +29694,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-3020",
+      "id": "tx-mig-3021",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-21",
       "amount": 50,
@@ -29694,7 +29703,7 @@ export const initialFinanceData: FinanceData = {
       "description": "50 салон"
     },
     {
-      "id": "tx-mig-3021",
+      "id": "tx-mig-3022",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-18",
       "amount": 1,
@@ -29703,7 +29712,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1"
     },
     {
-      "id": "tx-mig-3022",
+      "id": "tx-mig-3023",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-24",
       "amount": 363.8,
@@ -29712,7 +29721,7 @@ export const initialFinanceData: FinanceData = {
       "description": "363.8"
     },
     {
-      "id": "tx-mig-3023",
+      "id": "tx-mig-3024",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-20",
       "amount": 80,
@@ -29721,7 +29730,7 @@ export const initialFinanceData: FinanceData = {
       "description": "80 Свадьба дочки Юсифа"
     },
     {
-      "id": "tx-mig-3024",
+      "id": "tx-mig-3025",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 85,
@@ -29732,7 +29741,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3025",
+      "id": "tx-mig-3026",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 85,
@@ -29743,7 +29752,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3026",
+      "id": "tx-mig-3027",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-21",
       "amount": 4,
@@ -29752,7 +29761,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4"
     },
     {
-      "id": "tx-mig-3027",
+      "id": "tx-mig-3028",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-7",
       "amount": 45,
@@ -29761,7 +29770,7 @@ export const initialFinanceData: FinanceData = {
       "description": "45 за уколы"
     },
     {
-      "id": "tx-mig-3028",
+      "id": "tx-mig-3029",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 3,
@@ -29770,7 +29779,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-3029",
+      "id": "tx-mig-3030",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 195,
@@ -29781,7 +29790,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3030",
+      "id": "tx-mig-3031",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 195,
@@ -29792,7 +29801,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3031",
+      "id": "tx-mig-3032",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 60,
@@ -29803,7 +29812,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3032",
+      "id": "tx-mig-3033",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 60,
@@ -29814,7 +29823,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3033",
+      "id": "tx-mig-3034",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-8",
       "amount": 15,
@@ -29823,7 +29832,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15"
     },
     {
-      "id": "tx-mig-3034",
+      "id": "tx-mig-3035",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 14,
@@ -29832,7 +29841,7 @@ export const initialFinanceData: FinanceData = {
       "description": "14"
     },
     {
-      "id": "tx-mig-3035",
+      "id": "tx-mig-3036",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-12",
       "amount": 22.12,
@@ -29841,7 +29850,7 @@ export const initialFinanceData: FinanceData = {
       "description": "22.12"
     },
     {
-      "id": "tx-mig-3036",
+      "id": "tx-mig-3037",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 473,
@@ -29852,7 +29861,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3037",
+      "id": "tx-mig-3038",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-31",
       "amount": 473,
@@ -29863,7 +29872,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3038",
+      "id": "tx-mig-3039",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-9",
       "amount": 11,
@@ -29872,7 +29881,7 @@ export const initialFinanceData: FinanceData = {
       "description": "11"
     },
     {
-      "id": "tx-mig-3039",
+      "id": "tx-mig-3040",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-26",
       "amount": 3,
@@ -29881,7 +29890,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3 Ильгар"
     },
     {
-      "id": "tx-mig-3040",
+      "id": "tx-mig-3041",
       "accountId": "acc-parsed-6",
       "categoryId": "cat-parsed-23",
       "amount": 10,
@@ -29890,7 +29899,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-3041",
+      "id": "tx-mig-3042",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 30,
@@ -29901,7 +29910,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3042",
+      "id": "tx-mig-3043",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-31",
       "amount": 30,
@@ -29912,7 +29921,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3043",
+      "id": "tx-mig-3044",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-25",
       "amount": 1948.5,
@@ -29921,7 +29930,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1948.5"
     },
     {
-      "id": "tx-mig-3044",
+      "id": "tx-mig-3045",
       "accountId": "acc-parsed-16",
       "categoryId": "cat-parsed-25",
       "amount": 264,
@@ -29930,7 +29939,7 @@ export const initialFinanceData: FinanceData = {
       "description": "264"
     },
     {
-      "id": "tx-mig-3045",
+      "id": "tx-mig-3046",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-6",
       "amount": 20,
@@ -29939,7 +29948,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20 notion"
     },
     {
-      "id": "tx-mig-3046",
+      "id": "tx-mig-3047",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-16",
       "amount": 1,
@@ -29948,7 +29957,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1"
     },
     {
-      "id": "tx-mig-3047",
+      "id": "tx-mig-3048",
       "accountId": "acc-parsed-6",
       "categoryId": "cat-parsed-23",
       "amount": 10,
@@ -29957,7 +29966,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-3048",
+      "id": "tx-mig-3049",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 20,
@@ -29968,7 +29977,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3049",
+      "id": "tx-mig-3050",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 20,
@@ -29979,7 +29988,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3050",
+      "id": "tx-mig-3051",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 12.2,
@@ -29988,7 +29997,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12.2"
     },
     {
-      "id": "tx-mig-3051",
+      "id": "tx-mig-3052",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 26,
@@ -29999,7 +30008,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3052",
+      "id": "tx-mig-3053",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 26,
@@ -30010,7 +30019,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3053",
+      "id": "tx-mig-3054",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 8,
@@ -30019,7 +30028,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8"
     },
     {
-      "id": "tx-mig-3054",
+      "id": "tx-mig-3055",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 20,
@@ -30030,7 +30039,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3055",
+      "id": "tx-mig-3056",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 20,
@@ -30041,7 +30050,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3056",
+      "id": "tx-mig-3057",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-21",
       "amount": 8,
@@ -30050,7 +30059,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8"
     },
     {
-      "id": "tx-mig-3057",
+      "id": "tx-mig-3058",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 30,
@@ -30061,7 +30070,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3058",
+      "id": "tx-mig-3059",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 30,
@@ -30072,7 +30081,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3059",
+      "id": "tx-mig-3060",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-4",
       "amount": 10,
@@ -30081,7 +30090,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-3060",
+      "id": "tx-mig-3061",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 35,
@@ -30090,7 +30099,7 @@ export const initialFinanceData: FinanceData = {
       "description": "35"
     },
     {
-      "id": "tx-mig-3061",
+      "id": "tx-mig-3062",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-8",
       "amount": 11.3,
@@ -30099,7 +30108,7 @@ export const initialFinanceData: FinanceData = {
       "description": "11.3"
     },
     {
-      "id": "tx-mig-3062",
+      "id": "tx-mig-3063",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-26",
       "amount": 6,
@@ -30108,7 +30117,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3 3 samira ilqar"
     },
     {
-      "id": "tx-mig-3063",
+      "id": "tx-mig-3064",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-15",
       "amount": 20,
@@ -30117,7 +30126,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-3064",
+      "id": "tx-mig-3065",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-26",
       "amount": 15,
@@ -30126,7 +30135,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15 ailenet"
     },
     {
-      "id": "tx-mig-3065",
+      "id": "tx-mig-3066",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 6,
@@ -30135,7 +30144,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6"
     },
     {
-      "id": "tx-mig-3066",
+      "id": "tx-mig-3067",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 4.5,
@@ -30144,7 +30153,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4.5"
     },
     {
-      "id": "tx-mig-3067",
+      "id": "tx-mig-3068",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-32",
       "amount": 12,
@@ -30155,7 +30164,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3068",
+      "id": "tx-mig-3069",
       "accountId": "acc-parsed-6",
       "categoryId": "cat-parsed-31",
       "amount": 12,
@@ -30166,7 +30175,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3069",
+      "id": "tx-mig-3070",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 9,
@@ -30175,7 +30184,7 @@ export const initialFinanceData: FinanceData = {
       "description": "9"
     },
     {
-      "id": "tx-mig-3070",
+      "id": "tx-mig-3071",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 10,
@@ -30184,7 +30193,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-3071",
+      "id": "tx-mig-3072",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 9,
@@ -30193,7 +30202,7 @@ export const initialFinanceData: FinanceData = {
       "description": "9"
     },
     {
-      "id": "tx-mig-3072",
+      "id": "tx-mig-3073",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 4.6,
@@ -30202,7 +30211,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4.6"
     },
     {
-      "id": "tx-mig-3073",
+      "id": "tx-mig-3074",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 30,
@@ -30213,7 +30222,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3074",
+      "id": "tx-mig-3075",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 30,
@@ -30224,7 +30233,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3075",
+      "id": "tx-mig-3076",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-8",
       "amount": 10,
@@ -30233,7 +30242,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-3076",
+      "id": "tx-mig-3077",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 32,
@@ -30242,7 +30251,7 @@ export const initialFinanceData: FinanceData = {
       "description": "32"
     },
     {
-      "id": "tx-mig-3077",
+      "id": "tx-mig-3078",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-20",
       "amount": 10,
@@ -30251,7 +30260,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-3078",
+      "id": "tx-mig-3079",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 20,
@@ -30260,7 +30269,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-3079",
+      "id": "tx-mig-3080",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 5,
@@ -30269,7 +30278,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-3080",
+      "id": "tx-mig-3081",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 7,
@@ -30278,7 +30287,7 @@ export const initialFinanceData: FinanceData = {
       "description": "7"
     },
     {
-      "id": "tx-mig-3081",
+      "id": "tx-mig-3082",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 228.4,
@@ -30289,7 +30298,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3082",
+      "id": "tx-mig-3083",
       "accountId": "acc-parsed-18",
       "categoryId": "cat-parsed-31",
       "amount": 228.4,
@@ -30300,7 +30309,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3083",
+      "id": "tx-mig-3084",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-9",
       "amount": 73.5,
@@ -30309,7 +30318,7 @@ export const initialFinanceData: FinanceData = {
       "description": "70.5 3 автокредит"
     },
     {
-      "id": "tx-mig-3084",
+      "id": "tx-mig-3085",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-4",
       "amount": 10,
@@ -30318,7 +30327,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-3085",
+      "id": "tx-mig-3086",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 20,
@@ -30329,7 +30338,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3086",
+      "id": "tx-mig-3087",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 20,
@@ -30340,7 +30349,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3087",
+      "id": "tx-mig-3088",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 12,
@@ -30349,7 +30358,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12"
     },
     {
-      "id": "tx-mig-3088",
+      "id": "tx-mig-3089",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 9,
@@ -30358,7 +30367,7 @@ export const initialFinanceData: FinanceData = {
       "description": "9"
     },
     {
-      "id": "tx-mig-3089",
+      "id": "tx-mig-3090",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-15",
       "amount": 20,
@@ -30367,7 +30376,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-3090",
+      "id": "tx-mig-3091",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 10,
@@ -30376,7 +30385,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-3091",
+      "id": "tx-mig-3092",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-5",
       "amount": 4,
@@ -30385,7 +30394,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4"
     },
     {
-      "id": "tx-mig-3092",
+      "id": "tx-mig-3093",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 50,
@@ -30396,7 +30405,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3093",
+      "id": "tx-mig-3094",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 50,
@@ -30407,7 +30416,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3094",
+      "id": "tx-mig-3095",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 24,
@@ -30416,7 +30425,7 @@ export const initialFinanceData: FinanceData = {
       "description": "24"
     },
     {
-      "id": "tx-mig-3095",
+      "id": "tx-mig-3096",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-0",
       "amount": 3,
@@ -30425,7 +30434,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-3096",
+      "id": "tx-mig-3097",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-21",
       "amount": 4.3,
@@ -30434,7 +30443,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4.3"
     },
     {
-      "id": "tx-mig-3097",
+      "id": "tx-mig-3098",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 15,
@@ -30443,7 +30452,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15"
     },
     {
-      "id": "tx-mig-3098",
+      "id": "tx-mig-3099",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 542,
@@ -30452,7 +30461,7 @@ export const initialFinanceData: FinanceData = {
       "description": "542 aba logoped"
     },
     {
-      "id": "tx-mig-3099",
+      "id": "tx-mig-3100",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 1.3,
@@ -30461,7 +30470,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1.3"
     },
     {
-      "id": "tx-mig-3100",
+      "id": "tx-mig-3101",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 20,
@@ -30472,7 +30481,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3101",
+      "id": "tx-mig-3102",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 20,
@@ -30483,7 +30492,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3102",
+      "id": "tx-mig-3103",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-4",
       "amount": 3,
@@ -30492,7 +30501,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-3103",
+      "id": "tx-mig-3104",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 8,
@@ -30501,7 +30510,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8"
     },
     {
-      "id": "tx-mig-3104",
+      "id": "tx-mig-3105",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-21",
       "amount": 5.6,
@@ -30510,7 +30519,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5.6"
     },
     {
-      "id": "tx-mig-3105",
+      "id": "tx-mig-3106",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-0",
       "amount": 29,
@@ -30519,7 +30528,7 @@ export const initialFinanceData: FinanceData = {
       "description": "29 подгузники"
     },
     {
-      "id": "tx-mig-3106",
+      "id": "tx-mig-3107",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 570,
@@ -30530,7 +30539,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3107",
+      "id": "tx-mig-3108",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 570,
@@ -30541,7 +30550,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3108",
+      "id": "tx-mig-3109",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 20,
@@ -30550,7 +30559,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-3109",
+      "id": "tx-mig-3110",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-6",
       "amount": 5,
@@ -30559,7 +30568,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5 яндекс"
     },
     {
-      "id": "tx-mig-3110",
+      "id": "tx-mig-3111",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 3,
@@ -30568,7 +30577,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-3111",
+      "id": "tx-mig-3112",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-15",
       "amount": 20,
@@ -30577,7 +30586,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-3112",
+      "id": "tx-mig-3113",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-0",
       "amount": 3,
@@ -30586,7 +30595,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-3113",
+      "id": "tx-mig-3114",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-23",
       "amount": 10,
@@ -30595,7 +30604,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-3114",
+      "id": "tx-mig-3115",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 8.9,
@@ -30604,7 +30613,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8.9"
     },
     {
-      "id": "tx-mig-3115",
+      "id": "tx-mig-3116",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-8",
       "amount": 2.55,
@@ -30613,7 +30622,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2.55"
     },
     {
-      "id": "tx-mig-3116",
+      "id": "tx-mig-3117",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 9,
@@ -30622,7 +30631,7 @@ export const initialFinanceData: FinanceData = {
       "description": "9"
     },
     {
-      "id": "tx-mig-3117",
+      "id": "tx-mig-3118",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-23",
       "amount": 20,
@@ -30631,7 +30640,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10 10"
     },
     {
-      "id": "tx-mig-3118",
+      "id": "tx-mig-3119",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 95,
@@ -30640,7 +30649,7 @@ export const initialFinanceData: FinanceData = {
       "description": "95 УЗИ"
     },
     {
-      "id": "tx-mig-3119",
+      "id": "tx-mig-3120",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 10,
@@ -30649,7 +30658,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-3120",
+      "id": "tx-mig-3121",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 32,
@@ -30658,7 +30667,7 @@ export const initialFinanceData: FinanceData = {
       "description": "32"
     },
     {
-      "id": "tx-mig-3121",
+      "id": "tx-mig-3122",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 10,
@@ -30667,7 +30676,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-3122",
+      "id": "tx-mig-3123",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-32",
       "amount": 1,
@@ -30678,7 +30687,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3123",
+      "id": "tx-mig-3124",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 1,
@@ -30689,7 +30698,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3124",
+      "id": "tx-mig-3125",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 4,
@@ -30698,7 +30707,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4"
     },
     {
-      "id": "tx-mig-3125",
+      "id": "tx-mig-3126",
       "accountId": "acc-parsed-6",
       "categoryId": "cat-parsed-23",
       "amount": 8,
@@ -30707,7 +30716,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8"
     },
     {
-      "id": "tx-mig-3126",
+      "id": "tx-mig-3127",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-26",
       "amount": 12,
@@ -30716,7 +30725,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12 Ильгар"
     },
     {
-      "id": "tx-mig-3127",
+      "id": "tx-mig-3128",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-32",
       "amount": 200,
@@ -30727,7 +30736,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3128",
+      "id": "tx-mig-3129",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 200,
@@ -30738,7 +30747,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3129",
+      "id": "tx-mig-3130",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 2,
@@ -30747,7 +30756,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-3130",
+      "id": "tx-mig-3131",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 33,
@@ -30756,7 +30765,7 @@ export const initialFinanceData: FinanceData = {
       "description": "33"
     },
     {
-      "id": "tx-mig-3131",
+      "id": "tx-mig-3132",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-15",
       "amount": 20,
@@ -30765,7 +30774,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-3132",
+      "id": "tx-mig-3133",
       "accountId": "acc-parsed-6",
       "categoryId": "cat-parsed-23",
       "amount": 8,
@@ -30774,7 +30783,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8"
     },
     {
-      "id": "tx-mig-3133",
+      "id": "tx-mig-3134",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 15.4,
@@ -30783,7 +30792,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15.4"
     },
     {
-      "id": "tx-mig-3134",
+      "id": "tx-mig-3135",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-11",
       "amount": 10,
@@ -30792,7 +30801,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-3135",
+      "id": "tx-mig-3136",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-23",
       "amount": 7,
@@ -30801,7 +30810,7 @@ export const initialFinanceData: FinanceData = {
       "description": "7"
     },
     {
-      "id": "tx-mig-3136",
+      "id": "tx-mig-3137",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-7",
       "amount": 213,
@@ -30810,16 +30819,16 @@ export const initialFinanceData: FinanceData = {
       "description": "213 анализы Ильгар"
     },
     {
-      "id": "tx-mig-3137",
+      "id": "tx-mig-3138",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 3,
       "type": "expense",
       "date": "2024-05-11",
       "description": "3"
     },
     {
-      "id": "tx-mig-3138",
+      "id": "tx-mig-3139",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 4.5,
@@ -30828,7 +30837,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4.5"
     },
     {
-      "id": "tx-mig-3139",
+      "id": "tx-mig-3140",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-24",
       "amount": 327,
@@ -30837,7 +30846,7 @@ export const initialFinanceData: FinanceData = {
       "description": "327"
     },
     {
-      "id": "tx-mig-3140",
+      "id": "tx-mig-3141",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 8,
@@ -30846,7 +30855,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8"
     },
     {
-      "id": "tx-mig-3141",
+      "id": "tx-mig-3142",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 20,
@@ -30857,7 +30866,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3142",
+      "id": "tx-mig-3143",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 20,
@@ -30868,7 +30877,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3143",
+      "id": "tx-mig-3144",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-5",
       "amount": 5,
@@ -30877,7 +30886,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-3144",
+      "id": "tx-mig-3145",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 2.2,
@@ -30886,7 +30895,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2.2"
     },
     {
-      "id": "tx-mig-3145",
+      "id": "tx-mig-3146",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-0",
       "amount": 10,
@@ -30895,7 +30904,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-3146",
+      "id": "tx-mig-3147",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 3,
@@ -30904,7 +30913,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-3147",
+      "id": "tx-mig-3148",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 32,
@@ -30913,7 +30922,7 @@ export const initialFinanceData: FinanceData = {
       "description": "32"
     },
     {
-      "id": "tx-mig-3148",
+      "id": "tx-mig-3149",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 43,
@@ -30922,7 +30931,7 @@ export const initialFinanceData: FinanceData = {
       "description": "43"
     },
     {
-      "id": "tx-mig-3149",
+      "id": "tx-mig-3150",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-12",
       "amount": 26.7,
@@ -30931,7 +30940,7 @@ export const initialFinanceData: FinanceData = {
       "description": "26.7"
     },
     {
-      "id": "tx-mig-3150",
+      "id": "tx-mig-3151",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-6",
       "amount": 5.6,
@@ -30940,7 +30949,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5.6 ticktick"
     },
     {
-      "id": "tx-mig-3151",
+      "id": "tx-mig-3152",
       "accountId": "acc-parsed-6",
       "categoryId": "cat-parsed-23",
       "amount": 8,
@@ -30949,7 +30958,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8"
     },
     {
-      "id": "tx-mig-3152",
+      "id": "tx-mig-3153",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 12,
@@ -30958,7 +30967,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12"
     },
     {
-      "id": "tx-mig-3153",
+      "id": "tx-mig-3154",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-8",
       "amount": 107,
@@ -30967,7 +30976,7 @@ export const initialFinanceData: FinanceData = {
       "description": "107"
     },
     {
-      "id": "tx-mig-3154",
+      "id": "tx-mig-3155",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-6",
       "amount": 35,
@@ -30976,7 +30985,7 @@ export const initialFinanceData: FinanceData = {
       "description": "35 notion"
     },
     {
-      "id": "tx-mig-3155",
+      "id": "tx-mig-3156",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 1.5,
@@ -30985,7 +30994,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1.5"
     },
     {
-      "id": "tx-mig-3156",
+      "id": "tx-mig-3157",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-0",
       "amount": 200,
@@ -30994,7 +31003,7 @@ export const initialFinanceData: FinanceData = {
       "description": "200 детский сад"
     },
     {
-      "id": "tx-mig-3157",
+      "id": "tx-mig-3158",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 3,
@@ -31003,7 +31012,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-3158",
+      "id": "tx-mig-3159",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-15",
       "amount": 20,
@@ -31012,7 +31021,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-3159",
+      "id": "tx-mig-3160",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 315,
@@ -31023,7 +31032,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3160",
+      "id": "tx-mig-3161",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 315,
@@ -31034,7 +31043,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3161",
+      "id": "tx-mig-3162",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-0",
       "amount": 31.6,
@@ -31043,7 +31052,7 @@ export const initialFinanceData: FinanceData = {
       "description": "31.6 подгузники"
     },
     {
-      "id": "tx-mig-3162",
+      "id": "tx-mig-3163",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 20,
@@ -31054,7 +31063,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3163",
+      "id": "tx-mig-3164",
       "accountId": "acc-parsed-6",
       "categoryId": "cat-parsed-31",
       "amount": 20,
@@ -31065,7 +31074,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3164",
+      "id": "tx-mig-3165",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-22",
       "amount": 2.5,
@@ -31074,7 +31083,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2.5"
     },
     {
-      "id": "tx-mig-3165",
+      "id": "tx-mig-3166",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 33,
@@ -31083,7 +31092,7 @@ export const initialFinanceData: FinanceData = {
       "description": "33"
     },
     {
-      "id": "tx-mig-3166",
+      "id": "tx-mig-3167",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-8",
       "amount": 19,
@@ -31092,7 +31101,7 @@ export const initialFinanceData: FinanceData = {
       "description": "19"
     },
     {
-      "id": "tx-mig-3167",
+      "id": "tx-mig-3168",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-21",
       "amount": 20,
@@ -31101,7 +31110,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-3168",
+      "id": "tx-mig-3169",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 3,
@@ -31110,7 +31119,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-3169",
+      "id": "tx-mig-3170",
       "accountId": "acc-parsed-6",
       "categoryId": "cat-parsed-23",
       "amount": 8,
@@ -31119,7 +31128,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8"
     },
     {
-      "id": "tx-mig-3170",
+      "id": "tx-mig-3171",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-0",
       "amount": 1.5,
@@ -31128,7 +31137,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1.5"
     },
     {
-      "id": "tx-mig-3171",
+      "id": "tx-mig-3172",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-5",
       "amount": 4,
@@ -31137,7 +31146,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4"
     },
     {
-      "id": "tx-mig-3172",
+      "id": "tx-mig-3173",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 342,
@@ -31148,7 +31157,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3173",
+      "id": "tx-mig-3174",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-31",
       "amount": 342,
@@ -31159,7 +31168,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3174",
+      "id": "tx-mig-3175",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-9",
       "amount": 12,
@@ -31168,7 +31177,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12 в юнибанк"
     },
     {
-      "id": "tx-mig-3175",
+      "id": "tx-mig-3176",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 25,
@@ -31177,7 +31186,7 @@ export const initialFinanceData: FinanceData = {
       "description": "25"
     },
     {
-      "id": "tx-mig-3176",
+      "id": "tx-mig-3177",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-21",
       "amount": 10.33,
@@ -31186,7 +31195,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10.33"
     },
     {
-      "id": "tx-mig-3177",
+      "id": "tx-mig-3178",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-23",
       "amount": 7,
@@ -31195,7 +31204,7 @@ export const initialFinanceData: FinanceData = {
       "description": "7"
     },
     {
-      "id": "tx-mig-3178",
+      "id": "tx-mig-3179",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-26",
       "amount": 6,
@@ -31204,7 +31213,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3 3 ilqar samira"
     },
     {
-      "id": "tx-mig-3179",
+      "id": "tx-mig-3180",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-25",
       "amount": 1911,
@@ -31213,7 +31222,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1911"
     },
     {
-      "id": "tx-mig-3180",
+      "id": "tx-mig-3181",
       "accountId": "acc-parsed-16",
       "categoryId": "cat-parsed-25",
       "amount": 264,
@@ -31222,7 +31231,7 @@ export const initialFinanceData: FinanceData = {
       "description": "264"
     },
     {
-      "id": "tx-mig-3181",
+      "id": "tx-mig-3182",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 3,
@@ -31233,7 +31242,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3182",
+      "id": "tx-mig-3183",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 3,
@@ -31244,7 +31253,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3183",
+      "id": "tx-mig-3184",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 20,
@@ -31255,7 +31264,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3184",
+      "id": "tx-mig-3185",
       "accountId": "acc-parsed-6",
       "categoryId": "cat-parsed-31",
       "amount": 20,
@@ -31266,7 +31275,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3185",
+      "id": "tx-mig-3186",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-26",
       "amount": 15,
@@ -31275,7 +31284,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15 ailenet"
     },
     {
-      "id": "tx-mig-3186",
+      "id": "tx-mig-3187",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-0",
       "amount": 70,
@@ -31284,7 +31293,7 @@ export const initialFinanceData: FinanceData = {
       "description": "70 педиатр и анализы"
     },
     {
-      "id": "tx-mig-3187",
+      "id": "tx-mig-3188",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 3,
@@ -31295,7 +31304,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3188",
+      "id": "tx-mig-3189",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 3,
@@ -31306,7 +31315,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3189",
+      "id": "tx-mig-3190",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-16",
       "amount": 3,
@@ -31315,7 +31324,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-3190",
+      "id": "tx-mig-3191",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 1.5,
@@ -31324,7 +31333,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1.5"
     },
     {
-      "id": "tx-mig-3191",
+      "id": "tx-mig-3192",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 2,
@@ -31333,7 +31342,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-3192",
+      "id": "tx-mig-3193",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-6",
       "amount": 23,
@@ -31342,7 +31351,7 @@ export const initialFinanceData: FinanceData = {
       "description": "23 youtube"
     },
     {
-      "id": "tx-mig-3193",
+      "id": "tx-mig-3194",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 22,
@@ -31351,7 +31360,7 @@ export const initialFinanceData: FinanceData = {
       "description": "22"
     },
     {
-      "id": "tx-mig-3194",
+      "id": "tx-mig-3195",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-7",
       "amount": 25,
@@ -31360,7 +31369,7 @@ export const initialFinanceData: FinanceData = {
       "description": "25 уколы"
     },
     {
-      "id": "tx-mig-3195",
+      "id": "tx-mig-3196",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-15",
       "amount": 20,
@@ -31369,7 +31378,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-3196",
+      "id": "tx-mig-3197",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 2,
@@ -31378,7 +31387,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-3197",
+      "id": "tx-mig-3198",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 16.1,
@@ -31387,16 +31396,16 @@ export const initialFinanceData: FinanceData = {
       "description": "6.1 10"
     },
     {
-      "id": "tx-mig-3198",
+      "id": "tx-mig-3199",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 4,
       "type": "expense",
       "date": "2024-04-27",
       "description": "4"
     },
     {
-      "id": "tx-mig-3199",
+      "id": "tx-mig-3200",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-9",
       "amount": 262,
@@ -31405,7 +31414,7 @@ export const initialFinanceData: FinanceData = {
       "description": "262 автокредит"
     },
     {
-      "id": "tx-mig-3200",
+      "id": "tx-mig-3201",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-8",
       "amount": 48,
@@ -31414,7 +31423,7 @@ export const initialFinanceData: FinanceData = {
       "description": "48"
     },
     {
-      "id": "tx-mig-3201",
+      "id": "tx-mig-3202",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 5,
@@ -31425,7 +31434,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3202",
+      "id": "tx-mig-3203",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 5,
@@ -31436,7 +31445,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3203",
+      "id": "tx-mig-3204",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 38,
@@ -31447,7 +31456,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3204",
+      "id": "tx-mig-3205",
       "accountId": "acc-parsed-18",
       "categoryId": "cat-parsed-31",
       "amount": 38,
@@ -31458,7 +31467,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3205",
+      "id": "tx-mig-3206",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-5",
       "amount": 5,
@@ -31467,7 +31476,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-3206",
+      "id": "tx-mig-3207",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 8,
@@ -31476,7 +31485,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8"
     },
     {
-      "id": "tx-mig-3207",
+      "id": "tx-mig-3208",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 4,
@@ -31485,7 +31494,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4"
     },
     {
-      "id": "tx-mig-3208",
+      "id": "tx-mig-3209",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 85,
@@ -31496,7 +31505,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3209",
+      "id": "tx-mig-3210",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 85,
@@ -31507,7 +31516,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3210",
+      "id": "tx-mig-3211",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-15",
       "amount": 30,
@@ -31516,7 +31525,7 @@ export const initialFinanceData: FinanceData = {
       "description": "30"
     },
     {
-      "id": "tx-mig-3211",
+      "id": "tx-mig-3212",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 8,
@@ -31525,7 +31534,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8"
     },
     {
-      "id": "tx-mig-3212",
+      "id": "tx-mig-3213",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-21",
       "amount": 3,
@@ -31534,7 +31543,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-3213",
+      "id": "tx-mig-3214",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-10",
       "amount": 40,
@@ -31543,7 +31552,7 @@ export const initialFinanceData: FinanceData = {
       "description": "40"
     },
     {
-      "id": "tx-mig-3214",
+      "id": "tx-mig-3215",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-13",
       "amount": 16,
@@ -31552,7 +31561,7 @@ export const initialFinanceData: FinanceData = {
       "description": "16"
     },
     {
-      "id": "tx-mig-3215",
+      "id": "tx-mig-3216",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-0",
       "amount": 5,
@@ -31561,7 +31570,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-3216",
+      "id": "tx-mig-3217",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 1,
@@ -31570,7 +31579,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1"
     },
     {
-      "id": "tx-mig-3217",
+      "id": "tx-mig-3218",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 8,
@@ -31579,7 +31588,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8"
     },
     {
-      "id": "tx-mig-3218",
+      "id": "tx-mig-3219",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-0",
       "amount": 214,
@@ -31588,7 +31597,7 @@ export const initialFinanceData: FinanceData = {
       "description": "214 terapiya i logoped"
     },
     {
-      "id": "tx-mig-3219",
+      "id": "tx-mig-3220",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-0",
       "amount": 332,
@@ -31597,7 +31606,7 @@ export const initialFinanceData: FinanceData = {
       "description": "332 terapiya i logoped"
     },
     {
-      "id": "tx-mig-3220",
+      "id": "tx-mig-3221",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 17,
@@ -31606,7 +31615,7 @@ export const initialFinanceData: FinanceData = {
       "description": "17"
     },
     {
-      "id": "tx-mig-3221",
+      "id": "tx-mig-3222",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 3,
@@ -31615,7 +31624,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-3222",
+      "id": "tx-mig-3223",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 75,
@@ -31624,20 +31633,20 @@ export const initialFinanceData: FinanceData = {
       "description": "Перевод со счета Кошелёк в Кошелек Самира",
       "transferAccountId": "acc-parsed-7",
       "transferType": "out"
-    },
-    {
-      "id": "tx-mig-3223",
-      "accountId": "acc-parsed-7",
-      "categoryId": "cat-parsed-31",
-      "amount": 75,
-      "type": "transfer",
-      "date": "2024-04-21",
-      "description": "Перевод со счета Кошелёк в Кошелек Самира",
-      "transferAccountId": "acc-parsed-1",
-      "transferType": "in"
     },
     {
       "id": "tx-mig-3224",
+      "accountId": "acc-parsed-7",
+      "categoryId": "cat-parsed-31",
+      "amount": 75,
+      "type": "transfer",
+      "date": "2024-04-21",
+      "description": "Перевод со счета Кошелёк в Кошелек Самира",
+      "transferAccountId": "acc-parsed-1",
+      "transferType": "in"
+    },
+    {
+      "id": "tx-mig-3225",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 26,
@@ -31648,7 +31657,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3225",
+      "id": "tx-mig-3226",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 26,
@@ -31659,7 +31668,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3226",
+      "id": "tx-mig-3227",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-20",
       "amount": 20,
@@ -31668,7 +31677,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-3227",
+      "id": "tx-mig-3228",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 59,
@@ -31677,7 +31686,7 @@ export const initialFinanceData: FinanceData = {
       "description": "59"
     },
     {
-      "id": "tx-mig-3228",
+      "id": "tx-mig-3229",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 24,
@@ -31686,7 +31695,7 @@ export const initialFinanceData: FinanceData = {
       "description": "14 10"
     },
     {
-      "id": "tx-mig-3229",
+      "id": "tx-mig-3230",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 95,
@@ -31697,7 +31706,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3230",
+      "id": "tx-mig-3231",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 95,
@@ -31708,7 +31717,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3231",
+      "id": "tx-mig-3232",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-0",
       "amount": 30,
@@ -31717,7 +31726,7 @@ export const initialFinanceData: FinanceData = {
       "description": "30 подгузники"
     },
     {
-      "id": "tx-mig-3232",
+      "id": "tx-mig-3233",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-5",
       "amount": 5,
@@ -31726,7 +31735,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-3233",
+      "id": "tx-mig-3234",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 2,
@@ -31735,7 +31744,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-3234",
+      "id": "tx-mig-3235",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-8",
       "amount": 100,
@@ -31744,7 +31753,7 @@ export const initialFinanceData: FinanceData = {
       "description": "100"
     },
     {
-      "id": "tx-mig-3235",
+      "id": "tx-mig-3236",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 1,
@@ -31753,7 +31762,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1"
     },
     {
-      "id": "tx-mig-3236",
+      "id": "tx-mig-3237",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-0",
       "amount": 2,
@@ -31762,7 +31771,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-3237",
+      "id": "tx-mig-3238",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-26",
       "amount": 3,
@@ -31771,7 +31780,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3 Ильгар"
     },
     {
-      "id": "tx-mig-3238",
+      "id": "tx-mig-3239",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-32",
       "amount": 6,
@@ -31782,7 +31791,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3239",
+      "id": "tx-mig-3240",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-31",
       "amount": 6,
@@ -31793,7 +31802,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3240",
+      "id": "tx-mig-3241",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-26",
       "amount": 3,
@@ -31802,7 +31811,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3 Ильгар"
     },
     {
-      "id": "tx-mig-3241",
+      "id": "tx-mig-3242",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 8,
@@ -31811,7 +31820,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8"
     },
     {
-      "id": "tx-mig-3242",
+      "id": "tx-mig-3243",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 130,
@@ -31820,7 +31829,7 @@ export const initialFinanceData: FinanceData = {
       "description": "130 psixiatr"
     },
     {
-      "id": "tx-mig-3243",
+      "id": "tx-mig-3244",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-23",
       "amount": 11,
@@ -31829,7 +31838,7 @@ export const initialFinanceData: FinanceData = {
       "description": "11"
     },
     {
-      "id": "tx-mig-3244",
+      "id": "tx-mig-3245",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 25,
@@ -31838,7 +31847,7 @@ export const initialFinanceData: FinanceData = {
       "description": "25"
     },
     {
-      "id": "tx-mig-3245",
+      "id": "tx-mig-3246",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-26",
       "amount": 12,
@@ -31847,7 +31856,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12 Ильгар"
     },
     {
-      "id": "tx-mig-3246",
+      "id": "tx-mig-3247",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-21",
       "amount": 4,
@@ -31856,7 +31865,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4"
     },
     {
-      "id": "tx-mig-3247",
+      "id": "tx-mig-3248",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 30,
@@ -31867,7 +31876,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3248",
+      "id": "tx-mig-3249",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 30,
@@ -31878,7 +31887,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3249",
+      "id": "tx-mig-3250",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-0",
       "amount": 14,
@@ -31887,7 +31896,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4 10"
     },
     {
-      "id": "tx-mig-3250",
+      "id": "tx-mig-3251",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 33,
@@ -31896,7 +31905,7 @@ export const initialFinanceData: FinanceData = {
       "description": "33"
     },
     {
-      "id": "tx-mig-3251",
+      "id": "tx-mig-3252",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 9,
@@ -31905,7 +31914,7 @@ export const initialFinanceData: FinanceData = {
       "description": "9"
     },
     {
-      "id": "tx-mig-3252",
+      "id": "tx-mig-3253",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-6",
       "amount": 12,
@@ -31914,7 +31923,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12 memento database"
     },
     {
-      "id": "tx-mig-3253",
+      "id": "tx-mig-3254",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-20",
       "amount": 7,
@@ -31923,7 +31932,7 @@ export const initialFinanceData: FinanceData = {
       "description": "7"
     },
     {
-      "id": "tx-mig-3254",
+      "id": "tx-mig-3255",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-20",
       "amount": 3,
@@ -31932,7 +31941,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-3255",
+      "id": "tx-mig-3256",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-6",
       "amount": 12,
@@ -31941,7 +31950,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12 Memento databse"
     },
     {
-      "id": "tx-mig-3256",
+      "id": "tx-mig-3257",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-24",
       "amount": 364,
@@ -31950,7 +31959,7 @@ export const initialFinanceData: FinanceData = {
       "description": "364"
     },
     {
-      "id": "tx-mig-3257",
+      "id": "tx-mig-3258",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 100,
@@ -31961,7 +31970,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3258",
+      "id": "tx-mig-3259",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 100,
@@ -31972,7 +31981,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3259",
+      "id": "tx-mig-3260",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-15",
       "amount": 30,
@@ -31981,7 +31990,7 @@ export const initialFinanceData: FinanceData = {
       "description": "30"
     },
     {
-      "id": "tx-mig-3260",
+      "id": "tx-mig-3261",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-16",
       "amount": 1,
@@ -31990,7 +31999,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1"
     },
     {
-      "id": "tx-mig-3261",
+      "id": "tx-mig-3262",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 12,
@@ -31999,16 +32008,16 @@ export const initialFinanceData: FinanceData = {
       "description": "12"
     },
     {
-      "id": "tx-mig-3262",
+      "id": "tx-mig-3263",
       "accountId": "acc-parsed-0",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 3,
       "type": "expense",
       "date": "2024-04-09",
       "description": "3"
     },
     {
-      "id": "tx-mig-3263",
+      "id": "tx-mig-3264",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-23",
       "amount": 8,
@@ -32017,7 +32026,7 @@ export const initialFinanceData: FinanceData = {
       "description": "7 1"
     },
     {
-      "id": "tx-mig-3264",
+      "id": "tx-mig-3265",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-20",
       "amount": 55,
@@ -32026,7 +32035,7 @@ export const initialFinanceData: FinanceData = {
       "description": "55"
     },
     {
-      "id": "tx-mig-3265",
+      "id": "tx-mig-3266",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 12,
@@ -32035,7 +32044,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12"
     },
     {
-      "id": "tx-mig-3266",
+      "id": "tx-mig-3267",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-7",
       "amount": 10,
@@ -32044,7 +32053,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-3267",
+      "id": "tx-mig-3268",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-6",
       "amount": 5.6,
@@ -32053,7 +32062,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5.6 ticktick"
     },
     {
-      "id": "tx-mig-3268",
+      "id": "tx-mig-3269",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-29",
       "amount": 300,
@@ -32062,16 +32071,16 @@ export const initialFinanceData: FinanceData = {
       "description": "300 имплант Самира"
     },
     {
-      "id": "tx-mig-3269",
+      "id": "tx-mig-3270",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-23",
+      "categoryId": "cat-parsed-32",
       "amount": 7,
       "type": "expense",
       "date": "2024-04-08",
       "description": "7"
     },
     {
-      "id": "tx-mig-3270",
+      "id": "tx-mig-3271",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 205,
@@ -32082,7 +32091,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3271",
+      "id": "tx-mig-3272",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 205,
@@ -32093,7 +32102,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3272",
+      "id": "tx-mig-3273",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-15",
       "amount": 20,
@@ -32102,7 +32111,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-3273",
+      "id": "tx-mig-3274",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 4,
@@ -32111,7 +32120,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4"
     },
     {
-      "id": "tx-mig-3274",
+      "id": "tx-mig-3275",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-21",
       "amount": 45,
@@ -32120,7 +32129,7 @@ export const initialFinanceData: FinanceData = {
       "description": "45 салон"
     },
     {
-      "id": "tx-mig-3275",
+      "id": "tx-mig-3276",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 15,
@@ -32129,7 +32138,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15"
     },
     {
-      "id": "tx-mig-3276",
+      "id": "tx-mig-3277",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-21",
       "amount": 7,
@@ -32138,7 +32147,7 @@ export const initialFinanceData: FinanceData = {
       "description": "7"
     },
     {
-      "id": "tx-mig-3277",
+      "id": "tx-mig-3278",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-11",
       "amount": 10,
@@ -32147,7 +32156,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-3278",
+      "id": "tx-mig-3279",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 13,
@@ -32158,7 +32167,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3279",
+      "id": "tx-mig-3280",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 13,
@@ -32169,7 +32178,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3280",
+      "id": "tx-mig-3281",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 12,
@@ -32178,7 +32187,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12"
     },
     {
-      "id": "tx-mig-3281",
+      "id": "tx-mig-3282",
       "accountId": "acc-parsed-16",
       "categoryId": "cat-parsed-25",
       "amount": 264,
@@ -32187,7 +32196,7 @@ export const initialFinanceData: FinanceData = {
       "description": "264"
     },
     {
-      "id": "tx-mig-3282",
+      "id": "tx-mig-3283",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 10,
@@ -32198,7 +32207,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3283",
+      "id": "tx-mig-3284",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 10,
@@ -32209,7 +32218,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3284",
+      "id": "tx-mig-3285",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-5",
       "amount": 33,
@@ -32218,7 +32227,7 @@ export const initialFinanceData: FinanceData = {
       "description": "33 кафе"
     },
     {
-      "id": "tx-mig-3285",
+      "id": "tx-mig-3286",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 200,
@@ -32227,7 +32236,7 @@ export const initialFinanceData: FinanceData = {
       "description": "200 детский сад"
     },
     {
-      "id": "tx-mig-3286",
+      "id": "tx-mig-3287",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 5,
@@ -32238,7 +32247,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3287",
+      "id": "tx-mig-3288",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 5,
@@ -32249,7 +32258,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3288",
+      "id": "tx-mig-3289",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 50,
@@ -32260,7 +32269,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3289",
+      "id": "tx-mig-3290",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 50,
@@ -32271,7 +32280,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3290",
+      "id": "tx-mig-3291",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 300,
@@ -32282,7 +32291,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3291",
+      "id": "tx-mig-3292",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 300,
@@ -32293,7 +32302,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3292",
+      "id": "tx-mig-3293",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-6",
       "amount": 32,
@@ -32302,7 +32311,7 @@ export const initialFinanceData: FinanceData = {
       "description": "32 notion"
     },
     {
-      "id": "tx-mig-3293",
+      "id": "tx-mig-3294",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-12",
       "amount": 54,
@@ -32311,7 +32320,7 @@ export const initialFinanceData: FinanceData = {
       "description": "54"
     },
     {
-      "id": "tx-mig-3294",
+      "id": "tx-mig-3295",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 80,
@@ -32320,7 +32329,7 @@ export const initialFinanceData: FinanceData = {
       "description": "80"
     },
     {
-      "id": "tx-mig-3295",
+      "id": "tx-mig-3296",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-20",
       "amount": 13,
@@ -32329,7 +32338,7 @@ export const initialFinanceData: FinanceData = {
       "description": "13"
     },
     {
-      "id": "tx-mig-3296",
+      "id": "tx-mig-3297",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 30,
@@ -32338,7 +32347,7 @@ export const initialFinanceData: FinanceData = {
       "description": "30"
     },
     {
-      "id": "tx-mig-3297",
+      "id": "tx-mig-3298",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-20",
       "amount": 34,
@@ -32347,7 +32356,7 @@ export const initialFinanceData: FinanceData = {
       "description": "34"
     },
     {
-      "id": "tx-mig-3298",
+      "id": "tx-mig-3299",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-25",
       "amount": 1948,
@@ -32356,7 +32365,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1948"
     },
     {
-      "id": "tx-mig-3299",
+      "id": "tx-mig-3300",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 8,
@@ -32365,7 +32374,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3 5"
     },
     {
-      "id": "tx-mig-3300",
+      "id": "tx-mig-3301",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 11,
@@ -32374,7 +32383,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3 8"
     },
     {
-      "id": "tx-mig-3301",
+      "id": "tx-mig-3302",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-26",
       "amount": 6,
@@ -32383,7 +32392,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3 3"
     },
     {
-      "id": "tx-mig-3302",
+      "id": "tx-mig-3303",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-26",
       "amount": 15,
@@ -32392,7 +32401,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15 ailenet"
     },
     {
-      "id": "tx-mig-3303",
+      "id": "tx-mig-3304",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 3,
@@ -32401,7 +32410,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-3304",
+      "id": "tx-mig-3305",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 20,
@@ -32410,18 +32419,9 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-3305",
-      "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-0",
-      "amount": 5,
-      "type": "expense",
-      "date": "2024-03-29",
-      "description": "5"
-    },
-    {
       "id": "tx-mig-3306",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-4",
+      "categoryId": "cat-parsed-0",
       "amount": 5,
       "type": "expense",
       "date": "2024-03-29",
@@ -32430,6 +32430,15 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-3307",
       "accountId": "acc-parsed-1",
+      "categoryId": "cat-parsed-4",
+      "amount": 5,
+      "type": "expense",
+      "date": "2024-03-29",
+      "description": "5"
+    },
+    {
+      "id": "tx-mig-3308",
+      "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 5,
       "type": "expense",
@@ -32437,7 +32446,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-3308",
+      "id": "tx-mig-3309",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 10,
@@ -32446,7 +32455,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-3309",
+      "id": "tx-mig-3310",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-9",
       "amount": 302,
@@ -32455,7 +32464,7 @@ export const initialFinanceData: FinanceData = {
       "description": "302 проценты кредита"
     },
     {
-      "id": "tx-mig-3310",
+      "id": "tx-mig-3311",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-15",
       "amount": 20,
@@ -32464,7 +32473,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-3311",
+      "id": "tx-mig-3312",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 21,
@@ -32473,7 +32482,7 @@ export const initialFinanceData: FinanceData = {
       "description": "21"
     },
     {
-      "id": "tx-mig-3312",
+      "id": "tx-mig-3313",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-21",
       "amount": 10,
@@ -32482,7 +32491,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-3313",
+      "id": "tx-mig-3314",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-15",
       "amount": 20,
@@ -32491,7 +32500,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-3314",
+      "id": "tx-mig-3315",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 6,
@@ -32500,7 +32509,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6"
     },
     {
-      "id": "tx-mig-3315",
+      "id": "tx-mig-3316",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 8,
@@ -32509,7 +32518,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8"
     },
     {
-      "id": "tx-mig-3316",
+      "id": "tx-mig-3317",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-21",
       "amount": 10,
@@ -32518,7 +32527,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-3317",
+      "id": "tx-mig-3318",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 7,
@@ -32527,7 +32536,7 @@ export const initialFinanceData: FinanceData = {
       "description": "7"
     },
     {
-      "id": "tx-mig-3318",
+      "id": "tx-mig-3319",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 32,
@@ -32536,7 +32545,7 @@ export const initialFinanceData: FinanceData = {
       "description": "32 подгузники"
     },
     {
-      "id": "tx-mig-3319",
+      "id": "tx-mig-3320",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-6",
       "amount": 5,
@@ -32545,7 +32554,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5 yandex"
     },
     {
-      "id": "tx-mig-3320",
+      "id": "tx-mig-3321",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 3,
@@ -32554,7 +32563,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-3321",
+      "id": "tx-mig-3322",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-20",
       "amount": 10,
@@ -32563,7 +32572,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-3322",
+      "id": "tx-mig-3323",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 195,
@@ -32574,7 +32583,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3323",
+      "id": "tx-mig-3324",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 195,
@@ -32585,7 +32594,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3324",
+      "id": "tx-mig-3325",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-8",
       "amount": 41,
@@ -32594,7 +32603,7 @@ export const initialFinanceData: FinanceData = {
       "description": "41"
     },
     {
-      "id": "tx-mig-3325",
+      "id": "tx-mig-3326",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 3.5,
@@ -32603,7 +32612,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3.5"
     },
     {
-      "id": "tx-mig-3326",
+      "id": "tx-mig-3327",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 44,
@@ -32612,7 +32621,7 @@ export const initialFinanceData: FinanceData = {
       "description": "44"
     },
     {
-      "id": "tx-mig-3327",
+      "id": "tx-mig-3328",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-8",
       "amount": 108,
@@ -32621,7 +32630,7 @@ export const initialFinanceData: FinanceData = {
       "description": "108 миноксидил"
     },
     {
-      "id": "tx-mig-3328",
+      "id": "tx-mig-3329",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 12,
@@ -32630,7 +32639,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12"
     },
     {
-      "id": "tx-mig-3329",
+      "id": "tx-mig-3330",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-29",
       "amount": 300,
@@ -32639,7 +32648,7 @@ export const initialFinanceData: FinanceData = {
       "description": "300 имплант"
     },
     {
-      "id": "tx-mig-3330",
+      "id": "tx-mig-3331",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-8",
       "amount": 14,
@@ -32648,7 +32657,7 @@ export const initialFinanceData: FinanceData = {
       "description": "14"
     },
     {
-      "id": "tx-mig-3331",
+      "id": "tx-mig-3332",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 100,
@@ -32659,7 +32668,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3332",
+      "id": "tx-mig-3333",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 100,
@@ -32670,7 +32679,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3333",
+      "id": "tx-mig-3334",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-8",
       "amount": 156,
@@ -32679,7 +32688,7 @@ export const initialFinanceData: FinanceData = {
       "description": "156"
     },
     {
-      "id": "tx-mig-3334",
+      "id": "tx-mig-3335",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-0",
       "amount": 50,
@@ -32688,7 +32697,7 @@ export const initialFinanceData: FinanceData = {
       "description": "50 одежда"
     },
     {
-      "id": "tx-mig-3335",
+      "id": "tx-mig-3336",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-29",
       "amount": 85,
@@ -32697,7 +32706,7 @@ export const initialFinanceData: FinanceData = {
       "description": "85 зуб вытащили"
     },
     {
-      "id": "tx-mig-3336",
+      "id": "tx-mig-3337",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 30,
@@ -32706,7 +32715,7 @@ export const initialFinanceData: FinanceData = {
       "description": "30"
     },
     {
-      "id": "tx-mig-3337",
+      "id": "tx-mig-3338",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-7",
       "amount": 50,
@@ -32715,7 +32724,7 @@ export const initialFinanceData: FinanceData = {
       "description": "50 гинеколог"
     },
     {
-      "id": "tx-mig-3338",
+      "id": "tx-mig-3339",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-23",
       "amount": 8,
@@ -32724,7 +32733,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8"
     },
     {
-      "id": "tx-mig-3339",
+      "id": "tx-mig-3340",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-7",
       "amount": 85,
@@ -32733,7 +32742,7 @@ export const initialFinanceData: FinanceData = {
       "description": "85 невропатолог"
     },
     {
-      "id": "tx-mig-3340",
+      "id": "tx-mig-3341",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-20",
       "amount": 52,
@@ -32742,7 +32751,7 @@ export const initialFinanceData: FinanceData = {
       "description": "52 подарки врачам"
     },
     {
-      "id": "tx-mig-3341",
+      "id": "tx-mig-3342",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 17,
@@ -32751,7 +32760,7 @@ export const initialFinanceData: FinanceData = {
       "description": "17"
     },
     {
-      "id": "tx-mig-3342",
+      "id": "tx-mig-3343",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-26",
       "amount": 12,
@@ -32760,7 +32769,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12 ilqar"
     },
     {
-      "id": "tx-mig-3343",
+      "id": "tx-mig-3344",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 6,
@@ -32769,7 +32778,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6"
     },
     {
-      "id": "tx-mig-3344",
+      "id": "tx-mig-3345",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 116,
@@ -32780,7 +32789,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3345",
+      "id": "tx-mig-3346",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 116,
@@ -32791,7 +32800,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3346",
+      "id": "tx-mig-3347",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 195,
@@ -32802,7 +32811,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3347",
+      "id": "tx-mig-3348",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 195,
@@ -32813,7 +32822,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3348",
+      "id": "tx-mig-3349",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-8",
       "amount": 1,
@@ -32822,7 +32831,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1"
     },
     {
-      "id": "tx-mig-3349",
+      "id": "tx-mig-3350",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-0",
       "amount": 6,
@@ -32831,7 +32840,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6 фото в садике"
     },
     {
-      "id": "tx-mig-3350",
+      "id": "tx-mig-3351",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 35,
@@ -32840,7 +32849,7 @@ export const initialFinanceData: FinanceData = {
       "description": "35"
     },
     {
-      "id": "tx-mig-3351",
+      "id": "tx-mig-3352",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 43,
@@ -32849,7 +32858,7 @@ export const initialFinanceData: FinanceData = {
       "description": "43"
     },
     {
-      "id": "tx-mig-3352",
+      "id": "tx-mig-3353",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 1.3,
@@ -32858,7 +32867,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1.3"
     },
     {
-      "id": "tx-mig-3353",
+      "id": "tx-mig-3354",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-13",
       "amount": 16,
@@ -32867,7 +32876,7 @@ export const initialFinanceData: FinanceData = {
       "description": "16"
     },
     {
-      "id": "tx-mig-3354",
+      "id": "tx-mig-3355",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-10",
       "amount": 40,
@@ -32876,7 +32885,7 @@ export const initialFinanceData: FinanceData = {
       "description": "40"
     },
     {
-      "id": "tx-mig-3355",
+      "id": "tx-mig-3356",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-0",
       "amount": 70,
@@ -32885,7 +32894,7 @@ export const initialFinanceData: FinanceData = {
       "description": "50 20 детский сад"
     },
     {
-      "id": "tx-mig-3356",
+      "id": "tx-mig-3357",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 13,
@@ -32894,7 +32903,7 @@ export const initialFinanceData: FinanceData = {
       "description": "13"
     },
     {
-      "id": "tx-mig-3357",
+      "id": "tx-mig-3358",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-11",
       "amount": 19,
@@ -32903,7 +32912,7 @@ export const initialFinanceData: FinanceData = {
       "description": "19"
     },
     {
-      "id": "tx-mig-3358",
+      "id": "tx-mig-3359",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 30,
@@ -32914,7 +32923,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3359",
+      "id": "tx-mig-3360",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 30,
@@ -32925,7 +32934,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3360",
+      "id": "tx-mig-3361",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-21",
       "amount": 20,
@@ -32934,7 +32943,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-3361",
+      "id": "tx-mig-3362",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-22",
       "amount": 8,
@@ -32943,7 +32952,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8 ремонт печки"
     },
     {
-      "id": "tx-mig-3362",
+      "id": "tx-mig-3363",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-15",
       "amount": 20,
@@ -32952,7 +32961,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-3363",
+      "id": "tx-mig-3364",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-6",
       "amount": 12,
@@ -32961,7 +32970,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12 memento"
     },
     {
-      "id": "tx-mig-3364",
+      "id": "tx-mig-3365",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-22",
       "amount": 40,
@@ -32970,7 +32979,7 @@ export const initialFinanceData: FinanceData = {
       "description": "40 тв ремонт"
     },
     {
-      "id": "tx-mig-3365",
+      "id": "tx-mig-3366",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 38,
@@ -32979,7 +32988,7 @@ export const initialFinanceData: FinanceData = {
       "description": "38"
     },
     {
-      "id": "tx-mig-3366",
+      "id": "tx-mig-3367",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-22",
       "amount": 10,
@@ -32988,7 +32997,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10 ремонт тэн стиралки"
     },
     {
-      "id": "tx-mig-3367",
+      "id": "tx-mig-3368",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-8",
       "amount": 64,
@@ -32997,7 +33006,7 @@ export const initialFinanceData: FinanceData = {
       "description": "64"
     },
     {
-      "id": "tx-mig-3368",
+      "id": "tx-mig-3369",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 5.3,
@@ -33006,7 +33015,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5.3"
     },
     {
-      "id": "tx-mig-3369",
+      "id": "tx-mig-3370",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-6",
       "amount": 5.6,
@@ -33015,7 +33024,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5.6 ticktick"
     },
     {
-      "id": "tx-mig-3370",
+      "id": "tx-mig-3371",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 6,
@@ -33024,7 +33033,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6"
     },
     {
-      "id": "tx-mig-3371",
+      "id": "tx-mig-3372",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-5",
       "amount": 4,
@@ -33033,7 +33042,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4"
     },
     {
-      "id": "tx-mig-3372",
+      "id": "tx-mig-3373",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-20",
       "amount": 20,
@@ -33042,7 +33051,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-3373",
+      "id": "tx-mig-3374",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-20",
       "amount": 40,
@@ -33051,7 +33060,7 @@ export const initialFinanceData: FinanceData = {
       "description": "40 цветы"
     },
     {
-      "id": "tx-mig-3374",
+      "id": "tx-mig-3375",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-20",
       "amount": 330,
@@ -33060,7 +33069,7 @@ export const initialFinanceData: FinanceData = {
       "description": "330 маме и Самире"
     },
     {
-      "id": "tx-mig-3375",
+      "id": "tx-mig-3376",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 295,
@@ -33071,7 +33080,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3376",
+      "id": "tx-mig-3377",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 295,
@@ -33082,7 +33091,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3377",
+      "id": "tx-mig-3378",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 20,
@@ -33091,7 +33100,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-3378",
+      "id": "tx-mig-3379",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 12,
@@ -33102,7 +33111,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3379",
+      "id": "tx-mig-3380",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 12,
@@ -33113,7 +33122,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3380",
+      "id": "tx-mig-3381",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-24",
       "amount": 363,
@@ -33122,7 +33131,7 @@ export const initialFinanceData: FinanceData = {
       "description": "363"
     },
     {
-      "id": "tx-mig-3381",
+      "id": "tx-mig-3382",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-20",
       "amount": 85,
@@ -33131,7 +33140,7 @@ export const initialFinanceData: FinanceData = {
       "description": "85 в детский сад"
     },
     {
-      "id": "tx-mig-3382",
+      "id": "tx-mig-3383",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 20,
@@ -33140,7 +33149,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-3383",
+      "id": "tx-mig-3384",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-4",
       "amount": 6.2,
@@ -33149,7 +33158,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6.2"
     },
     {
-      "id": "tx-mig-3384",
+      "id": "tx-mig-3385",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-32",
       "amount": 6,
@@ -33160,7 +33169,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3385",
+      "id": "tx-mig-3386",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 6,
@@ -33171,7 +33180,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3386",
+      "id": "tx-mig-3387",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-0",
       "amount": 170,
@@ -33180,7 +33189,7 @@ export const initialFinanceData: FinanceData = {
       "description": "170 детский сад"
     },
     {
-      "id": "tx-mig-3387",
+      "id": "tx-mig-3388",
       "accountId": "acc-parsed-16",
       "categoryId": "cat-parsed-25",
       "amount": 264,
@@ -33189,7 +33198,7 @@ export const initialFinanceData: FinanceData = {
       "description": "264"
     },
     {
-      "id": "tx-mig-3388",
+      "id": "tx-mig-3389",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-16",
       "amount": 5,
@@ -33198,7 +33207,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-3389",
+      "id": "tx-mig-3390",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-12",
       "amount": 68,
@@ -33207,7 +33216,7 @@ export const initialFinanceData: FinanceData = {
       "description": "68"
     },
     {
-      "id": "tx-mig-3390",
+      "id": "tx-mig-3391",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-32",
       "amount": 253,
@@ -33218,7 +33227,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3391",
+      "id": "tx-mig-3392",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-31",
       "amount": 253,
@@ -33229,7 +33238,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3392",
+      "id": "tx-mig-3393",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 15,
@@ -33240,7 +33249,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3393",
+      "id": "tx-mig-3394",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 15,
@@ -33251,7 +33260,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3394",
+      "id": "tx-mig-3395",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-29",
       "amount": 40,
@@ -33260,7 +33269,7 @@ export const initialFinanceData: FinanceData = {
       "description": "40"
     },
     {
-      "id": "tx-mig-3395",
+      "id": "tx-mig-3396",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 5,
@@ -33269,7 +33278,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-3396",
+      "id": "tx-mig-3397",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-9",
       "amount": 13,
@@ -33278,7 +33287,7 @@ export const initialFinanceData: FinanceData = {
       "description": "13"
     },
     {
-      "id": "tx-mig-3397",
+      "id": "tx-mig-3398",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-5",
       "amount": 5,
@@ -33287,7 +33296,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-3398",
+      "id": "tx-mig-3399",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-0",
       "amount": 35,
@@ -33296,7 +33305,7 @@ export const initialFinanceData: FinanceData = {
       "description": "35 подгузники"
     },
     {
-      "id": "tx-mig-3399",
+      "id": "tx-mig-3400",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-25",
       "amount": 1976,
@@ -33305,7 +33314,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1976"
     },
     {
-      "id": "tx-mig-3400",
+      "id": "tx-mig-3401",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-26",
       "amount": 15,
@@ -33314,7 +33323,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15 ailenet"
     },
     {
-      "id": "tx-mig-3401",
+      "id": "tx-mig-3402",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-9",
       "amount": 4,
@@ -33323,7 +33332,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4 перевод на карту"
     },
     {
-      "id": "tx-mig-3402",
+      "id": "tx-mig-3403",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-26",
       "amount": 3,
@@ -33332,7 +33341,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3 Ильгар"
     },
     {
-      "id": "tx-mig-3403",
+      "id": "tx-mig-3404",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 900,
@@ -33343,7 +33352,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3404",
+      "id": "tx-mig-3405",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 900,
@@ -33354,7 +33363,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3405",
+      "id": "tx-mig-3406",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 10,
@@ -33363,7 +33372,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-3406",
+      "id": "tx-mig-3407",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-21",
       "amount": 6,
@@ -33372,7 +33381,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6"
     },
     {
-      "id": "tx-mig-3407",
+      "id": "tx-mig-3408",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 3,
@@ -33381,7 +33390,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-3408",
+      "id": "tx-mig-3409",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-0",
       "amount": 4,
@@ -33390,7 +33399,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4"
     },
     {
-      "id": "tx-mig-3409",
+      "id": "tx-mig-3410",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 1,
@@ -33399,7 +33408,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1"
     },
     {
-      "id": "tx-mig-3410",
+      "id": "tx-mig-3411",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 9,
@@ -33408,7 +33417,7 @@ export const initialFinanceData: FinanceData = {
       "description": "9"
     },
     {
-      "id": "tx-mig-3411",
+      "id": "tx-mig-3412",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 4,
@@ -33417,7 +33426,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4"
     },
     {
-      "id": "tx-mig-3412",
+      "id": "tx-mig-3413",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 14,
@@ -33426,7 +33435,7 @@ export const initialFinanceData: FinanceData = {
       "description": "14"
     },
     {
-      "id": "tx-mig-3413",
+      "id": "tx-mig-3414",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-9",
       "amount": 301,
@@ -33435,7 +33444,7 @@ export const initialFinanceData: FinanceData = {
       "description": "301 за авто"
     },
     {
-      "id": "tx-mig-3414",
+      "id": "tx-mig-3415",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 22,
@@ -33444,7 +33453,7 @@ export const initialFinanceData: FinanceData = {
       "description": "22"
     },
     {
-      "id": "tx-mig-3415",
+      "id": "tx-mig-3416",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-5",
       "amount": 4,
@@ -33453,7 +33462,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4"
     },
     {
-      "id": "tx-mig-3416",
+      "id": "tx-mig-3417",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-6",
       "amount": 10,
@@ -33462,7 +33471,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10 minimalistic phone"
     },
     {
-      "id": "tx-mig-3417",
+      "id": "tx-mig-3418",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 20,
@@ -33471,7 +33480,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-3418",
+      "id": "tx-mig-3419",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-22",
       "amount": 30,
@@ -33480,7 +33489,7 @@ export const initialFinanceData: FinanceData = {
       "description": "30 плита"
     },
     {
-      "id": "tx-mig-3419",
+      "id": "tx-mig-3420",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-15",
       "amount": 20,
@@ -33489,7 +33498,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-3420",
+      "id": "tx-mig-3421",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 10,
@@ -33498,7 +33507,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-3421",
+      "id": "tx-mig-3422",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 68,
@@ -33507,7 +33516,7 @@ export const initialFinanceData: FinanceData = {
       "description": "68"
     },
     {
-      "id": "tx-mig-3422",
+      "id": "tx-mig-3423",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-5",
       "amount": 5,
@@ -33516,7 +33525,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-3423",
+      "id": "tx-mig-3424",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-8",
       "amount": 15,
@@ -33525,7 +33534,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15"
     },
     {
-      "id": "tx-mig-3424",
+      "id": "tx-mig-3425",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-6",
       "amount": 5,
@@ -33534,7 +33543,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5 yandex"
     },
     {
-      "id": "tx-mig-3425",
+      "id": "tx-mig-3426",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 5,
@@ -33543,7 +33552,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-3426",
+      "id": "tx-mig-3427",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-17",
       "amount": 95,
@@ -33552,7 +33561,7 @@ export const initialFinanceData: FinanceData = {
       "description": "95"
     },
     {
-      "id": "tx-mig-3427",
+      "id": "tx-mig-3428",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-8",
       "amount": 39,
@@ -33561,7 +33570,7 @@ export const initialFinanceData: FinanceData = {
       "description": "39"
     },
     {
-      "id": "tx-mig-3428",
+      "id": "tx-mig-3429",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-32",
       "amount": 100,
@@ -33572,7 +33581,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3429",
+      "id": "tx-mig-3430",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 100,
@@ -33583,7 +33592,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3430",
+      "id": "tx-mig-3431",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 2,
@@ -33592,7 +33601,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-3431",
+      "id": "tx-mig-3432",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-0",
       "amount": 3,
@@ -33601,7 +33610,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-3432",
+      "id": "tx-mig-3433",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-22",
       "amount": 2,
@@ -33610,7 +33619,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-3433",
+      "id": "tx-mig-3434",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-29",
       "amount": 200,
@@ -33619,7 +33628,7 @@ export const initialFinanceData: FinanceData = {
       "description": "200 Самира две коронки"
     },
     {
-      "id": "tx-mig-3434",
+      "id": "tx-mig-3435",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 21,
@@ -33628,7 +33637,7 @@ export const initialFinanceData: FinanceData = {
       "description": "21"
     },
     {
-      "id": "tx-mig-3435",
+      "id": "tx-mig-3436",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-16",
       "amount": 7,
@@ -33637,18 +33646,9 @@ export const initialFinanceData: FinanceData = {
       "description": "7"
     },
     {
-      "id": "tx-mig-3436",
-      "accountId": "acc-parsed-0",
-      "categoryId": "cat-parsed-15",
-      "amount": 20,
-      "type": "expense",
-      "date": "2024-02-19",
-      "description": "20"
-    },
-    {
       "id": "tx-mig-3437",
       "accountId": "acc-parsed-0",
-      "categoryId": "cat-parsed-8",
+      "categoryId": "cat-parsed-15",
       "amount": 20,
       "type": "expense",
       "date": "2024-02-19",
@@ -33657,6 +33657,15 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-3438",
       "accountId": "acc-parsed-0",
+      "categoryId": "cat-parsed-8",
+      "amount": 20,
+      "type": "expense",
+      "date": "2024-02-19",
+      "description": "20"
+    },
+    {
+      "id": "tx-mig-3439",
+      "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 25,
       "type": "expense",
@@ -33664,7 +33673,7 @@ export const initialFinanceData: FinanceData = {
       "description": "25"
     },
     {
-      "id": "tx-mig-3439",
+      "id": "tx-mig-3440",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 30,
@@ -33675,7 +33684,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3440",
+      "id": "tx-mig-3441",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-31",
       "amount": 30,
@@ -33686,7 +33695,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3441",
+      "id": "tx-mig-3442",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-6",
       "amount": 28,
@@ -33695,7 +33704,7 @@ export const initialFinanceData: FinanceData = {
       "description": "28 ханимани"
     },
     {
-      "id": "tx-mig-3442",
+      "id": "tx-mig-3443",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 10,
@@ -33706,7 +33715,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3443",
+      "id": "tx-mig-3444",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 10,
@@ -33717,7 +33726,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3444",
+      "id": "tx-mig-3445",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-6",
       "amount": 23,
@@ -33726,7 +33735,7 @@ export const initialFinanceData: FinanceData = {
       "description": "23 udemy aba terapiya"
     },
     {
-      "id": "tx-mig-3445",
+      "id": "tx-mig-3446",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 25,
@@ -33737,7 +33746,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3446",
+      "id": "tx-mig-3447",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-31",
       "amount": 25,
@@ -33748,7 +33757,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3447",
+      "id": "tx-mig-3448",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-20",
       "amount": 20,
@@ -33757,7 +33766,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20 Амиль"
     },
     {
-      "id": "tx-mig-3448",
+      "id": "tx-mig-3449",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-5",
       "amount": 5,
@@ -33766,7 +33775,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-3449",
+      "id": "tx-mig-3450",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-29",
       "amount": 210,
@@ -33775,7 +33784,7 @@ export const initialFinanceData: FinanceData = {
       "description": "210 Самира"
     },
     {
-      "id": "tx-mig-3450",
+      "id": "tx-mig-3451",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 3,
@@ -33784,7 +33793,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-3451",
+      "id": "tx-mig-3452",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-21",
       "amount": 30,
@@ -33793,7 +33802,7 @@ export const initialFinanceData: FinanceData = {
       "description": "30 салон"
     },
     {
-      "id": "tx-mig-3452",
+      "id": "tx-mig-3453",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 150,
@@ -33804,7 +33813,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3453",
+      "id": "tx-mig-3454",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 150,
@@ -33815,7 +33824,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3454",
+      "id": "tx-mig-3455",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-21",
       "amount": 17.5,
@@ -33824,7 +33833,7 @@ export const initialFinanceData: FinanceData = {
       "description": "17.5"
     },
     {
-      "id": "tx-mig-3455",
+      "id": "tx-mig-3456",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-0",
       "amount": 30.2,
@@ -33833,7 +33842,7 @@ export const initialFinanceData: FinanceData = {
       "description": "30.2 подгузники"
     },
     {
-      "id": "tx-mig-3456",
+      "id": "tx-mig-3457",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 8,
@@ -33842,7 +33851,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8"
     },
     {
-      "id": "tx-mig-3457",
+      "id": "tx-mig-3458",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 8,
@@ -33851,7 +33860,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8"
     },
     {
-      "id": "tx-mig-3458",
+      "id": "tx-mig-3459",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-20",
       "amount": 47,
@@ -33860,7 +33869,7 @@ export const initialFinanceData: FinanceData = {
       "description": "47"
     },
     {
-      "id": "tx-mig-3459",
+      "id": "tx-mig-3460",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-20",
       "amount": 5.7,
@@ -33869,7 +33878,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5.7"
     },
     {
-      "id": "tx-mig-3460",
+      "id": "tx-mig-3461",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-29",
       "amount": 45,
@@ -33878,7 +33887,7 @@ export const initialFinanceData: FinanceData = {
       "description": "45 Самира"
     },
     {
-      "id": "tx-mig-3461",
+      "id": "tx-mig-3462",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 195,
@@ -33889,7 +33898,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3462",
+      "id": "tx-mig-3463",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 195,
@@ -33900,7 +33909,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3463",
+      "id": "tx-mig-3464",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-21",
       "amount": 31,
@@ -33909,7 +33918,7 @@ export const initialFinanceData: FinanceData = {
       "description": "31 салон"
     },
     {
-      "id": "tx-mig-3464",
+      "id": "tx-mig-3465",
       "accountId": "acc-parsed-6",
       "categoryId": "cat-parsed-32",
       "amount": 23,
@@ -33920,7 +33929,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3465",
+      "id": "tx-mig-3466",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 23,
@@ -33931,7 +33940,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3466",
+      "id": "tx-mig-3467",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 75,
@@ -33942,7 +33951,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3467",
+      "id": "tx-mig-3468",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 75,
@@ -33953,7 +33962,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3468",
+      "id": "tx-mig-3469",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 8,
@@ -33962,7 +33971,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8"
     },
     {
-      "id": "tx-mig-3469",
+      "id": "tx-mig-3470",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-8",
       "amount": 5.5,
@@ -33971,7 +33980,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5.5"
     },
     {
-      "id": "tx-mig-3470",
+      "id": "tx-mig-3471",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-14",
       "amount": 28,
@@ -33980,7 +33989,7 @@ export const initialFinanceData: FinanceData = {
       "description": "28"
     },
     {
-      "id": "tx-mig-3471",
+      "id": "tx-mig-3472",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-29",
       "amount": 30,
@@ -33989,7 +33998,7 @@ export const initialFinanceData: FinanceData = {
       "description": "30 Samira"
     },
     {
-      "id": "tx-mig-3472",
+      "id": "tx-mig-3473",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-8",
       "amount": 7.7,
@@ -33998,7 +34007,7 @@ export const initialFinanceData: FinanceData = {
       "description": "7.7"
     },
     {
-      "id": "tx-mig-3473",
+      "id": "tx-mig-3474",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 21,
@@ -34007,7 +34016,7 @@ export const initialFinanceData: FinanceData = {
       "description": "21"
     },
     {
-      "id": "tx-mig-3474",
+      "id": "tx-mig-3475",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-10",
       "amount": 40,
@@ -34016,7 +34025,7 @@ export const initialFinanceData: FinanceData = {
       "description": "40"
     },
     {
-      "id": "tx-mig-3475",
+      "id": "tx-mig-3476",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-13",
       "amount": 16,
@@ -34025,7 +34034,7 @@ export const initialFinanceData: FinanceData = {
       "description": "16"
     },
     {
-      "id": "tx-mig-3476",
+      "id": "tx-mig-3477",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 3,
@@ -34034,7 +34043,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-3477",
+      "id": "tx-mig-3478",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 14,
@@ -34043,7 +34052,7 @@ export const initialFinanceData: FinanceData = {
       "description": "14"
     },
     {
-      "id": "tx-mig-3478",
+      "id": "tx-mig-3479",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-0",
       "amount": 10,
@@ -34052,7 +34061,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-3479",
+      "id": "tx-mig-3480",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 36,
@@ -34061,7 +34070,7 @@ export const initialFinanceData: FinanceData = {
       "description": "36 одежда"
     },
     {
-      "id": "tx-mig-3480",
+      "id": "tx-mig-3481",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-14",
       "amount": 12,
@@ -34070,7 +34079,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12"
     },
     {
-      "id": "tx-mig-3481",
+      "id": "tx-mig-3482",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 195,
@@ -34081,7 +34090,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3482",
+      "id": "tx-mig-3483",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 195,
@@ -34092,7 +34101,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3483",
+      "id": "tx-mig-3484",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 3,
@@ -34101,7 +34110,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-3484",
+      "id": "tx-mig-3485",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-20",
       "amount": 50,
@@ -34110,7 +34119,7 @@ export const initialFinanceData: FinanceData = {
       "description": "50 Эльхан день рождения"
     },
     {
-      "id": "tx-mig-3485",
+      "id": "tx-mig-3486",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-24",
       "amount": 401,
@@ -34119,7 +34128,7 @@ export const initialFinanceData: FinanceData = {
       "description": "401"
     },
     {
-      "id": "tx-mig-3486",
+      "id": "tx-mig-3487",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-6",
       "amount": 12,
@@ -34128,7 +34137,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12 Memento databse"
     },
     {
-      "id": "tx-mig-3487",
+      "id": "tx-mig-3488",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-32",
       "amount": 20,
@@ -34139,7 +34148,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3488",
+      "id": "tx-mig-3489",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-31",
       "amount": 20,
@@ -34150,7 +34159,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3489",
+      "id": "tx-mig-3490",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-15",
       "amount": 30,
@@ -34159,7 +34168,7 @@ export const initialFinanceData: FinanceData = {
       "description": "30"
     },
     {
-      "id": "tx-mig-3490",
+      "id": "tx-mig-3491",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-4",
       "amount": 4,
@@ -34168,7 +34177,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4"
     },
     {
-      "id": "tx-mig-3491",
+      "id": "tx-mig-3492",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-29",
       "amount": 40,
@@ -34177,7 +34186,7 @@ export const initialFinanceData: FinanceData = {
       "description": "40 Самира"
     },
     {
-      "id": "tx-mig-3492",
+      "id": "tx-mig-3493",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-6",
       "amount": 5.6,
@@ -34186,16 +34195,16 @@ export const initialFinanceData: FinanceData = {
       "description": "5.6 ticktick"
     },
     {
-      "id": "tx-mig-3493",
+      "id": "tx-mig-3494",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 35,
       "type": "expense",
       "date": "2024-02-07",
       "description": "35"
     },
     {
-      "id": "tx-mig-3494",
+      "id": "tx-mig-3495",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 30,
@@ -34206,7 +34215,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3495",
+      "id": "tx-mig-3496",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 30,
@@ -34217,7 +34226,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3496",
+      "id": "tx-mig-3497",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-16",
       "amount": 4,
@@ -34226,7 +34235,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4"
     },
     {
-      "id": "tx-mig-3497",
+      "id": "tx-mig-3498",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 30,
@@ -34235,7 +34244,7 @@ export const initialFinanceData: FinanceData = {
       "description": "30"
     },
     {
-      "id": "tx-mig-3498",
+      "id": "tx-mig-3499",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-29",
       "amount": 47,
@@ -34244,7 +34253,7 @@ export const initialFinanceData: FinanceData = {
       "description": "47 Самира пломба"
     },
     {
-      "id": "tx-mig-3499",
+      "id": "tx-mig-3500",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-6",
       "amount": 20,
@@ -34253,7 +34262,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20 notion"
     },
     {
-      "id": "tx-mig-3500",
+      "id": "tx-mig-3501",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-8",
       "amount": 5.5,
@@ -34262,7 +34271,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5.5"
     },
     {
-      "id": "tx-mig-3501",
+      "id": "tx-mig-3502",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 3,
@@ -34271,7 +34280,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-3502",
+      "id": "tx-mig-3503",
       "accountId": "acc-parsed-6",
       "categoryId": "cat-parsed-23",
       "amount": 6,
@@ -34280,7 +34289,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6"
     },
     {
-      "id": "tx-mig-3503",
+      "id": "tx-mig-3504",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-0",
       "amount": 220,
@@ -34289,7 +34298,7 @@ export const initialFinanceData: FinanceData = {
       "description": "220 курс развития речи Рената"
     },
     {
-      "id": "tx-mig-3504",
+      "id": "tx-mig-3505",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 40,
@@ -34298,7 +34307,7 @@ export const initialFinanceData: FinanceData = {
       "description": "40"
     },
     {
-      "id": "tx-mig-3505",
+      "id": "tx-mig-3506",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 31,
@@ -34307,7 +34316,7 @@ export const initialFinanceData: FinanceData = {
       "description": "31"
     },
     {
-      "id": "tx-mig-3506",
+      "id": "tx-mig-3507",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 210,
@@ -34316,20 +34325,20 @@ export const initialFinanceData: FinanceData = {
       "description": "Перевод со счета ASB kart в Albali kart",
       "transferAccountId": "acc-parsed-2",
       "transferType": "out"
-    },
-    {
-      "id": "tx-mig-3507",
-      "accountId": "acc-parsed-2",
-      "categoryId": "cat-parsed-31",
-      "amount": 210,
-      "type": "transfer",
-      "date": "2024-02-04",
-      "description": "Перевод со счета ASB kart в Albali kart",
-      "transferAccountId": "acc-parsed-0",
-      "transferType": "in"
     },
     {
       "id": "tx-mig-3508",
+      "accountId": "acc-parsed-2",
+      "categoryId": "cat-parsed-31",
+      "amount": 210,
+      "type": "transfer",
+      "date": "2024-02-04",
+      "description": "Перевод со счета ASB kart в Albali kart",
+      "transferAccountId": "acc-parsed-0",
+      "transferType": "in"
+    },
+    {
+      "id": "tx-mig-3509",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 25,
@@ -34340,7 +34349,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3509",
+      "id": "tx-mig-3510",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 25,
@@ -34351,7 +34360,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3510",
+      "id": "tx-mig-3511",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-12",
       "amount": 91.82,
@@ -34360,7 +34369,7 @@ export const initialFinanceData: FinanceData = {
       "description": "91.82"
     },
     {
-      "id": "tx-mig-3511",
+      "id": "tx-mig-3512",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-8",
       "amount": 30,
@@ -34369,7 +34378,7 @@ export const initialFinanceData: FinanceData = {
       "description": "30"
     },
     {
-      "id": "tx-mig-3512",
+      "id": "tx-mig-3513",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-29",
       "amount": 56,
@@ -34378,7 +34387,7 @@ export const initialFinanceData: FinanceData = {
       "description": "56 Самира"
     },
     {
-      "id": "tx-mig-3513",
+      "id": "tx-mig-3514",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-0",
       "amount": 2,
@@ -34387,7 +34396,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-3514",
+      "id": "tx-mig-3515",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-15",
       "amount": 20,
@@ -34396,7 +34405,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-3515",
+      "id": "tx-mig-3516",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-20",
       "amount": 20,
@@ -34405,7 +34414,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20 Яс Эльхана"
     },
     {
-      "id": "tx-mig-3516",
+      "id": "tx-mig-3517",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-5",
       "amount": 5,
@@ -34414,7 +34423,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-3517",
+      "id": "tx-mig-3518",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-26",
       "amount": 3,
@@ -34423,7 +34432,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3 Ilqar"
     },
     {
-      "id": "tx-mig-3518",
+      "id": "tx-mig-3519",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-25",
       "amount": 1801,
@@ -34432,7 +34441,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1801"
     },
     {
-      "id": "tx-mig-3519",
+      "id": "tx-mig-3520",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-26",
       "amount": 3,
@@ -34441,7 +34450,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3 samira"
     },
     {
-      "id": "tx-mig-3520",
+      "id": "tx-mig-3521",
       "accountId": "acc-parsed-16",
       "categoryId": "cat-parsed-25",
       "amount": 263,
@@ -34450,7 +34459,7 @@ export const initialFinanceData: FinanceData = {
       "description": "263"
     },
     {
-      "id": "tx-mig-3521",
+      "id": "tx-mig-3522",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 220,
@@ -34461,7 +34470,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3522",
+      "id": "tx-mig-3523",
       "accountId": "acc-parsed-18",
       "categoryId": "cat-parsed-31",
       "amount": 220,
@@ -34472,7 +34481,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3523",
+      "id": "tx-mig-3524",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-32",
       "amount": 2,
@@ -34483,7 +34492,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3524",
+      "id": "tx-mig-3525",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-31",
       "amount": 2,
@@ -34494,7 +34503,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3525",
+      "id": "tx-mig-3526",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-21",
       "amount": 3,
@@ -34503,7 +34512,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-3526",
+      "id": "tx-mig-3527",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-0",
       "amount": 33,
@@ -34512,7 +34521,7 @@ export const initialFinanceData: FinanceData = {
       "description": "33 подгузники"
     },
     {
-      "id": "tx-mig-3527",
+      "id": "tx-mig-3528",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-9",
       "amount": 78,
@@ -34521,7 +34530,7 @@ export const initialFinanceData: FinanceData = {
       "description": "78 кредит за авто"
     },
     {
-      "id": "tx-mig-3528",
+      "id": "tx-mig-3529",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-20",
       "amount": 1,
@@ -34530,7 +34539,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1"
     },
     {
-      "id": "tx-mig-3529",
+      "id": "tx-mig-3530",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-0",
       "amount": 5,
@@ -34539,7 +34548,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-3530",
+      "id": "tx-mig-3531",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 5,
@@ -34548,7 +34557,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-3531",
+      "id": "tx-mig-3532",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-26",
       "amount": 15,
@@ -34557,7 +34566,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15 ailenet"
     },
     {
-      "id": "tx-mig-3532",
+      "id": "tx-mig-3533",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-21",
       "amount": 4,
@@ -34566,7 +34575,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4"
     },
     {
-      "id": "tx-mig-3533",
+      "id": "tx-mig-3534",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 11,
@@ -34575,7 +34584,7 @@ export const initialFinanceData: FinanceData = {
       "description": "11"
     },
     {
-      "id": "tx-mig-3534",
+      "id": "tx-mig-3535",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-21",
       "amount": 8,
@@ -34584,7 +34593,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8"
     },
     {
-      "id": "tx-mig-3535",
+      "id": "tx-mig-3536",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-22",
       "amount": 20,
@@ -34593,7 +34602,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-3536",
+      "id": "tx-mig-3537",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 36,
@@ -34602,7 +34611,7 @@ export const initialFinanceData: FinanceData = {
       "description": "36"
     },
     {
-      "id": "tx-mig-3537",
+      "id": "tx-mig-3538",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 95,
@@ -34613,7 +34622,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3538",
+      "id": "tx-mig-3539",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 95,
@@ -34624,7 +34633,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3539",
+      "id": "tx-mig-3540",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 3.6,
@@ -34633,7 +34642,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3.6"
     },
     {
-      "id": "tx-mig-3540",
+      "id": "tx-mig-3541",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-21",
       "amount": 2,
@@ -34642,7 +34651,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-3541",
+      "id": "tx-mig-3542",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-5",
       "amount": 5,
@@ -34651,7 +34660,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-3542",
+      "id": "tx-mig-3543",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 1,
@@ -34660,7 +34669,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1"
     },
     {
-      "id": "tx-mig-3543",
+      "id": "tx-mig-3544",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 2,
@@ -34669,7 +34678,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-3544",
+      "id": "tx-mig-3545",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 15,
@@ -34678,7 +34687,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15"
     },
     {
-      "id": "tx-mig-3545",
+      "id": "tx-mig-3546",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 9.1,
@@ -34687,7 +34696,7 @@ export const initialFinanceData: FinanceData = {
       "description": "9.1"
     },
     {
-      "id": "tx-mig-3546",
+      "id": "tx-mig-3547",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-6",
       "amount": 5,
@@ -34696,7 +34705,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-3547",
+      "id": "tx-mig-3548",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 5.2,
@@ -34705,7 +34714,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5.2"
     },
     {
-      "id": "tx-mig-3548",
+      "id": "tx-mig-3549",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-20",
       "amount": 51,
@@ -34714,7 +34723,7 @@ export const initialFinanceData: FinanceData = {
       "description": "51 Эльхану"
     },
     {
-      "id": "tx-mig-3549",
+      "id": "tx-mig-3550",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 28,
@@ -34723,7 +34732,7 @@ export const initialFinanceData: FinanceData = {
       "description": "28"
     },
     {
-      "id": "tx-mig-3550",
+      "id": "tx-mig-3551",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 20,
@@ -34732,7 +34741,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-3551",
+      "id": "tx-mig-3552",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-15",
       "amount": 15,
@@ -34741,7 +34750,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15"
     },
     {
-      "id": "tx-mig-3552",
+      "id": "tx-mig-3553",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-6",
       "amount": 5,
@@ -34750,7 +34759,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5 yandex"
     },
     {
-      "id": "tx-mig-3553",
+      "id": "tx-mig-3554",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 2,
@@ -34759,7 +34768,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-3554",
+      "id": "tx-mig-3555",
       "accountId": "acc-parsed-6",
       "categoryId": "cat-parsed-0",
       "amount": 45,
@@ -34768,7 +34777,7 @@ export const initialFinanceData: FinanceData = {
       "description": "45"
     },
     {
-      "id": "tx-mig-3555",
+      "id": "tx-mig-3556",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 22,
@@ -34777,7 +34786,7 @@ export const initialFinanceData: FinanceData = {
       "description": "22"
     },
     {
-      "id": "tx-mig-3556",
+      "id": "tx-mig-3557",
       "accountId": "acc-parsed-6",
       "categoryId": "cat-parsed-22",
       "amount": 5,
@@ -34786,7 +34795,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-3557",
+      "id": "tx-mig-3558",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 13.7,
@@ -34795,7 +34804,7 @@ export const initialFinanceData: FinanceData = {
       "description": "13.7"
     },
     {
-      "id": "tx-mig-3558",
+      "id": "tx-mig-3559",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-5",
       "amount": 5,
@@ -34804,7 +34813,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-3559",
+      "id": "tx-mig-3560",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 2.7,
@@ -34813,7 +34822,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2.7"
     },
     {
-      "id": "tx-mig-3560",
+      "id": "tx-mig-3561",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-14",
       "amount": 9,
@@ -34822,7 +34831,7 @@ export const initialFinanceData: FinanceData = {
       "description": "9"
     },
     {
-      "id": "tx-mig-3561",
+      "id": "tx-mig-3562",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-8",
       "amount": 15.3,
@@ -34831,7 +34840,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15.3"
     },
     {
-      "id": "tx-mig-3562",
+      "id": "tx-mig-3563",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 180,
@@ -34842,7 +34851,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3563",
+      "id": "tx-mig-3564",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-31",
       "amount": 180,
@@ -34853,7 +34862,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3564",
+      "id": "tx-mig-3565",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-21",
       "amount": 47,
@@ -34862,7 +34871,7 @@ export const initialFinanceData: FinanceData = {
       "description": "47"
     },
     {
-      "id": "tx-mig-3565",
+      "id": "tx-mig-3566",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 10,
@@ -34871,7 +34880,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-3566",
+      "id": "tx-mig-3567",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 9.8,
@@ -34880,7 +34889,7 @@ export const initialFinanceData: FinanceData = {
       "description": "9.8"
     },
     {
-      "id": "tx-mig-3567",
+      "id": "tx-mig-3568",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 22.3,
@@ -34889,7 +34898,7 @@ export const initialFinanceData: FinanceData = {
       "description": "22.3"
     },
     {
-      "id": "tx-mig-3568",
+      "id": "tx-mig-3569",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-26",
       "amount": 12,
@@ -34898,7 +34907,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12 Ильгар"
     },
     {
-      "id": "tx-mig-3569",
+      "id": "tx-mig-3570",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 10,
@@ -34907,7 +34916,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-3570",
+      "id": "tx-mig-3571",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-0",
       "amount": 28,
@@ -34916,7 +34925,7 @@ export const initialFinanceData: FinanceData = {
       "description": "28 подгузники"
     },
     {
-      "id": "tx-mig-3571",
+      "id": "tx-mig-3572",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-32",
       "amount": 95,
@@ -34927,7 +34936,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3572",
+      "id": "tx-mig-3573",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 95,
@@ -34938,7 +34947,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3573",
+      "id": "tx-mig-3574",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 60,
@@ -34949,7 +34958,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3574",
+      "id": "tx-mig-3575",
       "accountId": "acc-parsed-6",
       "categoryId": "cat-parsed-31",
       "amount": 60,
@@ -34960,7 +34969,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3575",
+      "id": "tx-mig-3576",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-15",
       "amount": 30,
@@ -34969,7 +34978,7 @@ export const initialFinanceData: FinanceData = {
       "description": "30"
     },
     {
-      "id": "tx-mig-3576",
+      "id": "tx-mig-3577",
       "accountId": "acc-parsed-6",
       "categoryId": "cat-parsed-20",
       "amount": 36,
@@ -34978,7 +34987,7 @@ export const initialFinanceData: FinanceData = {
       "description": "36"
     },
     {
-      "id": "tx-mig-3577",
+      "id": "tx-mig-3578",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 12.6,
@@ -34987,7 +34996,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12.6"
     },
     {
-      "id": "tx-mig-3578",
+      "id": "tx-mig-3579",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-11",
       "amount": 14,
@@ -34996,7 +35005,7 @@ export const initialFinanceData: FinanceData = {
       "description": "14"
     },
     {
-      "id": "tx-mig-3579",
+      "id": "tx-mig-3580",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-5",
       "amount": 4,
@@ -35005,7 +35014,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4"
     },
     {
-      "id": "tx-mig-3580",
+      "id": "tx-mig-3581",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 2.4,
@@ -35014,7 +35023,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2.4"
     },
     {
-      "id": "tx-mig-3581",
+      "id": "tx-mig-3582",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 95,
@@ -35025,7 +35034,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3582",
+      "id": "tx-mig-3583",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 95,
@@ -35036,16 +35045,16 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3583",
+      "id": "tx-mig-3584",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 35,
       "type": "expense",
       "date": "2024-01-11",
       "description": "35"
     },
     {
-      "id": "tx-mig-3584",
+      "id": "tx-mig-3585",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-6",
       "amount": 12,
@@ -35054,7 +35063,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12 Memento databse"
     },
     {
-      "id": "tx-mig-3585",
+      "id": "tx-mig-3586",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 1014,
@@ -35065,7 +35074,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3586",
+      "id": "tx-mig-3587",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-31",
       "amount": 1014,
@@ -35076,7 +35085,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3587",
+      "id": "tx-mig-3588",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-21",
       "amount": 12,
@@ -35085,7 +35094,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12"
     },
     {
-      "id": "tx-mig-3588",
+      "id": "tx-mig-3589",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-24",
       "amount": 327,
@@ -35094,7 +35103,7 @@ export const initialFinanceData: FinanceData = {
       "description": "327"
     },
     {
-      "id": "tx-mig-3589",
+      "id": "tx-mig-3590",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-25",
       "amount": 3280,
@@ -35103,7 +35112,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3280 тринадцатая зарплата"
     },
     {
-      "id": "tx-mig-3590",
+      "id": "tx-mig-3591",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-9",
       "amount": 365,
@@ -35112,7 +35121,7 @@ export const initialFinanceData: FinanceData = {
       "description": "365"
     },
     {
-      "id": "tx-mig-3591",
+      "id": "tx-mig-3592",
       "accountId": "acc-parsed-6",
       "categoryId": "cat-parsed-13",
       "amount": 15,
@@ -35121,7 +35130,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15"
     },
     {
-      "id": "tx-mig-3592",
+      "id": "tx-mig-3593",
       "accountId": "acc-parsed-6",
       "categoryId": "cat-parsed-0",
       "amount": 2,
@@ -35130,7 +35139,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-3593",
+      "id": "tx-mig-3594",
       "accountId": "acc-parsed-6",
       "categoryId": "cat-parsed-4",
       "amount": 1.4,
@@ -35139,7 +35148,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1.4"
     },
     {
-      "id": "tx-mig-3594",
+      "id": "tx-mig-3595",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 2.3,
@@ -35148,7 +35157,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2.3"
     },
     {
-      "id": "tx-mig-3595",
+      "id": "tx-mig-3596",
       "accountId": "acc-parsed-6",
       "categoryId": "cat-parsed-10",
       "amount": 40,
@@ -35157,7 +35166,7 @@ export const initialFinanceData: FinanceData = {
       "description": "40"
     },
     {
-      "id": "tx-mig-3596",
+      "id": "tx-mig-3597",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-6",
       "amount": 5.6,
@@ -35166,7 +35175,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5.6 ticktick"
     },
     {
-      "id": "tx-mig-3597",
+      "id": "tx-mig-3598",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 6,
@@ -35175,7 +35184,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6"
     },
     {
-      "id": "tx-mig-3598",
+      "id": "tx-mig-3599",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-21",
       "amount": 10,
@@ -35184,7 +35193,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-3599",
+      "id": "tx-mig-3600",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 1,
@@ -35193,7 +35202,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1"
     },
     {
-      "id": "tx-mig-3600",
+      "id": "tx-mig-3601",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-12",
       "amount": 60.62,
@@ -35202,7 +35211,7 @@ export const initialFinanceData: FinanceData = {
       "description": "60.62"
     },
     {
-      "id": "tx-mig-3601",
+      "id": "tx-mig-3602",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-20",
       "amount": 14,
@@ -35211,7 +35220,7 @@ export const initialFinanceData: FinanceData = {
       "description": "14"
     },
     {
-      "id": "tx-mig-3602",
+      "id": "tx-mig-3603",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-20",
       "amount": 35,
@@ -35220,7 +35229,7 @@ export const initialFinanceData: FinanceData = {
       "description": "35 Tahir emi"
     },
     {
-      "id": "tx-mig-3603",
+      "id": "tx-mig-3604",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-5",
       "amount": 5,
@@ -35229,7 +35238,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-3604",
+      "id": "tx-mig-3605",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 11,
@@ -35238,7 +35247,7 @@ export const initialFinanceData: FinanceData = {
       "description": "11"
     },
     {
-      "id": "tx-mig-3605",
+      "id": "tx-mig-3606",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-20",
       "amount": 22,
@@ -35247,7 +35256,7 @@ export const initialFinanceData: FinanceData = {
       "description": "22 торт"
     },
     {
-      "id": "tx-mig-3606",
+      "id": "tx-mig-3607",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 28,
@@ -35256,7 +35265,7 @@ export const initialFinanceData: FinanceData = {
       "description": "28"
     },
     {
-      "id": "tx-mig-3607",
+      "id": "tx-mig-3608",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-21",
       "amount": 3,
@@ -35265,7 +35274,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-3608",
+      "id": "tx-mig-3609",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-6",
       "amount": 21,
@@ -35274,7 +35283,7 @@ export const initialFinanceData: FinanceData = {
       "description": "21 notion"
     },
     {
-      "id": "tx-mig-3609",
+      "id": "tx-mig-3610",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-16",
       "amount": 3,
@@ -35283,7 +35292,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-3610",
+      "id": "tx-mig-3611",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 18,
@@ -35292,7 +35301,7 @@ export const initialFinanceData: FinanceData = {
       "description": "18"
     },
     {
-      "id": "tx-mig-3611",
+      "id": "tx-mig-3612",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 977,
@@ -35303,7 +35312,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3612",
+      "id": "tx-mig-3613",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-31",
       "amount": 977,
@@ -35314,7 +35323,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3613",
+      "id": "tx-mig-3614",
       "accountId": "acc-parsed-16",
       "categoryId": "cat-parsed-25",
       "amount": 265,
@@ -35323,7 +35332,7 @@ export const initialFinanceData: FinanceData = {
       "description": "265"
     },
     {
-      "id": "tx-mig-3614",
+      "id": "tx-mig-3615",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-9",
       "amount": 23,
@@ -35332,7 +35341,7 @@ export const initialFinanceData: FinanceData = {
       "description": "23"
     },
     {
-      "id": "tx-mig-3615",
+      "id": "tx-mig-3616",
       "accountId": "acc-parsed-6",
       "categoryId": "cat-parsed-20",
       "amount": 50,
@@ -35341,7 +35350,7 @@ export const initialFinanceData: FinanceData = {
       "description": "50 от мамы"
     },
     {
-      "id": "tx-mig-3616",
+      "id": "tx-mig-3617",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 31,
@@ -35350,7 +35359,7 @@ export const initialFinanceData: FinanceData = {
       "description": "31"
     },
     {
-      "id": "tx-mig-3617",
+      "id": "tx-mig-3618",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-6",
       "amount": 17,
@@ -35359,7 +35368,7 @@ export const initialFinanceData: FinanceData = {
       "description": "17 Agnessa mini"
     },
     {
-      "id": "tx-mig-3618",
+      "id": "tx-mig-3619",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-26",
       "amount": 6,
@@ -35368,7 +35377,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3 Ильгар 3 Самира"
     },
     {
-      "id": "tx-mig-3619",
+      "id": "tx-mig-3620",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 20.5,
@@ -35377,7 +35386,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20.5"
     },
     {
-      "id": "tx-mig-3620",
+      "id": "tx-mig-3621",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-26",
       "amount": 15,
@@ -35386,7 +35395,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15 ailenet"
     },
     {
-      "id": "tx-mig-3621",
+      "id": "tx-mig-3622",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-21",
       "amount": 5.32,
@@ -35395,7 +35404,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5.32"
     },
     {
-      "id": "tx-mig-3622",
+      "id": "tx-mig-3623",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 40,
@@ -35404,7 +35413,7 @@ export const initialFinanceData: FinanceData = {
       "description": "40"
     },
     {
-      "id": "tx-mig-3623",
+      "id": "tx-mig-3624",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-15",
       "amount": 20,
@@ -35413,7 +35422,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-3624",
+      "id": "tx-mig-3625",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-25",
       "amount": 1614,
@@ -35422,7 +35431,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1614"
     },
     {
-      "id": "tx-mig-3625",
+      "id": "tx-mig-3626",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-0",
       "amount": 24.9,
@@ -35431,7 +35440,7 @@ export const initialFinanceData: FinanceData = {
       "description": "24.9 подгузники"
     },
     {
-      "id": "tx-mig-3626",
+      "id": "tx-mig-3627",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-21",
       "amount": 9.6,
@@ -35440,7 +35449,7 @@ export const initialFinanceData: FinanceData = {
       "description": "9.6"
     },
     {
-      "id": "tx-mig-3627",
+      "id": "tx-mig-3628",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-5",
       "amount": 5,
@@ -35449,7 +35458,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5 футбол"
     },
     {
-      "id": "tx-mig-3628",
+      "id": "tx-mig-3629",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 17.8,
@@ -35458,7 +35467,7 @@ export const initialFinanceData: FinanceData = {
       "description": "17.8"
     },
     {
-      "id": "tx-mig-3629",
+      "id": "tx-mig-3630",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-8",
       "amount": 11.7,
@@ -35467,7 +35476,7 @@ export const initialFinanceData: FinanceData = {
       "description": "11.7"
     },
     {
-      "id": "tx-mig-3630",
+      "id": "tx-mig-3631",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 10,
@@ -35476,7 +35485,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-3631",
+      "id": "tx-mig-3632",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 10,
@@ -35487,7 +35496,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3632",
+      "id": "tx-mig-3633",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-31",
       "amount": 10,
@@ -35498,7 +35507,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3633",
+      "id": "tx-mig-3634",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 42,
@@ -35507,7 +35516,7 @@ export const initialFinanceData: FinanceData = {
       "description": "42"
     },
     {
-      "id": "tx-mig-3634",
+      "id": "tx-mig-3635",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 8,
@@ -35516,7 +35525,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8"
     },
     {
-      "id": "tx-mig-3635",
+      "id": "tx-mig-3636",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-20",
       "amount": 15,
@@ -35525,7 +35534,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15 день рождения Зейнеб"
     },
     {
-      "id": "tx-mig-3636",
+      "id": "tx-mig-3637",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 4,
@@ -35534,7 +35543,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4"
     },
     {
-      "id": "tx-mig-3637",
+      "id": "tx-mig-3638",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 222,
@@ -35545,7 +35554,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3638",
+      "id": "tx-mig-3639",
       "accountId": "acc-parsed-18",
       "categoryId": "cat-parsed-31",
       "amount": 222,
@@ -35556,7 +35565,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3639",
+      "id": "tx-mig-3640",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 70,
@@ -35567,7 +35576,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3640",
+      "id": "tx-mig-3641",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 70,
@@ -35578,7 +35587,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3641",
+      "id": "tx-mig-3642",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 10.3,
@@ -35587,7 +35596,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10.3"
     },
     {
-      "id": "tx-mig-3642",
+      "id": "tx-mig-3643",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 15,
@@ -35596,7 +35605,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15 Поликлиника"
     },
     {
-      "id": "tx-mig-3643",
+      "id": "tx-mig-3644",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-9",
       "amount": 80,
@@ -35605,7 +35614,7 @@ export const initialFinanceData: FinanceData = {
       "description": "80 world kart"
     },
     {
-      "id": "tx-mig-3644",
+      "id": "tx-mig-3645",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-20",
       "amount": 10,
@@ -35614,7 +35623,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10 Яс Аббас"
     },
     {
-      "id": "tx-mig-3645",
+      "id": "tx-mig-3646",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-21",
       "amount": 45,
@@ -35623,7 +35632,7 @@ export const initialFinanceData: FinanceData = {
       "description": "45 салон"
     },
     {
-      "id": "tx-mig-3646",
+      "id": "tx-mig-3647",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 49.3,
@@ -35632,7 +35641,7 @@ export const initialFinanceData: FinanceData = {
       "description": "49.3"
     },
     {
-      "id": "tx-mig-3647",
+      "id": "tx-mig-3648",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-21",
       "amount": 13.1,
@@ -35641,7 +35650,7 @@ export const initialFinanceData: FinanceData = {
       "description": "13.1"
     },
     {
-      "id": "tx-mig-3648",
+      "id": "tx-mig-3649",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 78,
@@ -35650,7 +35659,7 @@ export const initialFinanceData: FinanceData = {
       "description": "78"
     },
     {
-      "id": "tx-mig-3649",
+      "id": "tx-mig-3650",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 8.9,
@@ -35659,7 +35668,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8.9"
     },
     {
-      "id": "tx-mig-3650",
+      "id": "tx-mig-3651",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-8",
       "amount": 40,
@@ -35668,7 +35677,7 @@ export const initialFinanceData: FinanceData = {
       "description": "40 d vitamin"
     },
     {
-      "id": "tx-mig-3651",
+      "id": "tx-mig-3652",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 20.7,
@@ -35677,7 +35686,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20.7"
     },
     {
-      "id": "tx-mig-3652",
+      "id": "tx-mig-3653",
       "accountId": "acc-parsed-6",
       "categoryId": "cat-parsed-22",
       "amount": 3.5,
@@ -35686,7 +35695,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3.5"
     },
     {
-      "id": "tx-mig-3653",
+      "id": "tx-mig-3654",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-6",
       "amount": 5,
@@ -35695,7 +35704,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5 yandex"
     },
     {
-      "id": "tx-mig-3654",
+      "id": "tx-mig-3655",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 2.4,
@@ -35704,7 +35713,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2.4"
     },
     {
-      "id": "tx-mig-3655",
+      "id": "tx-mig-3656",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-19",
       "amount": 7,
@@ -35713,7 +35722,7 @@ export const initialFinanceData: FinanceData = {
       "description": "7 регулировка фар"
     },
     {
-      "id": "tx-mig-3656",
+      "id": "tx-mig-3657",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-20",
       "amount": 20,
@@ -35722,7 +35731,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20 yas Amir futbol"
     },
     {
-      "id": "tx-mig-3657",
+      "id": "tx-mig-3658",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 17,
@@ -35731,7 +35740,7 @@ export const initialFinanceData: FinanceData = {
       "description": "17"
     },
     {
-      "id": "tx-mig-3658",
+      "id": "tx-mig-3659",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 95,
@@ -35742,7 +35751,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3659",
+      "id": "tx-mig-3660",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 95,
@@ -35753,7 +35762,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3660",
+      "id": "tx-mig-3661",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 30,
@@ -35764,7 +35773,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3661",
+      "id": "tx-mig-3662",
       "accountId": "acc-parsed-6",
       "categoryId": "cat-parsed-31",
       "amount": 30,
@@ -35775,7 +35784,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3662",
+      "id": "tx-mig-3663",
       "accountId": "acc-parsed-6",
       "categoryId": "cat-parsed-0",
       "amount": 50,
@@ -35784,7 +35793,7 @@ export const initialFinanceData: FinanceData = {
       "description": "50"
     },
     {
-      "id": "tx-mig-3663",
+      "id": "tx-mig-3664",
       "accountId": "acc-parsed-6",
       "categoryId": "cat-parsed-22",
       "amount": 30,
@@ -35793,7 +35802,7 @@ export const initialFinanceData: FinanceData = {
       "description": "30"
     },
     {
-      "id": "tx-mig-3664",
+      "id": "tx-mig-3665",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-15",
       "amount": 20,
@@ -35802,7 +35811,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-3665",
+      "id": "tx-mig-3666",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 10,
@@ -35811,7 +35820,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-3666",
+      "id": "tx-mig-3667",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 7.6,
@@ -35820,7 +35829,7 @@ export const initialFinanceData: FinanceData = {
       "description": "7.6"
     },
     {
-      "id": "tx-mig-3667",
+      "id": "tx-mig-3668",
       "accountId": "acc-parsed-6",
       "categoryId": "cat-parsed-22",
       "amount": 14,
@@ -35829,7 +35838,7 @@ export const initialFinanceData: FinanceData = {
       "description": "14"
     },
     {
-      "id": "tx-mig-3668",
+      "id": "tx-mig-3669",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 5,
@@ -35838,7 +35847,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-3669",
+      "id": "tx-mig-3670",
       "accountId": "acc-parsed-6",
       "categoryId": "cat-parsed-0",
       "amount": 20,
@@ -35847,7 +35856,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-3670",
+      "id": "tx-mig-3671",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 1,
@@ -35856,7 +35865,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1"
     },
     {
-      "id": "tx-mig-3671",
+      "id": "tx-mig-3672",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-14",
       "amount": 2,
@@ -35865,7 +35874,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-3672",
+      "id": "tx-mig-3673",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-0",
       "amount": 90,
@@ -35874,7 +35883,7 @@ export const initialFinanceData: FinanceData = {
       "description": "90 психиатру"
     },
     {
-      "id": "tx-mig-3673",
+      "id": "tx-mig-3674",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 13,
@@ -35883,7 +35892,7 @@ export const initialFinanceData: FinanceData = {
       "description": "13"
     },
     {
-      "id": "tx-mig-3674",
+      "id": "tx-mig-3675",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-9",
       "amount": 20,
@@ -35892,7 +35901,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-3675",
+      "id": "tx-mig-3676",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 80,
@@ -35903,7 +35912,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3676",
+      "id": "tx-mig-3677",
       "accountId": "acc-parsed-18",
       "categoryId": "cat-parsed-31",
       "amount": 80,
@@ -35914,7 +35923,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3677",
+      "id": "tx-mig-3678",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 40,
@@ -35925,7 +35934,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3678",
+      "id": "tx-mig-3679",
       "accountId": "acc-parsed-6",
       "categoryId": "cat-parsed-31",
       "amount": 40,
@@ -35936,7 +35945,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3679",
+      "id": "tx-mig-3680",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 34,
@@ -35945,7 +35954,7 @@ export const initialFinanceData: FinanceData = {
       "description": "34"
     },
     {
-      "id": "tx-mig-3680",
+      "id": "tx-mig-3681",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-20",
       "amount": 21,
@@ -35954,7 +35963,7 @@ export const initialFinanceData: FinanceData = {
       "description": "21"
     },
     {
-      "id": "tx-mig-3681",
+      "id": "tx-mig-3682",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 5,
@@ -35963,7 +35972,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-3682",
+      "id": "tx-mig-3683",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-20",
       "amount": 32,
@@ -35972,7 +35981,7 @@ export const initialFinanceData: FinanceData = {
       "description": "32"
     },
     {
-      "id": "tx-mig-3683",
+      "id": "tx-mig-3684",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-26",
       "amount": 12,
@@ -35981,7 +35990,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12 ilqar"
     },
     {
-      "id": "tx-mig-3684",
+      "id": "tx-mig-3685",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-0",
       "amount": 31,
@@ -35990,7 +35999,7 @@ export const initialFinanceData: FinanceData = {
       "description": "31"
     },
     {
-      "id": "tx-mig-3685",
+      "id": "tx-mig-3686",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-23",
       "amount": 14,
@@ -35999,7 +36008,7 @@ export const initialFinanceData: FinanceData = {
       "description": "14"
     },
     {
-      "id": "tx-mig-3686",
+      "id": "tx-mig-3687",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 12,
@@ -36008,7 +36017,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12"
     },
     {
-      "id": "tx-mig-3687",
+      "id": "tx-mig-3688",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 100,
@@ -36019,7 +36028,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3688",
+      "id": "tx-mig-3689",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 100,
@@ -36030,7 +36039,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3689",
+      "id": "tx-mig-3690",
       "accountId": "acc-parsed-6",
       "categoryId": "cat-parsed-23",
       "amount": 17,
@@ -36039,7 +36048,7 @@ export const initialFinanceData: FinanceData = {
       "description": "17"
     },
     {
-      "id": "tx-mig-3690",
+      "id": "tx-mig-3691",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 4,
@@ -36048,7 +36057,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4"
     },
     {
-      "id": "tx-mig-3691",
+      "id": "tx-mig-3692",
       "accountId": "acc-parsed-6",
       "categoryId": "cat-parsed-23",
       "amount": 18,
@@ -36057,7 +36066,7 @@ export const initialFinanceData: FinanceData = {
       "description": "18"
     },
     {
-      "id": "tx-mig-3692",
+      "id": "tx-mig-3693",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 12,
@@ -36066,7 +36075,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12"
     },
     {
-      "id": "tx-mig-3693",
+      "id": "tx-mig-3694",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-20",
       "amount": 8,
@@ -36075,7 +36084,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8"
     },
     {
-      "id": "tx-mig-3694",
+      "id": "tx-mig-3695",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-8",
       "amount": 1,
@@ -36084,7 +36093,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1"
     },
     {
-      "id": "tx-mig-3695",
+      "id": "tx-mig-3696",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 7,
@@ -36093,7 +36102,7 @@ export const initialFinanceData: FinanceData = {
       "description": "7"
     },
     {
-      "id": "tx-mig-3696",
+      "id": "tx-mig-3697",
       "accountId": "acc-parsed-6",
       "categoryId": "cat-parsed-23",
       "amount": 19,
@@ -36102,7 +36111,7 @@ export const initialFinanceData: FinanceData = {
       "description": "19"
     },
     {
-      "id": "tx-mig-3697",
+      "id": "tx-mig-3698",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 24,
@@ -36111,7 +36120,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12 12"
     },
     {
-      "id": "tx-mig-3698",
+      "id": "tx-mig-3699",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 15,
@@ -36122,7 +36131,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3699",
+      "id": "tx-mig-3700",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 15,
@@ -36133,7 +36142,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3700",
+      "id": "tx-mig-3701",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-23",
       "amount": 6,
@@ -36142,7 +36151,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6"
     },
     {
-      "id": "tx-mig-3701",
+      "id": "tx-mig-3702",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 12,
@@ -36151,7 +36160,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12"
     },
     {
-      "id": "tx-mig-3702",
+      "id": "tx-mig-3703",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 3,
@@ -36160,7 +36169,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-3703",
+      "id": "tx-mig-3704",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 1,
@@ -36169,7 +36178,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1"
     },
     {
-      "id": "tx-mig-3704",
+      "id": "tx-mig-3705",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-21",
       "amount": 19,
@@ -36178,7 +36187,7 @@ export const initialFinanceData: FinanceData = {
       "description": "19"
     },
     {
-      "id": "tx-mig-3705",
+      "id": "tx-mig-3706",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 30,
@@ -36187,7 +36196,7 @@ export const initialFinanceData: FinanceData = {
       "description": "30"
     },
     {
-      "id": "tx-mig-3706",
+      "id": "tx-mig-3707",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 43,
@@ -36196,7 +36205,7 @@ export const initialFinanceData: FinanceData = {
       "description": "43"
     },
     {
-      "id": "tx-mig-3707",
+      "id": "tx-mig-3708",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-10",
       "amount": 20,
@@ -36205,7 +36214,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-3708",
+      "id": "tx-mig-3709",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-13",
       "amount": 16,
@@ -36214,7 +36223,7 @@ export const initialFinanceData: FinanceData = {
       "description": "16"
     },
     {
-      "id": "tx-mig-3709",
+      "id": "tx-mig-3710",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-6",
       "amount": 13,
@@ -36223,7 +36232,7 @@ export const initialFinanceData: FinanceData = {
       "description": "13 memento"
     },
     {
-      "id": "tx-mig-3710",
+      "id": "tx-mig-3711",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 13,
@@ -36232,7 +36241,7 @@ export const initialFinanceData: FinanceData = {
       "description": "13"
     },
     {
-      "id": "tx-mig-3711",
+      "id": "tx-mig-3712",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 11,
@@ -36241,7 +36250,7 @@ export const initialFinanceData: FinanceData = {
       "description": "11"
     },
     {
-      "id": "tx-mig-3712",
+      "id": "tx-mig-3713",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-15",
       "amount": 20,
@@ -36250,7 +36259,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-3713",
+      "id": "tx-mig-3714",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-0",
       "amount": 12,
@@ -36259,7 +36268,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12"
     },
     {
-      "id": "tx-mig-3714",
+      "id": "tx-mig-3715",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 10,
@@ -36270,7 +36279,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3715",
+      "id": "tx-mig-3716",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 10,
@@ -36281,7 +36290,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3716",
+      "id": "tx-mig-3717",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 100,
@@ -36292,7 +36301,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3717",
+      "id": "tx-mig-3718",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 100,
@@ -36303,7 +36312,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3718",
+      "id": "tx-mig-3719",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 95,
@@ -36314,7 +36323,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3719",
+      "id": "tx-mig-3720",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 95,
@@ -36325,7 +36334,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3720",
+      "id": "tx-mig-3721",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 15,
@@ -36336,7 +36345,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3721",
+      "id": "tx-mig-3722",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 15,
@@ -36347,7 +36356,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3722",
+      "id": "tx-mig-3723",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 13,
@@ -36356,7 +36365,7 @@ export const initialFinanceData: FinanceData = {
       "description": "13"
     },
     {
-      "id": "tx-mig-3723",
+      "id": "tx-mig-3724",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 7,
@@ -36365,7 +36374,7 @@ export const initialFinanceData: FinanceData = {
       "description": "7"
     },
     {
-      "id": "tx-mig-3724",
+      "id": "tx-mig-3725",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-24",
       "amount": 327,
@@ -36374,7 +36383,7 @@ export const initialFinanceData: FinanceData = {
       "description": "327"
     },
     {
-      "id": "tx-mig-3725",
+      "id": "tx-mig-3726",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 18,
@@ -36383,7 +36392,7 @@ export const initialFinanceData: FinanceData = {
       "description": "18"
     },
     {
-      "id": "tx-mig-3726",
+      "id": "tx-mig-3727",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 10,
@@ -36394,7 +36403,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3727",
+      "id": "tx-mig-3728",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 10,
@@ -36405,7 +36414,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3728",
+      "id": "tx-mig-3729",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 13,
@@ -36414,7 +36423,7 @@ export const initialFinanceData: FinanceData = {
       "description": "13"
     },
     {
-      "id": "tx-mig-3729",
+      "id": "tx-mig-3730",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 1,
@@ -36423,7 +36432,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1"
     },
     {
-      "id": "tx-mig-3730",
+      "id": "tx-mig-3731",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 39,
@@ -36434,7 +36443,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3731",
+      "id": "tx-mig-3732",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-31",
       "amount": 39,
@@ -36445,7 +36454,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3732",
+      "id": "tx-mig-3733",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 13,
@@ -36454,7 +36463,7 @@ export const initialFinanceData: FinanceData = {
       "description": "13"
     },
     {
-      "id": "tx-mig-3733",
+      "id": "tx-mig-3734",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-0",
       "amount": 385,
@@ -36463,7 +36472,7 @@ export const initialFinanceData: FinanceData = {
       "description": "385 aba terapiya"
     },
     {
-      "id": "tx-mig-3734",
+      "id": "tx-mig-3735",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 960,
@@ -36474,7 +36483,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3735",
+      "id": "tx-mig-3736",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-31",
       "amount": 960,
@@ -36485,7 +36494,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3736",
+      "id": "tx-mig-3737",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 3,
@@ -36494,7 +36503,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-3737",
+      "id": "tx-mig-3738",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 10,
@@ -36505,7 +36514,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3738",
+      "id": "tx-mig-3739",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 10,
@@ -36516,7 +36525,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3739",
+      "id": "tx-mig-3740",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-6",
       "amount": 21,
@@ -36525,7 +36534,7 @@ export const initialFinanceData: FinanceData = {
       "description": "21 notion"
     },
     {
-      "id": "tx-mig-3740",
+      "id": "tx-mig-3741",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-23",
       "amount": 6,
@@ -36534,7 +36543,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6"
     },
     {
-      "id": "tx-mig-3741",
+      "id": "tx-mig-3742",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-11",
       "amount": 12,
@@ -36543,7 +36552,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12"
     },
     {
-      "id": "tx-mig-3742",
+      "id": "tx-mig-3743",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-12",
       "amount": 40,
@@ -36552,7 +36561,7 @@ export const initialFinanceData: FinanceData = {
       "description": "40"
     },
     {
-      "id": "tx-mig-3743",
+      "id": "tx-mig-3744",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 5,
@@ -36561,7 +36570,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-3744",
+      "id": "tx-mig-3745",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 50,
@@ -36572,7 +36581,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3745",
+      "id": "tx-mig-3746",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 50,
@@ -36583,7 +36592,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3746",
+      "id": "tx-mig-3747",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 8,
@@ -36592,7 +36601,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8"
     },
     {
-      "id": "tx-mig-3747",
+      "id": "tx-mig-3748",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 24,
@@ -36601,7 +36610,7 @@ export const initialFinanceData: FinanceData = {
       "description": "24"
     },
     {
-      "id": "tx-mig-3748",
+      "id": "tx-mig-3749",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 6,
@@ -36610,7 +36619,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6"
     },
     {
-      "id": "tx-mig-3749",
+      "id": "tx-mig-3750",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 50,
@@ -36621,7 +36630,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3750",
+      "id": "tx-mig-3751",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 50,
@@ -36632,7 +36641,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3751",
+      "id": "tx-mig-3752",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-25",
       "amount": 2087,
@@ -36641,7 +36650,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2087"
     },
     {
-      "id": "tx-mig-3752",
+      "id": "tx-mig-3753",
       "accountId": "acc-parsed-16",
       "categoryId": "cat-parsed-25",
       "amount": 265,
@@ -36650,7 +36659,7 @@ export const initialFinanceData: FinanceData = {
       "description": "265"
     },
     {
-      "id": "tx-mig-3753",
+      "id": "tx-mig-3754",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-26",
       "amount": 5,
@@ -36659,7 +36668,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5 Samira"
     },
     {
-      "id": "tx-mig-3754",
+      "id": "tx-mig-3755",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-21",
       "amount": 64,
@@ -36668,7 +36677,7 @@ export const initialFinanceData: FinanceData = {
       "description": "64 духи"
     },
     {
-      "id": "tx-mig-3755",
+      "id": "tx-mig-3756",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 20,
@@ -36679,7 +36688,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3756",
+      "id": "tx-mig-3757",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 20,
@@ -36690,7 +36699,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3757",
+      "id": "tx-mig-3758",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-26",
       "amount": 15,
@@ -36699,7 +36708,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15 ailenet"
     },
     {
-      "id": "tx-mig-3758",
+      "id": "tx-mig-3759",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-0",
       "amount": 30,
@@ -36708,18 +36717,9 @@ export const initialFinanceData: FinanceData = {
       "description": "30 подгузники"
     },
     {
-      "id": "tx-mig-3759",
+      "id": "tx-mig-3760",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
-      "amount": 12,
-      "type": "expense",
-      "date": "2023-11-30",
-      "description": "12"
-    },
-    {
-      "id": "tx-mig-3760",
-      "accountId": "acc-parsed-2",
-      "categoryId": "cat-parsed-4",
       "amount": 12,
       "type": "expense",
       "date": "2023-11-30",
@@ -36728,6 +36728,15 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-3761",
       "accountId": "acc-parsed-2",
+      "categoryId": "cat-parsed-4",
+      "amount": 12,
+      "type": "expense",
+      "date": "2023-11-30",
+      "description": "12"
+    },
+    {
+      "id": "tx-mig-3762",
+      "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-26",
       "amount": 3,
       "type": "expense",
@@ -36735,7 +36744,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3 ilqar"
     },
     {
-      "id": "tx-mig-3762",
+      "id": "tx-mig-3763",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 5,
@@ -36744,7 +36753,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-3763",
+      "id": "tx-mig-3764",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 12,
@@ -36753,7 +36762,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12"
     },
     {
-      "id": "tx-mig-3764",
+      "id": "tx-mig-3765",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 16,
@@ -36762,7 +36771,7 @@ export const initialFinanceData: FinanceData = {
       "description": "16"
     },
     {
-      "id": "tx-mig-3765",
+      "id": "tx-mig-3766",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 5,
@@ -36773,7 +36782,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3766",
+      "id": "tx-mig-3767",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 5,
@@ -36784,7 +36793,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3767",
+      "id": "tx-mig-3768",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-5",
       "amount": 25,
@@ -36793,7 +36802,7 @@ export const initialFinanceData: FinanceData = {
       "description": "25"
     },
     {
-      "id": "tx-mig-3768",
+      "id": "tx-mig-3769",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 100,
@@ -36804,7 +36813,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3769",
+      "id": "tx-mig-3770",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 100,
@@ -36815,7 +36824,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3770",
+      "id": "tx-mig-3771",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 2,
@@ -36824,7 +36833,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-3771",
+      "id": "tx-mig-3772",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-15",
       "amount": 20,
@@ -36833,7 +36842,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-3772",
+      "id": "tx-mig-3773",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 15,
@@ -36844,7 +36853,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3773",
+      "id": "tx-mig-3774",
       "accountId": "acc-parsed-6",
       "categoryId": "cat-parsed-31",
       "amount": 15,
@@ -36855,7 +36864,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3774",
+      "id": "tx-mig-3775",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 30,
@@ -36866,7 +36875,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3775",
+      "id": "tx-mig-3776",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 30,
@@ -36877,7 +36886,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3776",
+      "id": "tx-mig-3777",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 215,
@@ -36888,7 +36897,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3777",
+      "id": "tx-mig-3778",
       "accountId": "acc-parsed-18",
       "categoryId": "cat-parsed-31",
       "amount": 215,
@@ -36899,7 +36908,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3778",
+      "id": "tx-mig-3779",
       "accountId": "acc-parsed-6",
       "categoryId": "cat-parsed-20",
       "amount": 50,
@@ -36908,7 +36917,7 @@ export const initialFinanceData: FinanceData = {
       "description": "50 Sakir toy"
     },
     {
-      "id": "tx-mig-3779",
+      "id": "tx-mig-3780",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 5,
@@ -36917,7 +36926,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-3780",
+      "id": "tx-mig-3781",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-9",
       "amount": 85,
@@ -36926,7 +36935,7 @@ export const initialFinanceData: FinanceData = {
       "description": "85 avto"
     },
     {
-      "id": "tx-mig-3781",
+      "id": "tx-mig-3782",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-32",
       "amount": 216,
@@ -36937,7 +36946,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3782",
+      "id": "tx-mig-3783",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 216,
@@ -36948,7 +36957,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3783",
+      "id": "tx-mig-3784",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 100,
@@ -36959,7 +36968,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3784",
+      "id": "tx-mig-3785",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 100,
@@ -36970,7 +36979,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3785",
+      "id": "tx-mig-3786",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 38,
@@ -36979,7 +36988,7 @@ export const initialFinanceData: FinanceData = {
       "description": "38"
     },
     {
-      "id": "tx-mig-3786",
+      "id": "tx-mig-3787",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 5,
@@ -36988,7 +36997,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-3787",
+      "id": "tx-mig-3788",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-8",
       "amount": 50,
@@ -36997,7 +37006,7 @@ export const initialFinanceData: FinanceData = {
       "description": "50"
     },
     {
-      "id": "tx-mig-3788",
+      "id": "tx-mig-3789",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-21",
       "amount": 23,
@@ -37006,7 +37015,7 @@ export const initialFinanceData: FinanceData = {
       "description": "23"
     },
     {
-      "id": "tx-mig-3789",
+      "id": "tx-mig-3790",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-4",
       "amount": 57,
@@ -37015,7 +37024,7 @@ export const initialFinanceData: FinanceData = {
       "description": "57"
     },
     {
-      "id": "tx-mig-3790",
+      "id": "tx-mig-3791",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-20",
       "amount": 10,
@@ -37024,7 +37033,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-3791",
+      "id": "tx-mig-3792",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-6",
       "amount": 10,
@@ -37033,7 +37042,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10 cloud pc"
     },
     {
-      "id": "tx-mig-3792",
+      "id": "tx-mig-3793",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-5",
       "amount": 4,
@@ -37042,7 +37051,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4"
     },
     {
-      "id": "tx-mig-3793",
+      "id": "tx-mig-3794",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 3,
@@ -37051,7 +37060,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-3794",
+      "id": "tx-mig-3795",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 10,
@@ -37062,7 +37071,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3795",
+      "id": "tx-mig-3796",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 10,
@@ -37073,7 +37082,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3796",
+      "id": "tx-mig-3797",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 19,
@@ -37082,7 +37091,7 @@ export const initialFinanceData: FinanceData = {
       "description": "19"
     },
     {
-      "id": "tx-mig-3797",
+      "id": "tx-mig-3798",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 6,
@@ -37091,7 +37100,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6"
     },
     {
-      "id": "tx-mig-3798",
+      "id": "tx-mig-3799",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 17,
@@ -37100,7 +37109,7 @@ export const initialFinanceData: FinanceData = {
       "description": "11 6"
     },
     {
-      "id": "tx-mig-3799",
+      "id": "tx-mig-3800",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 20,
@@ -37111,7 +37120,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3800",
+      "id": "tx-mig-3801",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 20,
@@ -37122,7 +37131,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3801",
+      "id": "tx-mig-3802",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-23",
       "amount": 11,
@@ -37131,7 +37140,7 @@ export const initialFinanceData: FinanceData = {
       "description": "11"
     },
     {
-      "id": "tx-mig-3802",
+      "id": "tx-mig-3803",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 12,
@@ -37140,7 +37149,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12"
     },
     {
-      "id": "tx-mig-3803",
+      "id": "tx-mig-3804",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-4",
       "amount": 18,
@@ -37149,7 +37158,7 @@ export const initialFinanceData: FinanceData = {
       "description": "18"
     },
     {
-      "id": "tx-mig-3804",
+      "id": "tx-mig-3805",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-21",
       "amount": 8,
@@ -37158,7 +37167,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8"
     },
     {
-      "id": "tx-mig-3805",
+      "id": "tx-mig-3806",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 15,
@@ -37167,7 +37176,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15"
     },
     {
-      "id": "tx-mig-3806",
+      "id": "tx-mig-3807",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 4,
@@ -37178,7 +37187,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3807",
+      "id": "tx-mig-3808",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 4,
@@ -37189,7 +37198,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3808",
+      "id": "tx-mig-3809",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-0",
       "amount": 12,
@@ -37198,7 +37207,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12"
     },
     {
-      "id": "tx-mig-3809",
+      "id": "tx-mig-3810",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-0",
       "amount": 30,
@@ -37207,7 +37216,7 @@ export const initialFinanceData: FinanceData = {
       "description": "30 врач"
     },
     {
-      "id": "tx-mig-3810",
+      "id": "tx-mig-3811",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 14,
@@ -37216,7 +37225,7 @@ export const initialFinanceData: FinanceData = {
       "description": "14"
     },
     {
-      "id": "tx-mig-3811",
+      "id": "tx-mig-3812",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-23",
       "amount": 1,
@@ -37225,7 +37234,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1"
     },
     {
-      "id": "tx-mig-3812",
+      "id": "tx-mig-3813",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 6,
@@ -37234,7 +37243,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6"
     },
     {
-      "id": "tx-mig-3813",
+      "id": "tx-mig-3814",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-23",
       "amount": 24,
@@ -37243,7 +37252,7 @@ export const initialFinanceData: FinanceData = {
       "description": "9 4 11"
     },
     {
-      "id": "tx-mig-3814",
+      "id": "tx-mig-3815",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-4",
       "amount": 9,
@@ -37252,7 +37261,7 @@ export const initialFinanceData: FinanceData = {
       "description": "9"
     },
     {
-      "id": "tx-mig-3815",
+      "id": "tx-mig-3816",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 2,
@@ -37261,7 +37270,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-3816",
+      "id": "tx-mig-3817",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 20,
@@ -37272,7 +37281,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3817",
+      "id": "tx-mig-3818",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 20,
@@ -37283,7 +37292,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3818",
+      "id": "tx-mig-3819",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 11,
@@ -37292,7 +37301,7 @@ export const initialFinanceData: FinanceData = {
       "description": "11"
     },
     {
-      "id": "tx-mig-3819",
+      "id": "tx-mig-3820",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 275,
@@ -37303,7 +37312,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3820",
+      "id": "tx-mig-3821",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-31",
       "amount": 275,
@@ -37314,7 +37323,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3821",
+      "id": "tx-mig-3822",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-0",
       "amount": 45,
@@ -37323,7 +37332,7 @@ export const initialFinanceData: FinanceData = {
       "description": "45 eylence merkezi"
     },
     {
-      "id": "tx-mig-3822",
+      "id": "tx-mig-3823",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-20",
       "amount": 1.3,
@@ -37332,7 +37341,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1.3"
     },
     {
-      "id": "tx-mig-3823",
+      "id": "tx-mig-3824",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-9",
       "amount": 26,
@@ -37341,7 +37350,7 @@ export const initialFinanceData: FinanceData = {
       "description": "26"
     },
     {
-      "id": "tx-mig-3824",
+      "id": "tx-mig-3825",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 20,
@@ -37350,7 +37359,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3 17"
     },
     {
-      "id": "tx-mig-3825",
+      "id": "tx-mig-3826",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-6",
       "amount": 26,
@@ -37359,7 +37368,7 @@ export const initialFinanceData: FinanceData = {
       "description": "26 Хани мани"
     },
     {
-      "id": "tx-mig-3826",
+      "id": "tx-mig-3827",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 1,
@@ -37368,7 +37377,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1"
     },
     {
-      "id": "tx-mig-3827",
+      "id": "tx-mig-3828",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-5",
       "amount": 6,
@@ -37377,7 +37386,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6"
     },
     {
-      "id": "tx-mig-3828",
+      "id": "tx-mig-3829",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 15,
@@ -37386,7 +37395,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15"
     },
     {
-      "id": "tx-mig-3829",
+      "id": "tx-mig-3830",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-15",
       "amount": 20,
@@ -37395,7 +37404,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-3830",
+      "id": "tx-mig-3831",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 6,
@@ -37404,7 +37413,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6"
     },
     {
-      "id": "tx-mig-3831",
+      "id": "tx-mig-3832",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-20",
       "amount": 65,
@@ -37413,7 +37422,7 @@ export const initialFinanceData: FinanceData = {
       "description": "65 два торта"
     },
     {
-      "id": "tx-mig-3832",
+      "id": "tx-mig-3833",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-4",
       "amount": 4,
@@ -37422,7 +37431,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4"
     },
     {
-      "id": "tx-mig-3833",
+      "id": "tx-mig-3834",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 5,
@@ -37431,7 +37440,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-3834",
+      "id": "tx-mig-3835",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-26",
       "amount": 13,
@@ -37440,7 +37449,7 @@ export const initialFinanceData: FinanceData = {
       "description": "13 Ильгар"
     },
     {
-      "id": "tx-mig-3835",
+      "id": "tx-mig-3836",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 20,
@@ -37451,7 +37460,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3836",
+      "id": "tx-mig-3837",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 20,
@@ -37462,7 +37471,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3837",
+      "id": "tx-mig-3838",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-20",
       "amount": 36.2,
@@ -37471,7 +37480,7 @@ export const initialFinanceData: FinanceData = {
       "description": "30 3.2 3"
     },
     {
-      "id": "tx-mig-3838",
+      "id": "tx-mig-3839",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-8",
       "amount": 6,
@@ -37480,7 +37489,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6"
     },
     {
-      "id": "tx-mig-3839",
+      "id": "tx-mig-3840",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 12,
@@ -37489,7 +37498,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12"
     },
     {
-      "id": "tx-mig-3840",
+      "id": "tx-mig-3841",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 100,
@@ -37500,7 +37509,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3841",
+      "id": "tx-mig-3842",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 100,
@@ -37511,7 +37520,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3842",
+      "id": "tx-mig-3843",
       "accountId": "acc-parsed-6",
       "categoryId": "cat-parsed-20",
       "amount": 200,
@@ -37520,7 +37529,7 @@ export const initialFinanceData: FinanceData = {
       "description": "100 emi 50 resad 50 turkan день рождения Руфатика"
     },
     {
-      "id": "tx-mig-3843",
+      "id": "tx-mig-3844",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 9,
@@ -37529,7 +37538,7 @@ export const initialFinanceData: FinanceData = {
       "description": "9"
     },
     {
-      "id": "tx-mig-3844",
+      "id": "tx-mig-3845",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-4",
       "amount": 10,
@@ -37538,7 +37547,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-3845",
+      "id": "tx-mig-3846",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 13,
@@ -37547,7 +37556,7 @@ export const initialFinanceData: FinanceData = {
       "description": "13"
     },
     {
-      "id": "tx-mig-3846",
+      "id": "tx-mig-3847",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 5,
@@ -37556,7 +37565,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-3847",
+      "id": "tx-mig-3848",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 14,
@@ -37565,7 +37574,7 @@ export const initialFinanceData: FinanceData = {
       "description": "14"
     },
     {
-      "id": "tx-mig-3848",
+      "id": "tx-mig-3849",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 10,
@@ -37576,7 +37585,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3849",
+      "id": "tx-mig-3850",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 10,
@@ -37587,7 +37596,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3850",
+      "id": "tx-mig-3851",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 195,
@@ -37598,7 +37607,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3851",
+      "id": "tx-mig-3852",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 195,
@@ -37609,7 +37618,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3852",
+      "id": "tx-mig-3853",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 33,
@@ -37618,7 +37627,7 @@ export const initialFinanceData: FinanceData = {
       "description": "33"
     },
     {
-      "id": "tx-mig-3853",
+      "id": "tx-mig-3854",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-22",
       "amount": 240,
@@ -37627,7 +37636,7 @@ export const initialFinanceData: FinanceData = {
       "description": "240 чайник термос"
     },
     {
-      "id": "tx-mig-3854",
+      "id": "tx-mig-3855",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-21",
       "amount": 60,
@@ -37636,7 +37645,7 @@ export const initialFinanceData: FinanceData = {
       "description": "60"
     },
     {
-      "id": "tx-mig-3855",
+      "id": "tx-mig-3856",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 23,
@@ -37645,7 +37654,7 @@ export const initialFinanceData: FinanceData = {
       "description": "23"
     },
     {
-      "id": "tx-mig-3856",
+      "id": "tx-mig-3857",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-21",
       "amount": 26,
@@ -37654,7 +37663,7 @@ export const initialFinanceData: FinanceData = {
       "description": "26 салон"
     },
     {
-      "id": "tx-mig-3857",
+      "id": "tx-mig-3858",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-4",
       "amount": 35,
@@ -37663,7 +37672,7 @@ export const initialFinanceData: FinanceData = {
       "description": "35"
     },
     {
-      "id": "tx-mig-3858",
+      "id": "tx-mig-3859",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 1,
@@ -37672,7 +37681,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1"
     },
     {
-      "id": "tx-mig-3859",
+      "id": "tx-mig-3860",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 47,
@@ -37681,7 +37690,7 @@ export const initialFinanceData: FinanceData = {
       "description": "47"
     },
     {
-      "id": "tx-mig-3860",
+      "id": "tx-mig-3861",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-0",
       "amount": 36,
@@ -37690,7 +37699,7 @@ export const initialFinanceData: FinanceData = {
       "description": "36"
     },
     {
-      "id": "tx-mig-3861",
+      "id": "tx-mig-3862",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-6",
       "amount": 12,
@@ -37699,7 +37708,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12 Memento databse"
     },
     {
-      "id": "tx-mig-3862",
+      "id": "tx-mig-3863",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-24",
       "amount": 327,
@@ -37708,7 +37717,7 @@ export const initialFinanceData: FinanceData = {
       "description": "327"
     },
     {
-      "id": "tx-mig-3863",
+      "id": "tx-mig-3864",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-23",
       "amount": 12,
@@ -37717,7 +37726,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12"
     },
     {
-      "id": "tx-mig-3864",
+      "id": "tx-mig-3865",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-13",
       "amount": 32,
@@ -37726,7 +37735,7 @@ export const initialFinanceData: FinanceData = {
       "description": "32"
     },
     {
-      "id": "tx-mig-3865",
+      "id": "tx-mig-3866",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 100,
@@ -37737,7 +37746,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3866",
+      "id": "tx-mig-3867",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 100,
@@ -37748,7 +37757,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3867",
+      "id": "tx-mig-3868",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 6,
@@ -37757,7 +37766,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6"
     },
     {
-      "id": "tx-mig-3868",
+      "id": "tx-mig-3869",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-20",
       "amount": 15,
@@ -37766,7 +37775,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15"
     },
     {
-      "id": "tx-mig-3869",
+      "id": "tx-mig-3870",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 12,
@@ -37775,7 +37784,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12"
     },
     {
-      "id": "tx-mig-3870",
+      "id": "tx-mig-3871",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-4",
       "amount": 6.8,
@@ -37784,7 +37793,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6.8"
     },
     {
-      "id": "tx-mig-3871",
+      "id": "tx-mig-3872",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-6",
       "amount": 5.6,
@@ -37793,7 +37802,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5.6 ticktick"
     },
     {
-      "id": "tx-mig-3872",
+      "id": "tx-mig-3873",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-4",
       "amount": 6.5,
@@ -37802,7 +37811,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6.5"
     },
     {
-      "id": "tx-mig-3873",
+      "id": "tx-mig-3874",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 50,
@@ -37813,7 +37822,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3874",
+      "id": "tx-mig-3875",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 50,
@@ -37824,7 +37833,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3875",
+      "id": "tx-mig-3876",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-15",
       "amount": 42,
@@ -37833,7 +37842,7 @@ export const initialFinanceData: FinanceData = {
       "description": "42"
     },
     {
-      "id": "tx-mig-3876",
+      "id": "tx-mig-3877",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 12,
@@ -37842,7 +37851,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12"
     },
     {
-      "id": "tx-mig-3877",
+      "id": "tx-mig-3878",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-8",
       "amount": 1.1,
@@ -37851,7 +37860,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1.1"
     },
     {
-      "id": "tx-mig-3878",
+      "id": "tx-mig-3879",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-11",
       "amount": 10,
@@ -37860,7 +37869,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-3879",
+      "id": "tx-mig-3880",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 95,
@@ -37871,7 +37880,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3880",
+      "id": "tx-mig-3881",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 95,
@@ -37882,7 +37891,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3881",
+      "id": "tx-mig-3882",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-23",
       "amount": 10,
@@ -37891,7 +37900,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-3882",
+      "id": "tx-mig-3883",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 11,
@@ -37900,7 +37909,7 @@ export const initialFinanceData: FinanceData = {
       "description": "11"
     },
     {
-      "id": "tx-mig-3883",
+      "id": "tx-mig-3884",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 14,
@@ -37909,7 +37918,7 @@ export const initialFinanceData: FinanceData = {
       "description": "14"
     },
     {
-      "id": "tx-mig-3884",
+      "id": "tx-mig-3885",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 2,
@@ -37918,7 +37927,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-3885",
+      "id": "tx-mig-3886",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 15,
@@ -37929,7 +37938,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3886",
+      "id": "tx-mig-3887",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 15,
@@ -37940,7 +37949,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3887",
+      "id": "tx-mig-3888",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 48,
@@ -37949,7 +37958,7 @@ export const initialFinanceData: FinanceData = {
       "description": "48"
     },
     {
-      "id": "tx-mig-3888",
+      "id": "tx-mig-3889",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-21",
       "amount": 10,
@@ -37958,7 +37967,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-3889",
+      "id": "tx-mig-3890",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 11.3,
@@ -37967,7 +37976,7 @@ export const initialFinanceData: FinanceData = {
       "description": "11.3"
     },
     {
-      "id": "tx-mig-3890",
+      "id": "tx-mig-3891",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 200,
@@ -37978,7 +37987,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3891",
+      "id": "tx-mig-3892",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 200,
@@ -37989,7 +37998,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3892",
+      "id": "tx-mig-3893",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-12",
       "amount": 32.15,
@@ -37998,7 +38007,7 @@ export const initialFinanceData: FinanceData = {
       "description": "32.15"
     },
     {
-      "id": "tx-mig-3893",
+      "id": "tx-mig-3894",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 2,
@@ -38007,7 +38016,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-3894",
+      "id": "tx-mig-3895",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-8",
       "amount": 56,
@@ -38016,7 +38025,7 @@ export const initialFinanceData: FinanceData = {
       "description": "56"
     },
     {
-      "id": "tx-mig-3895",
+      "id": "tx-mig-3896",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 10,
@@ -38027,7 +38036,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3896",
+      "id": "tx-mig-3897",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 10,
@@ -38038,7 +38047,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3897",
+      "id": "tx-mig-3898",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-0",
       "amount": 1030,
@@ -38047,7 +38056,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1030 aba terapiya"
     },
     {
-      "id": "tx-mig-3898",
+      "id": "tx-mig-3899",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-4",
       "amount": 9.66,
@@ -38056,7 +38065,7 @@ export const initialFinanceData: FinanceData = {
       "description": "9.66"
     },
     {
-      "id": "tx-mig-3899",
+      "id": "tx-mig-3900",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 14,
@@ -38065,7 +38074,7 @@ export const initialFinanceData: FinanceData = {
       "description": "14"
     },
     {
-      "id": "tx-mig-3900",
+      "id": "tx-mig-3901",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-5",
       "amount": 4,
@@ -38074,7 +38083,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4"
     },
     {
-      "id": "tx-mig-3901",
+      "id": "tx-mig-3902",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 7.2,
@@ -38083,7 +38092,7 @@ export const initialFinanceData: FinanceData = {
       "description": "7.2"
     },
     {
-      "id": "tx-mig-3902",
+      "id": "tx-mig-3903",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 77,
@@ -38094,7 +38103,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3903",
+      "id": "tx-mig-3904",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-31",
       "amount": 77,
@@ -38105,7 +38114,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3904",
+      "id": "tx-mig-3905",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 20,
@@ -38116,7 +38125,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3905",
+      "id": "tx-mig-3906",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 20,
@@ -38127,7 +38136,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3906",
+      "id": "tx-mig-3907",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 3.4,
@@ -38136,7 +38145,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3.4"
     },
     {
-      "id": "tx-mig-3907",
+      "id": "tx-mig-3908",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-4",
       "amount": 30,
@@ -38145,7 +38154,7 @@ export const initialFinanceData: FinanceData = {
       "description": "30 bal"
     },
     {
-      "id": "tx-mig-3908",
+      "id": "tx-mig-3909",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-9",
       "amount": 23,
@@ -38154,7 +38163,7 @@ export const initialFinanceData: FinanceData = {
       "description": "23"
     },
     {
-      "id": "tx-mig-3909",
+      "id": "tx-mig-3910",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-20",
       "amount": 10,
@@ -38163,7 +38172,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10 Эльхану"
     },
     {
-      "id": "tx-mig-3910",
+      "id": "tx-mig-3911",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 13,
@@ -38172,7 +38181,7 @@ export const initialFinanceData: FinanceData = {
       "description": "13"
     },
     {
-      "id": "tx-mig-3911",
+      "id": "tx-mig-3912",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 13,
@@ -38181,7 +38190,7 @@ export const initialFinanceData: FinanceData = {
       "description": "13"
     },
     {
-      "id": "tx-mig-3912",
+      "id": "tx-mig-3913",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 20,
@@ -38192,7 +38201,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3913",
+      "id": "tx-mig-3914",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 20,
@@ -38203,7 +38212,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3914",
+      "id": "tx-mig-3915",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 265,
@@ -38214,7 +38223,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3915",
+      "id": "tx-mig-3916",
       "accountId": "acc-parsed-16",
       "categoryId": "cat-parsed-31",
       "amount": 265,
@@ -38225,7 +38234,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3916",
+      "id": "tx-mig-3917",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-26",
       "amount": 3,
@@ -38234,7 +38243,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3 Ilqar"
     },
     {
-      "id": "tx-mig-3917",
+      "id": "tx-mig-3918",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-25",
       "amount": 2062,
@@ -38243,7 +38252,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1797 265"
     },
     {
-      "id": "tx-mig-3918",
+      "id": "tx-mig-3919",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-20",
       "amount": 10,
@@ -38252,7 +38261,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-3919",
+      "id": "tx-mig-3920",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 2,
@@ -38261,7 +38270,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-3920",
+      "id": "tx-mig-3921",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-20",
       "amount": 12.6,
@@ -38270,7 +38279,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12.6"
     },
     {
-      "id": "tx-mig-3921",
+      "id": "tx-mig-3922",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 11,
@@ -38279,7 +38288,7 @@ export const initialFinanceData: FinanceData = {
       "description": "11"
     },
     {
-      "id": "tx-mig-3922",
+      "id": "tx-mig-3923",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 16,
@@ -38288,7 +38297,7 @@ export const initialFinanceData: FinanceData = {
       "description": "16"
     },
     {
-      "id": "tx-mig-3923",
+      "id": "tx-mig-3924",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-26",
       "amount": 15,
@@ -38297,7 +38306,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15 ailenet"
     },
     {
-      "id": "tx-mig-3924",
+      "id": "tx-mig-3925",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 2.5,
@@ -38306,7 +38315,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2.5"
     },
     {
-      "id": "tx-mig-3925",
+      "id": "tx-mig-3926",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 1,
@@ -38315,7 +38324,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1"
     },
     {
-      "id": "tx-mig-3926",
+      "id": "tx-mig-3927",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 10,
@@ -38324,7 +38333,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-3927",
+      "id": "tx-mig-3928",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 62,
@@ -38333,7 +38342,7 @@ export const initialFinanceData: FinanceData = {
       "description": "62"
     },
     {
-      "id": "tx-mig-3928",
+      "id": "tx-mig-3929",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 100,
@@ -38342,20 +38351,20 @@ export const initialFinanceData: FinanceData = {
       "description": "Перевод со счета Albali кредитная карта в Albali kart",
       "transferAccountId": "acc-parsed-2",
       "transferType": "out"
-    },
-    {
-      "id": "tx-mig-3929",
-      "accountId": "acc-parsed-2",
-      "categoryId": "cat-parsed-31",
-      "amount": 100,
-      "type": "transfer",
-      "date": "2023-10-29",
-      "description": "Перевод со счета Albali кредитная карта в Albali kart",
-      "transferAccountId": "acc-parsed-20",
-      "transferType": "in"
     },
     {
       "id": "tx-mig-3930",
+      "accountId": "acc-parsed-2",
+      "categoryId": "cat-parsed-31",
+      "amount": 100,
+      "type": "transfer",
+      "date": "2023-10-29",
+      "description": "Перевод со счета Albali кредитная карта в Albali kart",
+      "transferAccountId": "acc-parsed-20",
+      "transferType": "in"
+    },
+    {
+      "id": "tx-mig-3931",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 50,
@@ -38366,7 +38375,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3931",
+      "id": "tx-mig-3932",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 50,
@@ -38377,7 +38386,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3932",
+      "id": "tx-mig-3933",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-16",
       "amount": 10,
@@ -38386,7 +38395,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-3933",
+      "id": "tx-mig-3934",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-0",
       "amount": 25,
@@ -38395,7 +38404,7 @@ export const initialFinanceData: FinanceData = {
       "description": "25 подгузники"
     },
     {
-      "id": "tx-mig-3934",
+      "id": "tx-mig-3935",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-8",
       "amount": 47.6,
@@ -38404,7 +38413,7 @@ export const initialFinanceData: FinanceData = {
       "description": "47.6"
     },
     {
-      "id": "tx-mig-3935",
+      "id": "tx-mig-3936",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-32",
       "amount": 87,
@@ -38415,7 +38424,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3936",
+      "id": "tx-mig-3937",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 87,
@@ -38426,7 +38435,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3937",
+      "id": "tx-mig-3938",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-23",
       "amount": 5,
@@ -38435,7 +38444,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-3938",
+      "id": "tx-mig-3939",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 6,
@@ -38444,7 +38453,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6"
     },
     {
-      "id": "tx-mig-3939",
+      "id": "tx-mig-3940",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-15",
       "amount": 20,
@@ -38453,7 +38462,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-3940",
+      "id": "tx-mig-3941",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 300,
@@ -38464,7 +38473,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3941",
+      "id": "tx-mig-3942",
       "accountId": "acc-parsed-18",
       "categoryId": "cat-parsed-31",
       "amount": 300,
@@ -38475,7 +38484,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3942",
+      "id": "tx-mig-3943",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 17,
@@ -38484,7 +38493,7 @@ export const initialFinanceData: FinanceData = {
       "description": "17"
     },
     {
-      "id": "tx-mig-3943",
+      "id": "tx-mig-3944",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-0",
       "amount": 10.3,
@@ -38493,7 +38502,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10.3 подгузники"
     },
     {
-      "id": "tx-mig-3944",
+      "id": "tx-mig-3945",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-4",
       "amount": 5,
@@ -38502,7 +38511,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-3945",
+      "id": "tx-mig-3946",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 20,
@@ -38513,7 +38522,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3946",
+      "id": "tx-mig-3947",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 20,
@@ -38524,7 +38533,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3947",
+      "id": "tx-mig-3948",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 2.3,
@@ -38533,7 +38542,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2.3"
     },
     {
-      "id": "tx-mig-3948",
+      "id": "tx-mig-3949",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 40,
@@ -38544,7 +38553,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3949",
+      "id": "tx-mig-3950",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 40,
@@ -38555,7 +38564,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3950",
+      "id": "tx-mig-3951",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-6",
       "amount": 10,
@@ -38564,7 +38573,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10 onworks.net"
     },
     {
-      "id": "tx-mig-3951",
+      "id": "tx-mig-3952",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 12,
@@ -38573,7 +38582,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12"
     },
     {
-      "id": "tx-mig-3952",
+      "id": "tx-mig-3953",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 100,
@@ -38584,7 +38593,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3953",
+      "id": "tx-mig-3954",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 100,
@@ -38595,7 +38604,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3954",
+      "id": "tx-mig-3955",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 12,
@@ -38604,7 +38613,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12"
     },
     {
-      "id": "tx-mig-3955",
+      "id": "tx-mig-3956",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 2,
@@ -38613,7 +38622,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-3956",
+      "id": "tx-mig-3957",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 20,
@@ -38624,7 +38633,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3957",
+      "id": "tx-mig-3958",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 20,
@@ -38635,7 +38644,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3958",
+      "id": "tx-mig-3959",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-0",
       "amount": 2,
@@ -38644,7 +38653,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-3959",
+      "id": "tx-mig-3960",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 10.35,
@@ -38653,7 +38662,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10.35"
     },
     {
-      "id": "tx-mig-3960",
+      "id": "tx-mig-3961",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-8",
       "amount": 3.41,
@@ -38662,7 +38671,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3.41"
     },
     {
-      "id": "tx-mig-3961",
+      "id": "tx-mig-3962",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 85,
@@ -38673,7 +38682,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3962",
+      "id": "tx-mig-3963",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 85,
@@ -38684,7 +38693,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3963",
+      "id": "tx-mig-3964",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 6.45,
@@ -38693,7 +38702,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6.45"
     },
     {
-      "id": "tx-mig-3964",
+      "id": "tx-mig-3965",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-6",
       "amount": 5,
@@ -38702,7 +38711,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-3965",
+      "id": "tx-mig-3966",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 9,
@@ -38711,7 +38720,7 @@ export const initialFinanceData: FinanceData = {
       "description": "9"
     },
     {
-      "id": "tx-mig-3966",
+      "id": "tx-mig-3967",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-5",
       "amount": 5,
@@ -38720,7 +38729,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-3967",
+      "id": "tx-mig-3968",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 20,
@@ -38731,7 +38740,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3968",
+      "id": "tx-mig-3969",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 20,
@@ -38742,7 +38751,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3969",
+      "id": "tx-mig-3970",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-6",
       "amount": 6,
@@ -38751,7 +38760,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6 focus todo"
     },
     {
-      "id": "tx-mig-3970",
+      "id": "tx-mig-3971",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 18,
@@ -38760,7 +38769,7 @@ export const initialFinanceData: FinanceData = {
       "description": "18"
     },
     {
-      "id": "tx-mig-3971",
+      "id": "tx-mig-3972",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 10,
@@ -38771,7 +38780,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3972",
+      "id": "tx-mig-3973",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 10,
@@ -38782,16 +38791,16 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3973",
+      "id": "tx-mig-3974",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 40,
       "type": "expense",
       "date": "2023-10-19",
       "description": "40"
     },
     {
-      "id": "tx-mig-3974",
+      "id": "tx-mig-3975",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 15,
@@ -38800,7 +38809,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15"
     },
     {
-      "id": "tx-mig-3975",
+      "id": "tx-mig-3976",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 20,
@@ -38811,7 +38820,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3976",
+      "id": "tx-mig-3977",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 20,
@@ -38822,7 +38831,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3977",
+      "id": "tx-mig-3978",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 20,
@@ -38831,7 +38840,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-3978",
+      "id": "tx-mig-3979",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 16,
@@ -38840,7 +38849,7 @@ export const initialFinanceData: FinanceData = {
       "description": "16"
     },
     {
-      "id": "tx-mig-3979",
+      "id": "tx-mig-3980",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 2,
@@ -38849,7 +38858,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-3980",
+      "id": "tx-mig-3981",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-32",
       "amount": 100,
@@ -38860,7 +38869,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3981",
+      "id": "tx-mig-3982",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 100,
@@ -38871,7 +38880,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3982",
+      "id": "tx-mig-3983",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 15,
@@ -38880,7 +38889,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15"
     },
     {
-      "id": "tx-mig-3983",
+      "id": "tx-mig-3984",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-23",
       "amount": 26,
@@ -38889,7 +38898,7 @@ export const initialFinanceData: FinanceData = {
       "description": "26"
     },
     {
-      "id": "tx-mig-3984",
+      "id": "tx-mig-3985",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 11,
@@ -38898,20 +38907,20 @@ export const initialFinanceData: FinanceData = {
       "description": "Перевод со счета Кошелёк в Кошелек Самира",
       "transferAccountId": "acc-parsed-7",
       "transferType": "out"
-    },
-    {
-      "id": "tx-mig-3985",
-      "accountId": "acc-parsed-7",
-      "categoryId": "cat-parsed-31",
-      "amount": 11,
-      "type": "transfer",
-      "date": "2023-10-17",
-      "description": "Перевод со счета Кошелёк в Кошелек Самира",
-      "transferAccountId": "acc-parsed-1",
-      "transferType": "in"
     },
     {
       "id": "tx-mig-3986",
+      "accountId": "acc-parsed-7",
+      "categoryId": "cat-parsed-31",
+      "amount": 11,
+      "type": "transfer",
+      "date": "2023-10-17",
+      "description": "Перевод со счета Кошелёк в Кошелек Самира",
+      "transferAccountId": "acc-parsed-1",
+      "transferType": "in"
+    },
+    {
+      "id": "tx-mig-3987",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 20,
@@ -38922,7 +38931,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3987",
+      "id": "tx-mig-3988",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 20,
@@ -38933,7 +38942,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3988",
+      "id": "tx-mig-3989",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 6.73,
@@ -38942,7 +38951,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6.73"
     },
     {
-      "id": "tx-mig-3989",
+      "id": "tx-mig-3990",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-0",
       "amount": 1,
@@ -38951,7 +38960,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1"
     },
     {
-      "id": "tx-mig-3990",
+      "id": "tx-mig-3991",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-4",
       "amount": 35,
@@ -38960,7 +38969,7 @@ export const initialFinanceData: FinanceData = {
       "description": "35"
     },
     {
-      "id": "tx-mig-3991",
+      "id": "tx-mig-3992",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-0",
       "amount": 5.12,
@@ -38969,7 +38978,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5.12"
     },
     {
-      "id": "tx-mig-3992",
+      "id": "tx-mig-3993",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 19,
@@ -38978,7 +38987,7 @@ export const initialFinanceData: FinanceData = {
       "description": "19"
     },
     {
-      "id": "tx-mig-3993",
+      "id": "tx-mig-3994",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-8",
       "amount": 24,
@@ -38987,7 +38996,7 @@ export const initialFinanceData: FinanceData = {
       "description": "24"
     },
     {
-      "id": "tx-mig-3994",
+      "id": "tx-mig-3995",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 100,
@@ -38998,7 +39007,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-3995",
+      "id": "tx-mig-3996",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 100,
@@ -39009,7 +39018,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-3996",
+      "id": "tx-mig-3997",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-15",
       "amount": 20,
@@ -39018,7 +39027,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-3997",
+      "id": "tx-mig-3998",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 2,
@@ -39027,7 +39036,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-3998",
+      "id": "tx-mig-3999",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 2,
@@ -39036,7 +39045,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-3999",
+      "id": "tx-mig-4000",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-0",
       "amount": 51,
@@ -39045,7 +39054,7 @@ export const initialFinanceData: FinanceData = {
       "description": "51 одежда"
     },
     {
-      "id": "tx-mig-4000",
+      "id": "tx-mig-4001",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 8,
@@ -39054,7 +39063,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8"
     },
     {
-      "id": "tx-mig-4001",
+      "id": "tx-mig-4002",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-26",
       "amount": 12,
@@ -39063,7 +39072,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12 Ilqar"
     },
     {
-      "id": "tx-mig-4002",
+      "id": "tx-mig-4003",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-4",
       "amount": 2.4,
@@ -39072,7 +39081,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2.4"
     },
     {
-      "id": "tx-mig-4003",
+      "id": "tx-mig-4004",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 7,
@@ -39081,7 +39090,7 @@ export const initialFinanceData: FinanceData = {
       "description": "7"
     },
     {
-      "id": "tx-mig-4004",
+      "id": "tx-mig-4005",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-0",
       "amount": 2,
@@ -39090,7 +39099,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-4005",
+      "id": "tx-mig-4006",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 20,
@@ -39101,7 +39110,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4006",
+      "id": "tx-mig-4007",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 20,
@@ -39112,7 +39121,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4007",
+      "id": "tx-mig-4008",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-5",
       "amount": 4,
@@ -39121,7 +39130,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4"
     },
     {
-      "id": "tx-mig-4008",
+      "id": "tx-mig-4009",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-23",
       "amount": 8,
@@ -39130,7 +39139,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8"
     },
     {
-      "id": "tx-mig-4009",
+      "id": "tx-mig-4010",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 5,
@@ -39139,7 +39148,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-4010",
+      "id": "tx-mig-4011",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 13,
@@ -39148,7 +39157,7 @@ export const initialFinanceData: FinanceData = {
       "description": "13"
     },
     {
-      "id": "tx-mig-4011",
+      "id": "tx-mig-4012",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 25.4,
@@ -39157,7 +39166,7 @@ export const initialFinanceData: FinanceData = {
       "description": "25.40"
     },
     {
-      "id": "tx-mig-4012",
+      "id": "tx-mig-4013",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-8",
       "amount": 64,
@@ -39166,7 +39175,7 @@ export const initialFinanceData: FinanceData = {
       "description": "64 Minoxidil"
     },
     {
-      "id": "tx-mig-4013",
+      "id": "tx-mig-4014",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 12,
@@ -39177,7 +39186,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4014",
+      "id": "tx-mig-4015",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 12,
@@ -39188,7 +39197,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4015",
+      "id": "tx-mig-4016",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-11",
       "amount": 6,
@@ -39197,17 +39206,8 @@ export const initialFinanceData: FinanceData = {
       "description": "6"
     },
     {
-      "id": "tx-mig-4016",
-      "accountId": "acc-parsed-7",
-      "categoryId": "cat-parsed-23",
-      "amount": 6,
-      "type": "expense",
-      "date": "2023-10-11",
-      "description": "6"
-    },
-    {
       "id": "tx-mig-4017",
-      "accountId": "acc-parsed-20",
+      "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 6,
       "type": "expense",
@@ -39216,6 +39216,15 @@ export const initialFinanceData: FinanceData = {
     },
     {
       "id": "tx-mig-4018",
+      "accountId": "acc-parsed-20",
+      "categoryId": "cat-parsed-23",
+      "amount": 6,
+      "type": "expense",
+      "date": "2023-10-11",
+      "description": "6"
+    },
+    {
+      "id": "tx-mig-4019",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 16,
@@ -39224,7 +39233,7 @@ export const initialFinanceData: FinanceData = {
       "description": "16"
     },
     {
-      "id": "tx-mig-4019",
+      "id": "tx-mig-4020",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 10,
@@ -39235,7 +39244,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4020",
+      "id": "tx-mig-4021",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 10,
@@ -39246,7 +39255,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4021",
+      "id": "tx-mig-4022",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-24",
       "amount": 327,
@@ -39255,7 +39264,7 @@ export const initialFinanceData: FinanceData = {
       "description": "327"
     },
     {
-      "id": "tx-mig-4022",
+      "id": "tx-mig-4023",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-6",
       "amount": 12,
@@ -39264,7 +39273,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12 Memento databse"
     },
     {
-      "id": "tx-mig-4023",
+      "id": "tx-mig-4024",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 12,
@@ -39273,7 +39282,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12"
     },
     {
-      "id": "tx-mig-4024",
+      "id": "tx-mig-4025",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-6",
       "amount": 5.6,
@@ -39282,7 +39291,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5.6 ticktick"
     },
     {
-      "id": "tx-mig-4025",
+      "id": "tx-mig-4026",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 15,
@@ -39291,7 +39300,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15"
     },
     {
-      "id": "tx-mig-4026",
+      "id": "tx-mig-4027",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-8",
       "amount": 36.7,
@@ -39300,7 +39309,7 @@ export const initialFinanceData: FinanceData = {
       "description": "36.7"
     },
     {
-      "id": "tx-mig-4027",
+      "id": "tx-mig-4028",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-22",
       "amount": 5,
@@ -39309,7 +39318,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-4028",
+      "id": "tx-mig-4029",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-0",
       "amount": 103,
@@ -39318,7 +39327,7 @@ export const initialFinanceData: FinanceData = {
       "description": "103 одежда и игрушки"
     },
     {
-      "id": "tx-mig-4029",
+      "id": "tx-mig-4030",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 100,
@@ -39329,7 +39338,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4030",
+      "id": "tx-mig-4031",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 100,
@@ -39340,7 +39349,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4031",
+      "id": "tx-mig-4032",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 100,
@@ -39351,7 +39360,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4032",
+      "id": "tx-mig-4033",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 100,
@@ -39362,7 +39371,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4033",
+      "id": "tx-mig-4034",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-21",
       "amount": 32,
@@ -39371,7 +39380,7 @@ export const initialFinanceData: FinanceData = {
       "description": "32"
     },
     {
-      "id": "tx-mig-4034",
+      "id": "tx-mig-4035",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-0",
       "amount": 25.6,
@@ -39380,7 +39389,7 @@ export const initialFinanceData: FinanceData = {
       "description": "25.6 подгузники"
     },
     {
-      "id": "tx-mig-4035",
+      "id": "tx-mig-4036",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 20,
@@ -39391,7 +39400,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4036",
+      "id": "tx-mig-4037",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 20,
@@ -39402,7 +39411,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4037",
+      "id": "tx-mig-4038",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 13,
@@ -39411,7 +39420,7 @@ export const initialFinanceData: FinanceData = {
       "description": "13"
     },
     {
-      "id": "tx-mig-4038",
+      "id": "tx-mig-4039",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-0",
       "amount": 1,
@@ -39420,7 +39429,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1"
     },
     {
-      "id": "tx-mig-4039",
+      "id": "tx-mig-4040",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 3,
@@ -39429,7 +39438,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-4040",
+      "id": "tx-mig-4041",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 20,
@@ -39440,7 +39449,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4041",
+      "id": "tx-mig-4042",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 20,
@@ -39451,7 +39460,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4042",
+      "id": "tx-mig-4043",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 14,
@@ -39460,7 +39469,7 @@ export const initialFinanceData: FinanceData = {
       "description": "14"
     },
     {
-      "id": "tx-mig-4043",
+      "id": "tx-mig-4044",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-32",
       "amount": 85,
@@ -39471,7 +39480,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4044",
+      "id": "tx-mig-4045",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 85,
@@ -39482,7 +39491,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4045",
+      "id": "tx-mig-4046",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 20,
@@ -39493,7 +39502,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4046",
+      "id": "tx-mig-4047",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 20,
@@ -39504,7 +39513,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4047",
+      "id": "tx-mig-4048",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 15,
@@ -39513,7 +39522,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15"
     },
     {
-      "id": "tx-mig-4048",
+      "id": "tx-mig-4049",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 3,
@@ -39522,7 +39531,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-4049",
+      "id": "tx-mig-4050",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 100,
@@ -39533,7 +39542,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4050",
+      "id": "tx-mig-4051",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 100,
@@ -39544,7 +39553,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4051",
+      "id": "tx-mig-4052",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-0",
       "amount": 1070,
@@ -39553,7 +39562,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1070 aba terapiya"
     },
     {
-      "id": "tx-mig-4052",
+      "id": "tx-mig-4053",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 14,
@@ -39562,7 +39571,7 @@ export const initialFinanceData: FinanceData = {
       "description": "14"
     },
     {
-      "id": "tx-mig-4053",
+      "id": "tx-mig-4054",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 9,
@@ -39573,7 +39582,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4054",
+      "id": "tx-mig-4055",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 9,
@@ -39584,7 +39593,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4055",
+      "id": "tx-mig-4056",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-8",
       "amount": 2,
@@ -39593,7 +39602,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-4056",
+      "id": "tx-mig-4057",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-15",
       "amount": 20,
@@ -39602,7 +39611,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-4057",
+      "id": "tx-mig-4058",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 399,
@@ -39613,7 +39622,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4058",
+      "id": "tx-mig-4059",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-31",
       "amount": 399,
@@ -39624,7 +39633,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4059",
+      "id": "tx-mig-4060",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 40,
@@ -39633,7 +39642,7 @@ export const initialFinanceData: FinanceData = {
       "description": "40"
     },
     {
-      "id": "tx-mig-4060",
+      "id": "tx-mig-4061",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-8",
       "amount": 3.5,
@@ -39642,7 +39651,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3.5"
     },
     {
-      "id": "tx-mig-4061",
+      "id": "tx-mig-4062",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 20,
@@ -39651,7 +39660,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-4062",
+      "id": "tx-mig-4063",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-0",
       "amount": 23.65,
@@ -39660,7 +39669,7 @@ export const initialFinanceData: FinanceData = {
       "description": "23.65 подгузник"
     },
     {
-      "id": "tx-mig-4063",
+      "id": "tx-mig-4064",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 21,
@@ -39669,7 +39678,7 @@ export const initialFinanceData: FinanceData = {
       "description": "21"
     },
     {
-      "id": "tx-mig-4064",
+      "id": "tx-mig-4065",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-8",
       "amount": 4.7,
@@ -39678,7 +39687,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4.7"
     },
     {
-      "id": "tx-mig-4065",
+      "id": "tx-mig-4066",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-25",
       "amount": 2013,
@@ -39687,7 +39696,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2013"
     },
     {
-      "id": "tx-mig-4066",
+      "id": "tx-mig-4067",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 264,
@@ -39698,7 +39707,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4067",
+      "id": "tx-mig-4068",
       "accountId": "acc-parsed-16",
       "categoryId": "cat-parsed-31",
       "amount": 264,
@@ -39709,7 +39718,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4068",
+      "id": "tx-mig-4069",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 20,
@@ -39720,7 +39729,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4069",
+      "id": "tx-mig-4070",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 20,
@@ -39731,7 +39740,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4070",
+      "id": "tx-mig-4071",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 1.5,
@@ -39740,7 +39749,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1.5"
     },
     {
-      "id": "tx-mig-4071",
+      "id": "tx-mig-4072",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 13.9,
@@ -39749,7 +39758,7 @@ export const initialFinanceData: FinanceData = {
       "description": "13.9"
     },
     {
-      "id": "tx-mig-4072",
+      "id": "tx-mig-4073",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-26",
       "amount": 6,
@@ -39758,7 +39767,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3 3"
     },
     {
-      "id": "tx-mig-4073",
+      "id": "tx-mig-4074",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-26",
       "amount": 15,
@@ -39767,7 +39776,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15 ailenet"
     },
     {
-      "id": "tx-mig-4074",
+      "id": "tx-mig-4075",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 5,
@@ -39776,7 +39785,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-4075",
+      "id": "tx-mig-4076",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 12,
@@ -39785,7 +39794,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12"
     },
     {
-      "id": "tx-mig-4076",
+      "id": "tx-mig-4077",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-23",
       "amount": 14,
@@ -39794,7 +39803,7 @@ export const initialFinanceData: FinanceData = {
       "description": "14"
     },
     {
-      "id": "tx-mig-4077",
+      "id": "tx-mig-4078",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-32",
       "amount": 45,
@@ -39805,7 +39814,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4078",
+      "id": "tx-mig-4079",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 45,
@@ -39816,7 +39825,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4079",
+      "id": "tx-mig-4080",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-0",
       "amount": 2,
@@ -39825,7 +39834,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-4080",
+      "id": "tx-mig-4081",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-5",
       "amount": 5,
@@ -39834,7 +39843,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-4081",
+      "id": "tx-mig-4082",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 6,
@@ -39843,7 +39852,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6"
     },
     {
-      "id": "tx-mig-4082",
+      "id": "tx-mig-4083",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 13,
@@ -39852,16 +39861,16 @@ export const initialFinanceData: FinanceData = {
       "description": "13"
     },
     {
-      "id": "tx-mig-4083",
+      "id": "tx-mig-4084",
       "accountId": "acc-parsed-2",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 9.6,
       "type": "expense",
       "date": "2023-09-28",
       "description": "9.6"
     },
     {
-      "id": "tx-mig-4084",
+      "id": "tx-mig-4085",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 19,
@@ -39870,7 +39879,7 @@ export const initialFinanceData: FinanceData = {
       "description": "19"
     },
     {
-      "id": "tx-mig-4085",
+      "id": "tx-mig-4086",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 13,
@@ -39879,7 +39888,7 @@ export const initialFinanceData: FinanceData = {
       "description": "13"
     },
     {
-      "id": "tx-mig-4086",
+      "id": "tx-mig-4087",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 30,
@@ -39890,7 +39899,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4087",
+      "id": "tx-mig-4088",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 30,
@@ -39901,7 +39910,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4088",
+      "id": "tx-mig-4089",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-0",
       "amount": 1,
@@ -39910,7 +39919,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1"
     },
     {
-      "id": "tx-mig-4089",
+      "id": "tx-mig-4090",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 5.5,
@@ -39919,7 +39928,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5.5"
     },
     {
-      "id": "tx-mig-4090",
+      "id": "tx-mig-4091",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-9",
       "amount": 34.24,
@@ -39928,7 +39937,7 @@ export const initialFinanceData: FinanceData = {
       "description": "34.24 edv"
     },
     {
-      "id": "tx-mig-4091",
+      "id": "tx-mig-4092",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 14,
@@ -39937,7 +39946,7 @@ export const initialFinanceData: FinanceData = {
       "description": "14"
     },
     {
-      "id": "tx-mig-4092",
+      "id": "tx-mig-4093",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 300,
@@ -39948,7 +39957,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4093",
+      "id": "tx-mig-4094",
       "accountId": "acc-parsed-18",
       "categoryId": "cat-parsed-31",
       "amount": 300,
@@ -39959,7 +39968,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4094",
+      "id": "tx-mig-4095",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-21",
       "amount": 1.6,
@@ -39968,7 +39977,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1.6"
     },
     {
-      "id": "tx-mig-4095",
+      "id": "tx-mig-4096",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 13,
@@ -39977,7 +39986,7 @@ export const initialFinanceData: FinanceData = {
       "description": "13"
     },
     {
-      "id": "tx-mig-4096",
+      "id": "tx-mig-4097",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-4",
       "amount": 2.5,
@@ -39986,7 +39995,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2.5"
     },
     {
-      "id": "tx-mig-4097",
+      "id": "tx-mig-4098",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 11,
@@ -39997,7 +40006,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4098",
+      "id": "tx-mig-4099",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 11,
@@ -40008,7 +40017,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4099",
+      "id": "tx-mig-4100",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-26",
       "amount": 3,
@@ -40017,7 +40026,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3 Ильгар"
     },
     {
-      "id": "tx-mig-4100",
+      "id": "tx-mig-4101",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 20,
@@ -40028,7 +40037,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4101",
+      "id": "tx-mig-4102",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 20,
@@ -40039,7 +40048,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4102",
+      "id": "tx-mig-4103",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 13,
@@ -40048,7 +40057,7 @@ export const initialFinanceData: FinanceData = {
       "description": "13"
     },
     {
-      "id": "tx-mig-4103",
+      "id": "tx-mig-4104",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 50,
@@ -40059,7 +40068,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4104",
+      "id": "tx-mig-4105",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 50,
@@ -40070,7 +40079,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4105",
+      "id": "tx-mig-4106",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 6.6,
@@ -40079,7 +40088,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6.6"
     },
     {
-      "id": "tx-mig-4106",
+      "id": "tx-mig-4107",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-22",
       "amount": 23.31,
@@ -40088,7 +40097,7 @@ export const initialFinanceData: FinanceData = {
       "description": "23.31"
     },
     {
-      "id": "tx-mig-4107",
+      "id": "tx-mig-4108",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 4.3,
@@ -40097,7 +40106,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4.3"
     },
     {
-      "id": "tx-mig-4108",
+      "id": "tx-mig-4109",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-15",
       "amount": 10,
@@ -40106,7 +40115,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-4109",
+      "id": "tx-mig-4110",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 10,
@@ -40115,7 +40124,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-4110",
+      "id": "tx-mig-4111",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 16,
@@ -40124,7 +40133,7 @@ export const initialFinanceData: FinanceData = {
       "description": "16"
     },
     {
-      "id": "tx-mig-4111",
+      "id": "tx-mig-4112",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-15",
       "amount": 30,
@@ -40133,7 +40142,7 @@ export const initialFinanceData: FinanceData = {
       "description": "30"
     },
     {
-      "id": "tx-mig-4112",
+      "id": "tx-mig-4113",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 34.6,
@@ -40142,7 +40151,7 @@ export const initialFinanceData: FinanceData = {
       "description": "34.6"
     },
     {
-      "id": "tx-mig-4113",
+      "id": "tx-mig-4114",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-0",
       "amount": 40,
@@ -40151,7 +40160,7 @@ export const initialFinanceData: FinanceData = {
       "description": "40 aba terapiya"
     },
     {
-      "id": "tx-mig-4114",
+      "id": "tx-mig-4115",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 17,
@@ -40160,7 +40169,7 @@ export const initialFinanceData: FinanceData = {
       "description": "17"
     },
     {
-      "id": "tx-mig-4115",
+      "id": "tx-mig-4116",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 50,
@@ -40171,7 +40180,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4116",
+      "id": "tx-mig-4117",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 50,
@@ -40182,7 +40191,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4117",
+      "id": "tx-mig-4118",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 1.5,
@@ -40191,7 +40200,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1.5"
     },
     {
-      "id": "tx-mig-4118",
+      "id": "tx-mig-4119",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-32",
       "amount": 1,
@@ -40200,21 +40209,21 @@ export const initialFinanceData: FinanceData = {
       "description": "Перевод со счета Albali kart в Albali кредитная карта",
       "transferAccountId": "acc-parsed-20",
       "transferType": "out"
-    },
-    {
-      "id": "tx-mig-4119",
-      "accountId": "acc-parsed-20",
-      "categoryId": "cat-parsed-31",
-      "amount": 1,
-      "type": "transfer",
-      "date": "2023-09-20",
-      "description": "Перевод со счета Albali kart в Albali кредитная карта",
-      "transferAccountId": "acc-parsed-2",
-      "transferType": "in"
     },
     {
       "id": "tx-mig-4120",
       "accountId": "acc-parsed-20",
+      "categoryId": "cat-parsed-31",
+      "amount": 1,
+      "type": "transfer",
+      "date": "2023-09-20",
+      "description": "Перевод со счета Albali kart в Albali кредитная карта",
+      "transferAccountId": "acc-parsed-2",
+      "transferType": "in"
+    },
+    {
+      "id": "tx-mig-4121",
+      "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 100,
       "type": "transfer",
@@ -40224,7 +40233,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4121",
+      "id": "tx-mig-4122",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 100,
@@ -40235,7 +40244,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4122",
+      "id": "tx-mig-4123",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 2,
@@ -40244,7 +40253,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-4123",
+      "id": "tx-mig-4124",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-9",
       "amount": 5,
@@ -40253,7 +40262,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-4124",
+      "id": "tx-mig-4125",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-26",
       "amount": 4,
@@ -40262,7 +40271,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4 Самира"
     },
     {
-      "id": "tx-mig-4125",
+      "id": "tx-mig-4126",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-4",
       "amount": 4.6,
@@ -40271,7 +40280,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4.6"
     },
     {
-      "id": "tx-mig-4126",
+      "id": "tx-mig-4127",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 20,
@@ -40282,7 +40291,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4127",
+      "id": "tx-mig-4128",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 20,
@@ -40293,7 +40302,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4128",
+      "id": "tx-mig-4129",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-23",
       "amount": 12,
@@ -40302,7 +40311,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12"
     },
     {
-      "id": "tx-mig-4129",
+      "id": "tx-mig-4130",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-0",
       "amount": 7.4,
@@ -40311,7 +40320,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1.5 5.9"
     },
     {
-      "id": "tx-mig-4130",
+      "id": "tx-mig-4131",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-21",
       "amount": 8,
@@ -40320,7 +40329,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8"
     },
     {
-      "id": "tx-mig-4131",
+      "id": "tx-mig-4132",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 18,
@@ -40329,7 +40338,7 @@ export const initialFinanceData: FinanceData = {
       "description": "18"
     },
     {
-      "id": "tx-mig-4132",
+      "id": "tx-mig-4133",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 80,
@@ -40340,7 +40349,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4133",
+      "id": "tx-mig-4134",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 80,
@@ -40351,7 +40360,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4134",
+      "id": "tx-mig-4135",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 2.4,
@@ -40360,7 +40369,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2.4"
     },
     {
-      "id": "tx-mig-4135",
+      "id": "tx-mig-4136",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 20,
@@ -40369,7 +40378,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-4136",
+      "id": "tx-mig-4137",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 4,
@@ -40378,7 +40387,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2 2"
     },
     {
-      "id": "tx-mig-4137",
+      "id": "tx-mig-4138",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 2.27,
@@ -40387,7 +40396,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2.27"
     },
     {
-      "id": "tx-mig-4138",
+      "id": "tx-mig-4139",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 12.5,
@@ -40396,7 +40405,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12.5"
     },
     {
-      "id": "tx-mig-4139",
+      "id": "tx-mig-4140",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 3,
@@ -40405,7 +40414,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-4140",
+      "id": "tx-mig-4141",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-0",
       "amount": 10,
@@ -40414,7 +40423,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10 подгузники"
     },
     {
-      "id": "tx-mig-4141",
+      "id": "tx-mig-4142",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 20.3,
@@ -40423,7 +40432,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20.30"
     },
     {
-      "id": "tx-mig-4142",
+      "id": "tx-mig-4143",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 1.3,
@@ -40432,7 +40441,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1.3"
     },
     {
-      "id": "tx-mig-4143",
+      "id": "tx-mig-4144",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-16",
       "amount": 7,
@@ -40441,7 +40450,7 @@ export const initialFinanceData: FinanceData = {
       "description": "7"
     },
     {
-      "id": "tx-mig-4144",
+      "id": "tx-mig-4145",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 5.53,
@@ -40450,7 +40459,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5.53"
     },
     {
-      "id": "tx-mig-4145",
+      "id": "tx-mig-4146",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-0",
       "amount": 30,
@@ -40459,7 +40468,7 @@ export const initialFinanceData: FinanceData = {
       "description": "30 подгузники"
     },
     {
-      "id": "tx-mig-4146",
+      "id": "tx-mig-4147",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-22",
       "amount": 27,
@@ -40468,7 +40477,7 @@ export const initialFinanceData: FinanceData = {
       "description": "27 ковры мойка"
     },
     {
-      "id": "tx-mig-4147",
+      "id": "tx-mig-4148",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-5",
       "amount": 5,
@@ -40477,7 +40486,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5 футбол"
     },
     {
-      "id": "tx-mig-4148",
+      "id": "tx-mig-4149",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 9,
@@ -40486,7 +40495,7 @@ export const initialFinanceData: FinanceData = {
       "description": "9"
     },
     {
-      "id": "tx-mig-4149",
+      "id": "tx-mig-4150",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-4",
       "amount": 1.3,
@@ -40495,7 +40504,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1.3"
     },
     {
-      "id": "tx-mig-4150",
+      "id": "tx-mig-4151",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-0",
       "amount": 1.5,
@@ -40504,7 +40513,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1.5"
     },
     {
-      "id": "tx-mig-4151",
+      "id": "tx-mig-4152",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 12,
@@ -40513,7 +40522,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12"
     },
     {
-      "id": "tx-mig-4152",
+      "id": "tx-mig-4153",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-0",
       "amount": 100,
@@ -40522,16 +40531,16 @@ export const initialFinanceData: FinanceData = {
       "description": "100 aba terapiya"
     },
     {
-      "id": "tx-mig-4153",
+      "id": "tx-mig-4154",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 45,
       "type": "expense",
       "date": "2023-09-14",
       "description": "45 С Андреем в ресторане"
     },
     {
-      "id": "tx-mig-4154",
+      "id": "tx-mig-4155",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-4",
       "amount": 3.1,
@@ -40540,7 +40549,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3.1"
     },
     {
-      "id": "tx-mig-4155",
+      "id": "tx-mig-4156",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 23,
@@ -40549,7 +40558,7 @@ export const initialFinanceData: FinanceData = {
       "description": "23"
     },
     {
-      "id": "tx-mig-4156",
+      "id": "tx-mig-4157",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-23",
       "amount": 18,
@@ -40558,7 +40567,7 @@ export const initialFinanceData: FinanceData = {
       "description": "18"
     },
     {
-      "id": "tx-mig-4157",
+      "id": "tx-mig-4158",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-0",
       "amount": 455,
@@ -40567,7 +40576,7 @@ export const initialFinanceData: FinanceData = {
       "description": "455 Aba terapiya"
     },
     {
-      "id": "tx-mig-4158",
+      "id": "tx-mig-4159",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 10.4,
@@ -40576,7 +40585,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10.4"
     },
     {
-      "id": "tx-mig-4159",
+      "id": "tx-mig-4160",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 700,
@@ -40587,7 +40596,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4160",
+      "id": "tx-mig-4161",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 700,
@@ -40598,7 +40607,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4161",
+      "id": "tx-mig-4162",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 2,
@@ -40607,7 +40616,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-4162",
+      "id": "tx-mig-4163",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-11",
       "amount": 8,
@@ -40616,7 +40625,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8"
     },
     {
-      "id": "tx-mig-4163",
+      "id": "tx-mig-4164",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-23",
       "amount": 12,
@@ -40625,7 +40634,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12"
     },
     {
-      "id": "tx-mig-4164",
+      "id": "tx-mig-4165",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-0",
       "amount": 60,
@@ -40634,7 +40643,7 @@ export const initialFinanceData: FinanceData = {
       "description": "60 психолог"
     },
     {
-      "id": "tx-mig-4165",
+      "id": "tx-mig-4166",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-8",
       "amount": 24,
@@ -40643,7 +40652,7 @@ export const initialFinanceData: FinanceData = {
       "description": "24"
     },
     {
-      "id": "tx-mig-4166",
+      "id": "tx-mig-4167",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-21",
       "amount": 20,
@@ -40652,7 +40661,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-4167",
+      "id": "tx-mig-4168",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-24",
       "amount": 328,
@@ -40661,7 +40670,7 @@ export const initialFinanceData: FinanceData = {
       "description": "328"
     },
     {
-      "id": "tx-mig-4168",
+      "id": "tx-mig-4169",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 200,
@@ -40672,7 +40681,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4169",
+      "id": "tx-mig-4170",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 200,
@@ -40683,7 +40692,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4170",
+      "id": "tx-mig-4171",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-20",
       "amount": 17.65,
@@ -40692,7 +40701,7 @@ export const initialFinanceData: FinanceData = {
       "description": "17.65"
     },
     {
-      "id": "tx-mig-4171",
+      "id": "tx-mig-4172",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-15",
       "amount": 20,
@@ -40701,7 +40710,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-4172",
+      "id": "tx-mig-4173",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 53,
@@ -40710,7 +40719,7 @@ export const initialFinanceData: FinanceData = {
       "description": "53"
     },
     {
-      "id": "tx-mig-4173",
+      "id": "tx-mig-4174",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 5,
@@ -40719,7 +40728,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-4174",
+      "id": "tx-mig-4175",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 10.4,
@@ -40728,7 +40737,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10.4"
     },
     {
-      "id": "tx-mig-4175",
+      "id": "tx-mig-4176",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 10,
@@ -40737,7 +40746,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-4176",
+      "id": "tx-mig-4177",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-6",
       "amount": 5.6,
@@ -40746,7 +40755,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5.6 ticktick"
     },
     {
-      "id": "tx-mig-4177",
+      "id": "tx-mig-4178",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-0",
       "amount": 90,
@@ -40755,7 +40764,7 @@ export const initialFinanceData: FinanceData = {
       "description": "90 к психиатру"
     },
     {
-      "id": "tx-mig-4178",
+      "id": "tx-mig-4179",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 1,
@@ -40764,7 +40773,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1"
     },
     {
-      "id": "tx-mig-4179",
+      "id": "tx-mig-4180",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-21",
       "amount": 31,
@@ -40773,7 +40782,7 @@ export const initialFinanceData: FinanceData = {
       "description": "31 фаберлик"
     },
     {
-      "id": "tx-mig-4180",
+      "id": "tx-mig-4181",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 1.7,
@@ -40782,7 +40791,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1.7"
     },
     {
-      "id": "tx-mig-4181",
+      "id": "tx-mig-4182",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-12",
       "amount": 27.6,
@@ -40791,7 +40800,7 @@ export const initialFinanceData: FinanceData = {
       "description": "27.6"
     },
     {
-      "id": "tx-mig-4182",
+      "id": "tx-mig-4183",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-20",
       "amount": 10,
@@ -40800,7 +40809,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-4183",
+      "id": "tx-mig-4184",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 7,
@@ -40809,7 +40818,7 @@ export const initialFinanceData: FinanceData = {
       "description": "7"
     },
     {
-      "id": "tx-mig-4184",
+      "id": "tx-mig-4185",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 2,
@@ -40818,7 +40827,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-4185",
+      "id": "tx-mig-4186",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 22,
@@ -40827,7 +40836,7 @@ export const initialFinanceData: FinanceData = {
       "description": "22"
     },
     {
-      "id": "tx-mig-4186",
+      "id": "tx-mig-4187",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 9,
@@ -40836,16 +40845,16 @@ export const initialFinanceData: FinanceData = {
       "description": "9"
     },
     {
-      "id": "tx-mig-4187",
+      "id": "tx-mig-4188",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-20",
       "amount": 80,
       "type": "expense",
       "date": "2023-09-05",
-      "description": "20 Famil\t 10 Sohrab\t Qezenfer emi 50 yaslar"
+      "description": "20 Famil, 10 Sohrab, Qezenfer emi 50 yaslar"
     },
     {
-      "id": "tx-mig-4188",
+      "id": "tx-mig-4189",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 185,
@@ -40856,7 +40865,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4189",
+      "id": "tx-mig-4190",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 185,
@@ -40867,7 +40876,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4190",
+      "id": "tx-mig-4191",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-22",
       "amount": 1,
@@ -40876,7 +40885,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1/"
     },
     {
-      "id": "tx-mig-4191",
+      "id": "tx-mig-4192",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-13",
       "amount": 32,
@@ -40885,7 +40894,7 @@ export const initialFinanceData: FinanceData = {
       "description": "32"
     },
     {
-      "id": "tx-mig-4192",
+      "id": "tx-mig-4193",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 13,
@@ -40894,7 +40903,7 @@ export const initialFinanceData: FinanceData = {
       "description": "13"
     },
     {
-      "id": "tx-mig-4193",
+      "id": "tx-mig-4194",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 300,
@@ -40905,7 +40914,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4194",
+      "id": "tx-mig-4195",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 300,
@@ -40916,7 +40925,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4195",
+      "id": "tx-mig-4196",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-15",
       "amount": 25,
@@ -40925,7 +40934,7 @@ export const initialFinanceData: FinanceData = {
       "description": "25"
     },
     {
-      "id": "tx-mig-4196",
+      "id": "tx-mig-4197",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 4.4,
@@ -40934,7 +40943,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4.4"
     },
     {
-      "id": "tx-mig-4197",
+      "id": "tx-mig-4198",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 40,
@@ -40943,7 +40952,7 @@ export const initialFinanceData: FinanceData = {
       "description": "40"
     },
     {
-      "id": "tx-mig-4198",
+      "id": "tx-mig-4199",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 10,
@@ -40952,7 +40961,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-4199",
+      "id": "tx-mig-4200",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-21",
       "amount": 200,
@@ -40961,7 +40970,7 @@ export const initialFinanceData: FinanceData = {
       "description": "200 салон"
     },
     {
-      "id": "tx-mig-4200",
+      "id": "tx-mig-4201",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 8,
@@ -40970,7 +40979,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8"
     },
     {
-      "id": "tx-mig-4201",
+      "id": "tx-mig-4202",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 2,
@@ -40979,16 +40988,16 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-4202",
+      "id": "tx-mig-4203",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 23,
       "type": "expense",
       "date": "2023-09-02",
       "description": "23"
     },
     {
-      "id": "tx-mig-4203",
+      "id": "tx-mig-4204",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-25",
       "amount": 1971,
@@ -40997,7 +41006,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1971"
     },
     {
-      "id": "tx-mig-4204",
+      "id": "tx-mig-4205",
       "accountId": "acc-parsed-16",
       "categoryId": "cat-parsed-25",
       "amount": 264.5,
@@ -41006,7 +41015,7 @@ export const initialFinanceData: FinanceData = {
       "description": "264.5"
     },
     {
-      "id": "tx-mig-4205",
+      "id": "tx-mig-4206",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-21",
       "amount": 25,
@@ -41015,7 +41024,7 @@ export const initialFinanceData: FinanceData = {
       "description": "25 салон"
     },
     {
-      "id": "tx-mig-4206",
+      "id": "tx-mig-4207",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-26",
       "amount": 3,
@@ -41024,7 +41033,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3 Ilqar"
     },
     {
-      "id": "tx-mig-4207",
+      "id": "tx-mig-4208",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 15,
@@ -41033,7 +41042,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15"
     },
     {
-      "id": "tx-mig-4208",
+      "id": "tx-mig-4209",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 1.5,
@@ -41042,7 +41051,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1.5"
     },
     {
-      "id": "tx-mig-4209",
+      "id": "tx-mig-4210",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 18.37,
@@ -41051,7 +41060,7 @@ export const initialFinanceData: FinanceData = {
       "description": "18.37"
     },
     {
-      "id": "tx-mig-4210",
+      "id": "tx-mig-4211",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-32",
       "amount": 9,
@@ -41062,7 +41071,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4211",
+      "id": "tx-mig-4212",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-31",
       "amount": 9,
@@ -41073,7 +41082,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4212",
+      "id": "tx-mig-4213",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-26",
       "amount": 15,
@@ -41082,7 +41091,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15 ailenet"
     },
     {
-      "id": "tx-mig-4213",
+      "id": "tx-mig-4214",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-21",
       "amount": 13.04,
@@ -41091,7 +41100,7 @@ export const initialFinanceData: FinanceData = {
       "description": "13.04"
     },
     {
-      "id": "tx-mig-4214",
+      "id": "tx-mig-4215",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 20,
@@ -41100,7 +41109,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-4215",
+      "id": "tx-mig-4216",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 35,
@@ -41111,7 +41120,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4216",
+      "id": "tx-mig-4217",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 35,
@@ -41122,7 +41131,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4217",
+      "id": "tx-mig-4218",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 8,
@@ -41131,7 +41140,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8"
     },
     {
-      "id": "tx-mig-4218",
+      "id": "tx-mig-4219",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 15,
@@ -41140,7 +41149,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15"
     },
     {
-      "id": "tx-mig-4219",
+      "id": "tx-mig-4220",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 14,
@@ -41149,7 +41158,7 @@ export const initialFinanceData: FinanceData = {
       "description": "14"
     },
     {
-      "id": "tx-mig-4220",
+      "id": "tx-mig-4221",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-8",
       "amount": 4,
@@ -41158,7 +41167,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4"
     },
     {
-      "id": "tx-mig-4221",
+      "id": "tx-mig-4222",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 5,
@@ -41167,7 +41176,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-4222",
+      "id": "tx-mig-4223",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 3,
@@ -41176,7 +41185,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-4223",
+      "id": "tx-mig-4224",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 8,
@@ -41185,7 +41194,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8"
     },
     {
-      "id": "tx-mig-4224",
+      "id": "tx-mig-4225",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 45,
@@ -41196,7 +41205,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4225",
+      "id": "tx-mig-4226",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 45,
@@ -41207,7 +41216,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4226",
+      "id": "tx-mig-4227",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-20",
       "amount": 15.1,
@@ -41216,7 +41225,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10.10 5"
     },
     {
-      "id": "tx-mig-4227",
+      "id": "tx-mig-4228",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-20",
       "amount": 10,
@@ -41225,7 +41234,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-4228",
+      "id": "tx-mig-4229",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 300,
@@ -41236,7 +41245,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4229",
+      "id": "tx-mig-4230",
       "accountId": "acc-parsed-18",
       "categoryId": "cat-parsed-31",
       "amount": 300,
@@ -41247,7 +41256,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4230",
+      "id": "tx-mig-4231",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-26",
       "amount": 12,
@@ -41256,7 +41265,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12 Ильгар"
     },
     {
-      "id": "tx-mig-4231",
+      "id": "tx-mig-4232",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 18.2,
@@ -41265,7 +41274,7 @@ export const initialFinanceData: FinanceData = {
       "description": "18.2"
     },
     {
-      "id": "tx-mig-4232",
+      "id": "tx-mig-4233",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 11.37,
@@ -41274,16 +41283,16 @@ export const initialFinanceData: FinanceData = {
       "description": "11.37"
     },
     {
-      "id": "tx-mig-4233",
+      "id": "tx-mig-4234",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 7,
       "type": "expense",
       "date": "2023-08-22",
       "description": "7"
     },
     {
-      "id": "tx-mig-4234",
+      "id": "tx-mig-4235",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 7.3,
@@ -41292,7 +41301,7 @@ export const initialFinanceData: FinanceData = {
       "description": "7.3"
     },
     {
-      "id": "tx-mig-4235",
+      "id": "tx-mig-4236",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 20.3,
@@ -41301,7 +41310,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20.3"
     },
     {
-      "id": "tx-mig-4236",
+      "id": "tx-mig-4237",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-32",
       "amount": 10,
@@ -41312,7 +41321,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4237",
+      "id": "tx-mig-4238",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-31",
       "amount": 10,
@@ -41323,7 +41332,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4238",
+      "id": "tx-mig-4239",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-4",
       "amount": 11.43,
@@ -41332,7 +41341,7 @@ export const initialFinanceData: FinanceData = {
       "description": "11.43"
     },
     {
-      "id": "tx-mig-4239",
+      "id": "tx-mig-4240",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 50,
@@ -41343,7 +41352,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4240",
+      "id": "tx-mig-4241",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 50,
@@ -41354,7 +41363,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4241",
+      "id": "tx-mig-4242",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-21",
       "amount": 4.2,
@@ -41363,7 +41372,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4.2"
     },
     {
-      "id": "tx-mig-4242",
+      "id": "tx-mig-4243",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-15",
       "amount": 37,
@@ -41372,7 +41381,7 @@ export const initialFinanceData: FinanceData = {
       "description": "37"
     },
     {
-      "id": "tx-mig-4243",
+      "id": "tx-mig-4244",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-0",
       "amount": 51.1,
@@ -41381,7 +41390,7 @@ export const initialFinanceData: FinanceData = {
       "description": "51.1 подгузники"
     },
     {
-      "id": "tx-mig-4244",
+      "id": "tx-mig-4245",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-8",
       "amount": 7.7,
@@ -41390,7 +41399,7 @@ export const initialFinanceData: FinanceData = {
       "description": "7.7"
     },
     {
-      "id": "tx-mig-4245",
+      "id": "tx-mig-4246",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 12.4,
@@ -41399,7 +41408,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12.4"
     },
     {
-      "id": "tx-mig-4246",
+      "id": "tx-mig-4247",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-20",
       "amount": 15,
@@ -41408,7 +41417,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15"
     },
     {
-      "id": "tx-mig-4247",
+      "id": "tx-mig-4248",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-5",
       "amount": 5.5,
@@ -41417,7 +41426,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5.5"
     },
     {
-      "id": "tx-mig-4248",
+      "id": "tx-mig-4249",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 5,
@@ -41426,7 +41435,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-4249",
+      "id": "tx-mig-4250",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 21.45,
@@ -41435,7 +41444,7 @@ export const initialFinanceData: FinanceData = {
       "description": "21.45"
     },
     {
-      "id": "tx-mig-4250",
+      "id": "tx-mig-4251",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 0.6,
@@ -41444,7 +41453,7 @@ export const initialFinanceData: FinanceData = {
       "description": "0.6"
     },
     {
-      "id": "tx-mig-4251",
+      "id": "tx-mig-4252",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 6,
@@ -41455,7 +41464,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4252",
+      "id": "tx-mig-4253",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 6,
@@ -41466,7 +41475,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4253",
+      "id": "tx-mig-4254",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-6",
       "amount": 29,
@@ -41475,7 +41484,7 @@ export const initialFinanceData: FinanceData = {
       "description": "29 honey money"
     },
     {
-      "id": "tx-mig-4254",
+      "id": "tx-mig-4255",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-25",
       "amount": 500,
@@ -41484,7 +41493,7 @@ export const initialFinanceData: FinanceData = {
       "description": "500"
     },
     {
-      "id": "tx-mig-4255",
+      "id": "tx-mig-4256",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 40,
@@ -41493,7 +41502,7 @@ export const initialFinanceData: FinanceData = {
       "description": "40"
     },
     {
-      "id": "tx-mig-4256",
+      "id": "tx-mig-4257",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 25,
@@ -41504,7 +41513,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4257",
+      "id": "tx-mig-4258",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-31",
       "amount": 25,
@@ -41515,7 +41524,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4258",
+      "id": "tx-mig-4259",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-32",
       "amount": 3,
@@ -41526,7 +41535,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4259",
+      "id": "tx-mig-4260",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-31",
       "amount": 3,
@@ -41537,7 +41546,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4260",
+      "id": "tx-mig-4261",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-32",
       "amount": 25,
@@ -41548,7 +41557,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4261",
+      "id": "tx-mig-4262",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 25,
@@ -41559,7 +41568,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4262",
+      "id": "tx-mig-4263",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-0",
       "amount": 8.24,
@@ -41568,7 +41577,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8.24"
     },
     {
-      "id": "tx-mig-4263",
+      "id": "tx-mig-4264",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 1.52,
@@ -41577,7 +41586,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1.52"
     },
     {
-      "id": "tx-mig-4264",
+      "id": "tx-mig-4265",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 10.5,
@@ -41586,7 +41595,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10.5"
     },
     {
-      "id": "tx-mig-4265",
+      "id": "tx-mig-4266",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 10,
@@ -41595,7 +41604,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-4266",
+      "id": "tx-mig-4267",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 10.54,
@@ -41604,7 +41613,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10.54"
     },
     {
-      "id": "tx-mig-4267",
+      "id": "tx-mig-4268",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-19",
       "amount": 85,
@@ -41613,7 +41622,7 @@ export const initialFinanceData: FinanceData = {
       "description": "85 yag filtr salon filtr"
     },
     {
-      "id": "tx-mig-4268",
+      "id": "tx-mig-4269",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-32",
       "amount": 100,
@@ -41624,7 +41633,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4269",
+      "id": "tx-mig-4270",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 100,
@@ -41635,7 +41644,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4270",
+      "id": "tx-mig-4271",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-21",
       "amount": 30,
@@ -41644,7 +41653,7 @@ export const initialFinanceData: FinanceData = {
       "description": "30"
     },
     {
-      "id": "tx-mig-4271",
+      "id": "tx-mig-4272",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 4,
@@ -41653,7 +41662,7 @@ export const initialFinanceData: FinanceData = {
       "description": "4"
     },
     {
-      "id": "tx-mig-4272",
+      "id": "tx-mig-4273",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-15",
       "amount": 30,
@@ -41662,7 +41671,7 @@ export const initialFinanceData: FinanceData = {
       "description": "30"
     },
     {
-      "id": "tx-mig-4273",
+      "id": "tx-mig-4274",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 8,
@@ -41671,7 +41680,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8"
     },
     {
-      "id": "tx-mig-4274",
+      "id": "tx-mig-4275",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 6.4,
@@ -41680,7 +41689,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1.7 0.92 0.9 2.88"
     },
     {
-      "id": "tx-mig-4275",
+      "id": "tx-mig-4276",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 12.56,
@@ -41689,7 +41698,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12.56"
     },
     {
-      "id": "tx-mig-4276",
+      "id": "tx-mig-4277",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-5",
       "amount": 3,
@@ -41698,7 +41707,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-4277",
+      "id": "tx-mig-4278",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-11",
       "amount": 21,
@@ -41707,7 +41716,7 @@ export const initialFinanceData: FinanceData = {
       "description": "21"
     },
     {
-      "id": "tx-mig-4278",
+      "id": "tx-mig-4279",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 25,
@@ -41716,7 +41725,7 @@ export const initialFinanceData: FinanceData = {
       "description": "25"
     },
     {
-      "id": "tx-mig-4279",
+      "id": "tx-mig-4280",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-6",
       "amount": 12,
@@ -41725,7 +41734,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12 Memento databse"
     },
     {
-      "id": "tx-mig-4280",
+      "id": "tx-mig-4281",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 310,
@@ -41734,7 +41743,7 @@ export const initialFinanceData: FinanceData = {
       "description": "310 в Гебеле пять дней"
     },
     {
-      "id": "tx-mig-4281",
+      "id": "tx-mig-4282",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-6",
       "amount": 5.6,
@@ -41743,7 +41752,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5.6 ticktick"
     },
     {
-      "id": "tx-mig-4282",
+      "id": "tx-mig-4283",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-32",
       "amount": 20,
@@ -41754,7 +41763,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4283",
+      "id": "tx-mig-4284",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-31",
       "amount": 20,
@@ -41765,7 +41774,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4284",
+      "id": "tx-mig-4285",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-24",
       "amount": 327,
@@ -41774,7 +41783,7 @@ export const initialFinanceData: FinanceData = {
       "description": "327"
     },
     {
-      "id": "tx-mig-4285",
+      "id": "tx-mig-4286",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-12",
       "amount": 24.46,
@@ -41783,7 +41792,7 @@ export const initialFinanceData: FinanceData = {
       "description": "24.46"
     },
     {
-      "id": "tx-mig-4286",
+      "id": "tx-mig-4287",
       "accountId": "acc-parsed-16",
       "categoryId": "cat-parsed-25",
       "amount": 315,
@@ -41792,7 +41801,7 @@ export const initialFinanceData: FinanceData = {
       "description": "315"
     },
     {
-      "id": "tx-mig-4287",
+      "id": "tx-mig-4288",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 31.8,
@@ -41801,7 +41810,7 @@ export const initialFinanceData: FinanceData = {
       "description": "31.8"
     },
     {
-      "id": "tx-mig-4288",
+      "id": "tx-mig-4289",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 8.8,
@@ -41810,7 +41819,7 @@ export const initialFinanceData: FinanceData = {
       "description": "8.8"
     },
     {
-      "id": "tx-mig-4289",
+      "id": "tx-mig-4290",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 50,
@@ -41819,20 +41828,20 @@ export const initialFinanceData: FinanceData = {
       "description": "Перевод со счета ASB kart в Albali kart",
       "transferAccountId": "acc-parsed-2",
       "transferType": "out"
-    },
-    {
-      "id": "tx-mig-4290",
-      "accountId": "acc-parsed-2",
-      "categoryId": "cat-parsed-31",
-      "amount": 50,
-      "type": "transfer",
-      "date": "2023-08-05",
-      "description": "Перевод со счета ASB kart в Albali kart",
-      "transferAccountId": "acc-parsed-0",
-      "transferType": "in"
     },
     {
       "id": "tx-mig-4291",
+      "accountId": "acc-parsed-2",
+      "categoryId": "cat-parsed-31",
+      "amount": 50,
+      "type": "transfer",
+      "date": "2023-08-05",
+      "description": "Перевод со счета ASB kart в Albali kart",
+      "transferAccountId": "acc-parsed-0",
+      "transferType": "in"
+    },
+    {
+      "id": "tx-mig-4292",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 100,
@@ -41843,7 +41852,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4292",
+      "id": "tx-mig-4293",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 100,
@@ -41854,7 +41863,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4293",
+      "id": "tx-mig-4294",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 450,
@@ -41865,7 +41874,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4294",
+      "id": "tx-mig-4295",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 450,
@@ -41876,7 +41885,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4295",
+      "id": "tx-mig-4296",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-21",
       "amount": 13.7,
@@ -41885,7 +41894,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5.3 0.6 4.1 3.7"
     },
     {
-      "id": "tx-mig-4296",
+      "id": "tx-mig-4297",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-0",
       "amount": 7,
@@ -41894,7 +41903,7 @@ export const initialFinanceData: FinanceData = {
       "description": "7"
     },
     {
-      "id": "tx-mig-4297",
+      "id": "tx-mig-4298",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-15",
       "amount": 26,
@@ -41903,7 +41912,7 @@ export const initialFinanceData: FinanceData = {
       "description": "26"
     },
     {
-      "id": "tx-mig-4298",
+      "id": "tx-mig-4299",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-8",
       "amount": 0.6,
@@ -41912,7 +41921,7 @@ export const initialFinanceData: FinanceData = {
       "description": "0.6"
     },
     {
-      "id": "tx-mig-4299",
+      "id": "tx-mig-4300",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 16,
@@ -41921,7 +41930,7 @@ export const initialFinanceData: FinanceData = {
       "description": "16"
     },
     {
-      "id": "tx-mig-4300",
+      "id": "tx-mig-4301",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 15,
@@ -41930,7 +41939,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15"
     },
     {
-      "id": "tx-mig-4301",
+      "id": "tx-mig-4302",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-8",
       "amount": 23.3,
@@ -41939,7 +41948,7 @@ export const initialFinanceData: FinanceData = {
       "description": "23.3"
     },
     {
-      "id": "tx-mig-4302",
+      "id": "tx-mig-4303",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 36.6,
@@ -41948,7 +41957,7 @@ export const initialFinanceData: FinanceData = {
       "description": "36.6"
     },
     {
-      "id": "tx-mig-4303",
+      "id": "tx-mig-4304",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-19",
       "amount": 12,
@@ -41957,7 +41966,7 @@ export const initialFinanceData: FinanceData = {
       "description": "12 баланс колес"
     },
     {
-      "id": "tx-mig-4304",
+      "id": "tx-mig-4305",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-0",
       "amount": 24.5,
@@ -41966,7 +41975,7 @@ export const initialFinanceData: FinanceData = {
       "description": "24.5 подгузники"
     },
     {
-      "id": "tx-mig-4305",
+      "id": "tx-mig-4306",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 9,
@@ -41975,7 +41984,7 @@ export const initialFinanceData: FinanceData = {
       "description": "9"
     },
     {
-      "id": "tx-mig-4306",
+      "id": "tx-mig-4307",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-20",
       "amount": 9,
@@ -41984,7 +41993,7 @@ export const initialFinanceData: FinanceData = {
       "description": "9"
     },
     {
-      "id": "tx-mig-4307",
+      "id": "tx-mig-4308",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-0",
       "amount": 24.5,
@@ -41993,16 +42002,16 @@ export const initialFinanceData: FinanceData = {
       "description": "24.5 подгузники"
     },
     {
-      "id": "tx-mig-4308",
+      "id": "tx-mig-4309",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 1.2,
       "type": "expense",
       "date": "2023-08-02",
       "description": "1.2"
     },
     {
-      "id": "tx-mig-4309",
+      "id": "tx-mig-4310",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-8",
       "amount": 23.5,
@@ -42011,7 +42020,7 @@ export const initialFinanceData: FinanceData = {
       "description": "23.5"
     },
     {
-      "id": "tx-mig-4310",
+      "id": "tx-mig-4311",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-15",
       "amount": 32.5,
@@ -42020,7 +42029,7 @@ export const initialFinanceData: FinanceData = {
       "description": "32.5"
     },
     {
-      "id": "tx-mig-4311",
+      "id": "tx-mig-4312",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 50,
@@ -42031,7 +42040,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4312",
+      "id": "tx-mig-4313",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 50,
@@ -42042,7 +42051,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4313",
+      "id": "tx-mig-4314",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 1.2,
@@ -42051,7 +42060,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1.2"
     },
     {
-      "id": "tx-mig-4314",
+      "id": "tx-mig-4315",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 50,
@@ -42062,7 +42071,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4315",
+      "id": "tx-mig-4316",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 50,
@@ -42073,7 +42082,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4316",
+      "id": "tx-mig-4317",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-15",
       "amount": 32.6,
@@ -42082,7 +42091,7 @@ export const initialFinanceData: FinanceData = {
       "description": "32.6"
     },
     {
-      "id": "tx-mig-4317",
+      "id": "tx-mig-4318",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-25",
       "amount": 794,
@@ -42091,7 +42100,7 @@ export const initialFinanceData: FinanceData = {
       "description": "794"
     },
     {
-      "id": "tx-mig-4318",
+      "id": "tx-mig-4319",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-32",
       "amount": 3,
@@ -42102,7 +42111,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4319",
+      "id": "tx-mig-4320",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 3,
@@ -42113,7 +42122,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4320",
+      "id": "tx-mig-4321",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 4,
@@ -42124,7 +42133,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4321",
+      "id": "tx-mig-4322",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-31",
       "amount": 4,
@@ -42135,7 +42144,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4322",
+      "id": "tx-mig-4323",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 17,
@@ -42144,7 +42153,7 @@ export const initialFinanceData: FinanceData = {
       "description": "17"
     },
     {
-      "id": "tx-mig-4323",
+      "id": "tx-mig-4324",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 6,
@@ -42153,7 +42162,7 @@ export const initialFinanceData: FinanceData = {
       "description": "6"
     },
     {
-      "id": "tx-mig-4324",
+      "id": "tx-mig-4325",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-18",
       "amount": 15,
@@ -42162,7 +42171,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15 держала для телефона"
     },
     {
-      "id": "tx-mig-4325",
+      "id": "tx-mig-4326",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 5,
@@ -42171,7 +42180,7 @@ export const initialFinanceData: FinanceData = {
       "description": "5"
     },
     {
-      "id": "tx-mig-4326",
+      "id": "tx-mig-4327",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 9,
@@ -42180,7 +42189,7 @@ export const initialFinanceData: FinanceData = {
       "description": "9"
     },
     {
-      "id": "tx-mig-4327",
+      "id": "tx-mig-4328",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 50,
@@ -42191,7 +42200,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4328",
+      "id": "tx-mig-4329",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 50,
@@ -42202,7 +42211,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4329",
+      "id": "tx-mig-4330",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-26",
       "amount": 15,
@@ -42211,16 +42220,16 @@ export const initialFinanceData: FinanceData = {
       "description": "15 ailenet"
     },
     {
-      "id": "tx-mig-4330",
+      "id": "tx-mig-4331",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 3,
       "type": "expense",
       "date": "2023-07-31",
       "description": "3"
     },
     {
-      "id": "tx-mig-4331",
+      "id": "tx-mig-4332",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 2.2,
@@ -42229,7 +42238,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2.2"
     },
     {
-      "id": "tx-mig-4332",
+      "id": "tx-mig-4333",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-20",
       "amount": 20,
@@ -42238,7 +42247,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20 йас"
     },
     {
-      "id": "tx-mig-4333",
+      "id": "tx-mig-4334",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-20",
       "amount": 20,
@@ -42247,7 +42256,7 @@ export const initialFinanceData: FinanceData = {
       "description": "20"
     },
     {
-      "id": "tx-mig-4334",
+      "id": "tx-mig-4335",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-20",
       "amount": 28,
@@ -42256,7 +42265,7 @@ export const initialFinanceData: FinanceData = {
       "description": "28"
     },
     {
-      "id": "tx-mig-4335",
+      "id": "tx-mig-4336",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 120,
@@ -42267,7 +42276,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4336",
+      "id": "tx-mig-4337",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 120,
@@ -42278,7 +42287,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4337",
+      "id": "tx-mig-4338",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-20",
       "amount": 50,
@@ -42287,7 +42296,7 @@ export const initialFinanceData: FinanceData = {
       "description": "50 Эми за авто"
     },
     {
-      "id": "tx-mig-4338",
+      "id": "tx-mig-4339",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 70,
@@ -42298,7 +42307,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4339",
+      "id": "tx-mig-4340",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-31",
       "amount": 70,
@@ -42309,7 +42318,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4340",
+      "id": "tx-mig-4341",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-32",
       "amount": 11,
@@ -42320,7 +42329,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4341",
+      "id": "tx-mig-4342",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-31",
       "amount": 11,
@@ -42331,7 +42340,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4342",
+      "id": "tx-mig-4343",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-21",
       "amount": 40,
@@ -42340,7 +42349,7 @@ export const initialFinanceData: FinanceData = {
       "description": "40 салон"
     },
     {
-      "id": "tx-mig-4343",
+      "id": "tx-mig-4344",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-15",
       "amount": 40,
@@ -42349,7 +42358,7 @@ export const initialFinanceData: FinanceData = {
       "description": "40"
     },
     {
-      "id": "tx-mig-4344",
+      "id": "tx-mig-4345",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-5",
       "amount": 2,
@@ -42358,7 +42367,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-4345",
+      "id": "tx-mig-4346",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-4",
       "amount": 2.3,
@@ -42367,7 +42376,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2.3"
     },
     {
-      "id": "tx-mig-4346",
+      "id": "tx-mig-4347",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 2,
@@ -42376,7 +42385,7 @@ export const initialFinanceData: FinanceData = {
       "description": "2"
     },
     {
-      "id": "tx-mig-4347",
+      "id": "tx-mig-4348",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
       "amount": 1,
@@ -42385,7 +42394,7 @@ export const initialFinanceData: FinanceData = {
       "description": "1"
     },
     {
-      "id": "tx-mig-4348",
+      "id": "tx-mig-4349",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 3,
@@ -42394,7 +42403,7 @@ export const initialFinanceData: FinanceData = {
       "description": "3"
     },
     {
-      "id": "tx-mig-4349",
+      "id": "tx-mig-4350",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-32",
       "amount": 50,
@@ -42405,7 +42414,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4350",
+      "id": "tx-mig-4351",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-31",
       "amount": 50,
@@ -42416,16 +42425,16 @@ export const initialFinanceData: FinanceData = {
       "transferType": "in"
     },
     {
-      "id": "tx-mig-4351",
+      "id": "tx-mig-4352",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-20",
-      "amount": 10.899999999999999,
+      "amount": 10.9,
       "type": "expense",
       "date": "2023-07-27",
       "description": "3.6 4.5 2.8"
     },
     {
-      "id": "tx-mig-4352",
+      "id": "tx-mig-4353",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
       "amount": 15.4,
@@ -42434,7 +42443,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15.4"
     },
     {
-      "id": "tx-mig-4353",
+      "id": "tx-mig-4354",
       "accountId": "acc-parsed-3",
       "categoryId": "cat-parsed-4",
       "amount": 10,
@@ -42443,7 +42452,7 @@ export const initialFinanceData: FinanceData = {
       "description": "10"
     },
     {
-      "id": "tx-mig-4354",
+      "id": "tx-mig-4355",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-0",
       "amount": 15,
@@ -42452,7 +42461,7 @@ export const initialFinanceData: FinanceData = {
       "description": "15"
     },
     {
-      "id": "tx-mig-4355",
+      "id": "tx-mig-4356",
       "accountId": "acc-parsed-0",
       "categoryId": "cat-parsed-32",
       "amount": 301,
@@ -42463,7 +42472,7 @@ export const initialFinanceData: FinanceData = {
       "transferType": "out"
     },
     {
-      "id": "tx-mig-4356",
+      "id": "tx-mig-4357",
       "accountId": "acc-parsed-18",
       "categoryId": "cat-parsed-31",
       "amount": 301,
@@ -42472,15 +42481,6 @@ export const initialFinanceData: FinanceData = {
       "description": "Перевод со счета ASB kart в YapiKrediBank kredit",
       "transferAccountId": "acc-parsed-0",
       "transferType": "in"
-    },
-    {
-      "id": "tx-mig-4357",
-      "accountId": "acc-parsed-0",
-      "categoryId": "cat-parsed-26",
-      "amount": 11,
-      "type": "expense",
-      "date": "2023-07-26",
-      "description": "11 Ilqar"
     },
     {
       "id": "tx-mig-4358",
@@ -43044,7 +43044,7 @@ export const initialFinanceData: FinanceData = {
       "amount": 182,
       "type": "expense",
       "date": "2023-07-09",
-      "description": "140 чехол для машины\t 35 коврики 7 защита от солнца"
+      "description": "140 чехол для машины, 35 коврики 7 защита от солнца"
     },
     {
       "id": "tx-mig-4418",
@@ -43076,7 +43076,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-4421",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 25,
       "type": "expense",
       "date": "2023-07-09",
@@ -43576,7 +43576,7 @@ export const initialFinanceData: FinanceData = {
       "id": "tx-mig-4472",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
-      "amount": 10.120000000000001,
+      "amount": 10.12,
       "type": "expense",
       "date": "2023-07-01",
       "description": "2.41 2.28 0.03 0.9 4.5"
@@ -43754,7 +43754,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-4491",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 25,
       "type": "expense",
       "date": "2023-06-27",
@@ -43983,7 +43983,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-4516",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 22,
       "type": "expense",
       "date": "2023-06-23",
@@ -44001,7 +44001,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-4518",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 22,
       "type": "expense",
       "date": "2023-06-23",
@@ -45488,7 +45488,7 @@ export const initialFinanceData: FinanceData = {
       "id": "tx-mig-4672",
       "accountId": "acc-parsed-2",
       "categoryId": "cat-parsed-4",
-      "amount": 29.599999999999998,
+      "amount": 29.6,
       "type": "expense",
       "date": "2023-05-22",
       "description": "23.4 6.2"
@@ -47847,7 +47847,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-4916",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 15,
       "type": "expense",
       "date": "2023-03-27",
@@ -49514,7 +49514,7 @@ export const initialFinanceData: FinanceData = {
       "id": "tx-mig-5094",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-21",
-      "amount": 13.600000000000001,
+      "amount": 13.6,
       "type": "expense",
       "date": "2023-02-04",
       "description": "10.4 3.2"
@@ -49829,7 +49829,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-5126",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 10,
       "type": "expense",
       "date": "2023-01-27",
@@ -50855,10 +50855,10 @@ export const initialFinanceData: FinanceData = {
       "id": "tx-mig-5235",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-4",
-      "amount": 31.169999999999998,
+      "amount": 31.17,
       "type": "expense",
       "date": "2022-12-23",
-      "description": "0\t86 0\t86 1.6 8 0.56 0.7 5.63 3.59 1.15 6.66 1 0.56"
+      "description": "0,86 0,86 1.6 8 0.56 0.7 5.63 3.59 1.15 6.66 1 0.56"
     },
     {
       "id": "tx-mig-5236",
@@ -50997,7 +50997,7 @@ export const initialFinanceData: FinanceData = {
       "amount": 14.2,
       "type": "expense",
       "date": "2022-12-17",
-      "description": "14\t2"
+      "description": "14,2"
     },
     {
       "id": "tx-mig-5251",
@@ -51006,7 +51006,7 @@ export const initialFinanceData: FinanceData = {
       "amount": 2.6,
       "type": "expense",
       "date": "2022-12-17",
-      "description": "2\t6"
+      "description": "2,6"
     },
     {
       "id": "tx-mig-5252",
@@ -51556,7 +51556,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-5309",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 3.5,
       "type": "expense",
       "date": "2022-11-30",
@@ -52398,7 +52398,7 @@ export const initialFinanceData: FinanceData = {
       "amount": 40,
       "type": "expense",
       "date": "2022-11-06",
-      "description": "10 yas Yusif 10 yas Heyran 20 yas Irada"
+      "description": "10 yas Yusif 10 yas Heyran 20 yas Ira da"
     },
     {
       "id": "tx-mig-5400",
@@ -52658,7 +52658,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-5427",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 12,
       "type": "expense",
       "date": "2022-10-27",
@@ -53508,7 +53508,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-5517",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 1.2,
       "type": "expense",
       "date": "2022-09-29",
@@ -53544,7 +53544,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-5521",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 15,
       "type": "expense",
       "date": "2022-09-27",
@@ -53778,7 +53778,7 @@ export const initialFinanceData: FinanceData = {
       "id": "tx-mig-5546",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-8",
-      "amount": 126.39999999999999,
+      "amount": 126.4,
       "type": "expense",
       "date": "2022-09-20",
       "description": "15.1 68 для лица Самиры 43.3 невропатолог"
@@ -54168,7 +54168,7 @@ export const initialFinanceData: FinanceData = {
       "id": "tx-mig-5588",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-21",
-      "amount": 14.399999999999999,
+      "amount": 14.4,
       "type": "expense",
       "date": "2022-09-04",
       "description": "6.6 3.8 4"
@@ -54327,7 +54327,7 @@ export const initialFinanceData: FinanceData = {
       "amount": 40,
       "type": "income",
       "date": "2022-08-30",
-      "description": "15 kesbek\t 25edv"
+      "description": "15 kesbek, 25edv"
     },
     {
       "id": "tx-mig-5605",
@@ -54369,7 +54369,7 @@ export const initialFinanceData: FinanceData = {
       "id": "tx-mig-5609",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-22",
-      "amount": 14.299999999999999,
+      "amount": 14.3,
       "type": "expense",
       "date": "2022-08-28",
       "description": "3.9 2.2 1 1.2 6"
@@ -54381,7 +54381,7 @@ export const initialFinanceData: FinanceData = {
       "amount": 54,
       "type": "expense",
       "date": "2022-08-28",
-      "description": "40 4 лекарства\t 10 врачу"
+      "description": "40 4 лекарства, 10 врачу"
     },
     {
       "id": "tx-mig-5611",
@@ -54409,7 +54409,7 @@ export const initialFinanceData: FinanceData = {
       "id": "tx-mig-5613",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-4",
-      "amount": 22.799999999999997,
+      "amount": 22.8,
       "type": "expense",
       "date": "2022-08-27",
       "description": "9.7 7 6.1"
@@ -54517,7 +54517,7 @@ export const initialFinanceData: FinanceData = {
       "id": "tx-mig-5625",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-21",
-      "amount": 9.719999999999999,
+      "amount": 9.72,
       "type": "expense",
       "date": "2022-08-21",
       "description": "5 4.72"
@@ -54674,7 +54674,7 @@ export const initialFinanceData: FinanceData = {
       "id": "tx-mig-5642",
       "accountId": "acc-parsed-7",
       "categoryId": "cat-parsed-4",
-      "amount": 21.240000000000002,
+      "amount": 21.24,
       "type": "expense",
       "date": "2022-08-16",
       "description": "2.24 19"
@@ -54934,7 +54934,7 @@ export const initialFinanceData: FinanceData = {
       "id": "tx-mig-5670",
       "accountId": "acc-parsed-20",
       "categoryId": "cat-parsed-0",
-      "amount": 15.559999999999999,
+      "amount": 15.56,
       "type": "expense",
       "date": "2022-08-07",
       "description": "5.52 4.92 5.12"
@@ -55518,7 +55518,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-5731",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 12,
       "type": "expense",
       "date": "2022-07-26",
@@ -55782,7 +55782,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-5759",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 2,
       "type": "expense",
       "date": "2022-07-18",
@@ -55885,7 +55885,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-5770",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 10,
       "type": "expense",
       "date": "2022-07-14",
@@ -55975,7 +55975,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-5780",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 1.5,
       "type": "expense",
       "date": "2022-07-11",
@@ -56225,7 +56225,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-5806",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 4,
       "type": "expense",
       "date": "2022-07-06",
@@ -56364,7 +56364,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-5821",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 28,
       "type": "expense",
       "date": "2022-07-04",
@@ -56935,7 +56935,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-5880",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 10,
       "type": "expense",
       "date": "2022-06-24",
@@ -56944,7 +56944,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-5881",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 26,
       "type": "expense",
       "date": "2022-06-24",
@@ -57221,7 +57221,7 @@ export const initialFinanceData: FinanceData = {
       "amount": 5.8,
       "type": "expense",
       "date": "2022-06-17",
-      "description": "5\t8"
+      "description": "5,8"
     },
     {
       "id": "tx-mig-5911",
@@ -57715,7 +57715,7 @@ export const initialFinanceData: FinanceData = {
       "id": "tx-mig-5963",
       "accountId": "acc-parsed-1",
       "categoryId": "cat-parsed-4",
-      "amount": 3.9499999999999997,
+      "amount": 3.95,
       "type": "expense",
       "date": "2022-06-04",
       "description": "3.3 + 0.65"
@@ -60485,7 +60485,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-6258",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 1.4,
       "type": "expense",
       "date": "2022-03-22",
@@ -61063,7 +61063,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-6320",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 29,
       "type": "expense",
       "date": "2022-03-08",
@@ -61675,7 +61675,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-6384",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 2,
       "type": "expense",
       "date": "2022-02-17",
@@ -62543,7 +62543,7 @@ export const initialFinanceData: FinanceData = {
     {
       "id": "tx-mig-6476",
       "accountId": "acc-parsed-1",
-      "categoryId": "cat-parsed-32",
+      "categoryId": "cat-parsed-28",
       "amount": 40,
       "type": "expense",
       "date": "2022-01-23",

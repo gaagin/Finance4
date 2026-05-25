@@ -10,32 +10,13 @@ import { LayoutDashboard, ReceiptText, Calendar, SlidersHorizontal, Settings, Fl
 import { initAuth, logout, googleSignIn, db } from './googleAuth';
 import { User } from 'firebase/auth';
 import { doc, onSnapshot, getDoc } from 'firebase/firestore';
-import { getUserFinanceData, saveUserFinanceData, testConnection, subscribeToUserFinanceData } from './firebaseService';
+import { getUserFinanceData, saveUserFinanceData, testConnection, subscribeToUserFinanceData, reinitUserFinanceData } from './firebaseService';
 import firebaseConfig from '../firebase-applet-config.json';
 
 export default function App() {
   
-  // 1. Initial State hydrated from Storage or Default Azerbaijan parameters (HoneyMoney)
-  const [data, setData] = useState<FinanceData>(() => {
-    const saved = localStorage.getItem('milli_finance_data_v8_realonly_clean');
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        if (!parsed.cards) {
-          parsed.cards = initialFinanceData.cards || [];
-        }
-        // Automatically upgrades localStorage to the compiled JSON if fresh CSV contains more transactions
-        if (parsed.transactions && parsed.transactions.length < initialFinanceData.transactions.length) {
-          console.log(`Auto-upgrading local state to the newly uploaded CSV data (${initialFinanceData.transactions.length} transactions).`);
-          return initialFinanceData;
-        }
-        return parsed;
-      } catch (e) {
-        console.error('Ошибка чтения локального хранилища:', e);
-      }
-    }
-    return initialFinanceData;
-  });
+  // 1. Initial State starts with parsed HoneyMoney JSON data (6572 transactions)
+  const [data, setData] = useState<FinanceData>(initialFinanceData);
 
   const [isFirebaseLoading, setIsFirebaseLoading] = useState(false);
   const isLoadedFromFirebase = useRef(false);
@@ -94,18 +75,18 @@ export default function App() {
       async (cloudData) => {
         const stringifiedCloud = JSON.stringify(cloudData);
         
-        // If active Firestore collection of transactions is empty, seed it with the parse-time initialFinanceData (derived from CSV)
+        // If active Firestore collection of transactions is empty, seed it with the parse-time initialFinanceData (derived from JSON)
         const isDbEmptyOfTransactions = cloudData.transactions.length === 0;
 
         if (isDbEmptyOfTransactions) {
           lastFetchedDataRef.current = JSON.stringify(initialFinanceData);
           setData(initialFinanceData);
           try {
-            await saveUserFinanceData(currentUser.uid, currentUser.email || "", initialFinanceData, null);
-            addToast("Все данные и транзакции из CSV импортированы в Firebase! ☁️🎉", "success");
+            await reinitUserFinanceData(currentUser.uid, currentUser.email || "", initialFinanceData);
+            addToast("Все данные и транзакции из honey_export.json импортированы в Firebase! ☁️🎉", "success");
           } catch (err: any) {
             console.error("Ошибка инициализации данных в Firebase:", err);
-            addToast(`Ошибка автоимпорта CSV: ${err.message || err}`, "warning" as any);
+            addToast(`Ошибка автоимпорта JSON: ${err.message || err}`, "warning" as any);
           }
         } else if (stringifiedCloud !== lastFetchedDataRef.current) {
           // Only update local state if it differs from what was last loaded/saved to prevent cycles
@@ -134,10 +115,7 @@ export default function App() {
     };
   }, [currentUser]);
 
-  // Sync state to LocalStorage (purely client-side, zero cost, never triggers loops)
-  useEffect(() => {
-    localStorage.setItem('milli_finance_data_v8_realonly_clean', JSON.stringify(data));
-  }, [data]);
+  // LocalStorage sync is disabled: all operations are now strictly through Firebase Firestore database
 
   useEffect(() => {
     const unsubscribe = initAuth(
@@ -238,24 +216,24 @@ export default function App() {
 
   const handleForceImportCSVToFirebase = async () => {
     if (!currentUser) return;
-    if (confirm("Вы уверены, что хотите принудительно залить все данные HoneyMoney из оригинального CSV файла напрямую в базу данных Firebase? Это перезапишет текущий заголовок счетов и все транзакции в облаке на данные из CSV.")) {
+    if (confirm(`Вы уверены, что хотите принудительно залить все данные HoneyMoney из файла honey_export.json напрямую в базу данных Firebase? Это полностью удалит все старые транзакции и перезапишет счета на свежие данные (${initialFinanceData.transactions.length} операций).`)) {
       setIsFirebaseLoading(true);
       setFirebaseSyncError(null);
       try {
-        addToast("Старт импорта CSV файла... Запись 2100+ транзакций в Firebase Firestore... ⏳", "success");
-        await saveUserFinanceData(currentUser.uid, currentUser.email || "", initialFinanceData, null);
+        addToast(`Старт импорта JSON... Запись всех ${initialFinanceData.transactions.length} транзакций в Firebase Firestore с полной очисткой старых записей... ⏳`, "success");
+        await reinitUserFinanceData(currentUser.uid, currentUser.email || "", initialFinanceData);
         lastFetchedDataRef.current = JSON.stringify(initialFinanceData);
         setData(initialFinanceData);
-        addToast("Все данные оригинального HoneyMoney CSV файла успешно залиты в Firebase! ☁️🎉", "success");
+        addToast("Все данные из honey_export.json успешно залиты в Firebase! Старые данные удалены. ☁️🎉", "success");
       } catch (err: any) {
-        console.error("Ошибка ручного импорта CSV в Firebase:", err);
+        console.error("Ошибка принудительного импорта JSON в Firebase:", err);
         let msg = err?.message || String(err);
         try {
           const parsed = JSON.parse(msg);
           msg = parsed.error || msg;
         } catch {}
         setFirebaseSyncError(msg);
-        addToast(`Не удалось залить CSV: ${msg}`, "critical" as any);
+        addToast(`Не удалось залить JSON: ${msg}`, "critical" as any);
       } finally {
         setIsFirebaseLoading(false);
       }
@@ -1097,9 +1075,9 @@ export default function App() {
                   onClick={handleForceImportCSVToFirebase}
                   disabled={isFirebaseLoading}
                   className="w-full sm:w-auto px-3.5 py-2 bg-gradient-to-r from-amber-500/15 to-orange-500/15 hover:from-amber-500/25 hover:to-orange-500/25 border border-orange-500/30 hover:border-orange-500/50 text-amber-600 dark:text-amber-400 text-xs font-bold rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1.5"
-                  title="Принудительно загрузить все транзакции и аккаунты из CSV файла в Firestore"
+                  title="Принудительно загрузить все транзакции и аккаунты из JSON файла в Firestore"
                 >
-                  <span>📥 Импорт CSV в облако</span>
+                  <span>📥 Импорт JSON в облако</span>
                 </button>
                 <button
                   onClick={async () => {

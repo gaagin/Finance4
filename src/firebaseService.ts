@@ -262,3 +262,65 @@ export async function saveUserFinanceData(
     handleFirestoreError(error, OperationType.WRITE, path);
   }
 }
+
+// 4. Force wipe and seed the database with clean FinanceData (no residual old docs)
+export async function reinitUserFinanceData(
+  uid: string,
+  email: string,
+  data: FinanceData
+): Promise<void> {
+  const path = `users/${uid}`;
+  try {
+    // 1. Fetch all current transaction document IDs
+    const txSnap = await getDocs(collection(db, 'users', uid, 'transactions'));
+    const oldIds: string[] = [];
+    txSnap.forEach(docSnap => {
+      oldIds.push(docSnap.id);
+    });
+
+    const batchLimit = 500;
+
+    // 2. Delete all existing transactions in chunks of 500
+    for (let i = 0; i < oldIds.length; i += batchLimit) {
+      const chunk = oldIds.slice(i, i + batchLimit);
+      const batch = writeBatch(db);
+      chunk.forEach((id) => {
+        batch.delete(doc(db, 'users', uid, 'transactions', id));
+      });
+      await batch.commit();
+    }
+
+    // 3. Save main document metadata (accounts, categories, budgets, cards)
+    const rawPayload = {
+      uid,
+      email,
+      updatedAt: new Date().toISOString(),
+      accounts: data.accounts || [],
+      categories: data.categories || [],
+      budgets: data.budgets || [],
+      cards: data.cards || [],
+    };
+    
+    const sanitizedPayload = JSON.parse(JSON.stringify(rawPayload, (_, value) => {
+      return value === undefined ? null : value;
+    }));
+
+    await setDoc(doc(db, 'users', uid), sanitizedPayload);
+
+    // 4. Write all new transactions in chunks of 500
+    const addedTransactions = data.transactions || [];
+    for (let i = 0; i < addedTransactions.length; i += batchLimit) {
+      const chunk = addedTransactions.slice(i, i + batchLimit);
+      const batch = writeBatch(db);
+      chunk.forEach((item) => {
+        const docRef = doc(db, 'users', uid, 'transactions', item.id);
+        const sanitizedItem = JSON.parse(JSON.stringify(item, (_, v) => v === undefined ? null : v));
+        batch.set(docRef, sanitizedItem);
+      });
+      await batch.commit();
+    }
+  } catch (error) {
+    handleFirestoreError(error, OperationType.WRITE, path);
+  }
+}
+
