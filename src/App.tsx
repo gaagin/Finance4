@@ -15,14 +15,19 @@ import firebaseConfig from '../firebase-applet-config.json';
 
 export default function App() {
   
-  // 1. Initial State hydrated from Storage or Default Azerbaijan parameters
+  // 1. Initial State hydrated from Storage or Default Azerbaijan parameters (HoneyMoney)
   const [data, setData] = useState<FinanceData>(() => {
-    const saved = localStorage.getItem('milli_finance_data_v1');
+    const saved = localStorage.getItem('milli_finance_data_v8_realonly_clean');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
         if (!parsed.cards) {
           parsed.cards = initialFinanceData.cards || [];
+        }
+        // Automatically upgrades localStorage to the compiled JSON if fresh CSV contains more transactions
+        if (parsed.transactions && parsed.transactions.length < initialFinanceData.transactions.length) {
+          console.log(`Auto-upgrading local state to the newly uploaded CSV data (${initialFinanceData.transactions.length} transactions).`);
+          return initialFinanceData;
         }
         return parsed;
       } catch (e) {
@@ -113,7 +118,7 @@ export default function App() {
 
   // Sync state to LocalStorage (purely client-side, zero cost, never triggers loops)
   useEffect(() => {
-    localStorage.setItem('milli_finance_data_v1', JSON.stringify(data));
+    localStorage.setItem('milli_finance_data_v8_realonly_clean', JSON.stringify(data));
   }, [data]);
 
   useEffect(() => {
@@ -375,7 +380,9 @@ export default function App() {
       accountId: transfer.fromAccountId,
       categoryId: 'cat-other-exp',
       amount: transfer.amount,
-      type: 'expense',
+      type: 'transfer',
+      transferType: 'out',
+      transferAccountId: transfer.toAccountId,
       date: transfer.date,
       description: transfer.description.trim() || `Перевод в счет ${toAcc.name}`,
     };
@@ -385,7 +392,9 @@ export default function App() {
       accountId: transfer.toAccountId,
       categoryId: 'cat-other-inc',
       amount: transfer.amount,
-      type: 'income',
+      type: 'transfer',
+      transferType: 'in',
+      transferAccountId: transfer.fromAccountId,
       date: transfer.date,
       description: transfer.description.trim() || `Перевод со счета ${fromAcc.name}`,
     };
@@ -415,19 +424,41 @@ export default function App() {
     const txToDelete = data.transactions.find(t => t.id === id);
     if (!txToDelete) return;
 
+    // Check if this is a paired transfer to delete both sides
+    const otherTx = txToDelete.type === 'transfer' && txToDelete.transferAccountId
+      ? data.transactions.find(t => t.type === 'transfer' && t.accountId === txToDelete.transferAccountId && t.transferAccountId === txToDelete.accountId && t.date === txToDelete.date && t.amount === txToDelete.amount)
+      : null;
+
     // Modify bank account balance in reverse
     const updatedAccounts = data.accounts.map(acc => {
+      let balanceAdjust = 0;
       if (acc.id === txToDelete.accountId) {
-        const reverseDelta = txToDelete.type === 'income' ? -txToDelete.amount : txToDelete.amount;
-        return { ...acc, balance: acc.balance + reverseDelta };
+        const reverseDelta = txToDelete.type === 'income' 
+          ? -txToDelete.amount 
+          : txToDelete.type === 'expense' 
+          ? txToDelete.amount 
+          : txToDelete.transferType === 'in' 
+          ? -txToDelete.amount 
+          : txToDelete.amount;
+        balanceAdjust += reverseDelta;
       }
-      return acc;
+      if (otherTx && acc.id === otherTx.accountId) {
+        const reverseDeltaOther = otherTx.type === 'income'
+          ? -otherTx.amount
+          : otherTx.type === 'expense'
+          ? otherTx.amount
+          : otherTx.transferType === 'in'
+          ? -otherTx.amount
+          : otherTx.amount;
+        balanceAdjust += reverseDeltaOther;
+      }
+      return balanceAdjust !== 0 ? { ...acc, balance: acc.balance + balanceAdjust } : acc;
     });
 
     const nextData = {
       ...data,
       accounts: updatedAccounts,
-      transactions: data.transactions.filter(t => t.id !== id)
+      transactions: data.transactions.filter(t => t.id !== id && (!otherTx || t.id !== otherTx.id))
     };
 
     setData(nextData);
@@ -444,27 +475,195 @@ export default function App() {
     const originalTx = data.transactions.find(t => t.id === updatedTx.id);
     if (!originalTx) return;
 
-    // 1. Revert original transaction balance effect
-    let adjustedAccounts = data.accounts.map(acc => {
-      if (acc.id === originalTx.accountId) {
-        const reverseDelta = originalTx.type === 'income' ? -originalTx.amount : originalTx.amount;
-        return { ...acc, balance: acc.balance + reverseDelta };
-      }
-      return acc;
-    });
+    let finalAccounts = [...data.accounts];
+    let finalTransactions = [...data.transactions];
 
-    // 2. Apply newly modified transaction balance effect
-    const finalAccounts = adjustedAccounts.map(acc => {
-      if (acc.id === updatedTx.accountId) {
-        const delta = updatedTx.type === 'income' ? updatedTx.amount : -updatedTx.amount;
-        return { ...acc, balance: acc.balance + delta };
-      }
-      return acc;
-    });
+    // Case A: BOTH original and updated are transfers
+    if (originalTx.type === 'transfer' && updatedTx.type === 'transfer') {
+      // Find counterpart of original transfer
+      const counterpartTx = finalTransactions.find(t =>
+        t.type === 'transfer' &&
+        t.id !== originalTx.id &&
+        t.accountId === originalTx.transferAccountId &&
+        t.transferAccountId === originalTx.accountId
+      );
 
-    const finalTransactions = data.transactions.map(t =>
-      t.id === updatedTx.id ? updatedTx : t
-    );
+      // Revert originalTx balance
+      finalAccounts = finalAccounts.map(acc => {
+        if (acc.id === originalTx.accountId) {
+          const reverseDelta = originalTx.transferType === 'in' ? -originalTx.amount : originalTx.amount;
+          return { ...acc, balance: acc.balance + reverseDelta };
+        }
+        return acc;
+      });
+
+      // Revert counterpartTx balance (if found)
+      if (counterpartTx) {
+        finalAccounts = finalAccounts.map(acc => {
+          if (acc.id === counterpartTx.accountId) {
+            const reverseDelta = counterpartTx.transferType === 'in' ? -counterpartTx.amount : counterpartTx.amount;
+            return { ...acc, balance: acc.balance + reverseDelta };
+          }
+          return acc;
+        });
+      }
+
+      // Apply updatedTx balance
+      finalAccounts = finalAccounts.map(acc => {
+        if (acc.id === updatedTx.accountId) {
+          const delta = updatedTx.transferType === 'in' ? updatedTx.amount : -updatedTx.amount;
+          return { ...acc, balance: acc.balance + delta };
+        }
+        return acc;
+      });
+
+      // Apply counterpart balance (derived from updatedTx)
+      if (updatedTx.transferAccountId) {
+        finalAccounts = finalAccounts.map(acc => {
+          if (acc.id === updatedTx.transferAccountId) {
+            // counterpart has inverted transferType
+            const counterpartTransferType = updatedTx.transferType === 'out' ? 'in' : 'out';
+            const delta = counterpartTransferType === 'in' ? updatedTx.amount : -updatedTx.amount;
+            return { ...acc, balance: acc.balance + delta };
+          }
+          return acc;
+        });
+      }
+
+      // Update transactions
+      finalTransactions = finalTransactions.map(t => {
+        if (t.id === updatedTx.id) {
+          return updatedTx;
+        }
+        if (counterpartTx && t.id === counterpartTx.id) {
+          return {
+            ...counterpartTx,
+            accountId: updatedTx.transferAccountId || '',
+            transferAccountId: updatedTx.accountId,
+            type: 'transfer',
+            transferType: updatedTx.transferType === 'out' ? 'in' : 'out',
+            categoryId: updatedTx.transferType === 'out' ? 'cat-other-inc' : 'cat-other-exp',
+            amount: updatedTx.amount,
+            date: updatedTx.date,
+            description: updatedTx.description,
+          };
+        }
+        return t;
+      });
+    }
+    // Case B: Convert regular transaction to a transfer (was not, now is)
+    else if (originalTx.type !== 'transfer' && updatedTx.type === 'transfer') {
+      // Revert originalTx balance
+      finalAccounts = finalAccounts.map(acc => {
+        if (acc.id === originalTx.accountId) {
+          const reverseDelta = originalTx.type === 'income' ? -originalTx.amount : originalTx.amount;
+          return { ...acc, balance: acc.balance + reverseDelta };
+        }
+        return acc;
+      });
+
+      // Apply updatedTx (the OUT/IN side of transfer we are updating)
+      finalAccounts = finalAccounts.map(acc => {
+        if (acc.id === updatedTx.accountId) {
+          const delta = updatedTx.transferType === 'in' ? updatedTx.amount : -updatedTx.amount;
+          return { ...acc, balance: acc.balance + delta };
+        }
+        return acc;
+      });
+
+      // Create and apply target counterpart (the opposite side)
+      const counterpartId = `tx-transfer-${updatedTx.transferType === 'out' ? 'in' : 'out'}-${Date.now()}`;
+      const counterpartTx: Transaction = {
+        id: counterpartId,
+        accountId: updatedTx.transferAccountId || '',
+        transferAccountId: updatedTx.accountId,
+        type: 'transfer',
+        transferType: updatedTx.transferType === 'out' ? 'in' : 'out',
+        categoryId: updatedTx.transferType === 'out' ? 'cat-other-inc' : 'cat-other-exp',
+        amount: updatedTx.amount,
+        date: updatedTx.date,
+        description: updatedTx.description,
+      };
+
+      finalAccounts = finalAccounts.map(acc => {
+        if (acc.id === counterpartTx.accountId) {
+          const delta = counterpartTx.transferType === 'in' ? counterpartTx.amount : -counterpartTx.amount;
+          return { ...acc, balance: acc.balance + delta };
+        }
+        return acc;
+      });
+
+      // Replace original with updated, and append counterpart
+      finalTransactions = finalTransactions.map(t => t.id === updatedTx.id ? updatedTx : t);
+      finalTransactions.push(counterpartTx);
+    }
+    // Case C: Convert transfer to a regular transaction (was, now is not)
+    else if (originalTx.type === 'transfer' && updatedTx.type !== 'transfer') {
+      // Find the old counterpart of the original transfer to delete
+      const counterpartTx = finalTransactions.find(t =>
+        t.type === 'transfer' &&
+        t.id !== originalTx.id &&
+        t.accountId === originalTx.transferAccountId &&
+        t.transferAccountId === originalTx.accountId
+      );
+
+      // Revert originalTx balance
+      finalAccounts = finalAccounts.map(acc => {
+        if (acc.id === originalTx.accountId) {
+          const reverseDelta = originalTx.transferType === 'in' ? -originalTx.amount : originalTx.amount;
+          return { ...acc, balance: acc.balance + reverseDelta };
+        }
+        return acc;
+      });
+
+      // Revert counterpartTx balance (if found) and remove it
+      if (counterpartTx) {
+        finalAccounts = finalAccounts.map(acc => {
+          if (acc.id === counterpartTx.accountId) {
+            const reverseDelta = counterpartTx.transferType === 'in' ? -counterpartTx.amount : counterpartTx.amount;
+            return { ...acc, balance: acc.balance + reverseDelta };
+          }
+          return acc;
+        });
+        // Filter out the counterpart from transactions
+        finalTransactions = finalTransactions.filter(t => t.id !== counterpartTx.id);
+      }
+
+      // Apply updatedTx (regular income/expense)
+      finalAccounts = finalAccounts.map(acc => {
+        if (acc.id === updatedTx.accountId) {
+          const delta = updatedTx.type === 'income' ? updatedTx.amount : -updatedTx.amount;
+          return { ...acc, balance: acc.balance + delta };
+        }
+        return acc;
+      });
+
+      // Replace original with updated
+      finalTransactions = finalTransactions.map(t => t.id === updatedTx.id ? updatedTx : t);
+    }
+    // Case D: Neither is/was a transfer (normal single tx updates)
+    else {
+      // Revert originalTx balance
+      finalAccounts = finalAccounts.map(acc => {
+        if (acc.id === originalTx.accountId) {
+          const reverseDelta = originalTx.type === 'income' ? -originalTx.amount : originalTx.amount;
+          return { ...acc, balance: acc.balance + reverseDelta };
+        }
+        return acc;
+      });
+
+      // Apply updatedTx balance
+      finalAccounts = finalAccounts.map(acc => {
+        if (acc.id === updatedTx.accountId) {
+          const delta = updatedTx.type === 'income' ? updatedTx.amount : -updatedTx.amount;
+          return { ...acc, balance: acc.balance + delta };
+        }
+        return acc;
+      });
+
+      // Replace in transactions list
+      finalTransactions = finalTransactions.map(t => t.id === updatedTx.id ? updatedTx : t);
+    }
 
     const nextData = {
       ...data,
@@ -505,19 +704,23 @@ export default function App() {
     saveToFirebaseDirectly(nextData);
   };
 
-  // Demo Reset Helper to let user easily restore original state
+  // Reset Helper to let user easily restore original HoneyMoney imported state
   const handleResetData = () => {
-    if (confirm('Вы уверены, что хотите сбросить все данные к демонстрационному шаблону Азербайджана (Капитал Банк, Чайхана, BakuKart)? Все ваши личные записи будут стерты!')) {
+    if (confirm('Вы уверены, что хотите сбросить все данные к вашим импортированным записям HoneyMoney? Все текущие временные изменения будут заменены исходным слепком экспорта.')) {
       setData(initialFinanceData);
       saveToFirebaseDirectly(initialFinanceData);
       setActiveTab('overview');
       setPreselectedDate(null);
       setEditingTransaction(null);
+      addToast("Данные успешно сброшены к состоянию HoneyMoney! ₼", "success");
     }
   };
 
   // Header quick assets metrics
   const overallCapital = data.accounts.reduce((sum, a) => sum + a.balance, 0);
+
+  // Check if loaded data is an old demo version (e.g. contains "Капитал Банк") so we can ask the user to migrate
+  const hasOldData = data.accounts.some(acc => acc.name.includes('Капитал') || acc.name.includes('BakuKart') || acc.name.includes('Чайхана'));
 
   return (
     <div className={`min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans antialiased selection:bg-teal-500 selection:text-slate-950 relative overflow-x-hidden ${theme === 'dark' ? 'dark' : ''}`} id="main-root-container">
@@ -568,10 +771,10 @@ export default function App() {
           <button
             onClick={handleResetData}
             className="flex items-center gap-1 px-3 py-1.5 border border-white/10 hover:border-rose-500/50 bg-white/5 hover:bg-rose-500/10 text-slate-300 hover:text-rose-400 text-xs font-semibold rounded-xl transition-all cursor-pointer"
-            title="Восстановить демо Азербайджана"
+            title="Сбросить все до реального экспорта HoneyMoney"
           >
             <Flame size={13} className="text-rose-500" />
-            <span className="hidden sm:inline">Сбросить демо</span>
+            <span className="hidden sm:inline">Сбросить к HoneyMoney</span>
           </button>
         </div>
 
@@ -579,6 +782,35 @@ export default function App() {
 
       {/* 2. Primary Layout Grid */}
       <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-6 z-10">
+
+        {/* HoneyMoney Data Alert Banner */}
+        {hasOldData && (
+          <div className="bg-gradient-to-r from-teal-500/20 via-indigo-500/20 to-slate-900/50 backdrop-blur-md rounded-2xl p-6 border border-teal-500/40 shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-5 animate-pulse" id="honeymoney-migration-banner">
+            <div className="flex items-start gap-3.5">
+              <div className="p-3 bg-teal-400 text-slate-950 rounded-2xl shadow-lg shadow-teal-500/10 shrink-0">
+                <RefreshCw size={24} className="animate-spin" style={{ animationDuration: '6s' }} />
+              </div>
+              <div>
+                <h3 className="font-display font-black text-white text-lg leading-tight">Обнаружен старый демонстрационный шаблон!</h3>
+                <p className="text-sm text-slate-300 mt-1 max-w-3xl leading-relaxed">
+                  Ваш браузер или облако Firebase загрузили старые демонстрационные данные (Капитал Банк, Чайхана). Мы успешно импортировали и сконвертировали ваши реальные данные экспорта <b>HoneyMoney ({initialFinanceData.transactions.length} финансовых операций, реальные счета Самиры и Ильгара, ABB и ASB карты за 2022–2026 годы)</b>! Нажмите кнопку справа, чтобы мгновенно применить реальные данные.
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => {
+                if (confirm('Внимание: Вы уверены, что хотите применить реальные данные экспорта HoneyMoney? Ваши старые локальные данные будут перезаписаны.')) {
+                  setData(initialFinanceData);
+                  saveToFirebaseDirectly(initialFinanceData);
+                  addToast("Ваши реальные данные HoneyMoney успешно применены! 🎉", "success");
+                }
+              }}
+              className="w-full md:w-auto px-6 py-3.5 bg-gradient-to-r from-teal-400 to-emerald-400 hover:from-teal-300 hover:to-emerald-300 text-slate-950 font-extrabold rounded-2xl transition-all shadow-lg hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer uppercase tracking-wider text-xs font-display shrink-0"
+            >
+              Применить данные HoneyMoney ₼
+            </button>
+          </div>
+        )}
         
         {/* Navigation tabs row: single card view controller switcher */}
         <div className="flex bg-white/5 backdrop-blur-md p-2 rounded-2xl border border-white/10 justify-between sm:justify-start gap-1 overflow-x-auto custom-scrollbar shadow-lg">

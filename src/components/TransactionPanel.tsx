@@ -59,49 +59,96 @@ export function TransactionPanel({
   const [editDate, setEditDate] = useState('');
   const [editDescription, setEditDescription] = useState('');
   const [editCardId, setEditCardId] = useState<string | undefined>(undefined);
+  const [editTransferAccountId, setEditTransferAccountId] = useState('');
+  const [editTransferType, setEditTransferType] = useState<'out' | 'in'>('out');
 
   // Synchronize Edit Modal state when editingTransaction triggers
   useEffect(() => {
     if (editingTransaction) {
       setEditAmount(editingTransaction.amount.toString());
       setEditType(editingTransaction.type);
-      setEditAccountId(editingTransaction.accountId);
-      setEditCategoryId(editingTransaction.categoryId);
       setEditDate(editingTransaction.date);
       setEditDescription(editingTransaction.description || '');
       setEditCardId(editingTransaction.cardId);
+
+      if (editingTransaction.type === 'transfer') {
+        if (editingTransaction.transferType === 'in') {
+          setEditAccountId(editingTransaction.transferAccountId || '');
+          setEditTransferAccountId(editingTransaction.accountId);
+        } else {
+          setEditAccountId(editingTransaction.accountId);
+          setEditTransferAccountId(editingTransaction.transferAccountId || '');
+        }
+        setEditTransferType(editingTransaction.transferType || 'out');
+        setEditCategoryId(editingTransaction.categoryId || 'cat-other-exp');
+      } else {
+        setEditAccountId(editingTransaction.accountId);
+        setEditCategoryId(editingTransaction.categoryId);
+        setEditTransferAccountId('');
+        setEditTransferType('out');
+      }
     }
   }, [editingTransaction]);
 
   // Handle changing Transaction Type within the Edit Modal
   const handleEditTypeChange = (newType: TransactionType) => {
     setEditType(newType);
-    const filteredCats = categories.filter(c => c.type === newType);
-    if (filteredCats.length > 0) {
-      setEditCategoryId(filteredCats[0].id);
+    if (newType !== 'transfer') {
+      const filteredCats = categories.filter(c => c.type === newType);
+      if (filteredCats.length > 0) {
+        setEditCategoryId(filteredCats[0].id);
+      } else {
+        setEditCategoryId('');
+      }
     } else {
-      setEditCategoryId('');
+      // It's a transfer!
+      // Set a default transferAccountId if it's empty or equals editAccountId
+      if (!editTransferAccountId || editTransferAccountId === editAccountId) {
+        const fallbackAcc = accounts.find(a => a.id !== editAccountId);
+        if (fallbackAcc) {
+          setEditTransferAccountId(fallbackAcc.id);
+        }
+      }
+      setEditCategoryId('cat-other-exp'); // Outgoing transfer category placeholder
     }
   };
 
   // Submit handler for Transaction Edit Modal
   const handleEditFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!editAmount || isNaN(Number(editAmount)) || Number(editAmount) <= 0 || !editAccountId || !editCategoryId || !editDate) {
+    if (!editAmount || isNaN(Number(editAmount)) || Number(editAmount) <= 0 || !editAccountId || !editDate) {
       alert('Пожалуйста, заполните необходимые поля корректными значениями.');
       return;
+    }
+
+    if (editType === 'transfer') {
+      if (!editTransferAccountId) {
+        alert('Пожалуйста, выберите счет зачисления.');
+        return;
+      }
+      if (editAccountId === editTransferAccountId) {
+        alert('Счет списания и счет зачисления не могут совпадать.');
+        return;
+      }
+    } else {
+      if (!editCategoryId) {
+        alert('Пожалуйста, выберите категорию.');
+        return;
+      }
     }
 
     if (editingTransaction) {
       onUpdateTransaction({
         id: editingTransaction.id,
         accountId: editAccountId,
-        categoryId: editCategoryId,
+        categoryId: editType === 'transfer' ? (editTransferType === 'in' ? 'cat-other-inc' : 'cat-other-exp') : editCategoryId,
         amount: Number(editAmount),
         type: editType,
         date: editDate,
         description: editDescription.trim(),
-        cardId: editCardId || undefined
+        cardId: editType === 'transfer' ? undefined : (editCardId || undefined),
+        transferAccountId: editType === 'transfer' ? editTransferAccountId : undefined,
+        transferType: editType === 'transfer' ? (editingTransaction.transferType || 'out') : undefined
       });
     }
   };
@@ -198,10 +245,10 @@ export function TransactionPanel({
 
   // Advanced Filters State
   const [filterSearch, setFilterSearch] = useState('');
-  const [filterType, setFilterType] = useState<'all' | 'expense' | 'income'>('all');
+  const [filterType, setFilterType] = useState<'all' | 'expense' | 'income' | 'transfer'>('all');
   const [filterAccount, setFilterAccount] = useState('all');
   const [filterCategory, setFilterCategory] = useState('all');
-  const [filterDateRange, setFilterDateRange] = useState<'all' | 'may' | 'april' | 'custom'>('all');
+  const [filterDateRange, setFilterDateRange] = useState<'all' | 'may' | 'april' | '2026' | '2025' | '2024' | '2023' | '2022' | 'custom'>('may');
   const [customStartDate, setCustomStartDate] = useState('2026-05-01');
   const [customEndDate, setCustomEndDate] = useState('2026-05-31');
   const [isFiltersExpanded, setIsFiltersExpanded] = useState(false);
@@ -212,7 +259,7 @@ export function TransactionPanel({
     if (filterType !== 'all') count++;
     if (filterAccount !== 'all') count++;
     if (filterCategory !== 'all') count++;
-    if (filterDateRange !== 'all') count++;
+    if (filterDateRange !== 'may') count++;
     return count;
   }, [filterType, filterAccount, filterCategory, filterDateRange]);
 
@@ -267,6 +314,8 @@ export function TransactionPanel({
       result = result.filter(tx => tx.date.startsWith('2026-05'));
     } else if (filterDateRange === 'april') {
       result = result.filter(tx => tx.date.startsWith('2026-04'));
+    } else if (['2026', '2025', '2024', '2023', '2022'].includes(filterDateRange)) {
+      result = result.filter(tx => tx.date.startsWith(filterDateRange));
     } else if (filterDateRange === 'custom') {
       result = result.filter(tx => tx.date >= customStartDate && tx.date <= customEndDate);
     }
@@ -631,6 +680,7 @@ export function TransactionPanel({
                       <option value="all" className="bg-slate-950 text-slate-300">Все записи</option>
                       <option value="expense" className="bg-slate-950 text-slate-300">Только расходы</option>
                       <option value="income" className="bg-slate-950 text-slate-300">Только доходы</option>
+                      <option value="transfer" className="bg-slate-950 text-slate-300">Только переводы</option>
                     </select>
                   </div>
 
@@ -675,6 +725,11 @@ export function TransactionPanel({
                       <option value="all" className="bg-slate-950 text-slate-300">За всё время</option>
                       <option value="may" className="bg-slate-950 text-slate-300">Май 2026</option>
                       <option value="april" className="bg-slate-950 text-slate-300">Апрель 2026</option>
+                      <option value="2026" className="bg-slate-950 text-slate-300">2026 год</option>
+                      <option value="2025" className="bg-slate-950 text-slate-300">2025 год</option>
+                      <option value="2024" className="bg-slate-950 text-slate-300">2024 год</option>
+                      <option value="2023" className="bg-slate-950 text-slate-300">2023 год</option>
+                      <option value="2022" className="bg-slate-950 text-slate-300">2022 год</option>
                       <option value="custom" className="bg-slate-950 text-slate-300">Указать вручную</option>
                     </select>
                   </div>
@@ -749,6 +804,7 @@ export function TransactionPanel({
                 const acc = accounts.find(a => a.id === tx.accountId);
                 const card = tx.cardId ? cards.find(c => c.id === tx.cardId) : null;
                 const isIncome = tx.type === 'income';
+                const isTransfer = tx.type === 'transfer';
 
                 return (
                   <div
@@ -756,6 +812,8 @@ export function TransactionPanel({
                     className={`grid grid-cols-1 md:grid-cols-12 gap-3 items-center p-3 px-4 rounded-2xl border transition-all hover:shadow-sm group ${
                       editingTransaction?.id === tx.id
                         ? 'bg-amber-500/10 border-amber-500/30'
+                        : isTransfer
+                        ? 'bg-amber-500/5 hover:bg-amber-500/10 border-amber-500/10'
                         : isIncome
                         ? 'bg-emerald-500/5 hover:bg-emerald-500/10 border-white/5'
                         : 'bg-white/5 hover:bg-white/10 border-white/5'
@@ -765,16 +823,16 @@ export function TransactionPanel({
                     <div className="col-span-3 flex items-center gap-3">
                       <div
                         className="w-8 h-8 rounded-lg flex items-center justify-center text-white shrink-0"
-                        style={{ backgroundColor: cat?.color || '#3b82f6' }}
+                        style={{ backgroundColor: isTransfer ? '#f59e0b' : (cat?.color || '#3b82f6') }}
                       >
-                        <IconComponent name={cat?.icon || 'HelpCircle'} size={14} />
+                        {isTransfer ? <ArrowUpDown size={14} /> : <IconComponent name={cat?.icon || 'HelpCircle'} size={14} />}
                       </div>
                       <div className="min-w-0">
                         <h4 className="font-semibold text-xs text-slate-200 truncate leading-tight">
-                          {tx.description || cat?.name || 'Без описания'}
+                          {tx.description || (isTransfer ? 'Перевод' : (cat?.name || 'Без описания'))}
                         </h4>
                         <span className="text-[10px] text-slate-400 uppercase tracking-wide font-medium">
-                          {cat?.name || 'Другое'}
+                          {isTransfer ? 'Перевод' : (cat?.name || 'Другое')}
                         </span>
                       </div>
                     </div>
@@ -799,8 +857,8 @@ export function TransactionPanel({
 
                     {/* Transaction sum */}
                     <div className="col-span-2 font-display font-extrabold text-sm md:text-right leading-none">
-                      <span className={isIncome ? 'text-emerald-400' : 'text-white'}>
-                        {isIncome ? '+' : '-'}{tx.amount.toFixed(2)} ₼
+                      <span className={isTransfer ? (tx.transferType === 'in' ? 'text-teal-400' : 'text-amber-400') : (isIncome ? 'text-emerald-400' : 'text-white')}>
+                        {isTransfer ? (tx.transferType === 'in' ? '+' : '-') : (isIncome ? '+' : '-')}{tx.amount.toFixed(2)} ₼
                       </span>
                     </div>
 
@@ -822,9 +880,9 @@ export function TransactionPanel({
                            const associatedCat = categories.find(c => c.id === tx.categoryId);
                            setDeleteConfirm({
                              id: tx.id,
-                             description: tx.description || associatedCat?.name || 'Без описания',
+                             description: tx.description || (isTransfer ? 'Перевод' : (associatedCat?.name || 'Без описания')),
                              amount: tx.amount,
-                             isIncome: tx.type === 'income'
+                             isIncome: isTransfer ? (tx.transferType === 'in') : (tx.type === 'income')
                            });
                          }}
                          className="p-1.5 px-2.5 text-[11px] font-semibold bg-white/5 hover:bg-rose-500/15 hover:text-rose-400 text-slate-400 border border-white/5 hover:border-rose-500/35 rounded-xl transition-all cursor-pointer flex items-center gap-1 shrink-0"
@@ -844,7 +902,7 @@ export function TransactionPanel({
 
         <div className="mt-4 p-3 bg-white/5 border border-white/10 rounded-2xl flex items-center gap-2 text-xs text-slate-300">
           <Info size={14} className="shrink-0 text-teal-300" />
-          <span><b>Всего отфильтровано:</b> Трат: {filteredTransactions.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0).toFixed(1)} AZN, Доходов: {filteredTransactions.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0).toFixed(1)} AZN.</span>
+          <span><b>Всего отфильтровано:</b> Трат: {filteredTransactions.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0).toFixed(1)} AZN, Доходов: {filteredTransactions.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0).toFixed(1)} AZN, Переводов: {filteredTransactions.filter(t => t.type === 'transfer' && t.transferType === 'out').reduce((s, t) => s + t.amount, 0).toFixed(1)} AZN.</span>
         </div>
       </div>
 
@@ -896,6 +954,18 @@ export function TransactionPanel({
                   <ArrowUpRight size={13} />
                   Доход
                 </button>
+                <button
+                  type="button"
+                  onClick={() => handleEditTypeChange('transfer')}
+                  className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                    editType === 'transfer'
+                      ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30 shadow-xs'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  <ArrowUpDown size={13} />
+                  Перевод
+                </button>
               </div>
 
               {/* Amount input */}
@@ -922,9 +992,9 @@ export function TransactionPanel({
 
               {/* Account selection */}
               <div>
-                <label className="block text-[11px] font-semibold text-slate-400 mb-1 uppercase tracking-wider flex items-center gap-1.5 select-none">
-                  <CreditCard size={12} />
-                  Счет
+                <label className="block text-[11px] font-semibold text-slate-400 mb-1 uppercase tracking-wider flex items-center gap-1.5 select-none text-left">
+                  <CreditCard size={12} className={editType === 'transfer' ? 'text-amber-400' : ''} />
+                  {editType === 'transfer' ? 'Счет списания (Откуда)' : 'Счет'}
                 </label>
                 <SearchableSelect
                   items={accounts}
@@ -946,46 +1016,76 @@ export function TransactionPanel({
                 />
               </div>
 
-              {/* Category selection */}
-              <div>
-                <label className="block text-[11px] font-semibold text-slate-400 mb-1 uppercase tracking-wider flex items-center gap-1.5 select-none">
-                  <Tag size={12} />
-                  Категория
-                </label>
-                <SearchableSelect
-                  items={categories.filter(c => c.type === editType)}
-                  value={editCategoryId}
-                  onChange={(id) => setEditCategoryId(id)}
-                  placeholder="Выберите категорию..."
-                  searchPlaceholder="Поиск категории..."
-                  idKey="id"
-                  displayValue={(cat) => (
-                    <div className="flex items-center gap-2 text-xs">
-                      <div
-                        className="w-4 h-4 rounded-sm flex items-center justify-center shrink-0"
-                        style={{ backgroundColor: cat.color }}
-                      >
-                        <span className="text-[10px] text-white">
-                          <IconComponent name={cat.icon || 'HelpCircle'} size={10} />
+              {/* Destination Account selection (TRANSFER ONLY) */}
+              {editType === 'transfer' && (
+                <div className="animate-fade-in text-left">
+                  <label className="block text-[11px] font-semibold text-slate-400 mb-1 uppercase tracking-wider flex items-center gap-1.5 select-none">
+                    <CreditCard size={12} className="text-emerald-400" />
+                    Счет зачисления (Куда)
+                  </label>
+                  <SearchableSelect
+                    items={accounts.filter(acc => acc.id !== editAccountId)}
+                    value={editTransferAccountId}
+                    onChange={(id) => setEditTransferAccountId(id)}
+                    placeholder="Выберите счет зачисления..."
+                    searchPlaceholder="Поиск счета..."
+                    idKey="id"
+                    displayValue={(acc) => `${acc.name} (${Math.round(acc.balance)} ₼)`}
+                    filterValue={(acc) => acc.name}
+                    renderItem={(acc) => (
+                      <div className="flex justify-between items-center w-full text-xs">
+                        <span className="font-semibold">{acc.name}</span>
+                        <span className="font-mono text-[9px] text-teal-400 bg-teal-500/10 px-1.5 py-0.5 rounded-md font-extrabold shrink-0 ml-2">
+                          {Math.round(acc.balance)} ₼
                         </span>
                       </div>
-                      <span className="truncate">{cat.name}</span>
-                    </div>
-                  )}
-                  filterValue={(cat) => cat.name}
-                  renderItem={(cat) => (
-                    <div className="flex items-center gap-2 text-xs">
-                      <div
-                        className="w-4 h-4 rounded-md flex items-center justify-center text-white shrink-0"
-                        style={{ backgroundColor: cat.color }}
-                      >
-                        <IconComponent name={cat.icon || 'HelpCircle'} size={10} />
+                    )}
+                  />
+                </div>
+              )}
+
+              {/* Category selection */}
+              {editType !== 'transfer' && (
+                <div>
+                  <label className="block text-[11px] font-semibold text-slate-400 mb-1 uppercase tracking-wider flex items-center gap-1.5 select-none">
+                    <Tag size={12} />
+                    Категория
+                  </label>
+                  <SearchableSelect
+                    items={categories.filter(c => c.type === editType)}
+                    value={editCategoryId}
+                    onChange={(id) => setEditCategoryId(id)}
+                    placeholder="Выберите категорию..."
+                    searchPlaceholder="Поиск категории..."
+                    idKey="id"
+                    displayValue={(cat) => (
+                      <div className="flex items-center gap-2 text-xs">
+                        <div
+                          className="w-4 h-4 rounded-sm flex items-center justify-center shrink-0"
+                          style={{ backgroundColor: cat.color }}
+                        >
+                          <span className="text-[10px] text-white">
+                            <IconComponent name={cat.icon || 'HelpCircle'} size={10} />
+                          </span>
+                        </div>
+                        <span className="truncate">{cat.name}</span>
                       </div>
-                      <span className="font-semibold">{cat.name}</span>
-                    </div>
-                  )}
-                />
-              </div>
+                    )}
+                    filterValue={(cat) => cat.name}
+                    renderItem={(cat) => (
+                      <div className="flex items-center gap-2 text-xs">
+                        <div
+                          className="w-4 h-4 rounded-md flex items-center justify-center text-white shrink-0"
+                          style={{ backgroundColor: cat.color }}
+                        >
+                          <IconComponent name={cat.icon || 'HelpCircle'} size={10} />
+                        </div>
+                        <span className="font-semibold">{cat.name}</span>
+                      </div>
+                    )}
+                  />
+                </div>
+              )}
 
               {/* Date selection */}
               <div>
@@ -1017,24 +1117,26 @@ export function TransactionPanel({
               </div>
 
               {/* Card selection */}
-              <div>
-                <label className="block text-[11px] font-semibold text-slate-400 mb-1 uppercase tracking-wider flex items-center gap-1">
-                  <CreditCard size={12} className="text-teal-300" />
-                  Привязать пластиковую карту (Опционально)
-                </label>
-                <select
-                  value={editCardId || ''}
-                  onChange={(e) => setEditCardId(e.target.value || undefined)}
-                  className="w-full p-2 bg-slate-950/60 border border-white/10 rounded-xl text-xs text-slate-200 cursor-pointer text-ellipsis"
-                >
-                  <option value="" className="bg-slate-950 text-slate-400">Без пластиковой карты (m10/Наличные)</option>
-                  {cards.map(card => (
-                    <option key={card.id} value={card.id} className="bg-slate-950 text-slate-200">
-                      {card.bank} •••• {card.lastFour} ({card.name})
-                    </option>
-                  ))}
-                </select>
-              </div>
+              {editType !== 'transfer' && (
+                <div>
+                  <label className="block text-[11px] font-semibold text-slate-400 mb-1 uppercase tracking-wider flex items-center gap-1">
+                    <CreditCard size={12} className="text-teal-300" />
+                    Привязать пластиковую карту (Опционально)
+                  </label>
+                  <select
+                    value={editCardId || ''}
+                    onChange={(e) => setEditCardId(e.target.value || undefined)}
+                    className="w-full p-2 bg-slate-950/60 border border-white/10 rounded-xl text-xs text-slate-200 cursor-pointer text-ellipsis"
+                  >
+                    <option value="" className="bg-slate-950 text-slate-400">Без пластиковой карты (m10/Наличные)</option>
+                    {cards.map(card => (
+                      <option key={card.id} value={card.id} className="bg-slate-950 text-slate-200">
+                        {card.bank} •••• {card.lastFour} ({card.name})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
 
               {/* Form Action button block */}
               <div className="flex gap-3 pt-4 border-t border-white/5">

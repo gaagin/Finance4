@@ -1,4 +1,4 @@
-export type TransactionType = 'expense' | 'income';
+export type TransactionType = 'expense' | 'income' | 'transfer';
 
 export interface Account {
   id: string;
@@ -32,6 +32,8 @@ export interface Transaction {
   date: string; // YYYY-MM-DD
   description: string;
   cardId?: string; // Связанная банковская карта (опционально)
+  transferAccountId?: string; // Другой счет перевода (опционально)
+  transferType?: 'out' | 'in'; // Направление ('out' - списание, 'in' - зачисление)
 }
 
 export interface BudgetLimit {
