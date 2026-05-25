@@ -16,8 +16,21 @@ import firebaseConfig from '../firebase-applet-config.json';
 
 export default function App() {
   
-  // 1. Initial State starts with parsed HoneyMoney JSON data (6572 transactions)
-  const [data, setData] = useState<FinanceData>(initialFinanceData);
+  // 1. Initial State starts with parsed local storage or fallback to HoneyMoney JSON data (6572 transactions)
+  const [data, setData] = useState<FinanceData>(() => {
+    const saved = localStorage.getItem('milli_finance_data_v8_realonly_clean');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed && Array.isArray(parsed.transactions) && parsed.transactions.length > 0) {
+          return parsed;
+        }
+      } catch (e) {
+        console.error('Ошибка чтения локального хранилища:', e);
+      }
+    }
+    return initialFinanceData;
+  });
 
   const [isFirebaseLoading, setIsFirebaseLoading] = useState(false);
   const isLoadedFromFirebase = useRef(false);
@@ -116,7 +129,10 @@ export default function App() {
     };
   }, [currentUser]);
 
-  // LocalStorage sync is disabled: all operations are now strictly through Firebase Firestore database
+  // Sync state to LocalStorage for offline capability and local testing
+  useEffect(() => {
+    localStorage.setItem('milli_finance_data_v8_realonly_clean', JSON.stringify(data));
+  }, [data]);
 
   useEffect(() => {
     const unsubscribe = initAuth(
@@ -242,14 +258,15 @@ export default function App() {
   };
 
   const handleUploadCustomJson = async (e: ChangeEvent<HTMLInputElement>) => {
-    if (!currentUser) {
-      addToast("Пожалуйста, сначала авторизуйтесь для работы с облаком Firebase.", "critical" as any);
-      return;
-    }
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (!confirm(`Вы уверены, что хотите загрузить файл "${file.name}" с вашего ПК в облако Firebase? Это ПОЛНОСТЬЮ УДАЛИТ И ПЕРЕЗАПИШЕТ все текущие транзакции и счета в облаке текущими данными из выбранного файла.`)) {
+    const isCloud = !!currentUser;
+    const confirmMessage = isCloud 
+      ? `Вы уверены, что хотите загрузить файл "${file.name}" с вашего ПК в облако Firebase? Это ПОЛНОСТЬЮ УДАЛИТ И ПЕРЕЗАПИШЕТ все текущие транзакции и счета в облаке текущими данными из выбранного файла.`
+      : `Вы уверены, что хотите импортировать файл "${file.name}" с вашего ПК в локальное хранилище браузера? Это заменит текущие данные в браузере. Вы сможете синхронизировать их с облаком при последующем входе.`;
+
+    if (!confirm(confirmMessage)) {
       e.target.value = '';
       return;
     }
@@ -270,12 +287,18 @@ export default function App() {
           const parsedData = parseAndStandardizeJsonToFinanceData(text);
           const numTxs = parsedData.transactions.length;
 
-          addToast(`Успешно распознано ${numTxs} транзакций! Батч-запись в Firebase Firestore... ⏳`, "success");
-          await reinitUserFinanceData(currentUser.uid, currentUser.email || "", parsedData);
-          lastFetchedDataRef.current = JSON.stringify(parsedData);
-          setData(parsedData);
-
-          addToast(`Успешно загружено: ${numTxs} транзакций из "${file.name}"! 🎉☁️`, "success");
+          if (isCloud && currentUser) {
+            addToast(`Успешно распознано ${numTxs} транзакций! Запись в БД Firebase... ⏳`, "success");
+            await reinitUserFinanceData(currentUser.uid, currentUser.email || "", parsedData);
+            lastFetchedDataRef.current = JSON.stringify(parsedData);
+            setData(parsedData);
+            addToast(`Успешно загружено: ${numTxs} транзакций из "${file.name}" в облако! 🎉☁️`, "success");
+          } else {
+            addToast(`Успешно распознано ${numTxs} транзакций! Сохранение локально... 💾`, "success");
+            localStorage.setItem('milli_finance_data_v8_realonly_clean', JSON.stringify(parsedData));
+            setData(parsedData);
+            addToast(`Успешно загружено: ${numTxs} транзакций из "${file.name}" в локальный кэш! 💻🎉 Войдите в Firebase для сохранения в облаке.`, "success");
+          }
         } catch (innerErr: any) {
           console.error("Ошибка импорта загруженного файла:", innerErr);
           const msg = innerErr?.message || String(innerErr);
@@ -1016,6 +1039,19 @@ export default function App() {
                   <Info size={13} />
                   {showAuthInstructions ? 'Скрыть инструкцию' : 'Инструкция по настройке'}
                 </button>
+
+                <div className="w-full border-t border-white/5 my-1" />
+
+                <label className="w-full px-4 py-2.5 bg-gradient-to-r from-teal-500/15 to-emerald-500/15 hover:from-teal-500/25 hover:to-emerald-500/25 border border-teal-500/30 hover:border-teal-500/50 text-teal-600 dark:text-teal-400 text-xs font-bold rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-sm text-center">
+                  <span>📂 Выбрать JSON с ПК</span>
+                  <input
+                    type="file"
+                    accept=".json"
+                    onChange={handleUploadCustomJson}
+                    disabled={isFirebaseLoading}
+                    className="hidden"
+                  />
+                </label>
               </div>
             </div>
 
