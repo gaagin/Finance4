@@ -48,3 +48,18 @@ export interface FinanceData {
   budgets: BudgetLimit[];
   cards: BankCard[]; // Список банковских карт
 }
+
+export function formatCategoryDisplayName(name: string): string {
+  if (!name) return '';
+  const separators = ['/', '—', '–', '-', '−'];
+  for (const sep of separators) {
+    if (name.includes(sep)) {
+      const parts = name.split(sep);
+      const lastPart = parts[parts.length - 1].trim();
+      if (lastPart) {
+        return lastPart;
+      }
+    }
+  }
+  return name;
+}

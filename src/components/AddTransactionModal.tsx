@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Account, Category, Transaction, TransactionType } from '../types';
+import { Account, Category, Transaction, TransactionType, formatCategoryDisplayName } from '../types';
 import { X, ArrowUpDown, Coins, CreditCard, Tag, Landmark, FileText, Check } from 'lucide-react';
 import { SearchableSelect } from './SearchableSelect';
 import { IconComponent } from './IconComponent';
@@ -266,7 +266,7 @@ export function AddTransactionModal({
                           <IconComponent name={cat.icon || 'HelpCircle'} size={10} />
                         </span>
                       </div>
-                      <span className="truncate">{cat.name}</span>
+                      <span className="truncate">{formatCategoryDisplayName(cat.name)}</span>
                     </div>
                   )}
                   filterValue={(cat) => cat.name}
@@ -278,7 +278,7 @@ export function AddTransactionModal({
                       >
                         <IconComponent name={cat.icon || 'HelpCircle'} size={11} />
                       </div>
-                      <span className="font-semibold">{cat.name}</span>
+                      <span className="font-semibold">{formatCategoryDisplayName(cat.name)}</span>
                     </div>
                   )}
                 />

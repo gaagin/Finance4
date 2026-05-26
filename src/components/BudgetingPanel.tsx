@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Transaction, Category, BudgetLimit } from '../types';
+import { Transaction, Category, BudgetLimit, formatCategoryDisplayName } from '../types';
 import { IconComponent } from './IconComponent';
 import { Plus, Sliders, Trash2, Edit2, AlertCircle, CheckCircle2, TrendingUp, Info, X, AlertTriangle } from 'lucide-react';
 
@@ -100,7 +100,7 @@ export function BudgetingPanel({
                   <option value="" className="bg-slate-950 text-slate-300">Выберите категорию...</option>
                   {unbudgetedCategories.map(cat => (
                     <option key={cat.id} value={cat.id} className="bg-slate-950 text-slate-300">
-                      {cat.name}
+                      {formatCategoryDisplayName(cat.name)}
                     </option>
                   ))}
                 </select>
@@ -226,7 +226,7 @@ export function BudgetingPanel({
                           <IconComponent name={cat.icon} size={20} />
                         </div>
                         <div>
-                          <h4 className="font-semibold text-sm text-slate-200">{cat.name}</h4>
+                          <h4 className="font-semibold text-sm text-slate-200">{formatCategoryDisplayName(cat.name)}</h4>
                           <span className={`inline-flex items-center text-[10px] uppercase tracking-wider font-extrabold px-2 py-0.5 rounded-md border ${badgeStyle} mt-0.5`}>
                             {statusLabel}
                           </span>

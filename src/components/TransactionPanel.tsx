@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Transaction, Category, Account, TransactionType, BankCard } from '../types';
+import { Transaction, Category, Account, TransactionType, BankCard, formatCategoryDisplayName } from '../types';
 import { IconComponent } from './IconComponent';
 import { PlusCircle, Edit2, Trash2, Search, Filter, Calendar, CreditCard, Tag, ArrowUpRight, ArrowDownLeft, X, ArrowUpDown, Info, ChevronDown, ChevronUp } from 'lucide-react';
 import { SearchableSelect } from './SearchableSelect';
@@ -518,7 +518,7 @@ export function TransactionPanel({
                         <IconComponent name={cat.icon || 'HelpCircle'} size={10} />
                       </span>
                     </div>
-                    <span className="truncate">{cat.name}</span>
+                    <span className="truncate">{formatCategoryDisplayName(cat.name)}</span>
                   </div>
                 )}
                 filterValue={(cat) => cat.name}
@@ -530,7 +530,7 @@ export function TransactionPanel({
                     >
                       <IconComponent name={cat.icon || 'HelpCircle'} size={11} />
                     </div>
-                    <span className="font-semibold">{cat.name}</span>
+                    <span className="font-semibold">{formatCategoryDisplayName(cat.name)}</span>
                   </div>
                 )}
               />
@@ -1068,7 +1068,7 @@ export function TransactionPanel({
                             <IconComponent name={cat.icon || 'HelpCircle'} size={10} />
                           </span>
                         </div>
-                        <span className="truncate">{cat.name}</span>
+                        <span className="truncate">{formatCategoryDisplayName(cat.name)}</span>
                       </div>
                     )}
                     filterValue={(cat) => cat.name}
@@ -1080,7 +1080,7 @@ export function TransactionPanel({
                         >
                           <IconComponent name={cat.icon || 'HelpCircle'} size={10} />
                         </div>
-                        <span className="font-semibold">{cat.name}</span>
+                        <span className="font-semibold">{formatCategoryDisplayName(cat.name)}</span>
                       </div>
                     )}
                   />
