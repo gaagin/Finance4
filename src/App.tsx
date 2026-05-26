@@ -35,6 +35,7 @@ export default function App() {
   const [isFirebaseLoading, setIsFirebaseLoading] = useState(false);
   const isLoadedFromFirebase = useRef(false);
   const lastFetchedDataRef = useRef<string | null>(null);
+  const isWritingToFirebaseRef = useRef(false);
 
   const dataRef = useRef(data);
   useEffect(() => {
@@ -87,12 +88,18 @@ export default function App() {
     const unsubscribe = subscribeToUserFinanceData(
       currentUser.uid,
       async (cloudData) => {
+        // If we are currently writing or seeding to Firebase, we ignore snapshot callbacks to avoid loops
+        if (isWritingToFirebaseRef.current) {
+          return;
+        }
+
         const stringifiedCloud = JSON.stringify(cloudData);
         
         // If active Firestore collection of transactions is empty, seed it with the parse-time initialFinanceData (derived from JSON)
         const isDbEmptyOfTransactions = cloudData.transactions.length === 0;
 
         if (isDbEmptyOfTransactions) {
+          isWritingToFirebaseRef.current = true;
           lastFetchedDataRef.current = JSON.stringify(initialFinanceData);
           setData(initialFinanceData);
           try {
@@ -101,6 +108,8 @@ export default function App() {
           } catch (err: any) {
             console.error("Ошибка инициализации данных в Firebase:", err);
             addToast(`Ошибка автоимпорта JSON: ${err.message || err}`, "warning" as any);
+          } finally {
+            isWritingToFirebaseRef.current = false;
           }
         } else if (stringifiedCloud !== lastFetchedDataRef.current) {
           // Only update local state if it differs from what was last loaded/saved to prevent cycles
@@ -211,6 +220,7 @@ export default function App() {
     if (currentUser) {
       try {
         setIsFirebaseLoading(true);
+        isWritingToFirebaseRef.current = true;
         const previousDataStr = lastFetchedDataRef.current;
         const previousData = previousDataStr ? JSON.parse(previousDataStr) : null;
         await saveUserFinanceData(currentUser.uid, currentUser.email || "", nextData, previousData);
@@ -226,6 +236,7 @@ export default function App() {
         setFirebaseSyncError(msg);
         addToast(`Ошибка сохранения в Firebase: ${msg}`, 'warning' as any);
       } finally {
+        isWritingToFirebaseRef.current = false;
         setIsFirebaseLoading(false);
       }
     }
@@ -1167,6 +1178,7 @@ export default function App() {
                     setIsFirebaseLoading(true);
                     setFirebaseSyncError(null);
                     try {
+                      isWritingToFirebaseRef.current = true;
                       const cloudData = await getUserFinanceData(currentUser.uid);
                       if (cloudData) {
                         setData(cloudData);
@@ -1187,6 +1199,7 @@ export default function App() {
                       setFirebaseSyncError(msg);
                       addToast(`Ошибка ручной синхронизации: ${msg}`, "warning" as any);
                     } finally {
+                      isWritingToFirebaseRef.current = false;
                       setIsFirebaseLoading(false);
                     }
                   }}
