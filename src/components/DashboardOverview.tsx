@@ -69,31 +69,43 @@ export function DashboardOverview({
   const [isSavingsGroupExpanded, setIsSavingsGroupExpanded] = useState(true);
   const [showSubcategories, setShowSubcategories] = useState(false);
 
-  // Render a beautifully styled grid representation of the Treemap
+  // Render a beautifully styled representation of the distribution weight (formerly grid Treemap)
   const renderTreemap = (items: any[], type: 'income' | 'expense') => {
     if (!items || items.length === 0) return null;
     
-    // Select top items for nice bento blocks
+    // Select top items for representation
     const sorted = [...items].sort((a,b) => b.amount - a.amount).slice(0, 6);
-    const borderColor = type === 'expense' ? 'border-[#e88d8b]/40' : 'border-[#d0edd9]/40';
-    const bgColor = type === 'expense' ? 'bg-[#f4c3c2]/5' : 'bg-[#d0edd9]/5';
-    const hoverBg = type === 'expense' ? 'hover:bg-[#f4c3c2]/10' : 'hover:bg-[#d0edd9]/10';
+    const borderColor = type === 'expense' ? 'border-rose-500/10' : 'border-emerald-500/10';
+    const bgColor = type === 'expense' ? 'bg-rose-500/5' : 'bg-emerald-500/5';
+    const fillBarColor = type === 'expense' ? 'bg-rose-500/10' : 'bg-emerald-500/10';
     const textColor = type === 'expense' ? 'text-rose-400' : 'text-emerald-400';
     
+    // Find maximum amount in these top items to scale the bars relative to the winner
+    const maxAmount = sorted[0]?.amount || 1;
+    
     return (
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-1.5 w-full mt-3 animate-fade-in pb-1 select-none">
+      <div className="flex flex-col gap-2 w-full mt-3 animate-fade-in pb-1 select-none">
         {sorted.map((item, idx) => {
+          const relativePercentage = (item.amount / maxAmount) * 100;
           return (
             <div 
               key={idx} 
-              className={`border ${borderColor} ${bgColor} ${hoverBg} p-2 rounded-xl flex flex-col justify-between transition-all hover:scale-[1.015] shadow-xs cursor-pointer`}
-              style={{ minHeight: '52px' }}
+              className={`relative border ${borderColor} ${bgColor} p-3 rounded-xl transition-all hover:scale-[1.01] shadow-xs cursor-pointer overflow-hidden flex items-center justify-between min-h-[46px]`}
             >
-              <div className="text-[9px] uppercase font-bold text-slate-400 tracking-tight truncate leading-tight">
-                {item.category.name}
-              </div>
-              <div className={`text-[11px] font-mono font-black ${textColor} leading-none mt-1`}>
-                {type === 'expense' ? '-' : '+'}{Math.round(item.amount).toLocaleString('ru-RU')} ₼
+              {/* Proportional visual background bar */}
+              <div 
+                className={`absolute left-0 top-0 bottom-0 ${fillBarColor} transition-all duration-500 rounded-l-xl`}
+                style={{ width: `${relativePercentage}%` }}
+              />
+              
+              <div className="relative flex items-center justify-between w-full min-w-0 z-10 gap-4">
+                <span className="text-xs font-bold text-slate-205 tracking-wide truncate flex items-center gap-2">
+                  <span className="text-slate-450 font-medium">#{idx + 1}</span>
+                  <span>{formatCategoryDisplayName(item.category.name)}</span>
+                </span>
+                <span className={`text-xs font-mono font-black ${textColor} shrink-0`}>
+                  {type === 'expense' ? '-' : '+'}{Math.round(item.amount).toLocaleString('ru-RU')} ₼
+                </span>
               </div>
             </div>
           );

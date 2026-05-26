@@ -42,16 +42,111 @@ export function CalendarPanel({
   const [currentDate, setCurrentDate] = useState(new Date(2026, 4, 1)); // Month index 4 is May
   const [selectedDayData, setSelectedDayData] = useState<{ date: string; txs: Transaction[] } | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [clickedDate, setClickedDate] = useState('2026-05-23');
+  const [clickedDate, setClickedDate] = useState(() => {
+    const d = new Date();
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  });
 
   // Drag and drop states for pointer/touch support
   const [draggingTxId, setDraggingTxId] = useState<string | null>(null);
   const [draggedOverDate, setDraggedOverDate] = useState<string | null>(null);
   const dragMovedRef = useRef(false);
 
+  // Auto-scrolling on drag coordinates refs for horizontal/vertical traversal
+  const dragXRef = useRef<number | null>(null);
+  const dragYRef = useRef<number | null>(null);
+
+  React.useEffect(() => {
+    if (!draggingTxId) {
+      dragXRef.current = null;
+      dragYRef.current = null;
+      return;
+    }
+
+    const handleWindowDragOver = (e: DragEvent) => {
+      if (e.clientX > 0 || e.clientY > 0) {
+        dragXRef.current = e.clientX;
+        dragYRef.current = e.clientY;
+      }
+    };
+
+    window.addEventListener('dragover', handleWindowDragOver, true);
+    return () => {
+      window.removeEventListener('dragover', handleWindowDragOver, true);
+    };
+  }, [draggingTxId]);
+
+  React.useEffect(() => {
+    if (!draggingTxId) return;
+
+    let scrollTimer: number;
+    const scrollEdgeY = 110; // px zone from viewport edge
+    const scrollEdgeX = 120; // px zone from viewport edge
+    const maxScrollSpeed = 16; // px scroll increment speed
+
+    const checkAndScroll = () => {
+      if (dragXRef.current !== null && dragYRef.current !== null) {
+        const x = dragXRef.current;
+        const y = dragYRef.current;
+
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+
+        // 1. Vertical page-level scroll traversal
+        let scrollYAmount = 0;
+        if (y > height - scrollEdgeY) {
+          const ratio = (y - (height - scrollEdgeY)) / scrollEdgeY;
+          scrollYAmount = Math.min(ratio, 1) * maxScrollSpeed;
+        } else if (y < scrollEdgeY) {
+          const ratio = (scrollEdgeY - y) / scrollEdgeY;
+          scrollYAmount = -Math.min(ratio, 1) * maxScrollSpeed;
+        }
+
+        if (scrollYAmount !== 0) {
+          window.scrollBy({ top: scrollYAmount, behavior: 'auto' });
+          if (document.scrollingElement) {
+            document.scrollingElement.scrollTop += scrollYAmount;
+          }
+        }
+
+        // 2. Horizontal component custom scrolling container traversal
+        const scrollContainer = document.getElementById('calendar-grid-scroll-container');
+        if (scrollContainer) {
+          let scrollXAmount = 0;
+          if (x > width - scrollEdgeX) {
+            const ratio = (x - (width - scrollEdgeX)) / scrollEdgeX;
+            scrollXAmount = Math.min(ratio, 1) * maxScrollSpeed;
+          } else if (x < scrollEdgeX) {
+            const ratio = (scrollEdgeX - x) / scrollEdgeX;
+            scrollXAmount = -Math.min(ratio, 1) * maxScrollSpeed;
+          }
+
+          if (scrollXAmount !== 0) {
+            scrollContainer.scrollBy({ left: scrollXAmount, behavior: 'auto' });
+          }
+        }
+      }
+      scrollTimer = requestAnimationFrame(checkAndScroll);
+    };
+
+    scrollTimer = requestAnimationFrame(checkAndScroll);
+    return () => {
+      cancelAnimationFrame(scrollTimer);
+    };
+  }, [draggingTxId]);
+
   const handleTouchMove = (e: React.TouchEvent, txId: string) => {
+    if (e.cancelable) {
+      e.preventDefault();
+    }
     dragMovedRef.current = true;
     const touch = e.touches[0];
+    dragXRef.current = touch.clientX;
+    dragYRef.current = touch.clientY;
+
     const element = document.elementFromPoint(touch.clientX, touch.clientY);
     if (element) {
       const cellElement = element.closest('[data-date]');
@@ -76,7 +171,7 @@ export function CalendarPanel({
   };
 
   const handleGoToToday = () => {
-    setCurrentDate(new Date(2026, 4, 23)); // Set to 23 May 2026 (local context today)
+    setCurrentDate(new Date()); // Set to current local today
   };
 
   // Calendar calculations (Monday start)
@@ -198,7 +293,13 @@ export function CalendarPanel({
                 .filter(t => t.type === 'expense')
                 .reduce((sum, t) => sum + t.amount, 0);
 
-              const isTodayStr = cell.dateString === '2026-05-23'; // highlight "today" contextually
+              const isTodayStr = cell.dateString === (() => {
+                const d = new Date();
+                const yr = d.getFullYear();
+                const mn = String(d.getMonth() + 1).padStart(2, '0');
+                const dy = String(d.getDate()).padStart(2, '0');
+                return `${yr}-${mn}-${dy}`;
+              })(); // highlight today dynamically
 
               return (
                 <div
@@ -293,9 +394,12 @@ export function CalendarPanel({
                             setDraggingTxId(null);
                             setDraggedOverDate(null);
                           }}
-                          onTouchStart={() => {
+                          onTouchStart={(e) => {
                             setDraggingTxId(tx.id);
                             dragMovedRef.current = false;
+                            const touch = e.touches[0];
+                            dragXRef.current = touch.clientX;
+                            dragYRef.current = touch.clientY;
                           }}
                           onTouchMove={(e) => handleTouchMove(e, tx.id)}
                           onTouchEnd={() => {
@@ -307,6 +411,8 @@ export function CalendarPanel({
                             }
                             setDraggingTxId(null);
                             setDraggedOverDate(null);
+                            dragXRef.current = null;
+                            dragYRef.current = null;
                             setTimeout(() => {
                               dragMovedRef.current = false;
                             }, 50);

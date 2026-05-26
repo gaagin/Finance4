@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Account, Category, Transaction, formatCategoryDisplayName } from '../types';
 import { IconComponent } from './IconComponent';
-import { Wallet, HelpCircle, CornerRightDown, Plus, X, Sparkles, Check, ChevronDown, ArrowRight, Search } from 'lucide-react';
+import { Wallet, HelpCircle, CornerRightDown, Plus, X, Sparkles, Check, ChevronDown, ArrowRight, Search, SlidersHorizontal, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface SearchableDropdownProps<T> {
   items: T[];
@@ -147,6 +147,101 @@ export function QuickDragDropBuilder({
   onAddTransfer,
   addToast,
 }: QuickDragDropBuilderProps) {
+  // Sorting / Reordering features
+  const [isSortingMode, setIsSortingMode] = useState<boolean>(false);
+
+  const [accountsOrder, setAccountsOrder] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem('honey_sort_accounts_v1');
+      return saved ? JSON.parse(saved) : [];
+    } catch (e) {
+      return [];
+    }
+  });
+
+  const [categoriesOrder, setCategoriesOrder] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem('honey_sort_categories_v1');
+      return saved ? JSON.parse(saved) : [];
+    } catch (e) {
+      return [];
+    }
+  });
+
+  // Calculate sorted items
+  const sortedAccountsDisplay = React.useMemo(() => {
+    return [...accounts].sort((a, b) => {
+      const idxA = accountsOrder.indexOf(a.id);
+      const idxB = accountsOrder.indexOf(b.id);
+      if (idxA === -1 && idxB === -1) return 0;
+      if (idxA === -1) return 1;
+      if (idxB === -1) return -1;
+      return idxA - idxB;
+    });
+  }, [accounts, accountsOrder]);
+
+  const sortedCategoriesDisplay = React.useMemo(() => {
+    return [...categories].sort((a, b) => {
+      const idxA = categoriesOrder.indexOf(a.id);
+      const idxB = categoriesOrder.indexOf(b.id);
+      if (idxA === -1 && idxB === -1) return 0;
+      if (idxA === -1) return 1;
+      if (idxB === -1) return -1;
+      return idxA - idxB;
+    });
+  }, [categories, categoriesOrder]);
+
+  const moveAccount = (id: string, direction: 'left' | 'right') => {
+    const list = sortedAccountsDisplay.map(a => a.id);
+    const index = list.indexOf(id);
+    if (index === -1) return;
+
+    const targetIndex = direction === 'left' ? index - 1 : index + 1;
+    if (targetIndex < 0 || targetIndex >= list.length) return;
+
+    const newList = [...list];
+    const temp = newList[index];
+    newList[index] = newList[targetIndex];
+    newList[targetIndex] = temp;
+
+    setAccountsOrder(newList);
+    localStorage.setItem('honey_sort_accounts_v1', JSON.stringify(newList));
+    addToast('Порядок счетов обновлен', 'success');
+  };
+
+  const moveCategory = (id: string, group: 'income' | 'expense', direction: 'left' | 'right') => {
+    const currentGroup = group === 'income' 
+      ? sortedCategoriesDisplay.filter(c => c.type === 'income') 
+      : sortedCategoriesDisplay.filter(c => c.type === 'expense');
+    const list = currentGroup.map(c => c.id);
+    const index = list.indexOf(id);
+    if (index === -1) return;
+
+    const targetIndex = direction === 'left' ? index - 1 : index + 1;
+    if (targetIndex < 0 || targetIndex >= list.length) return;
+
+    const fullOrderList = [...categoriesOrder];
+    categories.forEach(c => {
+      if (!fullOrderList.includes(c.id)) {
+        fullOrderList.push(c.id);
+      }
+    });
+
+    const indexInFull = fullOrderList.indexOf(id);
+    const targetIdInGroup = list[targetIndex];
+    const targetIndexInFull = fullOrderList.indexOf(targetIdInGroup);
+
+    if (indexInFull !== -1 && targetIndexInFull !== -1) {
+      const temp = fullOrderList[indexInFull];
+      fullOrderList[indexInFull] = fullOrderList[targetIndexInFull];
+      fullOrderList[targetIndexInFull] = temp;
+
+      setCategoriesOrder(fullOrderList);
+      localStorage.setItem('honey_sort_categories_v1', JSON.stringify(fullOrderList));
+      addToast('Порядок категорий обновлен', 'success');
+    }
+  };
+
   // Drag states
   const [activeDragAccount, setActiveDragAccount] = useState<Account | null>(null);
   const [dragOverCategoryId, setDragOverCategoryId] = useState<string | null>(null);
@@ -156,10 +251,17 @@ export function QuickDragDropBuilder({
   const [infoCategoryId, setInfoCategoryId] = useState<string | null>(null);
   const categoryTooltipTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  // States for displaying full name of accounts on tap/click
+  const [infoAccountId, setInfoAccountId] = useState<string | null>(null);
+  const accountTooltipTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
   useEffect(() => {
     return () => {
       if (categoryTooltipTimeoutRef.current) {
         clearTimeout(categoryTooltipTimeoutRef.current);
+      }
+      if (accountTooltipTimeoutRef.current) {
+        clearTimeout(accountTooltipTimeoutRef.current);
       }
     };
   }, []);
@@ -171,6 +273,16 @@ export function QuickDragDropBuilder({
     }
     categoryTooltipTimeoutRef.current = setTimeout(() => {
       setInfoCategoryId(null);
+    }, 4000); // 4 seconds visibility
+  };
+
+  const handleAccountClick = (acc: Account) => {
+    setInfoAccountId(acc.id);
+    if (accountTooltipTimeoutRef.current) {
+      clearTimeout(accountTooltipTimeoutRef.current);
+    }
+    accountTooltipTimeoutRef.current = setTimeout(() => {
+      setInfoAccountId(null);
     }, 4000); // 4 seconds visibility
   };
 
@@ -252,7 +364,13 @@ export function QuickDragDropBuilder({
 
   const [amount, setAmount] = useState<string>('');
   const [description, setDescription] = useState<string>('');
-  const [date, setDate] = useState<string>('2026-05-23'); // Lock default to 23 May 2026 as per other areas of application
+  const [date, setDate] = useState<string>(() => {
+    const d = new Date();
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }); // Default to current local date
 
   // Focus refs
   const inputRef = useRef<HTMLInputElement>(null);
@@ -276,8 +394,8 @@ export function QuickDragDropBuilder({
   }, [activeTransferData]);
 
   // Keep categories of type 'expense' only for natural spending logs
-  const expenseCategories = categories.filter(c => c.type === 'expense');
-  const incomeCategories = categories.filter(c => c.type === 'income');
+  const expenseCategories = sortedCategoriesDisplay.filter(c => c.type === 'expense');
+  const incomeCategories = sortedCategoriesDisplay.filter(c => c.type === 'income');
 
   // HTML5 Drag and Drop Handlers (for Desktop mouse)
   const handleDragStart = (e: React.DragEvent, account: Account) => {
@@ -487,14 +605,14 @@ export function QuickDragDropBuilder({
   return (
     <div 
       ref={containerRef}
-      className="bg-white/5 backdrop-blur-md rounded-3xl p-5 border border-white/10 shadow-lg relative overflow-hidden" 
+      className="bg-white/5 backdrop-blur-md rounded-2xl p-4 sm:p-5 border border-white/10 shadow-lg relative overflow-hidden" 
       id="quick-drag-action-panel"
     >
       {/* Decorative gradient corner */}
       <div className="absolute top-0 right-0 w-32 h-32 bg-teal-500/10 rounded-full blur-2xl pointer-events-none" />
 
       {/* Header section */}
-      <div className="flex items-center justify-between mb-4 border-b border-white/5 pb-2">
+      <div className="flex items-center justify-between mb-3 border-b border-white/5 pb-2">
         <div className="flex items-center gap-2">
           <div className="p-1.5 bg-teal-500/10 text-teal-300 border border-teal-500/20 rounded-lg">
             <Sparkles size={16} className="animate-pulse" />
@@ -504,55 +622,118 @@ export function QuickDragDropBuilder({
               Быстрая запись
             </h3>
             <p className="text-[10px] text-slate-400">
-              Перенесите счет на категорию расходов или на другой счет для перевода
+              {isSortingMode
+                ? "Нажимайте на стрелочки на карточках, чтобы расположить счета и категории в удобном порядке 🚀"
+                : "Перенесите счет на категорию расходов или на другой счет для перевода"}
             </p>
           </div>
         </div>
+        <button
+          type="button"
+          onClick={() => setIsSortingMode(!isSortingMode)}
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-[11px] font-bold cursor-pointer transition-all ${
+            isSortingMode
+              ? 'border-emerald-500 bg-emerald-500/20 text-emerald-300 shadow-xl ring-2 ring-emerald-500/35 scale-[1.02]'
+              : 'border-white/10 bg-white/5 text-slate-350 hover:bg-white/10 hover:border-white/25 active:scale-95'
+          }`}
+        >
+          <SlidersHorizontal size={13} />
+          {isSortingMode ? 'Готово' : 'Порядок'}
+        </button>
       </div>
 
       {/* Main interactive area */}
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-3">
         {/* ROW 1: Source Accounts */}
         <div>
-          <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5 select-none text-left">
-            Шаг 1: Возьмите счет (Списание или Источник)
+          <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 select-none text-left flex flex-wrap items-center justify-between gap-2">
+            <span>Шаг 1: Возьмите счет (Списание или Источник)</span>
+            {!isSortingMode && infoAccountId && (
+              <span className="text-teal-350 font-extrabold normal-case font-mono text-[11px] bg-teal-950/40 px-2 py-0.5 rounded-md border border-teal-500/20 animate-pulse">
+                🔍 {accounts.find(a => a.id === infoAccountId)?.name}
+              </span>
+            )}
           </span>
           <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-1.5">
-            {accounts.map(acc => {
+            {sortedAccountsDisplay.map(acc => {
               const bgClass = acc.type === 'card' ? 'bg-indigo-500/10 text-indigo-300 border-indigo-500/20 hover:border-indigo-400/50' : 'bg-emerald-500/10 text-emerald-300 border-emerald-500/20 hover:border-emerald-400/50';
               const isActive = activeDragAccount?.id === acc.id;
               const isOverAcc = dragOverAccountId === acc.id;
+              const hasFocus = infoAccountId === acc.id;
               
               return (
                 <div
                   key={acc.id}
                   data-account-id={acc.id}
-                  draggable
+                  draggable={!isSortingMode}
                   onDragStart={(e) => handleDragStart(e, acc)}
                   onDragEnd={handleDragEnd}
                   onDragOver={(e) => handleDragOverAccount(e, acc.id)}
                   onDragLeave={() => setDragOverAccountId(null)}
                   onDrop={(e) => handleDropOnAccount(e, acc)}
-                  onTouchStart={(e) => handleTouchStart(e, acc)}
+                  onClick={() => !isSortingMode && handleAccountClick(acc)}
+                  onMouseEnter={() => !isSortingMode && setInfoAccountId(acc.id)}
+                  onMouseLeave={() => !isSortingMode && setInfoAccountId(null)}
+                  onTouchStart={(e) => {
+                    if (isSortingMode) return;
+                    handleAccountClick(acc);
+                    handleTouchStart(e, acc);
+                  }}
                   onTouchMove={handleTouchMove}
                   onTouchEnd={handleTouchEnd}
-                  className={`p-1.5 rounded-xl border flex flex-col items-center justify-center text-center gap-1 transition-all select-none cursor-grab active:cursor-grabbing touch-none ${
+                  className={`relative p-1 rounded-xl border flex flex-col items-center justify-center text-center gap-0.5 transition-all select-none ${
                     isOverAcc 
                       ? 'border-indigo-450 bg-indigo-500/20 scale-[1.05] shadow-lg ring-2 ring-indigo-400'
-                      : bgClass
+                      : hasFocus && !isSortingMode
+                        ? 'border-teal-400 bg-teal-500/15 scale-[1.02] shadow-md ring-1 ring-teal-400/40'
+                        : bgClass
                   } ${
                     isActive ? 'scale-[1.05] ring-2 ring-teal-400 border-teal-400 bg-teal-500/20' : ''
+                  } ${
+                    isSortingMode ? 'cursor-default' : 'cursor-grab active:cursor-grabbing touch-none'
                   }`}
                   id={`drag-acc-${acc.id}`}
-                  style={{ minHeight: '56px' }}
+                  style={{ minHeight: '48px' }}
                 >
-                  <div className="w-5.5 h-5.5 bg-white/10 rounded flex items-center justify-center text-slate-200">
-                    <Wallet size={11} className="shrink-0" />
+                  <div className="w-4.5 h-4.5 bg-white/10 rounded-md flex items-center justify-center text-slate-200 pointer-events-none">
+                    <Wallet size={10} className="shrink-0" />
                   </div>
-                  <div className="text-center w-full min-w-0">
-                    <span className="block font-bold text-[8.5px] leading-tight text-slate-200 truncate px-0.5">{acc.name}</span>
+                  <div className="text-center w-full min-w-0 pointer-events-none">
+                    <span className={`block font-bold text-[8.5px] leading-tight text-slate-200 px-0.5 ${
+                      hasFocus && !isSortingMode ? 'line-clamp-2 overflow-visible break-words h-auto' : 'truncate'
+                    }`}>{acc.name}</span>
                     <span className="block text-[8px] font-mono leading-none opacity-80 mt-0.5 truncate">{Math.round(acc.balance)} ₼</span>
                   </div>
+
+                  {isSortingMode && (
+                    <div className="absolute inset-x-0 bottom-0 top-0 bg-slate-950/95 backdrop-blur-xs rounded-xl flex items-center justify-between px-1.5 z-[100]">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          moveAccount(acc.id, 'left');
+                        }}
+                        className="p-1 hover:bg-white/10 text-teal-450 rounded-md active:scale-75 transition-all cursor-pointer flex items-center justify-center shrink-0"
+                        title="Влево"
+                      >
+                        <ChevronLeft size={16} className="stroke-[3px]" />
+                      </button>
+                      <span className="text-[8px] text-teal-400 font-bold select-none truncate">Порядок</span>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          moveAccount(acc.id, 'right');
+                        }}
+                        className="p-1 hover:bg-white/10 text-teal-450 rounded-md active:scale-75 transition-all cursor-pointer flex items-center justify-center shrink-0"
+                        title="Вправо"
+                      >
+                        <ChevronRight size={16} className="stroke-[3px]" />
+                      </button>
+                    </div>
+                  )}
                 </div>
               );
             })}
@@ -568,10 +749,10 @@ export function QuickDragDropBuilder({
         </div>
 
         {/* ROW 2: Destination Categories Grid */}
-        <div className="space-y-4">
+        <div className="space-y-2.5">
           {/* Expense Categories */}
           <div>
-            <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5 select-none text-left flex flex-wrap items-center justify-between gap-2">
+            <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 select-none text-left flex flex-wrap items-center justify-between gap-2">
               <span>Шаг 2: Отпустите на категории расходов (Списание средств)</span>
               {infoCategoryId && expenseCategories.some(c => c.id === infoCategoryId) && (
                 <span className="text-teal-300 font-extrabold normal-case font-mono text-[11px] bg-teal-950/40 px-2 py-0.5 rounded-md border border-teal-500/20 animate-pulse">
@@ -590,32 +771,64 @@ export function QuickDragDropBuilder({
                     onDragOver={(e) => handleDragOverCategory(e, cat.id)}
                     onDragLeave={() => setDragOverCategoryId(null)}
                     onDrop={(e) => handleDropOnCategory(e, cat)}
-                    onClick={() => handleCategoryClick(cat)}
-                    onMouseEnter={() => setInfoCategoryId(cat.id)}
-                    onMouseLeave={() => setInfoCategoryId(null)}
+                    onClick={() => !isSortingMode && handleCategoryClick(cat)}
+                    onMouseEnter={() => !isSortingMode && setInfoCategoryId(cat.id)}
+                    onMouseLeave={() => !isSortingMode && setInfoCategoryId(null)}
                     onTouchStart={(e) => {
-                      // Prevent default scrolling on mobile if desired, or just trigger info selection
+                      if (isSortingMode) return;
                       handleCategoryClick(cat);
                     }}
                     title={cat.name}
-                    className={`relative p-1.5 rounded-xl border flex flex-col items-center justify-center text-center gap-1 transition-all select-none cursor-pointer hover:scale-[1.04] active:scale-95 ${
+                    className={`relative p-1 rounded-lg border flex flex-col items-center justify-center text-center gap-0.5 transition-all select-none ${
                       isOver 
                         ? 'border-emerald-400 bg-emerald-500/20 scale-[1.03] shadow-md shadow-emerald-500/5 ring-2 ring-emerald-400' 
-                        : hasFocus
+                        : hasFocus && !isSortingMode
                           ? 'border-teal-400 bg-teal-500/15 shadow-lg shadow-teal-500/10 scale-[1.02]'
                           : 'border-white/5 bg-white/5 hover:bg-white/10 hover:border-white/10'
+                    } ${
+                      isSortingMode ? 'cursor-default' : 'cursor-pointer hover:scale-[1.04] active:scale-95'
                     }`}
                     id={`drop-cat-${cat.id}`}
-                    style={{ minHeight: '56px' }}
+                    style={{ minHeight: '48px' }}
                   >
-                    <div className="w-5.5 h-5.5 bg-white/10 rounded flex items-center justify-center text-slate-200 pointer-events-none">
-                      <IconComponent name={cat.icon} size={12} />
+                    <div className="w-4.5 h-4.5 bg-white/10 rounded-md flex items-center justify-center text-slate-200 pointer-events-none">
+                      <IconComponent name={cat.icon} size={10} />
                     </div>
                     <span className={`text-[8.5px] font-semibold font-sans tracking-tight leading-normal text-slate-300 max-w-full px-0.5 pointer-events-none text-center ${
-                      hasFocus ? 'line-clamp-2 overflow-visible break-words h-auto' : 'truncate'
+                      hasFocus && !isSortingMode ? 'line-clamp-2 overflow-visible break-words h-auto' : 'truncate'
                     }`}>
                       {formatCategoryDisplayName(cat.name)}
                     </span>
+
+                    {isSortingMode && (
+                      <div className="absolute inset-x-0 bottom-0 top-0 bg-slate-950/95 backdrop-blur-xs rounded-xl flex items-center justify-between px-1.5 z-[100]">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            moveCategory(cat.id, 'expense', 'left');
+                          }}
+                          className="p-1 hover:bg-white/10 text-teal-450 rounded-md active:scale-75 transition-all cursor-pointer flex items-center justify-center shrink-0"
+                          title="Влево"
+                        >
+                          <ChevronLeft size={16} className="stroke-[3px]" />
+                        </button>
+                        <span className="text-[8px] text-teal-400 font-bold select-none truncate">Порядок</span>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            moveCategory(cat.id, 'expense', 'right');
+                          }}
+                          className="p-1 hover:bg-white/10 text-teal-450 rounded-md active:scale-75 transition-all cursor-pointer flex items-center justify-center shrink-0"
+                          title="Вправо"
+                        >
+                          <ChevronRight size={16} className="stroke-[3px]" />
+                        </button>
+                      </div>
+                    )}
                   </div>
                 );
               })}
@@ -624,8 +837,8 @@ export function QuickDragDropBuilder({
 
           {/* Income Categories */}
           {incomeCategories.length > 0 && (
-            <div className="pt-2 border-t border-white/5">
-              <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5 select-none text-left flex flex-wrap items-center justify-between gap-2">
+            <div className="pt-1.5 border-t border-white/5">
+              <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 select-none text-left flex flex-wrap items-center justify-between gap-2">
                 <span>Или отпустите на категории доходов (Пополнение баланса)</span>
                 {infoCategoryId && incomeCategories.some(c => c.id === infoCategoryId) && (
                   <span className="text-emerald-300 font-extrabold normal-case font-mono text-[11px] bg-emerald-950/40 px-2 py-0.5 rounded-md border border-emerald-500/20 animate-pulse">
@@ -644,31 +857,64 @@ export function QuickDragDropBuilder({
                       onDragOver={(e) => handleDragOverCategory(e, cat.id)}
                       onDragLeave={() => setDragOverCategoryId(null)}
                       onDrop={(e) => handleDropOnCategory(e, cat)}
-                      onClick={() => handleCategoryClick(cat)}
-                      onMouseEnter={() => setInfoCategoryId(cat.id)}
-                      onMouseLeave={() => setInfoCategoryId(null)}
+                      onClick={() => !isSortingMode && handleCategoryClick(cat)}
+                      onMouseEnter={() => !isSortingMode && setInfoCategoryId(cat.id)}
+                      onMouseLeave={() => !isSortingMode && setInfoCategoryId(null)}
                       onTouchStart={(e) => {
+                        if (isSortingMode) return;
                         handleCategoryClick(cat);
                       }}
                       title={cat.name}
-                      className={`relative p-1.5 rounded-xl border flex flex-col items-center justify-center text-center gap-1 transition-all select-none cursor-pointer hover:scale-[1.04] active:scale-95 ${
+                      className={`relative p-1 rounded-lg border flex flex-col items-center justify-center text-center gap-0.5 transition-all select-none ${
                         isOver 
                           ? 'border-emerald-400 bg-emerald-500/20 scale-[1.03] shadow-md shadow-emerald-500/5 ring-2 ring-emerald-400' 
-                          : hasFocus
+                          : hasFocus && !isSortingMode
                             ? 'border-emerald-400 bg-emerald-500/15 shadow-lg shadow-emerald-500/10 scale-[1.02]'
                             : 'border-white/5 bg-white/5 hover:bg-white/10 hover:border-white/10'
+                      } ${
+                        isSortingMode ? 'cursor-default' : 'cursor-pointer hover:scale-[1.04] active:scale-95'
                       }`}
                       id={`drop-cat-${cat.id}`}
-                      style={{ minHeight: '56px' }}
+                      style={{ minHeight: '48px' }}
                     >
-                      <div className="w-5.5 h-5.5 bg-white/10 rounded flex items-center justify-center text-emerald-400 pointer-events-none">
-                        <IconComponent name={cat.icon} size={12} />
+                      <div className="w-4.5 h-4.5 bg-white/10 rounded-md flex items-center justify-center text-emerald-400 pointer-events-none">
+                        <IconComponent name={cat.icon} size={10} />
                       </div>
                       <span className={`text-[8.5px] font-semibold font-sans tracking-tight leading-normal text-emerald-300 max-w-full px-0.5 pointer-events-none text-center ${
-                        hasFocus ? 'line-clamp-2 overflow-visible break-words h-auto' : 'truncate'
+                        hasFocus && !isSortingMode ? 'line-clamp-2 overflow-visible break-words h-auto' : 'truncate'
                       }`}>
                         {formatCategoryDisplayName(cat.name)}
                       </span>
+
+                      {isSortingMode && (
+                        <div className="absolute inset-x-0 bottom-0 top-0 bg-slate-950/95 backdrop-blur-xs rounded-xl flex items-center justify-between px-1.5 z-[100]">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              moveCategory(cat.id, 'income', 'left');
+                            }}
+                            className="p-1 hover:bg-white/10 text-teal-450 rounded-md active:scale-75 transition-all cursor-pointer flex items-center justify-center shrink-0"
+                            title="Влево"
+                          >
+                            <ChevronLeft size={16} className="stroke-[3px]" />
+                          </button>
+                          <span className="text-[8px] text-teal-400 font-bold select-none truncate">Порядок</span>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              moveCategory(cat.id, 'income', 'right');
+                            }}
+                            className="p-1 hover:bg-white/10 text-teal-450 rounded-md active:scale-75 transition-all cursor-pointer flex items-center justify-center shrink-0"
+                            title="Вправо"
+                          >
+                            <ChevronRight size={16} className="stroke-[3px]" />
+                          </button>
+                        </div>
+                      )}
                     </div>
                   );
                 })}
@@ -697,67 +943,67 @@ export function QuickDragDropBuilder({
       {/* THE QUICK TRANSACTION RECORDING MODAL */}
       {activeTxData && (
         <div 
-          className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[10000] flex items-center justify-center p-4"
+          className="fixed inset-0 bg-slate-950/85 backdrop-blur-xs z-[10000] flex items-center justify-center p-2 overflow-y-auto"
           id="quick-transaction-modal"
           onClick={() => setActiveTxData(null)}
         >
           <div 
-            className="w-full max-w-md bg-slate-900 border border-teal-500/30 rounded-3xl p-6 shadow-2xl relative animate-scale-up"
+            className="w-full max-w-sm bg-slate-900 border border-teal-500/30 rounded-2xl p-4 sm:p-5 shadow-2xl relative animate-scale-up my-auto max-h-[95vh] flex flex-col overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal exit */}
             <button
               onClick={() => setActiveTxData(null)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-white hover:bg-white/10 p-1.5 rounded-full transition-colors cursor-pointer"
+              className="absolute top-3.5 right-3.5 text-slate-400 hover:text-white hover:bg-white/10 p-1 rounded-full transition-colors cursor-pointer"
             >
-              <X size={18} />
+              <X size={16} />
             </button>
 
             {/* Modal header */}
-            <div className="text-center mb-6 mt-1">
-              <span className={`inline-flex items-center gap-1 font-mono text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full border mb-2 ${
+            <div className="text-center mb-3 mt-0">
+              <span className={`inline-flex items-center gap-1 font-mono text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full border mb-1.5 ${
                 activeTxData.category.type === 'income'
                   ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/20'
                   : 'bg-teal-500/10 text-teal-300 border-teal-500/20'
               }`}>
-                {activeTxData.category.type === 'income' ? '⚡ Мгновенная запись дохода' : '⚡ Мгновенная запись расхода'}
+                {activeTxData.category.type === 'income' ? '⚡ Доход' : '⚡ Расход'}
               </span>
-              <h4 className="font-display font-black text-white text-lg leading-tight">
-                {activeTxData.category.type === 'income' ? 'Введите сумму дохода' : 'Введите сумму расхода'}
+              <h4 className="font-display font-black text-white text-sm leading-tight">
+                {activeTxData.category.type === 'income' ? 'Мгновенный доход' : 'Мгновенный расход'}
               </h4>
               
               {/* Context Picker: Account -> Category */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4 bg-slate-950/60 p-3 rounded-2xl border border-white/5 text-left">
+              <div className="grid grid-cols-2 gap-2 mt-2 bg-slate-950/60 p-2 rounded-xl border border-white/5 text-left">
                 {/* Account Picker */}
-                <div className="flex flex-col gap-1">
-                  <label className="text-[9px] font-bold uppercase tracking-wider text-slate-400">
-                    {activeTxData.category.type === 'income' ? 'Счет зачисления' : 'Счет списания'}
+                <div className="flex flex-col gap-0.5 min-w-0">
+                  <label className="text-[8.5px] font-bold uppercase tracking-wider text-slate-400 truncate">
+                    {activeTxData.category.type === 'income' ? 'Зачисление' : 'Списание'}
                   </label>
                   <SearchableDropdown<Account>
                     items={accounts}
                     selectedItem={activeTxData.account}
                     onSelect={(acc) => setActiveTxData({ ...activeTxData, account: acc })}
                     getLabel={(acc) => acc.name}
-                    getIcon={(acc) => <Wallet size={11} className={activeTxData.category.type === 'income' ? 'text-emerald-400' : 'text-indigo-400'} />}
+                    getIcon={(acc) => <Wallet size={10} className={activeTxData.category.type === 'income' ? 'text-emerald-400' : 'text-indigo-400'} />}
                     getSubtitle={(acc) => `${Math.round(acc.balance)} ₼`}
-                    placeholder="Поиск счета..."
+                    placeholder="Поиск..."
                     accentClass={activeTxData.category.type === 'income' ? 'bg-emerald-500/10 border-emerald-500/20' : 'bg-indigo-500/10 border-indigo-500/20'}
                     textColorClass={activeTxData.category.type === 'income' ? 'text-emerald-300' : 'text-indigo-300'}
                   />
                 </div>
 
                 {/* Category Picker */}
-                <div className="flex flex-col gap-1">
-                  <label className="text-[9px] font-bold uppercase tracking-wider text-slate-400">
-                    {activeTxData.category.type === 'income' ? 'Категория дохода' : 'Категория расхода'}
+                <div className="flex flex-col gap-0.5 min-w-0">
+                  <label className="text-[8.5px] font-bold uppercase tracking-wider text-slate-400 truncate">
+                    Категория
                   </label>
                   <SearchableDropdown<Category>
                     items={activeTxData.category.type === 'income' ? incomeCategories : expenseCategories}
                     selectedItem={activeTxData.category}
                     onSelect={(cat) => setActiveTxData({ ...activeTxData, category: cat })}
                     getLabel={(cat) => formatCategoryDisplayName(cat.name)}
-                    getIcon={(cat) => <IconComponent name={cat.icon} size={11} />}
-                    placeholder="Поиск категории..."
+                    getIcon={(cat) => <IconComponent name={cat.icon} size={10} />}
+                    placeholder="Поиск..."
                     accentClass={activeTxData.category.type === 'income' ? 'bg-emerald-500/10 border-emerald-500/20' : 'bg-rose-500/10 border-rose-500/20'}
                     textColorClass={activeTxData.category.type === 'income' ? 'text-emerald-300' : 'text-rose-300'}
                   />
@@ -766,14 +1012,14 @@ export function QuickDragDropBuilder({
             </div>
 
             {/* Form */}
-            <form onSubmit={handleFormSubmit} className="space-y-4">
+            <form onSubmit={handleFormSubmit} className="space-y-3">
               {/* Amount - large focused number field */}
               <div>
-                <label className="block text-[10px] font-bold text-slate-400 mb-1.5 uppercase tracking-wider text-left">
-                  Сумма операции (AZN / ₼) <span className="text-rose-450">*</span>
+                <label className="block text-[8.5px] font-bold text-slate-400 mb-1 uppercase tracking-wider text-left">
+                  Сумма операции (₼) <span className="text-rose-450">*</span>
                 </label>
                 <div className="relative">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 font-display font-black text-slate-400 text-xl">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 font-display font-black text-slate-400 text-base">
                     ₼
                   </span>
                   <input
@@ -784,59 +1030,59 @@ export function QuickDragDropBuilder({
                     placeholder="0.00"
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3.5 bg-slate-950/80 border border-teal-500/40 rounded-2xl text-2xl font-display font-black text-white focus:outline-hidden focus:ring-2 focus:ring-teal-400 focus:border-transparent text-center"
+                    className="w-full pl-7 pr-3 py-1.5 bg-slate-950/80 border border-teal-500/40 rounded-xl text-base font-display font-black text-white focus:outline-hidden focus:ring-2 focus:ring-teal-400 focus:border-transparent text-center"
                     required
                   />
                 </div>
               </div>
 
-              {/* Description & Date fields (advanced / helper) */}
-              <div className="grid grid-cols-1 gap-3">
+              {/* Description & Date fields (advanced / helper) Grid style */}
+              <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="block text-[10px] font-bold text-slate-400 mb-1 uppercase tracking-wider text-left">
-                    Комментарий / Описание (необязательно)
+                  <label className="block text-[8.5px] font-bold text-slate-400 mb-0.5 uppercase tracking-wider text-left">
+                    Комментарий (опц.)
                   </label>
                   <input
                     type="text"
-                    placeholder={activeTxData.category.type === 'income' ? `Например: Поступление за ${activeTxData.category.name}` : `Например: Покупка в ${activeTxData.category.name}`}
+                    placeholder="Описание..."
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
-                    className="w-full px-3.5 py-2.5 bg-slate-950/60 border border-white/5 rounded-xl text-xs text-slate-200 focus:outline-hidden focus:ring-1 focus:ring-teal-400"
+                    className="w-full px-2 py-1.5 bg-slate-950/60 border border-white/5 rounded-lg text-[11px] text-slate-200 focus:outline-hidden focus:ring-1 focus:ring-teal-400"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-bold text-slate-400 mb-1 uppercase tracking-wider text-left">
+                  <label className="block text-[8.5px] font-bold text-slate-400 mb-0.5 uppercase tracking-wider text-left">
                     Дата операции
                   </label>
                   <input
                     type="date"
                     value={date}
                     onChange={(e) => setDate(e.target.value)}
-                    className="w-full px-3.5 py-2.5 bg-slate-950/60 border border-white/5 rounded-xl text-xs text-slate-200 font-mono focus:outline-hidden focus:ring-1 focus:ring-teal-400"
+                    className="w-full px-2 py-1.5 bg-slate-950/60 border border-white/5 rounded-lg text-[11px] text-slate-200 font-mono focus:outline-hidden focus:ring-1 focus:ring-teal-400"
                     required
                   />
                 </div>
               </div>
 
               {/* Submit / Cancel Buttons */}
-              <div className="flex gap-2.5 pt-2">
+              <div className="flex gap-2 pt-1.5">
                 <button
                   type="button"
                   onClick={() => setActiveTxData(null)}
-                  className="flex-1 px-4 py-3 border border-white/10 bg-white/5 text-slate-300 hover:text-white rounded-2xl hover:bg-white/10 text-xs font-bold transition-all cursor-pointer"
+                  className="flex-1 px-3 py-2 border border-white/10 bg-white/5 text-slate-350 hover:text-white rounded-xl hover:bg-white/10 text-xs font-bold transition-all cursor-pointer"
                 >
                   Отмена
                 </button>
                 <button
                   type="submit"
-                  className={`flex-1 px-4 py-3 text-slate-950 text-xs font-black rounded-2xl shadow-lg transition-all transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-1.5 cursor-pointer uppercase tracking-wider ${
+                  className={`flex-1 px-3 py-2 text-slate-950 text-xs font-black rounded-xl shadow-md transition-all transform hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-1 cursor-pointer uppercase tracking-wider ${
                     activeTxData.category.type === 'income'
                       ? 'bg-gradient-to-r from-emerald-400 to-teal-400 hover:from-emerald-300 hover:to-teal-300'
                       : 'bg-gradient-to-r from-teal-400 to-emerald-400 hover:from-teal-300 hover:to-emerald-300'
                   }`}
                 >
-                  <Check size={14} />
+                  <Check size={13} />
                   Записать ₼
                 </button>
               </div>
@@ -848,60 +1094,60 @@ export function QuickDragDropBuilder({
       {/* THE QUICK TRANSFER RECORDING MODAL */}
       {activeTransferData && (
         <div 
-          className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[10000] flex items-center justify-center p-4"
+          className="fixed inset-0 bg-slate-950/85 backdrop-blur-xs z-[10000] flex items-center justify-center p-2 overflow-y-auto"
           id="quick-transfer-modal"
           onClick={() => setActiveTransferData(null)}
         >
           <div 
-            className="w-full max-w-md bg-slate-900 border border-indigo-500/30 rounded-3xl p-6 shadow-2xl relative animate-scale-up"
+            className="w-full max-w-sm bg-slate-900 border border-indigo-500/30 rounded-2xl p-4 sm:p-5 shadow-2xl relative animate-scale-up my-auto max-h-[95vh] flex flex-col overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal exit */}
             <button
               onClick={() => setActiveTransferData(null)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-white hover:bg-white/10 p-1.5 rounded-full transition-colors cursor-pointer"
+              className="absolute top-3.5 right-3.5 text-slate-400 hover:text-white hover:bg-white/10 p-1 rounded-full transition-colors cursor-pointer"
             >
-              <X size={18} />
+              <X size={16} />
             </button>
 
             {/* Modal header */}
-            <div className="text-center mb-6 mt-1">
-              <span className="inline-flex items-center gap-1 bg-indigo-500/10 text-indigo-300 font-mono text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full border border-indigo-500/20 mb-2">
-                🔁 Мгновенный перевод между счетами
+            <div className="text-center mb-3 mt-0">
+              <span className="inline-flex items-center gap-1 bg-indigo-500/10 text-indigo-300 font-mono text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full border border-indigo-500/20 mb-1.5">
+                🔁 Мгновенный перевод
               </span>
-              <h4 className="font-display font-black text-white text-lg leading-tight">
-                Введите сумму перевода
+              <h4 className="font-display font-bold text-white text-sm leading-tight">
+                Перевод средств
               </h4>
               
               {/* Context Picker: From Account -> To Account */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4 bg-slate-950/60 p-3 rounded-2xl border border-white/5 text-left">
+              <div className="grid grid-cols-2 gap-2 mt-2 bg-slate-950/60 p-2 rounded-xl border border-white/5 text-left">
                 {/* From Account Picker */}
-                <div className="flex flex-col gap-1">
-                  <label className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Откуда перевести</label>
+                <div className="flex flex-col gap-0.5 min-w-0">
+                  <label className="text-[8.5px] font-bold uppercase tracking-wider text-slate-400 truncate">Откуда</label>
                   <SearchableDropdown<Account>
                     items={accounts.filter(acc => acc.id !== activeTransferData.toAccount.id)}
                     selectedItem={activeTransferData.fromAccount}
                     onSelect={(acc) => setActiveTransferData({ ...activeTransferData, fromAccount: acc })}
                     getLabel={(acc) => acc.name}
-                    getIcon={(acc) => <Wallet size={11} className="text-indigo-400" />}
+                    getIcon={(acc) => <Wallet size={10} className="text-indigo-400" />}
                     getSubtitle={(acc) => `${Math.round(acc.balance)} ₼`}
-                    placeholder="Поиск источника..."
+                    placeholder="Поиск..."
                     accentClass="bg-indigo-500/10 border-indigo-500/20"
                     textColorClass="text-indigo-300"
                   />
                 </div>
 
                 {/* To Account Picker */}
-                <div className="flex flex-col gap-1">
-                  <label className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Куда зачислить</label>
+                <div className="flex flex-col gap-0.5 min-w-0">
+                  <label className="text-[8.5px] font-bold uppercase tracking-wider text-slate-400 truncate">Куда</label>
                   <SearchableDropdown<Account>
                     items={accounts.filter(acc => acc.id !== activeTransferData.fromAccount.id)}
                     selectedItem={activeTransferData.toAccount}
                     onSelect={(acc) => setActiveTransferData({ ...activeTransferData, toAccount: acc })}
                     getLabel={(acc) => acc.name}
-                    getIcon={(acc) => <Wallet size={11} className="text-emerald-400" />}
+                    getIcon={(acc) => <Wallet size={10} className="text-emerald-400" />}
                     getSubtitle={(acc) => `${Math.round(acc.balance)} ₼`}
-                    placeholder="Поиск получателя..."
+                    placeholder="Поиск..."
                     accentClass="bg-emerald-500/10 border-emerald-500/20"
                     textColorClass="text-emerald-300"
                   />
@@ -910,14 +1156,14 @@ export function QuickDragDropBuilder({
             </div>
 
             {/* Form */}
-            <form onSubmit={handleTransferSubmit} className="space-y-4">
+            <form onSubmit={handleTransferSubmit} className="space-y-3">
               {/* Amount - large focused number field */}
               <div>
-                <label className="block text-[10px] font-bold text-slate-400 mb-1.5 uppercase tracking-wider text-left">
-                  Сумма перевода (AZN / ₼) <span className="text-indigo-400">*</span>
+                <label className="block text-[8.5px] font-bold text-slate-400 mb-1 uppercase tracking-wider text-left">
+                  Сумма перевода (₼) <span className="text-indigo-400">*</span>
                 </label>
                 <div className="relative">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 font-display font-black text-slate-400 text-xl">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 font-display font-black text-slate-400 text-base">
                     ₼
                   </span>
                   <input
@@ -928,55 +1174,55 @@ export function QuickDragDropBuilder({
                     placeholder="0.00"
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3.5 bg-slate-950/80 border border-indigo-500/40 rounded-2xl text-2xl font-display font-black text-white focus:outline-hidden focus:ring-2 focus:ring-indigo-400 focus:border-transparent text-center"
+                    className="w-full pl-7 pr-3 py-1.5 bg-slate-950/80 border border-indigo-500/40 rounded-xl text-base font-display font-black text-white focus:outline-hidden focus:ring-2 focus:ring-indigo-400 focus:border-transparent text-center"
                     required
                   />
                 </div>
               </div>
 
-              {/* Description & Date fields (advanced / helper) */}
-              <div className="grid grid-cols-1 gap-3">
+              {/* Description & Date fields (advanced / helper) Grid style */}
+              <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="block text-[10px] font-bold text-slate-400 mb-1 uppercase tracking-wider text-left">
-                    Комментарий / Описание (необязательно)
+                  <label className="block text-[8.5px] font-bold text-slate-400 mb-0.5 uppercase tracking-wider text-left">
+                    Комментарий (опц.)
                   </label>
                   <input
                     type="text"
-                    placeholder={`Например: Пополнение ${activeTransferData.toAccount.name}`}
+                    placeholder="Описание..."
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
-                    className="w-full px-3.5 py-2.5 bg-slate-950/60 border border-white/5 rounded-xl text-xs text-slate-200 focus:outline-hidden focus:ring-1 focus:ring-indigo-400"
+                    className="w-full px-2 py-1.5 bg-slate-950/60 border border-white/5 rounded-lg text-[11px] text-slate-200 focus:outline-hidden focus:ring-1 focus:ring-indigo-400"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-bold text-slate-400 mb-1 uppercase tracking-wider text-left">
+                  <label className="block text-[8.5px] font-bold text-slate-400 mb-0.5 uppercase tracking-wider text-left">
                     Дата операции
                   </label>
                   <input
                     type="date"
                     value={date}
                     onChange={(e) => setDate(e.target.value)}
-                    className="w-full px-3.5 py-2.5 bg-slate-950/60 border border-white/5 rounded-xl text-xs text-slate-200 font-mono focus:outline-hidden focus:ring-1 focus:ring-indigo-400"
+                    className="w-full px-2 py-1.5 bg-slate-950/60 border border-white/5 rounded-lg text-[11px] text-slate-200 font-mono focus:outline-hidden focus:ring-1 focus:ring-indigo-400"
                     required
                   />
                 </div>
               </div>
 
               {/* Submit / Cancel Buttons */}
-              <div className="flex gap-2.5 pt-2">
+              <div className="flex gap-2 pt-1.5">
                 <button
                   type="button"
                   onClick={() => setActiveTransferData(null)}
-                  className="flex-1 px-4 py-3 border border-white/10 bg-white/5 text-slate-300 hover:text-white rounded-2xl hover:bg-white/10 text-xs font-bold transition-all cursor-pointer"
+                  className="flex-1 px-3 py-2 border border-white/10 bg-white/5 text-slate-350 hover:text-white rounded-xl hover:bg-white/10 text-xs font-bold transition-all cursor-pointer"
                 >
                   Отмена
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-3 bg-gradient-to-r from-indigo-400 to-indigo-600 hover:from-indigo-300 hover:to-indigo-500 text-slate-950 text-xs font-black rounded-2xl shadow-lg transition-all transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-1.5 cursor-pointer uppercase tracking-wider"
+                  className="flex-1 px-3 py-2 bg-gradient-to-r from-indigo-400 to-indigo-600 hover:from-indigo-300 hover:to-indigo-500 text-slate-950 text-xs font-black rounded-xl shadow-md transition-all transform hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-1 cursor-pointer uppercase tracking-wider"
                 >
-                  <Check size={14} />
+                  <Check size={13} />
                   Перевести ₼
                 </button>
               </div>

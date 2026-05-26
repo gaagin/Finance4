@@ -47,7 +47,13 @@ export function TransactionPanel({
   const [accountId, setAccountId] = useState('');
   const [toAccountId, setToAccountId] = useState('');
   const [categoryId, setCategoryId] = useState('');
-  const [date, setDate] = useState('2026-05-23'); // Default lock to 23 May 2026
+  const [date, setDate] = useState(() => {
+    const d = new Date();
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }); // Default to current local date
   const [description, setDescription] = useState('');
   const [cardId, setCardId] = useState<string | undefined>(undefined);
 
