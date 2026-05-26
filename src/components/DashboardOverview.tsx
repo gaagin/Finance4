@@ -3,6 +3,7 @@ import { Transaction, Category, Account, BudgetLimit } from '../types';
 import { IconComponent } from './IconComponent';
 import { Wallet, ArrowUpRight, ArrowDownLeft, TrendingUp, AlertTriangle, Filter, Calendar, HelpCircle, FileSpreadsheet, Download, RefreshCw, LogIn, LogOut, CheckCircle, AlertCircle, ArrowUpDown, SlidersHorizontal } from 'lucide-react';
 import { exportToGoogleSheets } from '../googleSheetsService';
+import { QuickDragDropBuilder } from './QuickDragDropBuilder';
 
 interface DashboardOverviewProps {
   transactions: Transaction[];
@@ -14,6 +15,8 @@ interface DashboardOverviewProps {
   gAccessToken: string | null;
   onGoogleLogin: () => void;
   onGoogleLogout: () => void;
+  onAddTransaction: (tx: Omit<Transaction, 'id'>) => void;
+  addToast: (message: string, type: 'warning' | 'critical' | 'success') => void;
 }
 
 export function DashboardOverview({
@@ -25,7 +28,9 @@ export function DashboardOverview({
   currentUser,
   gAccessToken,
   onGoogleLogin,
-  onGoogleLogout
+  onGoogleLogout,
+  onAddTransaction,
+  addToast
 }: DashboardOverviewProps) {
   
   // Custom states for export status
@@ -744,6 +749,14 @@ export function DashboardOverview({
         </div>
 
       </div>
+
+      {/* --- QUICK INTERACTIVE GESTURE TRANSACTION BUILDER --- */}
+      <QuickDragDropBuilder
+        accounts={accounts}
+        categories={categories}
+        onAddTransaction={onAddTransaction}
+        addToast={addToast}
+      />
 
       {/* 1.5. Financial Exports & Google Sheets Synchronization */}
       <div className="bg-white/5 backdrop-blur-md rounded-3xl p-6 border border-white/10 shadow-lg flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden" id="financial-exports-section">

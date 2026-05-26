@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Transaction, Category, Account } from '../types';
 import { IconComponent } from './IconComponent';
 import { ChevronLeft, ChevronRight, Plus, Calendar as CalendarIcon, Info } from 'lucide-react';
@@ -18,6 +18,7 @@ interface CalendarPanelProps {
     description: string;
     date: string;
   }) => void;
+  onUpdateTransaction: (transaction: Transaction) => void;
 }
 
 const MONTHS_RU = [
@@ -34,13 +35,34 @@ export function CalendarPanel({
   onAddTransactionOnDate,
   onEditTransaction,
   onAddTransaction,
-  onAddTransfer
+  onAddTransfer,
+  onUpdateTransaction
 }: CalendarPanelProps) {
   // Default to May 2026, based on user's current date context
   const [currentDate, setCurrentDate] = useState(new Date(2026, 4, 1)); // Month index 4 is May
   const [selectedDayData, setSelectedDayData] = useState<{ date: string; txs: Transaction[] } | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [clickedDate, setClickedDate] = useState('2026-05-23');
+
+  // Drag and drop states for pointer/touch support
+  const [draggingTxId, setDraggingTxId] = useState<string | null>(null);
+  const [draggedOverDate, setDraggedOverDate] = useState<string | null>(null);
+  const dragMovedRef = useRef(false);
+
+  const handleTouchMove = (e: React.TouchEvent, txId: string) => {
+    dragMovedRef.current = true;
+    const touch = e.touches[0];
+    const element = document.elementFromPoint(touch.clientX, touch.clientY);
+    if (element) {
+      const cellElement = element.closest('[data-date]');
+      if (cellElement) {
+        const date = cellElement.getAttribute('data-date');
+        if (date && date !== draggedOverDate) {
+          setDraggedOverDate(date);
+        }
+      }
+    }
+  };
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
@@ -181,17 +203,45 @@ export function CalendarPanel({
               return (
                 <div
                   key={`${cell.dateString}-${idx}`}
+                  data-date={cell.dateString}
                   onClick={() => {
-                    if (cell.isCurrentMonth) {
+                    if (cell.isCurrentMonth && !dragMovedRef.current) {
                       setClickedDate(cell.dateString);
                       setIsModalOpen(true);
                     }
+                  }}
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    dragMovedRef.current = true;
+                    if (draggedOverDate !== cell.dateString) {
+                      setDraggedOverDate(cell.dateString);
+                    }
+                  }}
+                  onDragLeave={() => {
+                    if (draggedOverDate === cell.dateString) {
+                      setDraggedOverDate(null);
+                    }
+                  }}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    const txId = e.dataTransfer.getData('transactionId') || draggingTxId;
+                    if (txId) {
+                      const txToMove = transactions.find(t => t.id === txId);
+                      if (txToMove && txToMove.date !== cell.dateString) {
+                        onUpdateTransaction({ ...txToMove, date: cell.dateString });
+                      }
+                    }
+                    setDraggingTxId(null);
+                    setDraggedOverDate(null);
+                    dragMovedRef.current = false;
                   }}
                   className={`min-h-[105px] sm:min-h-[140px] flex flex-col justify-between p-1.5 rounded-xl border transition-all group cursor-pointer ${
                     cell.isCurrentMonth
                       ? 'bg-white/5 border-white/10 hover:border-teal-400/50 hover:bg-white/15 hover:shadow-md'
                       : 'bg-transparent border-white/5 text-slate-500'
-                  } ${isTodayStr ? 'ring-2 ring-teal-400 bg-teal-400/10' : ''}`}
+                  } ${isTodayStr ? 'ring-2 ring-teal-400 bg-teal-400/10' : ''} ${
+                    draggedOverDate === cell.dateString ? 'ring-2 ring-teal-400 bg-teal-400/20 border-teal-400 scale-[0.98]' : ''
+                  }`}
                 >
                   {/* Day Header row */}
                   <div className="flex items-center justify-between mb-1">
@@ -233,11 +283,44 @@ export function CalendarPanel({
                       return (
                         <div
                           key={tx.id}
+                          draggable={cell.isCurrentMonth}
+                          onDragStart={(e) => {
+                            e.dataTransfer.setData('transactionId', tx.id);
+                            setDraggingTxId(tx.id);
+                            dragMovedRef.current = false;
+                          }}
+                          onDragEnd={() => {
+                            setDraggingTxId(null);
+                            setDraggedOverDate(null);
+                          }}
+                          onTouchStart={() => {
+                            setDraggingTxId(tx.id);
+                            dragMovedRef.current = false;
+                          }}
+                          onTouchMove={(e) => handleTouchMove(e, tx.id)}
+                          onTouchEnd={() => {
+                            if (draggingTxId && draggedOverDate) {
+                              const txToMove = transactions.find(t => t.id === draggingTxId);
+                              if (txToMove && txToMove.date !== draggedOverDate) {
+                                onUpdateTransaction({ ...txToMove, date: draggedOverDate });
+                              }
+                            }
+                            setDraggingTxId(null);
+                            setDraggedOverDate(null);
+                            setTimeout(() => {
+                              dragMovedRef.current = false;
+                            }, 50);
+                          }}
                           onClick={(e) => {
                             e.stopPropagation();
+                            if (dragMovedRef.current) {
+                              return;
+                            }
                             onEditTransaction(tx);
                           }}
-                          className={`text-[10px] p-1 rounded-sm leading-tight transition-all cursor-pointer border truncate ${
+                          className={`text-[10px] p-1 rounded-sm leading-tight transition-all cursor-pointer border truncate touch-none select-none ${
+                            draggingTxId === tx.id ? 'opacity-40 border-dashed border-teal-500 bg-teal-100/10' : ''
+                          } ${
                             isIncome
                               ? 'bg-emerald-500/15 border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/25'
                               : 'bg-rose-500/15 border-rose-500/30 text-rose-400 hover:bg-rose-500/25'

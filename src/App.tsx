@@ -1158,6 +1158,8 @@ export default function App() {
               gAccessToken={gAccessToken}
               onGoogleLogin={handleGoogleLogin}
               onGoogleLogout={handleGoogleLogout}
+              onAddTransaction={handleAddTransaction}
+              addToast={addToast}
             />
           )}
 
@@ -1187,6 +1189,7 @@ export default function App() {
               onEditTransaction={handleEditTransactionStart}
               onAddTransaction={handleAddTransaction}
               onAddTransfer={handleAddTransfer}
+              onUpdateTransaction={handleUpdateTransaction}
             />
           )}
 
