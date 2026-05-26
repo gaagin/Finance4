@@ -73,69 +73,13 @@ export default function App() {
   const [firebaseSyncError, setFirebaseSyncError] = useState<string | null>(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
 
-  // Subscribe to Firebase Firestore user document for real-time synchronization between multiple devices
+  // Subscribe to Firebase Firestore user document for real-time synchronization between multiple devices (Temporarily disabled as requested)
   useEffect(() => {
-    if (!currentUser) {
-      isLoadedFromFirebase.current = false;
+    if (currentUser) {
+      isLoadedFromFirebase.current = true;
+      setIsFirebaseLoading(false);
       setFirebaseSyncError(null);
-      lastFetchedDataRef.current = null;
-      return;
     }
-
-    setIsFirebaseLoading(true);
-    setFirebaseSyncError(null);
-
-    const unsubscribe = subscribeToUserFinanceData(
-      currentUser.uid,
-      async (cloudData) => {
-        // If we are currently writing or seeding to Firebase, we ignore snapshot callbacks to avoid loops
-        if (isWritingToFirebaseRef.current) {
-          return;
-        }
-
-        const stringifiedCloud = JSON.stringify(cloudData);
-        
-        // If active Firestore collection of transactions is empty, seed it with the parse-time initialFinanceData (derived from JSON)
-        const isDbEmptyOfTransactions = cloudData.transactions.length === 0;
-
-        if (isDbEmptyOfTransactions) {
-          isWritingToFirebaseRef.current = true;
-          lastFetchedDataRef.current = JSON.stringify(initialFinanceData);
-          setData(initialFinanceData);
-          try {
-            await reinitUserFinanceData(currentUser.uid, currentUser.email || "", initialFinanceData);
-            addToast("Все данные и транзакции из honey_export.json импортированы в Firebase! ☁️🎉", "success");
-          } catch (err: any) {
-            console.error("Ошибка инициализации данных в Firebase:", err);
-            addToast(`Ошибка автоимпорта JSON: ${err.message || err}`, "warning" as any);
-          } finally {
-            isWritingToFirebaseRef.current = false;
-          }
-        } else if (stringifiedCloud !== lastFetchedDataRef.current) {
-          // Only update local state if it differs from what was last loaded/saved to prevent cycles
-          setData(cloudData);
-          lastFetchedDataRef.current = stringifiedCloud;
-          addToast("Синхронизация с облаком успешна! ☁️🔄", "success");
-        }
-        setIsFirebaseLoading(false);
-        isLoadedFromFirebase.current = true;
-      },
-      (err: any) => {
-        console.error('Ошибка синхронизации данных из Firebase:', err);
-        let msg = err?.message || String(err);
-        try {
-          const parsed = JSON.parse(msg);
-          msg = parsed.error || msg;
-        } catch {}
-        setFirebaseSyncError(msg);
-        addToast(`Ошибка подключения к Firebase: ${msg}`, "warning" as any);
-        setIsFirebaseLoading(false);
-      }
-    );
-
-    return () => {
-      unsubscribe();
-    };
   }, [currentUser]);
 
   // Sync state to LocalStorage for offline capability and local testing
@@ -217,29 +161,8 @@ export default function App() {
   };
 
   const saveToFirebaseDirectly = async (nextData: FinanceData) => {
-    if (currentUser) {
-      try {
-        setIsFirebaseLoading(true);
-        isWritingToFirebaseRef.current = true;
-        const previousDataStr = lastFetchedDataRef.current;
-        const previousData = previousDataStr ? JSON.parse(previousDataStr) : null;
-        await saveUserFinanceData(currentUser.uid, currentUser.email || "", nextData, previousData);
-        lastFetchedDataRef.current = JSON.stringify(nextData);
-        setFirebaseSyncError(null);
-      } catch (err: any) {
-        console.error("Ошибка сохранения в Firebase:", err);
-        let msg = err?.message || String(err);
-        try {
-          const parsed = JSON.parse(msg);
-          msg = parsed.error || msg;
-        } catch {}
-        setFirebaseSyncError(msg);
-        addToast(`Ошибка сохранения в Firebase: ${msg}`, 'warning' as any);
-      } finally {
-        isWritingToFirebaseRef.current = false;
-        setIsFirebaseLoading(false);
-      }
-    }
+    // Synchronization temporarily disabled as requested. Local changes are safe in LocalStorage.
+    return;
   };
 
   const handleForceImportCSVToFirebase = async () => {
@@ -1154,59 +1077,29 @@ export default function App() {
           </div>
         ) : (
           <div className="flex flex-col gap-3 w-full" id="firebase-sync-active-container">
-            <div className="bg-white/5 backdrop-blur-md rounded-2xl p-4 border border-emerald-500/20 shadow-md flex flex-col sm:flex-row items-center justify-between gap-4" id="firebase-sync-active-banner">
+            <div className="bg-white/5 backdrop-blur-md rounded-2xl p-4 border border-amber-500/20 shadow-md flex flex-col sm:flex-row items-center justify-between gap-4" id="firebase-sync-active-banner">
               <div className="flex items-center gap-3">
-                <div className="p-2.5 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 rounded-xl">
-                  <CheckCircle size={20} className="shrink-0" />
+                <div className="p-2.5 bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 rounded-xl">
+                  <AlertTriangle size={20} className="shrink-0" />
                 </div>
                 <div>
                   <div className="flex flex-wrap items-center gap-2">
-                    <h3 className="font-display font-bold text-slate-900 dark:text-white text-sm">Облако Firebase активно</h3>
-                    {isFirebaseLoading && (
-                      <span className="text-[9px] bg-amber-500/20 text-amber-600 dark:text-amber-300 font-mono font-bold px-1.5 py-0.5 rounded animate-pulse">Синхронизация...</span>
-                    )}
+                    <h3 className="font-display font-bold text-slate-900 dark:text-white text-sm">Синхронизация приостановлена</h3>
                   </div>
                   <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
-                    Все изменения автоматически сохраняются в вашей учетной записи: <span className="font-semibold text-teal-600 dark:text-teal-300">{currentUser.email}</span>
+                    Облако временно отключено по вашему запросу. Все изменения сохраняются локально в вашем браузере ({currentUser.email}).
                   </p>
                 </div>
               </div>
               <div className="flex items-center gap-2 w-full sm:w-auto justify-end flex-wrap">
 
                 <button
-                  onClick={async () => {
-                    setIsFirebaseLoading(true);
-                    setFirebaseSyncError(null);
-                    try {
-                      isWritingToFirebaseRef.current = true;
-                      const cloudData = await getUserFinanceData(currentUser.uid);
-                      if (cloudData) {
-                        setData(cloudData);
-                        lastFetchedDataRef.current = JSON.stringify(cloudData);
-                        addToast("Данные успешно синхронизированы из облака Firebase! ☁️", "success");
-                      } else {
-                        const latestLocalData = dataRef.current;
-                        await saveUserFinanceData(currentUser.uid, currentUser.email || "", latestLocalData);
-                        lastFetchedDataRef.current = JSON.stringify(latestLocalData);
-                        addToast("Локальные данные сохранены в облако Firebase! ☁️", "success");
-                      }
-                    } catch (err: any) {
-                      let msg = err?.message || String(err);
-                      try {
-                        const parsed = JSON.parse(msg);
-                        msg = parsed.error || msg;
-                      } catch {}
-                      setFirebaseSyncError(msg);
-                      addToast(`Ошибка ручной синхронизации: ${msg}`, "warning" as any);
-                    } finally {
-                      isWritingToFirebaseRef.current = false;
-                      setIsFirebaseLoading(false);
-                    }
+                  onClick={() => {
+                    addToast("Синхронизация приостановлена по вашему запросу. Все данные сохраняются локально на этом устройстве. 😊", "warning");
                   }}
-                  disabled={isFirebaseLoading}
                   className="w-full sm:w-auto px-3.5 py-2 bg-slate-800 dark:bg-white/10 hover:bg-slate-700 dark:hover:bg-white/15 text-white dark:text-slate-200 text-xs font-bold rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1.5"
                 >
-                  <RefreshCw size={13} className={isFirebaseLoading ? 'animate-spin' : ''} />
+                  <RefreshCw size={13} />
                   Синхронизировать сейчас
                 </button>
                 <button
