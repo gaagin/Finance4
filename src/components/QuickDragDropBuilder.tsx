@@ -192,10 +192,10 @@ export function QuickDragDropBuilder({
       <div className="flex flex-col gap-4">
         {/* ROW 1: Source Accounts (Pills close to categories for easiest thumb drag) */}
         <div>
-          <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 select-none">
+          <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5 select-none text-left">
             Шаг 1: Возьмите счет (Списание)
           </span>
-          <div className="flex flex-wrap gap-2 justify-start items-center">
+          <div className="flex flex-wrap gap-1.5 justify-start items-center">
             {accounts.map(acc => {
               const bgClass = acc.type === 'card' ? 'bg-indigo-500/10 text-indigo-300 border-indigo-500/20 hover:border-indigo-400/50' : 'bg-emerald-500/10 text-emerald-300 border-emerald-500/20 hover:border-emerald-400/50';
               const isActive = activeDragAccount?.id === acc.id;
@@ -209,15 +209,15 @@ export function QuickDragDropBuilder({
                   onTouchStart={(e) => handleTouchStart(e, acc)}
                   onTouchMove={handleTouchMove}
                   onTouchEnd={handleTouchEnd}
-                  className={`px-3 py-2 border rounded-2xl cursor-grab active:cursor-grabbing transition-all select-none flex items-center gap-2 touch-none ${bgClass} ${
-                    isActive ? 'scale-110 ring-2 ring-teal-400 border-teal-400 bg-teal-500/20' : ''
+                  className={`px-2 py-1.5 border rounded-xl cursor-grab active:cursor-grabbing transition-all select-none flex items-center gap-1.5 touch-none ${bgClass} ${
+                    isActive ? 'scale-[1.05] ring-2 ring-teal-400 border-teal-400 bg-teal-500/20' : ''
                   }`}
                   id={`drag-acc-${acc.id}`}
                 >
-                  <Wallet size={13} />
+                  <Wallet size={11} className="shrink-0" />
                   <div className="text-left">
-                    <span className="block font-semibold text-xs leading-none">{acc.name}</span>
-                    <span className="block text-[9px] font-mono mt-0.5 opacity-85">{Math.round(acc.balance)} ₼</span>
+                    <span className="block font-bold text-[10px] leading-tight text-slate-200">{acc.name}</span>
+                    <span className="block text-[9px] font-mono leading-none opacity-80 mt-0.5">{Math.round(acc.balance)} ₼</span>
                   </div>
                 </div>
               );
@@ -228,17 +228,17 @@ export function QuickDragDropBuilder({
         {/* Arrow transition */}
         <div className="flex justify-center -my-1 text-slate-500 select-none pointer-events-none">
           <div className="flex items-center gap-1.5 bg-white/5 border border-white/10 px-2 py-0.5 rounded-full text-[9px] font-mono">
-            <CornerRightDown size={10} className="text-teal-400 animate-bounce" />
+            <CornerRightDown size={9} className="text-teal-400 animate-bounce" />
             <span>ПЕРЕНЕСИТЕ СЮДА</span>
           </div>
         </div>
 
         {/* ROW 2: Destination Categories Grid (Compact touch-target boxes) */}
         <div>
-          <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 select-none">
+          <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5 select-none text-left">
             Шаг 2: Отпустите на категории расходов
           </span>
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2">
+          <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 gap-1.5">
             {expenseCategories.map(cat => {
               const isOver = dragOverCategoryId === cat.id;
               return (
@@ -248,18 +248,18 @@ export function QuickDragDropBuilder({
                   onDragOver={(e) => handleDragOverCategory(e, cat.id)}
                   onDragLeave={() => setDragOverCategoryId(null)}
                   onDrop={(e) => handleDropOnCategory(e, cat)}
-                  className={`p-2 rounded-xl border flex flex-col items-center justify-center text-center gap-1.5 transition-all select-none ${
+                  className={`p-1.5 rounded-xl border flex flex-col items-center justify-center text-center gap-1 transition-all select-none ${
                     isOver 
-                      ? 'border-emerald-400 bg-emerald-500/20 scale-105 shadow-lg shadow-emerald-500/10 ring-2 ring-emerald-400' 
+                      ? 'border-emerald-400 bg-emerald-500/20 scale-[1.03] shadow-md shadow-emerald-500/5 ring-2 ring-emerald-400' 
                       : 'border-white/5 bg-white/5 hover:bg-white/10 hover:border-white/10'
                   }`}
                   id={`drop-cat-${cat.id}`}
-                  style={{ minHeight: '68px' }}
+                  style={{ minHeight: '56px' }}
                 >
-                  <div className="w-7 h-7 bg-white/10 rounded-lg flex items-center justify-center text-slate-200">
-                    <IconComponent name={cat.icon} size={15} />
+                  <div className="w-5.5 h-5.5 bg-white/10 rounded flex items-center justify-center text-slate-200">
+                    <IconComponent name={cat.icon} size={12} />
                   </div>
-                  <span className="text-[9px] font-bold font-sans tracking-tight leading-tight text-slate-300 max-w-full truncate px-0.5">
+                  <span className="text-[8.5px] font-semibold font-sans tracking-tight leading-none text-slate-300 max-w-full truncate px-0.5">
                     {cat.name}
                   </span>
                 </div>
