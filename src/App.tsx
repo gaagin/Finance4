@@ -764,45 +764,45 @@ export default function App() {
       <div className="absolute bottom-[-100px] right-[-100px] w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[120px] pointer-events-none z-0" />
 
       {/* 1. Header Navigation Bar */}
-      <header className="sticky top-0 bg-slate-950/40 backdrop-blur-2xl border-b border-white/10 z-50 px-4 sm:px-8 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <header className="sticky top-0 bg-slate-950/40 backdrop-blur-2xl border-b border-white/10 z-50 px-3 sm:px-6 py-1.5 sm:py-2 flex items-center justify-between gap-2.5">
         
         {/* Logo and Azerbaijan context branding */}
-        <div className="flex items-center gap-3 z-10">
-          <div className="w-11 h-11 bg-teal-400 rounded-xl flex items-center justify-center text-slate-950 font-display font-extrabold text-2xl shadow-lg shadow-teal-400/20">
+        <div className="flex items-center gap-2 z-10 min-w-0 flex-1">
+          <div className="w-8 h-8 bg-teal-400 rounded-lg flex items-center justify-center text-slate-950 font-display font-extrabold text-base shadow-md shadow-teal-400/20 shrink-0">
             ₼
           </div>
-          <div>
-            <div className="flex items-center gap-1.5">
-              <h1 className="text-lg font-display font-black tracking-tight text-white leading-none">MilliFinance</h1>
-              <span className="flex items-center gap-1 px-1.5 py-0.5 bg-white/10 rounded text-[9px] font-bold text-teal-300 border border-white/10">
-                🇦🇿 AZN
-              </span>
-              <span className="flex items-center gap-1 px-1.5 py-0.5 bg-emerald-500/15 rounded text-[9px] font-bold text-emerald-300 border border-emerald-500/10" title="Все ваши данные хранятся конфиденциально и безопасно на вашем устройстве">
-                🔒 Локально
-              </span>
+          <div className="min-w-0">
+            <div className="flex items-center gap-1 leading-none flex-wrap">
+              <h1 className="text-xs sm:text-sm font-display font-black tracking-tight text-white truncate">MilliFinance</h1>
+              <div className="flex items-center gap-0.5 shrink-0">
+                <span className="flex items-center gap-0.5 px-0.9 py-0.2 bg-white/10 rounded text-[7px] font-bold text-teal-300 border border-white/5">
+                  AZN
+                </span>
+                <span className="flex items-center gap-0.5 px-0.9 py-0.2 bg-emerald-500/15 rounded text-[7px] font-bold text-emerald-300 border border-emerald-500/5" title="Все ваши данные хранятся конфиденциально и безопасно на вашем устройстве">
+                  🔒 Локально
+                </span>
+              </div>
             </div>
-            <p className="text-xs text-slate-400 mt-0.5">Умный домашний бюджет Азербайджана</p>
+            <p className="text-[9px] sm:text-[10px] text-slate-400 mt-0.5 truncate leading-none">Умный домашний бюджет Азербайджана</p>
           </div>
         </div>
 
         {/* Global stats block (Overall Capital indicator) and settings reset button */}
-        <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end z-10">
+        <div className="flex items-center gap-1.5 sm:gap-3 shrink-0 z-10">
           <div className="text-right">
-            <span className="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">Всего ресурсов</span>
-            <span className="text-base font-display font-black text-teal-300 tracking-tight leading-none">
-              {overallCapital.toFixed(2)} ₼
+            <span className="block text-[7.5px] sm:text-[8.5px] text-slate-400 font-bold uppercase tracking-wider leading-none">Всего</span>
+            <span className="text-xs sm:text-sm font-display font-black text-teal-300 tracking-tight leading-none block mt-0.5">
+              {overallCapital.toFixed(0)} ₼
             </span>
           </div>
 
-
-
           <button
             onClick={handleResetData}
-            className="flex items-center gap-1 px-3 py-1.5 border border-white/10 hover:border-rose-500/50 bg-white/5 hover:bg-rose-500/10 text-slate-300 hover:text-rose-400 text-xs font-semibold rounded-xl transition-all cursor-pointer"
+            className="flex items-center justify-center gap-0.5 p-1 sm:px-2 py-1 border border-white/10 hover:border-rose-500/50 bg-white/5 hover:bg-rose-500/10 text-slate-350 hover:text-rose-400 text-[9px] sm:text-[10.5px] font-semibold rounded-lg transition-all cursor-pointer"
             title="Сбросить все до реального экспорта HoneyMoney"
           >
-            <Flame size={13} className="text-rose-500" />
-            <span className="hidden sm:inline">Сбросить к HoneyMoney</span>
+            <Flame size={11} className="text-rose-500" />
+            <span className="hidden sm:inline">Сбросить</span>
           </button>
         </div>
 
@@ -838,102 +838,6 @@ export default function App() {
             </button>
           </div>
         )}
-
-        {/* Navigation tabs row: fixed bottom nav bar (always visible, not scrollable, optimized for smartphones) */}
-        <div 
-          className={`fixed bottom-0 left-0 right-0 w-full border-t px-2 pt-2 flex justify-around items-center gap-1 z-[999] transition-colors duration-200 ${
-            theme === 'dark'
-              ? 'bg-[#0f172a] border-white/10 text-slate-100 shadow-[0_-8px_30px_rgba(0,0,0,0.6)]'
-              : 'bg-white border-slate-200/80 text-slate-800 shadow-[0_-8px_30px_rgba(0,0,0,0.08)]'
-          }`}
-          id="fixed-bottom-nav"
-          style={{
-            paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 12px)'
-          }}
-        >
-          <button
-            onClick={() => handleQuickNavigate('overview')}
-            className={`flex flex-col items-center justify-center py-1.5 px-1 rounded-xl transition-all flex-1 min-w-0 select-none cursor-pointer group ${
-              activeTab === 'overview'
-                ? theme === 'dark'
-                  ? 'bg-teal-500/15 text-teal-300 border border-teal-500/20 shadow-inner font-bold'
-                  : 'bg-teal-500/10 text-teal-600 border border-teal-500/20 shadow-sm font-bold'
-                : theme === 'dark'
-                  ? 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
-                  : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100 border border-transparent'
-            }`}
-          >
-            <LayoutDashboard size={18} className="transition-transform group-active:scale-90" />
-            <span className="text-[9.5px] sm:text-[11px] font-bold tracking-wide mt-0.5 truncate">Обзор</span>
-          </button>
-
-          <button
-            onClick={() => handleQuickNavigate('transactions')}
-            className={`flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all flex-1 min-w-0 select-none relative cursor-pointer group ${
-              activeTab === 'transactions'
-                ? theme === 'dark'
-                  ? 'bg-teal-500/15 text-teal-300 border border-teal-500/20 shadow-inner font-bold'
-                  : 'bg-teal-500/10 text-teal-600 border border-teal-500/20 shadow-sm font-bold'
-                : theme === 'dark'
-                  ? 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
-                  : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100 border border-transparent'
-            }`}
-          >
-            <ReceiptText size={18} className="transition-transform group-active:scale-90" />
-            <span className="text-[9.5px] sm:text-[11px] font-bold tracking-wide mt-0.5 truncate">Журнал</span>
-            {preselectedDate && (
-              <span className="absolute top-1.5 right-1/2 translate-x-3 w-1.5 h-1.5 bg-rose-500 rounded-full animate-ping" />
-            )}
-          </button>
-
-          <button
-            onClick={() => handleQuickNavigate('calendar')}
-            className={`flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all flex-1 min-w-0 select-none cursor-pointer group ${
-              activeTab === 'calendar'
-                ? theme === 'dark'
-                  ? 'bg-teal-500/15 text-teal-300 border border-teal-500/20 shadow-inner font-bold'
-                  : 'bg-teal-500/10 text-teal-600 border border-teal-500/20 shadow-sm font-bold'
-                : theme === 'dark'
-                  ? 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
-                  : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100 border border-transparent'
-            }`}
-          >
-            <Calendar size={18} className="transition-transform group-active:scale-90" />
-            <span className="text-[9.5px] sm:text-[11px] font-bold tracking-wide mt-0.5 truncate">Календарь</span>
-          </button>
-
-          <button
-            onClick={() => handleQuickNavigate('budgeting')}
-            className={`flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all flex-1 min-w-0 select-none cursor-pointer group ${
-              activeTab === 'budgeting'
-                ? theme === 'dark'
-                  ? 'bg-teal-500/15 text-teal-300 border border-teal-500/20 shadow-inner font-bold'
-                  : 'bg-teal-500/10 text-teal-600 border border-teal-500/20 shadow-sm font-bold'
-                : theme === 'dark'
-                  ? 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
-                  : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100 border border-transparent'
-            }`}
-          >
-            <SlidersHorizontal size={18} className="transition-transform group-active:scale-90" />
-            <span className="text-[9.5px] sm:text-[11px] font-bold tracking-wide mt-0.5 truncate">Бюджет</span>
-          </button>
-
-          <button
-            onClick={() => handleQuickNavigate('accounts-categories')}
-            className={`flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all flex-1 min-w-0 select-none cursor-pointer group ${
-              activeTab === 'accounts-categories'
-                ? theme === 'dark'
-                  ? 'bg-teal-500/15 text-teal-300 border border-teal-500/20 shadow-inner font-bold'
-                  : 'bg-teal-500/10 text-teal-650 border border-teal-500/20 shadow-sm font-bold'
-                : theme === 'dark'
-                  ? 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
-                  : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100 border border-transparent'
-            }`}
-          >
-            <Settings size={18} className="transition-transform group-active:scale-90" />
-            <span className="text-[9.5px] sm:text-[11px] font-bold tracking-wide mt-0.5 truncate">Счета</span>
-          </button>
-        </div>
 
         {/* 3. Panel Deck Wrapper (conditionally renders active component based on navigation tab) */}
         <div className="transition-all duration-300" id="deck-wrapper">
@@ -1015,6 +919,102 @@ export default function App() {
         </div>
 
       </main>
+
+      {/* Navigation tabs row: fixed bottom nav bar (always visible, not scrollable, optimized for smartphones) */}
+      <div 
+        className={`fixed bottom-0 left-0 right-0 w-full border-t px-2 pt-2 flex justify-around items-center gap-1 z-[999] transition-colors duration-200 ${
+          theme === 'dark'
+            ? 'bg-[#0f172a] border-white/10 text-slate-100 shadow-[0_-8px_30px_rgba(0,0,0,0.6)]'
+            : 'bg-white border-slate-200/80 text-slate-800 shadow-[0_-8px_30px_rgba(0,0,0,0.08)]'
+        }`}
+        id="fixed-bottom-nav"
+        style={{
+          paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 12px)'
+        }}
+      >
+        <button
+          onClick={() => handleQuickNavigate('overview')}
+          className={`flex flex-col items-center justify-center py-1.5 px-1 rounded-xl transition-all flex-1 min-w-0 select-none cursor-pointer group ${
+            activeTab === 'overview'
+              ? theme === 'dark'
+                ? 'bg-teal-500/15 text-teal-300 border border-teal-500/20 shadow-inner font-bold'
+                : 'bg-teal-500/10 text-teal-600 border border-teal-500/20 shadow-sm font-bold'
+              : theme === 'dark'
+                ? 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
+                : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100 border border-transparent'
+          }`}
+        >
+          <LayoutDashboard size={18} className="transition-transform group-active:scale-90" />
+          <span className="text-[9.5px] sm:text-[11px] font-bold tracking-wide mt-0.5 truncate">Обзор</span>
+        </button>
+
+        <button
+          onClick={() => handleQuickNavigate('transactions')}
+          className={`flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all flex-1 min-w-0 select-none relative cursor-pointer group ${
+            activeTab === 'transactions'
+              ? theme === 'dark'
+                ? 'bg-teal-500/15 text-teal-300 border border-teal-500/20 shadow-inner font-bold'
+                : 'bg-teal-500/10 text-teal-600 border border-teal-500/20 shadow-sm font-bold'
+              : theme === 'dark'
+                ? 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
+                : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100 border border-transparent'
+          }`}
+        >
+          <ReceiptText size={18} className="transition-transform group-active:scale-90" />
+          <span className="text-[9.5px] sm:text-[11px] font-bold tracking-wide mt-0.5 truncate">Журнал</span>
+          {preselectedDate && (
+            <span className="absolute top-1.5 right-1/2 translate-x-3 w-1.5 h-1.5 bg-rose-500 rounded-full animate-ping" />
+          )}
+        </button>
+
+        <button
+          onClick={() => handleQuickNavigate('calendar')}
+          className={`flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all flex-1 min-w-0 select-none cursor-pointer group ${
+            activeTab === 'calendar'
+              ? theme === 'dark'
+                ? 'bg-teal-500/15 text-teal-300 border border-teal-500/20 shadow-inner font-bold'
+                : 'bg-teal-500/10 text-teal-600 border border-teal-500/20 shadow-sm font-bold'
+              : theme === 'dark'
+                ? 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
+                : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100 border border-transparent'
+          }`}
+        >
+          <Calendar size={18} className="transition-transform group-active:scale-90" />
+          <span className="text-[9.5px] sm:text-[11px] font-bold tracking-wide mt-0.5 truncate">Календарь</span>
+        </button>
+
+        <button
+          onClick={() => handleQuickNavigate('budgeting')}
+          className={`flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all flex-1 min-w-0 select-none cursor-pointer group ${
+            activeTab === 'budgeting'
+              ? theme === 'dark'
+                ? 'bg-teal-500/15 text-teal-300 border border-teal-500/20 shadow-inner font-bold'
+                : 'bg-teal-500/10 text-teal-600 border border-teal-500/20 shadow-sm font-bold'
+              : theme === 'dark'
+                ? 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
+                : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100 border border-transparent'
+          }`}
+        >
+          <SlidersHorizontal size={18} className="transition-transform group-active:scale-90" />
+          <span className="text-[9.5px] sm:text-[11px] font-bold tracking-wide mt-0.5 truncate">Бюджет</span>
+        </button>
+
+        <button
+          onClick={() => handleQuickNavigate('accounts-categories')}
+          className={`flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all flex-1 min-w-0 select-none cursor-pointer group ${
+            activeTab === 'accounts-categories'
+              ? theme === 'dark'
+                ? 'bg-teal-500/15 text-teal-300 border border-teal-500/20 shadow-inner font-bold'
+                : 'bg-teal-500/10 text-teal-650 border border-teal-500/20 shadow-sm font-bold'
+              : theme === 'dark'
+                ? 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
+                : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100 border border-transparent'
+          }`}
+        >
+          <Settings size={18} className="transition-transform group-active:scale-90" />
+          <span className="text-[9.5px] sm:text-[11px] font-bold tracking-wide mt-0.5 truncate">Счета</span>
+        </button>
+      </div>
 
       {/* Floating Budget & Authorization Toast Notifications stack */}
       <div className="fixed top-24 right-4 sm:right-8 space-y-3 z-[9999] max-w-sm w-full pointer-events-none" id="toasts-portal">

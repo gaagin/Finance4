@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Account, Category, Transaction, formatCategoryDisplayName } from '../types';
 import { IconComponent } from './IconComponent';
-import { Wallet, HelpCircle, CornerRightDown, Plus, X, Sparkles, Check, ChevronDown, ArrowRight, Search, SlidersHorizontal, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Wallet, HelpCircle, CornerRightDown, Plus, X, Sparkles, Check, ChevronDown, ArrowRight, Search, SlidersHorizontal, ChevronLeft, ChevronRight, CreditCard, FileText } from 'lucide-react';
 
 interface SearchableDropdownProps<T> {
   items: T[];
@@ -255,6 +255,9 @@ export function QuickDragDropBuilder({
   const [infoAccountId, setInfoAccountId] = useState<string | null>(null);
   const accountTooltipTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Click sequence state for selecting account first, then category to transact or other account to transfer
+  const [selectedAccountSeq, setSelectedAccountSeq] = useState<Account | null>(null);
+
   useEffect(() => {
     return () => {
       if (categoryTooltipTimeoutRef.current) {
@@ -267,6 +270,13 @@ export function QuickDragDropBuilder({
   }, []);
 
   const handleCategoryClick = (cat: Category) => {
+    if (selectedAccountSeq) {
+      const activeAcc = selectedAccountSeq;
+      setSelectedAccountSeq(null);
+      triggerQuickAmountModal(activeAcc, cat);
+      return;
+    }
+
     setInfoCategoryId(cat.id);
     if (categoryTooltipTimeoutRef.current) {
       clearTimeout(categoryTooltipTimeoutRef.current);
@@ -277,6 +287,19 @@ export function QuickDragDropBuilder({
   };
 
   const handleAccountClick = (acc: Account) => {
+    if (selectedAccountSeq?.id === acc.id) {
+      setSelectedAccountSeq(null);
+      return;
+    }
+
+    if (selectedAccountSeq) {
+      const fromAcc = selectedAccountSeq;
+      setSelectedAccountSeq(null);
+      triggerQuickTransferModal(fromAcc, acc);
+      return;
+    }
+
+    setSelectedAccountSeq(acc);
     setInfoAccountId(acc.id);
     if (accountTooltipTimeoutRef.current) {
       clearTimeout(accountTooltipTimeoutRef.current);
@@ -534,19 +557,48 @@ export function QuickDragDropBuilder({
   };
 
   const triggerQuickAmountModal = (account: Account, category: Category) => {
+    setSelectedAccountSeq(null);
     setActiveTxData({ account, category });
-    setAmount('');
+    setAmount('0');
     setDescription('');
   };
 
   const triggerQuickTransferModal = (fromAccount: Account, toAccount: Account) => {
+    setSelectedAccountSeq(null);
     setActiveTransferData({ fromAccount, toAccount });
-    setAmount('');
+    setAmount('0');
     setDescription('');
   };
 
-  const handleFormSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleDialClick = (val: string) => {
+    if (val === 'Стереть') {
+      setAmount(prev => {
+        if (prev.length <= 1) return '0';
+        return prev.slice(0, -1);
+      });
+    } else if (val === '.') {
+      setAmount(prev => {
+        if (!prev || prev === '0') return '0.';
+        if (prev.includes('.')) return prev;
+        return prev + '.';
+      });
+    } else {
+      setAmount(prev => {
+        if (prev === '0' || prev === '') return val;
+        return prev + val;
+      });
+    }
+  };
+
+  const handleQuickAdd = (val: number) => {
+    setAmount(prev => {
+      const current = parseFloat(prev) || 0;
+      return (current + val).toString();
+    });
+  };
+
+  const handleSaveTransaction = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     if (!activeTxData) return;
 
     const numAmount = Number(amount);
@@ -576,8 +628,8 @@ export function QuickDragDropBuilder({
     setActiveTxData(null);
   };
 
-  const handleTransferSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSaveTransfer = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     if (!activeTransferData) return;
 
     const numAmount = Number(amount);
@@ -605,61 +657,68 @@ export function QuickDragDropBuilder({
   return (
     <div 
       ref={containerRef}
-      className="bg-white/5 backdrop-blur-md rounded-2xl p-4 sm:p-5 border border-white/10 shadow-lg relative overflow-hidden" 
+      className="bg-white/5 backdrop-blur-md rounded-2xl p-2.5 sm:p-3.5 border border-white/10 shadow-lg relative overflow-hidden" 
       id="quick-drag-action-panel"
     >
       {/* Decorative gradient corner */}
       <div className="absolute top-0 right-0 w-32 h-32 bg-teal-500/10 rounded-full blur-2xl pointer-events-none" />
 
       {/* Header section */}
-      <div className="flex items-center justify-between mb-3 border-b border-white/5 pb-2">
-        <div className="flex items-center gap-2">
-          <div className="p-1.5 bg-teal-500/10 text-teal-300 border border-teal-500/20 rounded-lg">
-            <Sparkles size={16} className="animate-pulse" />
+      <div className="flex items-center justify-between mb-2 border-b border-white/5 pb-1.5">
+        <div className="flex items-center gap-1.5">
+          <div className="p-1 bg-teal-500/10 text-teal-300 border border-teal-500/20 rounded-md shrink-0">
+            <Sparkles size={13} className="animate-pulse" />
           </div>
           <div>
-            <h3 className="font-display font-bold text-slate-100 text-sm">
+            <h3 className="font-display font-bold text-slate-100 text-xs sm:text-sm leading-tight">
               Быстрая запись
             </h3>
-            <p className="text-[10px] text-slate-400">
+            <p className="text-[9px] text-slate-400 leading-none mt-0.5">
               {isSortingMode
-                ? "Нажимайте на стрелочки на карточках, чтобы расположить счета и категории в удобном порядке 🚀"
-                : "Перенесите счет на категорию расходов или на другой счет для перевода"}
+                ? "Настройте порядок перетаскиванием или стрелочками 🚀"
+                : "Перенесите счет на категорию или другой счет для операции"}
             </p>
           </div>
         </div>
         <button
           type="button"
           onClick={() => setIsSortingMode(!isSortingMode)}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-[11px] font-bold cursor-pointer transition-all ${
+          className={`flex items-center gap-1 px-2 py-1 rounded-lg border text-[10px] font-bold cursor-pointer transition-all shrink-0 ${
             isSortingMode
-              ? 'border-emerald-500 bg-emerald-500/20 text-emerald-300 shadow-xl ring-2 ring-emerald-500/35 scale-[1.02]'
-              : 'border-white/10 bg-white/5 text-slate-350 hover:bg-white/10 hover:border-white/25 active:scale-95'
+              ? 'border-emerald-500 bg-emerald-500/20 text-emerald-300 shadow-lg ring-1 ring-emerald-500/35'
+              : 'border-white/10 bg-white/5 text-slate-350 hover:bg-white/10 hover:border-white/20 active:scale-95'
           }`}
         >
-          <SlidersHorizontal size={13} />
+          <SlidersHorizontal size={11} />
           {isSortingMode ? 'Готово' : 'Порядок'}
         </button>
       </div>
 
       {/* Main interactive area */}
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-2">
         {/* ROW 1: Source Accounts */}
         <div>
-          <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 select-none text-left flex flex-wrap items-center justify-between gap-2">
-            <span>Шаг 1: Возьмите счет (Списание или Источник)</span>
+          <span className="block text-[8.5px] font-bold text-slate-400 uppercase tracking-widest mb-0.5 select-none text-left flex flex-wrap items-center justify-between gap-1.5">
+            {selectedAccountSeq ? (
+              <span className="text-yellow-300 font-extrabold animate-pulse">
+                👉 Выбран счет: {selectedAccountSeq.name} (теперь нажмите на категорию или другой счет)
+              </span>
+            ) : (
+              <span>Шаг 1: Возьмите счет (Списание или Источник)</span>
+            )}
             {!isSortingMode && infoAccountId && (
-              <span className="text-teal-350 font-extrabold normal-case font-mono text-[11px] bg-teal-950/40 px-2 py-0.5 rounded-md border border-teal-500/20 animate-pulse">
+              <span className="text-teal-350 font-extrabold normal-case font-mono text-[9.5px] bg-teal-950/40 px-1.5 py-0.2 rounded border border-teal-500/20 animate-pulse">
                 🔍 {accounts.find(a => a.id === infoAccountId)?.name}
               </span>
             )}
           </span>
-          <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-1.5">
+          <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-1">
             {sortedAccountsDisplay.map(acc => {
               const bgClass = acc.type === 'card' ? 'bg-indigo-500/10 text-indigo-300 border-indigo-500/20 hover:border-indigo-400/50' : 'bg-emerald-500/10 text-emerald-300 border-emerald-500/20 hover:border-emerald-400/50';
               const isActive = activeDragAccount?.id === acc.id;
               const isOverAcc = dragOverAccountId === acc.id;
               const hasFocus = infoAccountId === acc.id;
+              const isSeqSelected = selectedAccountSeq?.id === acc.id;
               
               return (
                 <div
@@ -672,8 +731,6 @@ export function QuickDragDropBuilder({
                   onDragLeave={() => setDragOverAccountId(null)}
                   onDrop={(e) => handleDropOnAccount(e, acc)}
                   onClick={() => !isSortingMode && handleAccountClick(acc)}
-                  onMouseEnter={() => !isSortingMode && setInfoAccountId(acc.id)}
-                  onMouseLeave={() => !isSortingMode && setInfoAccountId(null)}
                   onTouchStart={(e) => {
                     if (isSortingMode) return;
                     handleAccountClick(acc);
@@ -681,28 +738,30 @@ export function QuickDragDropBuilder({
                   }}
                   onTouchMove={handleTouchMove}
                   onTouchEnd={handleTouchEnd}
-                  className={`relative p-1 rounded-xl border flex flex-col items-center justify-center text-center gap-0.5 transition-all select-none ${
-                    isOverAcc 
-                      ? 'border-indigo-450 bg-indigo-500/20 scale-[1.05] shadow-lg ring-2 ring-indigo-400'
-                      : hasFocus && !isSortingMode
-                        ? 'border-teal-400 bg-teal-500/15 scale-[1.02] shadow-md ring-1 ring-teal-400/40'
-                        : bgClass
+                  className={`relative p-0.5 sm:p-1 rounded-lg border flex flex-col items-center justify-center text-center gap-0.5 transition-all select-none ${
+                    isSeqSelected
+                      ? 'border-yellow-400 bg-yellow-500/20 scale-[1.04] ring-2 ring-yellow-400/50 shadow-md shadow-yellow-500/10'
+                      : isOverAcc 
+                        ? 'border-indigo-400 bg-indigo-500/20 scale-[1.05]'
+                        : hasFocus && !isSortingMode
+                          ? 'border-teal-400 bg-teal-500/15 ring-1 ring-teal-400/40'
+                          : bgClass
                   } ${
-                    isActive ? 'scale-[1.05] ring-2 ring-teal-400 border-teal-400 bg-teal-500/20' : ''
+                    isActive ? 'scale-[1.03] ring-1 ring-teal-400 border-teal-400 bg-teal-500/20' : ''
                   } ${
                     isSortingMode ? 'cursor-default' : 'cursor-grab active:cursor-grabbing touch-none'
                   }`}
                   id={`drag-acc-${acc.id}`}
-                  style={{ minHeight: '48px' }}
+                  style={{ minHeight: '38px' }}
                 >
-                  <div className="w-4.5 h-4.5 bg-white/10 rounded-md flex items-center justify-center text-slate-200 pointer-events-none">
-                    <Wallet size={10} className="shrink-0" />
+                  <div className="w-3.5 h-3.5 bg-white/10 rounded flex items-center justify-center text-slate-200 pointer-events-none">
+                    <Wallet size={8} className="shrink-0" />
                   </div>
                   <div className="text-center w-full min-w-0 pointer-events-none">
-                    <span className={`block font-bold text-[8.5px] leading-tight text-slate-200 px-0.5 ${
+                    <span className={`block font-bold text-[8px] leading-tight text-slate-205 px-0.5 ${
                       hasFocus && !isSortingMode ? 'line-clamp-2 overflow-visible break-words h-auto' : 'truncate'
                     }`}>{acc.name}</span>
-                    <span className="block text-[8px] font-mono leading-none opacity-80 mt-0.5 truncate">{Math.round(acc.balance)} ₼</span>
+                    <span className="block text-[7.5px] font-mono leading-none opacity-80 mt-0.5 truncate">{Math.round(acc.balance)} ₼</span>
                   </div>
 
                   {isSortingMode && (
@@ -749,18 +808,18 @@ export function QuickDragDropBuilder({
         </div>
 
         {/* ROW 2: Destination Categories Grid */}
-        <div className="space-y-2.5">
+        <div className="space-y-1.5">
           {/* Expense Categories */}
           <div>
-            <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 select-none text-left flex flex-wrap items-center justify-between gap-2">
+            <span className="block text-[8.5px] font-bold text-slate-400 uppercase tracking-widest mb-0.5 select-none text-left flex flex-wrap items-center justify-between gap-1.5">
               <span>Шаг 2: Отпустите на категории расходов (Списание средств)</span>
               {infoCategoryId && expenseCategories.some(c => c.id === infoCategoryId) && (
-                <span className="text-teal-300 font-extrabold normal-case font-mono text-[11px] bg-teal-950/40 px-2 py-0.5 rounded-md border border-teal-500/20 animate-pulse">
+                <span className="text-teal-350 font-extrabold normal-case font-mono text-[9.5px] bg-teal-950/40 px-1.5 py-0.2 rounded border border-teal-500/20 animate-pulse">
                   🔍 {categories.find(c => c.id === infoCategoryId)?.name}
                 </span>
               )}
             </span>
-            <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 gap-1.5">
+            <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 gap-1">
               {expenseCategories.map(cat => {
                 const isOver = dragOverCategoryId === cat.id;
                 const hasFocus = infoCategoryId === cat.id;
@@ -772,29 +831,26 @@ export function QuickDragDropBuilder({
                     onDragLeave={() => setDragOverCategoryId(null)}
                     onDrop={(e) => handleDropOnCategory(e, cat)}
                     onClick={() => !isSortingMode && handleCategoryClick(cat)}
-                    onMouseEnter={() => !isSortingMode && setInfoCategoryId(cat.id)}
-                    onMouseLeave={() => !isSortingMode && setInfoCategoryId(null)}
                     onTouchStart={(e) => {
                       if (isSortingMode) return;
                       handleCategoryClick(cat);
                     }}
-                    title={cat.name}
-                    className={`relative p-1 rounded-lg border flex flex-col items-center justify-center text-center gap-0.5 transition-all select-none ${
+                    className={`relative p-0.5 sm:p-1 rounded-lg border flex flex-col items-center justify-center text-center gap-0.5 transition-all select-none ${
                       isOver 
-                        ? 'border-emerald-400 bg-emerald-500/20 scale-[1.03] shadow-md shadow-emerald-500/5 ring-2 ring-emerald-400' 
+                        ? 'border-emerald-400 bg-emerald-500/20 scale-[1.03] shadow-md shadow-emerald-500/5 ring-1 ring-emerald-400' 
                         : hasFocus && !isSortingMode
-                          ? 'border-teal-400 bg-teal-500/15 shadow-lg shadow-teal-500/10 scale-[1.02]'
+                          ? 'border-teal-400 bg-teal-500/15 ring-1 ring-teal-400/40 shadow-lg'
                           : 'border-white/5 bg-white/5 hover:bg-white/10 hover:border-white/10'
                     } ${
                       isSortingMode ? 'cursor-default' : 'cursor-pointer hover:scale-[1.04] active:scale-95'
                     }`}
                     id={`drop-cat-${cat.id}`}
-                    style={{ minHeight: '48px' }}
+                    style={{ minHeight: '38px' }}
                   >
-                    <div className="w-4.5 h-4.5 bg-white/10 rounded-md flex items-center justify-center text-slate-200 pointer-events-none">
-                      <IconComponent name={cat.icon} size={10} />
+                    <div className="w-3.5 h-3.5 bg-white/10 rounded flex items-center justify-center text-slate-200 pointer-events-none">
+                      <IconComponent name={cat.icon} size={8} />
                     </div>
-                    <span className={`text-[8.5px] font-semibold font-sans tracking-tight leading-normal text-slate-300 max-w-full px-0.5 pointer-events-none text-center ${
+                    <span className={`text-[8px] font-semibold font-sans tracking-tight leading-tight text-slate-300 max-w-full px-0.5 pointer-events-none text-center ${
                       hasFocus && !isSortingMode ? 'line-clamp-2 overflow-visible break-words h-auto' : 'truncate'
                     }`}>
                       {formatCategoryDisplayName(cat.name)}
@@ -838,15 +894,15 @@ export function QuickDragDropBuilder({
           {/* Income Categories */}
           {incomeCategories.length > 0 && (
             <div className="pt-1.5 border-t border-white/5">
-              <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 select-none text-left flex flex-wrap items-center justify-between gap-2">
+              <span className="block text-[8.5px] font-bold text-slate-400 uppercase tracking-widest mb-0.5 select-none text-left flex flex-wrap items-center justify-between gap-1.5">
                 <span>Или отпустите на категории доходов (Пополнение баланса)</span>
                 {infoCategoryId && incomeCategories.some(c => c.id === infoCategoryId) && (
-                  <span className="text-emerald-300 font-extrabold normal-case font-mono text-[11px] bg-emerald-950/40 px-2 py-0.5 rounded-md border border-emerald-500/20 animate-pulse">
+                  <span className="text-emerald-350 font-extrabold normal-case font-mono text-[9.5px] bg-emerald-950/40 px-1.5 py-0.2 rounded border border-emerald-500/20 animate-pulse">
                     🔍 {categories.find(c => c.id === infoCategoryId)?.name}
                   </span>
                 )}
               </span>
-              <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 gap-1.5">
+              <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 gap-1">
                 {incomeCategories.map(cat => {
                   const isOver = dragOverCategoryId === cat.id;
                   const hasFocus = infoCategoryId === cat.id;
@@ -858,29 +914,26 @@ export function QuickDragDropBuilder({
                       onDragLeave={() => setDragOverCategoryId(null)}
                       onDrop={(e) => handleDropOnCategory(e, cat)}
                       onClick={() => !isSortingMode && handleCategoryClick(cat)}
-                      onMouseEnter={() => !isSortingMode && setInfoCategoryId(cat.id)}
-                      onMouseLeave={() => !isSortingMode && setInfoCategoryId(null)}
                       onTouchStart={(e) => {
                         if (isSortingMode) return;
                         handleCategoryClick(cat);
                       }}
-                      title={cat.name}
-                      className={`relative p-1 rounded-lg border flex flex-col items-center justify-center text-center gap-0.5 transition-all select-none ${
+                      className={`relative p-0.5 sm:p-1 rounded-lg border flex flex-col items-center justify-center text-center gap-0.5 transition-all select-none ${
                         isOver 
-                          ? 'border-emerald-400 bg-emerald-500/20 scale-[1.03] shadow-md shadow-emerald-500/5 ring-2 ring-emerald-400' 
+                          ? 'border-emerald-400 bg-emerald-500/20 scale-[1.03] shadow-md shadow-emerald-500/5 ring-1 ring-emerald-400' 
                           : hasFocus && !isSortingMode
-                            ? 'border-emerald-400 bg-emerald-500/15 shadow-lg shadow-emerald-500/10 scale-[1.02]'
+                            ? 'border-emerald-450 bg-emerald-500/15 ring-1 ring-emerald-400/40 shadow-lg'
                             : 'border-white/5 bg-white/5 hover:bg-white/10 hover:border-white/10'
                       } ${
                         isSortingMode ? 'cursor-default' : 'cursor-pointer hover:scale-[1.04] active:scale-95'
                       }`}
                       id={`drop-cat-${cat.id}`}
-                      style={{ minHeight: '48px' }}
+                      style={{ minHeight: '38px' }}
                     >
-                      <div className="w-4.5 h-4.5 bg-white/10 rounded-md flex items-center justify-center text-emerald-400 pointer-events-none">
-                        <IconComponent name={cat.icon} size={10} />
+                      <div className="w-3.5 h-3.5 bg-white/10 rounded flex items-center justify-center text-emerald-400 pointer-events-none">
+                        <IconComponent name={cat.icon} size={8} />
                       </div>
-                      <span className={`text-[8.5px] font-semibold font-sans tracking-tight leading-normal text-emerald-300 max-w-full px-0.5 pointer-events-none text-center ${
+                      <span className={`text-[8px] font-semibold font-sans tracking-tight leading-tight text-emerald-300 max-w-full px-0.5 pointer-events-none text-center ${
                         hasFocus && !isSortingMode ? 'line-clamp-2 overflow-visible break-words h-auto' : 'truncate'
                       }`}>
                         {formatCategoryDisplayName(cat.name)}
@@ -943,150 +996,161 @@ export function QuickDragDropBuilder({
       {/* THE QUICK TRANSACTION RECORDING MODAL */}
       {activeTxData && (
         <div 
-          className="fixed inset-0 bg-slate-950/85 backdrop-blur-xs z-[10000] flex items-center justify-center p-2 overflow-y-auto"
+          className="fixed inset-0 bg-slate-950/80 backdrop-blur-xs z-[10000] flex items-center justify-center p-4 overflow-y-auto font-sans"
           id="quick-transaction-modal"
           onClick={() => setActiveTxData(null)}
         >
           <div 
-            className="w-full max-w-sm bg-slate-900 border border-teal-500/30 rounded-2xl p-4 sm:p-5 shadow-2xl relative animate-scale-up my-auto max-h-[95vh] flex flex-col overflow-y-auto"
+            className="w-full max-w-[390px] bg-white text-slate-900 rounded-[28px] p-6 shadow-2xl border border-slate-100 relative animate-scale-up my-auto flex flex-col gap-4 select-none"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Modal exit */}
-            <button
-              onClick={() => setActiveTxData(null)}
-              className="absolute top-3.5 right-3.5 text-slate-400 hover:text-white hover:bg-white/10 p-1 rounded-full transition-colors cursor-pointer"
-            >
-              <X size={16} />
-            </button>
+            {/* Header */}
+            <div className="flex items-center justify-between relative">
+              <div className="w-full text-center">
+                <span className="text-[11px] font-black uppercase tracking-widest text-slate-500">
+                  {activeTxData.category.type === 'income' ? 'ДОХОД' : 'РАСХОД'}
+                </span>
+              </div>
+              <button
+                onClick={() => setActiveTxData(null)}
+                className="absolute right-0 top-1/2 -translate-y-1/2 bg-slate-100 hover:bg-slate-200 text-slate-400 hover:text-slate-600 p-2 rounded-full transition-colors cursor-pointer"
+              >
+                <X size={14} className="stroke-[2.5]" />
+              </button>
+            </div>
 
-            {/* Modal header */}
-            <div className="text-center mb-3 mt-0">
-              <span className={`inline-flex items-center gap-1 font-mono text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full border mb-1.5 ${
-                activeTxData.category.type === 'income'
-                  ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/20'
-                  : 'bg-teal-500/10 text-teal-300 border-teal-500/20'
-              }`}>
-                {activeTxData.category.type === 'income' ? '⚡ Доход' : '⚡ Расход'}
-              </span>
-              <h4 className="font-display font-black text-white text-sm leading-tight">
-                {activeTxData.category.type === 'income' ? 'Мгновенный доход' : 'Мгновенный расход'}
-              </h4>
+            {/* Visual connector of accounts and categories */}
+            <div className="flex items-center justify-between relative mt-2 px-2">
+              {/* Connector line behind */}
+              <div className="absolute left-1/2 top-7 -translate-y-1/2 w-[60%] -translate-x-1/2 h-[1px] bg-slate-100 z-0" />
               
-              {/* Context Picker: Account -> Category */}
-              <div className="grid grid-cols-2 gap-2 mt-2 bg-slate-950/60 p-2 rounded-xl border border-white/5 text-left">
-                {/* Account Picker */}
-                <div className="flex flex-col gap-0.5 min-w-0">
-                  <label className="text-[8.5px] font-bold uppercase tracking-wider text-slate-400 truncate">
-                    {activeTxData.category.type === 'income' ? 'Зачисление' : 'Списание'}
-                  </label>
-                  <SearchableDropdown<Account>
-                    items={accounts}
-                    selectedItem={activeTxData.account}
-                    onSelect={(acc) => setActiveTxData({ ...activeTxData, account: acc })}
-                    getLabel={(acc) => acc.name}
-                    getIcon={(acc) => <Wallet size={10} className={activeTxData.category.type === 'income' ? 'text-emerald-400' : 'text-indigo-400'} />}
-                    getSubtitle={(acc) => `${Math.round(acc.balance)} ₼`}
-                    placeholder="Поиск..."
-                    accentClass={activeTxData.category.type === 'income' ? 'bg-emerald-500/10 border-emerald-500/20' : 'bg-indigo-500/10 border-indigo-500/20'}
-                    textColorClass={activeTxData.category.type === 'income' ? 'text-emerald-300' : 'text-indigo-300'}
-                  />
-                </div>
+              {/* Connector pill */}
+              <div className="absolute left-1/2 top-7 -translate-y-1/2 -translate-x-1/2 px-2.5 py-1 bg-white border border-slate-200 rounded-full text-[8.5px] font-black uppercase tracking-widest text-slate-500 z-10 select-none shadow-xs whitespace-nowrap">
+                {activeTxData.category.type === 'income' ? 'ПОЛУЧИТЬ' : 'ПОТРАТИТЬ'}
+              </div>
 
-                {/* Category Picker */}
-                <div className="flex flex-col gap-0.5 min-w-0">
-                  <label className="text-[8.5px] font-bold uppercase tracking-wider text-slate-400 truncate">
-                    Категория
-                  </label>
-                  <SearchableDropdown<Category>
-                    items={activeTxData.category.type === 'income' ? incomeCategories : expenseCategories}
-                    selectedItem={activeTxData.category}
-                    onSelect={(cat) => setActiveTxData({ ...activeTxData, category: cat })}
-                    getLabel={(cat) => formatCategoryDisplayName(cat.name)}
-                    getIcon={(cat) => <IconComponent name={cat.icon} size={10} />}
-                    placeholder="Поиск..."
-                    accentClass={activeTxData.category.type === 'income' ? 'bg-emerald-500/10 border-emerald-500/20' : 'bg-rose-500/10 border-rose-500/20'}
-                    textColorClass={activeTxData.category.type === 'income' ? 'text-emerald-300' : 'text-rose-300'}
+              {/* Source Account Bubble */}
+              <div className="flex flex-col items-center flex-1 z-10 min-w-0">
+                <div className="w-14 h-14 rounded-full bg-indigo-500 text-white flex items-center justify-center shadow-md shadow-indigo-500/20 shrink-0">
+                  <CreditCard size={22} className="stroke-[2]" />
+                </div>
+                <span className="mt-2 font-bold text-slate-800 text-[11px] sm:text-xs text-center leading-tight truncate w-full px-1">
+                  {activeTxData.account.name}
+                </span>
+                <span className="text-[9px] text-slate-400 font-bold font-mono mt-0.5 whitespace-nowrap">
+                  {Math.round(activeTxData.account.balance).toLocaleString('ru-RU')} ₼
+                </span>
+              </div>
+
+              {/* Space in between */}
+              <div className="w-10 shrink-0 h-4" />
+
+              {/* Destination Category Bubble */}
+              <div className="flex flex-col items-center flex-1 z-10 min-w-0">
+                <div className="w-14 h-14 rounded-full bg-amber-500 text-white flex items-center justify-center shadow-md shadow-amber-500/20 shrink-0">
+                  <IconComponent name={activeTxData.category.icon} size={22} className="stroke-[2]" />
+                </div>
+                <span className="mt-2 font-bold text-slate-800 text-[11px] sm:text-xs text-center leading-tight truncate w-full px-1">
+                  {formatCategoryDisplayName(activeTxData.category.name)}
+                </span>
+                <span className="text-[9px] text-slate-400 font-bold mt-0.5 whitespace-nowrap truncate max-w-full uppercase tracking-wider">
+                  {activeTxData.category.type === 'income' ? 'Пополнение' : 'Расход'}
+                </span>
+              </div>
+            </div>
+
+            {/* Input container: СУММА ТРАНЗАКЦИИ */}
+            <div className="bg-[#f8fafc] rounded-2xl p-3 border border-[#f1f5f9] flex flex-col mt-1">
+              <label className="text-[8.5px] font-black text-slate-400 uppercase tracking-wider text-right mb-0.5 select-none self-end">
+                СУММА ТРАНЗАКЦИИ
+              </label>
+              <div className="flex items-center justify-between gap-2.5">
+                <span className="text-3xl font-display font-light text-[#94a3b8] select-none">
+                  ₼
+                </span>
+                <div className="flex-1 text-right min-w-0 relative">
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    inputMode="none"
+                    value={amount === '0' || amount === '' ? '0' : amount}
+                    onChange={(e) => {
+                      const val = e.target.value.replace(/[^0-9.]/g, '');
+                      setAmount(val === '' ? '0' : val);
+                    }}
+                    className="w-full bg-transparent border-none p-0 text-right font-display font-black text-emerald-600 text-3xl sm:text-4xl focus:outline-hidden focus:ring-0 placeholder-emerald-600/30"
                   />
                 </div>
               </div>
             </div>
 
-            {/* Form */}
-            <form onSubmit={handleFormSubmit} className="space-y-3">
-              {/* Amount - large focused number field */}
-              <div>
-                <label className="block text-[8.5px] font-bold text-slate-400 mb-1 uppercase tracking-wider text-left">
-                  Сумма операции (₼) <span className="text-rose-450">*</span>
-                </label>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 font-display font-black text-slate-400 text-base">
-                    ₼
-                  </span>
-                  <input
-                    ref={inputRef}
-                    type="number"
-                    step="any"
-                    min="0.01"
-                    placeholder="0.00"
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
-                    className="w-full pl-7 pr-3 py-1.5 bg-slate-950/80 border border-teal-500/40 rounded-xl text-base font-display font-black text-white focus:outline-hidden focus:ring-2 focus:ring-teal-400 focus:border-transparent text-center"
-                    required
-                  />
-                </div>
-              </div>
-
-              {/* Description & Date fields (advanced / helper) Grid style */}
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <label className="block text-[8.5px] font-bold text-slate-400 mb-0.5 uppercase tracking-wider text-left">
-                    Комментарий (опц.)
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Описание..."
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    className="w-full px-2 py-1.5 bg-slate-950/60 border border-white/5 rounded-lg text-[11px] text-slate-200 focus:outline-hidden focus:ring-1 focus:ring-teal-400"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[8.5px] font-bold text-slate-400 mb-0.5 uppercase tracking-wider text-left">
-                    Дата операции
-                  </label>
-                  <input
-                    type="date"
-                    value={date}
-                    onChange={(e) => setDate(e.target.value)}
-                    className="w-full px-2 py-1.5 bg-slate-950/60 border border-white/5 rounded-lg text-[11px] text-slate-200 font-mono focus:outline-hidden focus:ring-1 focus:ring-teal-400"
-                    required
-                  />
-                </div>
-              </div>
-
-              {/* Submit / Cancel Buttons */}
-              <div className="flex gap-2 pt-1.5">
+            {/* Quick additive amount shortcuts */}
+            <div className="grid grid-cols-4 gap-1.5 mt-0.5">
+              {[100, 500, 1000, 5000].map((val) => (
                 <button
+                  key={val}
                   type="button"
-                  onClick={() => setActiveTxData(null)}
-                  className="flex-1 px-3 py-2 border border-white/10 bg-white/5 text-slate-350 hover:text-white rounded-xl hover:bg-white/10 text-xs font-bold transition-all cursor-pointer"
+                  onClick={() => handleQuickAdd(val)}
+                  className="border border-[#e2e8f0] bg-[#f8fafc] hover:bg-[#f1f5f9] text-[#1e293b] font-display font-extrabold text-[11px] py-1.5 sm:py-2 rounded-xl text-center active:scale-[0.97] transition-all cursor-pointer"
                 >
-                  Отмена
+                  +{val.toLocaleString('ru-RU')}
                 </button>
+              ))}
+            </div>
+
+            {/* Custom Keypad dialer */}
+            <div className="grid grid-cols-3 gap-1.5">
+              {['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0', 'Стереть'].map((keyVal) => (
                 <button
-                  type="submit"
-                  className={`flex-1 px-3 py-2 text-slate-950 text-xs font-black rounded-xl shadow-md transition-all transform hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-1 cursor-pointer uppercase tracking-wider ${
-                    activeTxData.category.type === 'income'
-                      ? 'bg-gradient-to-r from-emerald-400 to-teal-400 hover:from-emerald-300 hover:to-teal-300'
-                      : 'bg-gradient-to-r from-teal-400 to-emerald-400 hover:from-teal-300 hover:to-emerald-300'
+                  key={keyVal}
+                  type="button"
+                  onClick={() => handleDialClick(keyVal)}
+                  className={`h-11 sm:h-12 font-display font-extrabold text-base sm:text-lg border border-[#f1f5f9] hover:border-[#e2e8f0] hover:bg-[#f8fafc] rounded-2xl flex items-center justify-center transition-all cursor-pointer select-none active:scale-[0.95] ${
+                    keyVal === 'Стереть' 
+                      ? 'text-[#475569] text-xs font-sans font-bold hover:bg-rose-50/20' 
+                      : 'text-[#1e293b]'
                   }`}
                 >
-                  <Check size={13} />
-                  Записать ₼
+                  {keyVal}
                 </button>
-              </div>
-            </form>
+              ))}
+            </div>
+
+            {/* Optional Comment Input with Document icon */}
+            <div className="space-y-1 text-left border-t border-slate-100 pt-2.5">
+              <label className="flex items-center gap-1.5 text-[#64748b] text-[9px] font-black uppercase tracking-wider">
+                <FileText size={12} className="text-[#94a3b8] shrink-0" />
+                <span>ДОБАВИТЬ КОММЕНТАРИЙ</span>
+              </label>
+              <input
+                type="text"
+                placeholder="Добавить комментарий..."
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="w-full px-3 py-2 bg-[#f8fafc] border border-[#f1f5f9] hover:border-[#e2e8f0] rounded-xl text-[11px] text-slate-700 placeholder-slate-400 focus:outline-hidden focus:ring-1 focus:ring-slate-300 focus:bg-white transition-all font-sans"
+              />
+            </div>
+
+            {/* Form Bottom Actions */}
+            <div className="flex gap-3 pt-1">
+              <button
+                type="button"
+                onClick={() => {
+                  setAmount('0');
+                  setDescription('');
+                }}
+                className="flex-1 py-2.5 bg-[#f1f5f9] hover:bg-[#e2e8f0] text-[#475569] font-sans font-bold text-xs uppercase tracking-wider rounded-2xl cursor-pointer transition-all active:scale-[0.97] text-center"
+              >
+                Очистить
+              </button>
+              <button
+                type="button"
+                onClick={handleSaveTransaction}
+                className="flex-1 py-2.5 bg-[#f1f5f9] hover:bg-[#e2e8f0] text-[#475569] font-sans font-extrabold text-xs uppercase tracking-wider rounded-2xl cursor-pointer transition-all active:scale-[0.97] text-center"
+              >
+                ✓ Сохранить
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -1094,139 +1158,161 @@ export function QuickDragDropBuilder({
       {/* THE QUICK TRANSFER RECORDING MODAL */}
       {activeTransferData && (
         <div 
-          className="fixed inset-0 bg-slate-950/85 backdrop-blur-xs z-[10000] flex items-center justify-center p-2 overflow-y-auto"
+          className="fixed inset-0 bg-slate-950/80 backdrop-blur-xs z-[10000] flex items-center justify-center p-4 overflow-y-auto font-sans"
           id="quick-transfer-modal"
           onClick={() => setActiveTransferData(null)}
         >
           <div 
-            className="w-full max-w-sm bg-slate-900 border border-indigo-500/30 rounded-2xl p-4 sm:p-5 shadow-2xl relative animate-scale-up my-auto max-h-[95vh] flex flex-col overflow-y-auto"
+            className="w-full max-w-[390px] bg-white text-slate-900 rounded-[28px] p-6 shadow-2xl border border-slate-100 relative animate-scale-up my-auto flex flex-col gap-4 select-none"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Modal exit */}
-            <button
-              onClick={() => setActiveTransferData(null)}
-              className="absolute top-3.5 right-3.5 text-slate-400 hover:text-white hover:bg-white/10 p-1 rounded-full transition-colors cursor-pointer"
-            >
-              <X size={16} />
-            </button>
+            {/* Header */}
+            <div className="flex items-center justify-between relative">
+              <div className="w-full text-center">
+                <span className="text-[11px] font-black uppercase tracking-widest text-slate-500">
+                  ПЕРЕВОД
+                </span>
+              </div>
+              <button
+                onClick={() => setActiveTransferData(null)}
+                className="absolute right-0 top-1/2 -translate-y-1/2 bg-slate-100 hover:bg-slate-200 text-slate-400 hover:text-slate-600 p-2 rounded-full transition-colors cursor-pointer"
+              >
+                <X size={14} className="stroke-[2.5]" />
+              </button>
+            </div>
 
-            {/* Modal header */}
-            <div className="text-center mb-3 mt-0">
-              <span className="inline-flex items-center gap-1 bg-indigo-500/10 text-indigo-300 font-mono text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full border border-indigo-500/20 mb-1.5">
-                🔁 Мгновенный перевод
-              </span>
-              <h4 className="font-display font-bold text-white text-sm leading-tight">
-                Перевод средств
-              </h4>
+            {/* Visual connector of accounts */}
+            <div className="flex items-center justify-between relative mt-2 px-2">
+              {/* Connector line behind */}
+              <div className="absolute left-1/2 top-7 -translate-y-1/2 w-[60%] -translate-x-1/2 h-[1px] bg-slate-100 z-0" />
               
-              {/* Context Picker: From Account -> To Account */}
-              <div className="grid grid-cols-2 gap-2 mt-2 bg-slate-950/60 p-2 rounded-xl border border-white/5 text-left">
-                {/* From Account Picker */}
-                <div className="flex flex-col gap-0.5 min-w-0">
-                  <label className="text-[8.5px] font-bold uppercase tracking-wider text-slate-400 truncate">Откуда</label>
-                  <SearchableDropdown<Account>
-                    items={accounts.filter(acc => acc.id !== activeTransferData.toAccount.id)}
-                    selectedItem={activeTransferData.fromAccount}
-                    onSelect={(acc) => setActiveTransferData({ ...activeTransferData, fromAccount: acc })}
-                    getLabel={(acc) => acc.name}
-                    getIcon={(acc) => <Wallet size={10} className="text-indigo-400" />}
-                    getSubtitle={(acc) => `${Math.round(acc.balance)} ₼`}
-                    placeholder="Поиск..."
-                    accentClass="bg-indigo-500/10 border-indigo-500/20"
-                    textColorClass="text-indigo-300"
-                  />
-                </div>
+              {/* Connector pill */}
+              <div className="absolute left-1/2 top-7 -translate-y-1/2 -translate-x-1/2 px-2.5 py-1 bg-white border border-slate-200 rounded-full text-[8.5px] font-black uppercase tracking-widest text-slate-500 z-10 select-none shadow-xs whitespace-nowrap">
+                ПЕРЕВЕСТИ
+              </div>
 
-                {/* To Account Picker */}
-                <div className="flex flex-col gap-0.5 min-w-0">
-                  <label className="text-[8.5px] font-bold uppercase tracking-wider text-slate-400 truncate">Куда</label>
-                  <SearchableDropdown<Account>
-                    items={accounts.filter(acc => acc.id !== activeTransferData.fromAccount.id)}
-                    selectedItem={activeTransferData.toAccount}
-                    onSelect={(acc) => setActiveTransferData({ ...activeTransferData, toAccount: acc })}
-                    getLabel={(acc) => acc.name}
-                    getIcon={(acc) => <Wallet size={10} className="text-emerald-400" />}
-                    getSubtitle={(acc) => `${Math.round(acc.balance)} ₼`}
-                    placeholder="Поиск..."
-                    accentClass="bg-emerald-500/10 border-emerald-500/20"
-                    textColorClass="text-emerald-300"
+              {/* Source Account Bubble */}
+              <div className="flex flex-col items-center flex-1 z-10 min-w-0">
+                <div className="w-14 h-14 rounded-full bg-indigo-500 text-white flex items-center justify-center shadow-md shadow-indigo-500/20 shrink-0">
+                  <CreditCard size={22} className="stroke-[2]" />
+                </div>
+                <span className="mt-2 font-bold text-slate-800 text-[11px] sm:text-xs text-center leading-tight truncate w-full px-1">
+                  {activeTransferData.fromAccount.name}
+                </span>
+                <span className="text-[9px] text-slate-400 font-bold font-mono mt-0.5 whitespace-nowrap">
+                  {Math.round(activeTransferData.fromAccount.balance).toLocaleString('ru-RU')} ₼
+                </span>
+              </div>
+
+              {/* Space in between */}
+              <div className="w-10 shrink-0 h-4" />
+
+              {/* Destination Account Bubble */}
+              <div className="flex flex-col items-center flex-1 z-10 min-w-0">
+                <div className="w-14 h-14 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-md shadow-emerald-500/20 shrink-0">
+                  <CreditCard size={22} className="stroke-[2]" />
+                </div>
+                <span className="mt-2 font-bold text-slate-800 text-[11px] sm:text-xs text-center leading-tight truncate w-full px-1">
+                  {activeTransferData.toAccount.name}
+                </span>
+                <span className="text-[9px] text-slate-400 font-bold font-mono mt-0.5 whitespace-nowrap">
+                  {Math.round(activeTransferData.toAccount.balance).toLocaleString('ru-RU')} ₼
+                </span>
+              </div>
+            </div>
+
+            {/* Input container: СУММА ТРАНЗАКЦИИ */}
+            <div className="bg-[#f8fafc] rounded-2xl p-3 border border-[#f1f5f9] flex flex-col mt-1">
+              <label className="text-[8.5px] font-black text-slate-400 uppercase tracking-wider text-right mb-0.5 select-none self-end">
+                СУММА ТРАНЗАКЦИИ
+              </label>
+              <div className="flex items-center justify-between gap-2.5">
+                <span className="text-3xl font-display font-light text-[#94a3b8] select-none">
+                  ₼
+                </span>
+                <div className="flex-1 text-right min-w-0 relative">
+                  <input
+                    ref={transferInputRef}
+                    type="text"
+                    inputMode="none"
+                    value={amount === '0' || amount === '' ? '0' : amount}
+                    onChange={(e) => {
+                      const val = e.target.value.replace(/[^0-9.]/g, '');
+                      setAmount(val === '' ? '0' : val);
+                    }}
+                    className="w-full bg-transparent border-none p-0 text-right font-display font-black text-indigo-600 text-3xl sm:text-4xl focus:outline-hidden focus:ring-0 placeholder-indigo-600/30"
                   />
                 </div>
               </div>
             </div>
 
-            {/* Form */}
-            <form onSubmit={handleTransferSubmit} className="space-y-3">
-              {/* Amount - large focused number field */}
-              <div>
-                <label className="block text-[8.5px] font-bold text-slate-400 mb-1 uppercase tracking-wider text-left">
-                  Сумма перевода (₼) <span className="text-indigo-400">*</span>
-                </label>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 font-display font-black text-slate-400 text-base">
-                    ₼
-                  </span>
-                  <input
-                    ref={transferInputRef}
-                    type="number"
-                    step="any"
-                    min="0.01"
-                    placeholder="0.00"
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
-                    className="w-full pl-7 pr-3 py-1.5 bg-slate-950/80 border border-indigo-500/40 rounded-xl text-base font-display font-black text-white focus:outline-hidden focus:ring-2 focus:ring-indigo-400 focus:border-transparent text-center"
-                    required
-                  />
-                </div>
-              </div>
-
-              {/* Description & Date fields (advanced / helper) Grid style */}
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <label className="block text-[8.5px] font-bold text-slate-400 mb-0.5 uppercase tracking-wider text-left">
-                    Комментарий (опц.)
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Описание..."
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    className="w-full px-2 py-1.5 bg-slate-950/60 border border-white/5 rounded-lg text-[11px] text-slate-200 focus:outline-hidden focus:ring-1 focus:ring-indigo-400"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[8.5px] font-bold text-slate-400 mb-0.5 uppercase tracking-wider text-left">
-                    Дата операции
-                  </label>
-                  <input
-                    type="date"
-                    value={date}
-                    onChange={(e) => setDate(e.target.value)}
-                    className="w-full px-2 py-1.5 bg-slate-950/60 border border-white/5 rounded-lg text-[11px] text-slate-200 font-mono focus:outline-hidden focus:ring-1 focus:ring-indigo-400"
-                    required
-                  />
-                </div>
-              </div>
-
-              {/* Submit / Cancel Buttons */}
-              <div className="flex gap-2 pt-1.5">
+            {/* Quick additive amount shortcuts */}
+            <div className="grid grid-cols-4 gap-1.5 mt-0.5">
+              {[100, 500, 1000, 5000].map((val) => (
                 <button
+                  key={val}
                   type="button"
-                  onClick={() => setActiveTransferData(null)}
-                  className="flex-1 px-3 py-2 border border-white/10 bg-white/5 text-slate-350 hover:text-white rounded-xl hover:bg-white/10 text-xs font-bold transition-all cursor-pointer"
+                  onClick={() => handleQuickAdd(val)}
+                  className="border border-[#e2e8f0] bg-[#f8fafc] hover:bg-[#f1f5f9] text-[#1e293b] font-display font-extrabold text-[11px] py-1.5 sm:py-2 rounded-xl text-center active:scale-[0.97] transition-all cursor-pointer"
                 >
-                  Отмена
+                  +{val.toLocaleString('ru-RU')}
                 </button>
+              ))}
+            </div>
+
+            {/* Custom Keypad dialer */}
+            <div className="grid grid-cols-3 gap-1.5">
+              {['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0', 'Стереть'].map((keyVal) => (
                 <button
-                  type="submit"
-                  className="flex-1 px-3 py-2 bg-gradient-to-r from-indigo-400 to-indigo-600 hover:from-indigo-300 hover:to-indigo-500 text-slate-950 text-xs font-black rounded-xl shadow-md transition-all transform hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-1 cursor-pointer uppercase tracking-wider"
+                  key={keyVal}
+                  type="button"
+                  onClick={() => handleDialClick(keyVal)}
+                  className={`h-11 sm:h-12 font-display font-extrabold text-base sm:text-lg border border-[#f1f5f9] hover:border-[#e2e8f0] hover:bg-[#f8fafc] rounded-2xl flex items-center justify-center transition-all cursor-pointer select-none active:scale-[0.95] ${
+                    keyVal === 'Стереть' 
+                      ? 'text-[#475569] text-xs font-sans font-bold hover:bg-rose-50/20' 
+                      : 'text-[#1e293b]'
+                  }`}
                 >
-                  <Check size={13} />
-                  Перевести ₼
+                  {keyVal}
                 </button>
-              </div>
-            </form>
+              ))}
+            </div>
+
+            {/* Optional Comment Input with Document icon */}
+            <div className="space-y-1 text-left border-t border-slate-100 pt-2.5">
+              <label className="flex items-center gap-1.5 text-[#64748b] text-[9px] font-black uppercase tracking-wider">
+                <FileText size={12} className="text-[#94a3b8] shrink-0" />
+                <span>ДОБАВИТЬ КОММЕНТАРИЙ</span>
+              </label>
+              <input
+                type="text"
+                placeholder="Добавить комментарий..."
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="w-full px-3 py-2 bg-[#f8fafc] border border-[#f1f5f9] hover:border-[#e2e8f0] rounded-xl text-[11px] text-slate-700 placeholder-slate-400 focus:outline-hidden focus:ring-1 focus:ring-slate-300 focus:bg-white transition-all font-sans"
+              />
+            </div>
+
+            {/* Form Bottom Actions */}
+            <div className="flex gap-3 pt-1">
+              <button
+                type="button"
+                onClick={() => {
+                  setAmount('0');
+                  setDescription('');
+                }}
+                className="flex-1 py-2.5 bg-[#f1f5f9] hover:bg-[#e2e8f0] text-[#475569] font-sans font-bold text-xs uppercase tracking-wider rounded-2xl cursor-pointer transition-all active:scale-[0.97] text-center"
+              >
+                Очистить
+              </button>
+              <button
+                type="button"
+                onClick={handleSaveTransfer}
+                className="flex-1 py-2.5 bg-[#f1f5f9] hover:bg-[#e2e8f0] text-[#475569] font-sans font-extrabold text-xs uppercase tracking-wider rounded-2xl cursor-pointer transition-all active:scale-[0.97] text-center"
+              >
+                ✓ Сохранить
+              </button>
+            </div>
           </div>
         </div>
       )}
