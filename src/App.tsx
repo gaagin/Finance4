@@ -42,9 +42,7 @@ export default function App() {
     dataRef.current = data;
   }, [data]);
 
-  useEffect(() => {
-    testConnection();
-  }, []);
+  // Connection tests are disabled since we are 100% local.
 
   // Theme support: default is 'light' as requested.
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
@@ -88,21 +86,11 @@ export default function App() {
   }, [data]);
 
   useEffect(() => {
-    const unsubscribe = initAuth(
-      (user, token) => {
-        setCurrentUser(user);
-        setGAccessToken(token);
-        setNeedsAuth(false);
-        setIsAuthLoading(false);
-      },
-      () => {
-        setCurrentUser(null);
-        setGAccessToken(null);
-        setNeedsAuth(true);
-        setIsAuthLoading(false);
-      }
-    );
-    return () => unsubscribe();
+    // Synchronization is disabled; everything is kept in local storage.
+    setCurrentUser(null);
+    setGAccessToken(null);
+    setNeedsAuth(true);
+    setIsAuthLoading(false);
   }, []);
 
   const handleGoogleLogin = async () => {
@@ -789,15 +777,9 @@ export default function App() {
               <span className="flex items-center gap-1 px-1.5 py-0.5 bg-white/10 rounded text-[9px] font-bold text-teal-300 border border-white/10">
                 🇦🇿 AZN
               </span>
-              {isFirebaseLoading ? (
-                <span className="flex items-center gap-1 px-1.5 py-0.5 bg-amber-500/15 rounded text-[9px] font-bold text-amber-300 border border-amber-500/10 animate-pulse">
-                  Синхронизация...
-                </span>
-              ) : currentUser ? (
-                <span className="flex items-center gap-1 px-1.5 py-0.5 bg-emerald-500/15 rounded text-[9px] font-bold text-emerald-300 border border-emerald-500/10" title={`Синхронизировано с ${currentUser.email}`}>
-                  ☁️ Firebase
-                </span>
-              ) : null}
+              <span className="flex items-center gap-1 px-1.5 py-0.5 bg-emerald-500/15 rounded text-[9px] font-bold text-emerald-300 border border-emerald-500/10" title="Все ваши данные хранятся конфиденциально и безопасно на вашем устройстве">
+                🔒 Локально
+              </span>
             </div>
             <p className="text-xs text-slate-400 mt-0.5">Умный домашний бюджет Азербайджана</p>
           </div>
@@ -839,7 +821,7 @@ export default function App() {
               <div>
                 <h3 className="font-display font-black text-white text-lg leading-tight">Обнаружен старый демонстрационный шаблон!</h3>
                 <p className="text-sm text-slate-300 mt-1 max-w-3xl leading-relaxed">
-                  Ваш браузер или облако Firebase загрузили старые демонстрационные данные (Капитал Банк, Чайхана). Мы успешно импортировали и сконвертировали ваши реальные данные экспорта <b>HoneyMoney ({initialFinanceData.transactions.length} финансовых операций, реальные счета Самиры и Ильгара, ABB и ASB карты за 2022–2026 годы)</b>! Нажмите кнопку справа, чтобы мгновенно применить реальные данные.
+                  Ваш браузер загрузил старые демонстрационные данные (Капитал Банк, Чайхана). Мы успешно импортировали и сконвертировали ваши реальные данные экспорта <b>HoneyMoney ({initialFinanceData.transactions.length} финансовых операций, реальные счета Самиры и Ильгара, ABB и ASB карты за 2022–2026 годы)</b>! Нажмите кнопку справа, чтобы мгновенно применить реальные данные.
                 </p>
               </div>
             </div>
@@ -847,7 +829,6 @@ export default function App() {
               onClick={() => {
                 if (confirm('Внимание: Вы уверены, что хотите применить реальные данные экспорта HoneyMoney? Ваши старые локальные данные будут перезаписаны.')) {
                   setData(initialFinanceData);
-                  saveToFirebaseDirectly(initialFinanceData);
                   addToast("Ваши реальные данные HoneyMoney успешно применены! 🎉", "success");
                 }
               }}
@@ -857,18 +838,29 @@ export default function App() {
             </button>
           </div>
         )}
-        
+
         {/* Navigation tabs row: fixed bottom nav bar (always visible, not scrollable, optimized for smartphones) */}
         <div 
-          className="fixed bottom-0 left-0 right-0 md:bottom-5 md:left-1/2 md:-translate-x-1/2 md:max-w-xl md:w-[95%] bg-[#081022]/95 backdrop-blur-xl border-t md:border border-white/10 px-2.5 py-2.5 md:rounded-2xl flex justify-around items-center gap-1 z-[999] shadow-[0_-10px_35px_rgba(2,6,18,0.9)] md:shadow-[0_10px_40px_rgba(0,0,0,0.8)]" 
+          className={`fixed bottom-0 left-0 right-0 w-full border-t px-2 pt-2 flex justify-around items-center gap-1 z-[999] transition-colors duration-200 ${
+            theme === 'dark'
+              ? 'bg-[#0f172a] border-white/10 text-slate-100 shadow-[0_-8px_30px_rgba(0,0,0,0.6)]'
+              : 'bg-white border-slate-200/80 text-slate-800 shadow-[0_-8px_30px_rgba(0,0,0,0.08)]'
+          }`}
           id="fixed-bottom-nav"
+          style={{
+            paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 12px)'
+          }}
         >
           <button
             onClick={() => handleQuickNavigate('overview')}
-            className={`flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all flex-1 min-w-0 select-none cursor-pointer group ${
+            className={`flex flex-col items-center justify-center py-1.5 px-1 rounded-xl transition-all flex-1 min-w-0 select-none cursor-pointer group ${
               activeTab === 'overview'
-                ? 'bg-white/10 text-teal-300 border border-white/10 shadow-inner'
-                : 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
+                ? theme === 'dark'
+                  ? 'bg-teal-500/15 text-teal-300 border border-teal-500/20 shadow-inner font-bold'
+                  : 'bg-teal-500/10 text-teal-600 border border-teal-500/20 shadow-sm font-bold'
+                : theme === 'dark'
+                  ? 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
+                  : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100 border border-transparent'
             }`}
           >
             <LayoutDashboard size={18} className="transition-transform group-active:scale-90" />
@@ -879,8 +871,12 @@ export default function App() {
             onClick={() => handleQuickNavigate('transactions')}
             className={`flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all flex-1 min-w-0 select-none relative cursor-pointer group ${
               activeTab === 'transactions'
-                ? 'bg-white/10 text-teal-300 border border-white/10 shadow-inner'
-                : 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
+                ? theme === 'dark'
+                  ? 'bg-teal-500/15 text-teal-300 border border-teal-500/20 shadow-inner font-bold'
+                  : 'bg-teal-500/10 text-teal-600 border border-teal-500/20 shadow-sm font-bold'
+                : theme === 'dark'
+                  ? 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
+                  : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100 border border-transparent'
             }`}
           >
             <ReceiptText size={18} className="transition-transform group-active:scale-90" />
@@ -894,8 +890,12 @@ export default function App() {
             onClick={() => handleQuickNavigate('calendar')}
             className={`flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all flex-1 min-w-0 select-none cursor-pointer group ${
               activeTab === 'calendar'
-                ? 'bg-white/10 text-teal-300 border border-white/10 shadow-inner'
-                : 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
+                ? theme === 'dark'
+                  ? 'bg-teal-500/15 text-teal-300 border border-teal-500/20 shadow-inner font-bold'
+                  : 'bg-teal-500/10 text-teal-600 border border-teal-500/20 shadow-sm font-bold'
+                : theme === 'dark'
+                  ? 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
+                  : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100 border border-transparent'
             }`}
           >
             <Calendar size={18} className="transition-transform group-active:scale-90" />
@@ -906,8 +906,12 @@ export default function App() {
             onClick={() => handleQuickNavigate('budgeting')}
             className={`flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all flex-1 min-w-0 select-none cursor-pointer group ${
               activeTab === 'budgeting'
-                ? 'bg-white/10 text-teal-300 border border-white/10 shadow-inner'
-                : 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
+                ? theme === 'dark'
+                  ? 'bg-teal-500/15 text-teal-300 border border-teal-500/20 shadow-inner font-bold'
+                  : 'bg-teal-500/10 text-teal-600 border border-teal-500/20 shadow-sm font-bold'
+                : theme === 'dark'
+                  ? 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
+                  : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100 border border-transparent'
             }`}
           >
             <SlidersHorizontal size={18} className="transition-transform group-active:scale-90" />
@@ -918,8 +922,12 @@ export default function App() {
             onClick={() => handleQuickNavigate('accounts-categories')}
             className={`flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all flex-1 min-w-0 select-none cursor-pointer group ${
               activeTab === 'accounts-categories'
-                ? 'bg-white/10 text-teal-300 border border-white/10 shadow-inner'
-                : 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
+                ? theme === 'dark'
+                  ? 'bg-teal-500/15 text-teal-300 border border-teal-500/20 shadow-inner font-bold'
+                  : 'bg-teal-500/10 text-teal-650 border border-teal-500/20 shadow-sm font-bold'
+                : theme === 'dark'
+                  ? 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
+                  : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100 border border-transparent'
             }`}
           >
             <Settings size={18} className="transition-transform group-active:scale-90" />
