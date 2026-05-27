@@ -827,7 +827,7 @@ export default function App() {
       </header>
 
       {/* 2. Primary Layout Grid */}
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-6 z-10">
+      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-6 z-10 pb-24">
 
         {/* HoneyMoney Data Alert Banner */}
         {hasOldData && (
@@ -858,69 +858,72 @@ export default function App() {
           </div>
         )}
         
-        {/* Navigation tabs row: single card view controller switcher */}
-        <div className="flex bg-white/5 backdrop-blur-md p-2 rounded-2xl border border-white/10 justify-between sm:justify-start gap-1 overflow-x-auto custom-scrollbar shadow-lg">
+        {/* Navigation tabs row: fixed bottom nav bar (always visible, not scrollable, optimized for smartphones) */}
+        <div 
+          className="fixed bottom-0 left-0 right-0 md:bottom-5 md:left-1/2 md:-translate-x-1/2 md:max-w-xl md:w-[95%] bg-[#081022]/95 backdrop-blur-xl border-t md:border border-white/10 px-2.5 py-2.5 md:rounded-2xl flex justify-around items-center gap-1 z-[999] shadow-[0_-10px_35px_rgba(2,6,18,0.9)] md:shadow-[0_10px_40px_rgba(0,0,0,0.8)]" 
+          id="fixed-bottom-nav"
+        >
           <button
             onClick={() => handleQuickNavigate('overview')}
-            className={`flex items-center gap-2 px-4 py-2.5 text-xs sm:text-sm font-semibold rounded-xl transition-all shrink-0 cursor-pointer ${
+            className={`flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all flex-1 min-w-0 select-none cursor-pointer group ${
               activeTab === 'overview'
-                ? 'bg-white/15 text-white border border-white/15 shadow-md'
-                : 'text-slate-400 hover:text-white hover:bg-white/5'
+                ? 'bg-white/10 text-teal-300 border border-white/10 shadow-inner'
+                : 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
             }`}
           >
-            <LayoutDashboard size={15} />
-            <span>Панель аналитики</span>
+            <LayoutDashboard size={18} className="transition-transform group-active:scale-90" />
+            <span className="text-[9.5px] sm:text-[11px] font-bold tracking-wide mt-0.5 truncate">Обзор</span>
           </button>
 
           <button
             onClick={() => handleQuickNavigate('transactions')}
-            className={`flex items-center gap-2 px-4 py-2.5 text-xs sm:text-sm font-semibold rounded-xl transition-all relative shrink-0 cursor-pointer ${
+            className={`flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all flex-1 min-w-0 select-none relative cursor-pointer group ${
               activeTab === 'transactions'
-                ? 'bg-white/15 text-white border border-white/15 shadow-md'
-                : 'text-slate-400 hover:text-white hover:bg-white/5'
+                ? 'bg-white/10 text-teal-300 border border-white/10 shadow-inner'
+                : 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
             }`}
           >
-            <ReceiptText size={15} />
-            <span>Журнал операций</span>
+            <ReceiptText size={18} className="transition-transform group-active:scale-90" />
+            <span className="text-[9.5px] sm:text-[11px] font-bold tracking-wide mt-0.5 truncate">Журнал</span>
             {preselectedDate && (
-              <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-rose-500 rounded-full animate-ping" />
+              <span className="absolute top-1.5 right-1/2 translate-x-3 w-1.5 h-1.5 bg-rose-500 rounded-full animate-ping" />
             )}
           </button>
 
           <button
             onClick={() => handleQuickNavigate('calendar')}
-            className={`flex items-center gap-2 px-4 py-2.5 text-xs sm:text-sm font-semibold rounded-xl transition-all shrink-0 cursor-pointer ${
+            className={`flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all flex-1 min-w-0 select-none cursor-pointer group ${
               activeTab === 'calendar'
-                ? 'bg-white/15 text-white border border-white/15 shadow-md'
-                : 'text-slate-400 hover:text-white hover:bg-white/5'
+                ? 'bg-white/10 text-teal-300 border border-white/10 shadow-inner'
+                : 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
             }`}
           >
-            <Calendar size={15} />
-            <span>Календарь дней</span>
+            <Calendar size={18} className="transition-transform group-active:scale-90" />
+            <span className="text-[9.5px] sm:text-[11px] font-bold tracking-wide mt-0.5 truncate">Календарь</span>
           </button>
 
           <button
             onClick={() => handleQuickNavigate('budgeting')}
-            className={`flex items-center gap-2 px-4 py-2.5 text-xs sm:text-sm font-semibold rounded-xl transition-all shrink-0 cursor-pointer ${
+            className={`flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all flex-1 min-w-0 select-none cursor-pointer group ${
               activeTab === 'budgeting'
-                ? 'bg-white/15 text-white border border-white/15 shadow-md'
-                : 'text-slate-400 hover:text-white hover:bg-white/5'
+                ? 'bg-white/10 text-teal-300 border border-white/10 shadow-inner'
+                : 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
             }`}
           >
-            <SlidersHorizontal size={15} />
-            <span>Бюджетирование</span>
+            <SlidersHorizontal size={18} className="transition-transform group-active:scale-90" />
+            <span className="text-[9.5px] sm:text-[11px] font-bold tracking-wide mt-0.5 truncate">Бюджет</span>
           </button>
 
           <button
             onClick={() => handleQuickNavigate('accounts-categories')}
-            className={`flex items-center gap-2 px-4 py-2.5 text-xs sm:text-sm font-semibold rounded-xl transition-all shrink-0 cursor-pointer ${
+            className={`flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all flex-1 min-w-0 select-none cursor-pointer group ${
               activeTab === 'accounts-categories'
-                ? 'bg-white/15 text-white border border-white/15 shadow-md'
-                : 'text-slate-400 hover:text-white hover:bg-white/5'
+                ? 'bg-white/10 text-teal-300 border border-white/10 shadow-inner'
+                : 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
             }`}
           >
-            <Settings size={15} />
-            <span>Счета и категории</span>
+            <Settings size={18} className="transition-transform group-active:scale-90" />
+            <span className="text-[9.5px] sm:text-[11px] font-bold tracking-wide mt-0.5 truncate">Счета</span>
           </button>
         </div>
 
