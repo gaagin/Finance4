@@ -574,11 +574,11 @@ export function DashboardOverview({
 
   // SVG Coordinates calculations
   const trendSvgWidth = 800;
-  const trendSvgHeight = 245;
-  const trendPaddingLeft = 65;
+  const trendSvgHeight = 310;
+  const trendPaddingLeft = 110;
   const trendPaddingRight = 20;
-  const trendPaddingTop = 20;
-  const trendPaddingBottom = 40;
+  const trendPaddingTop = 10;
+  const trendPaddingBottom = 35;
   const trendChartWidth = trendSvgWidth - trendPaddingLeft - trendPaddingRight;
   const trendChartHeight = trendSvgHeight - trendPaddingTop - trendPaddingBottom;
 
@@ -591,9 +591,14 @@ export function DashboardOverview({
 
     // Give some vertical breathing space in chart
     const range = max - min;
-    const paddingVal = range * 0.15 || 50;
-    const graphMax = max + paddingVal;
-    const graphMin = min - paddingVal;
+    const paddingVal = range * 0.04 || 15;
+    let graphMax = max + paddingVal;
+    let graphMin = min - paddingVal;
+
+    // Let's round graphMax and graphMin to nice multiple steps so they produce neat rounded values like 10k, 5k, 0, -5k
+    const step = range > 15000 ? 5000 : (range > 3000 ? 1000 : 500);
+    graphMax = Math.ceil(graphMax / step) * step;
+    graphMin = Math.floor(graphMin / step) * step;
     const graphRange = graphMax - graphMin;
 
     const zeroPercent = Math.max(0, Math.min(100, ((graphMax - 0) / graphRange) * 100));
@@ -635,7 +640,20 @@ export function DashboardOverview({
       zeroPercent,
       yZero
     };
-  }, [balanceTrendData, trendChartWidth, trendChartHeight]);
+  }, [balanceTrendData, trendChartWidth, trendChartHeight, trendPaddingLeft, trendPaddingTop]);
+
+  // Compute distinct years present in the selected timeframe data to align vertical year gridlines
+  const distinctYears = useMemo(() => {
+    const yearsMap: { [year: string]: number } = {};
+    if (!trendStats || !trendStats.points) return [];
+    trendStats.points.forEach((pt) => {
+      const yr = pt.date.substring(0, 4);
+      if (!yearsMap[yr]) {
+        yearsMap[yr] = pt.x;
+      }
+    });
+    return Object.entries(yearsMap).map(([year, x]) => ({ year, x }));
+  }, [trendStats.points]);
 
   const handleTrendMouseMove = (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
     if (!svgRef.current || trendStats.points.length === 0) return;
@@ -714,33 +732,10 @@ export function DashboardOverview({
         />
       )}
 
-      {/* 2. Budget Threshold Warnings Section (only shown if warning triggers exist) */}
-      {budgetWarnings.length > 0 && (
-        <div className="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-amber-500/20 text-amber-400 rounded-xl">
-              <AlertTriangle size={18} className="stroke-[2.5px]" />
-            </div>
-            <div>
-              <h4 className="font-bold text-xs text-amber-300 uppercase tracking-wide">Внимание! Лимиты бюджетирования близки к исчерпанию</h4>
-              <p className="text-xs text-amber-200">
-                Обнаружено {budgetWarnings.length} категорий расходов за Май 2026, превысивших порог безопасной экономии (85%+):
-              </p>
-            </div>
-          </div>
 
-          <div className="flex flex-wrap gap-2">
-            {budgetWarnings.map(w => (
-              <span key={w.category.id} className="text-[10px] bg-amber-950/40 border border-amber-500/35 font-semibold text-amber-300 px-2.5 py-1 rounded-lg">
-                {w.category.name}: {w.spent.toFixed(0)} / {w.limit.toFixed(0)} ₼ ({w.percent.toFixed(0)}%)
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
 
       {/* 3. Analytics filter controls and charts rendering */}
-      <div className="bg-white/5 backdrop-blur-md rounded-3xl p-6 border border-white/10 shadow-lg">
+      <div className="w-full space-y-6">
         
         {/* Dynamic Analytics Configuration panel */}
         <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4 pb-4 border-b border-white/5 mb-6">
@@ -831,26 +826,15 @@ export function DashboardOverview({
             </div>
             
             {hasTrendPoints && firstPoint && lastPoint && (
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-x-4 gap-y-1 text-xs text-slate-305 w-full sm:w-auto sm:text-right font-display justify-end">
-                <div className="flex flex-col">
-                  <span className="text-[10px] text-slate-500 uppercase font-semibold text-left sm:text-right">Начало периода ({formatRussianDate(firstPoint.date)})</span>
-                  <span className="font-mono font-bold text-slate-300 text-left sm:text-right">{Math.round(startBalance).toLocaleString('ru-RU')} ₼</span>
-                </div>
-                <div className="w-px h-6 bg-white/10 hidden sm:block" />
-                <div className="flex flex-col">
-                  <span className="text-[10px] text-slate-500 uppercase font-semibold text-left sm:text-right">Итог на сегодня ({formatRussianDate(lastPoint.date)})</span>
-                  <span className="font-mono font-bold text-teal-400 text-[13px] text-left sm:text-right shrink-0">
-                    {Math.round(endBalance).toLocaleString('ru-RU')} ₼ 
-                    <span className={`text-xs ml-1.5 font-sans font-extrabold ${percentChange >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
-                      ({changePrefix}{percentChange.toFixed(0)}%)
-                    </span>
-                  </span>
-                </div>
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-slate-100 font-display font-bold text-xl sm:text-3xl px-1.5 mb-3">
+                <span className="opacity-90">{formatRussianDate(firstPoint.date).replace(' г.', '')}</span>
+                <span className="opacity-30 font-normal select-none">—</span>
+                <span className="opacity-90">{formatRussianDate(lastPoint.date).replace(' г.', '')}</span>
               </div>
             )}
           </div>
 
-          <div className="relative w-full aspect-video sm:aspect-auto sm:h-[245px]" id="trend-svg-container">
+          <div className="relative w-full h-[220px] sm:h-[300px]" id="trend-svg-container">
             {/* SVG Area Chart */}
             <svg
               ref={svgRef}
@@ -881,75 +865,71 @@ export function DashboardOverview({
                 </linearGradient>
               </defs>
 
-              {/* Dynamic Y Axis Gridlines and Labels */}
-              {Array.from({ length: 5 }).map((_, i) => {
-                const fraction = i / 4;
+              {/* Dynamic Y Axis Gridlines and Labels (8 ticks as in mockup) */}
+              {Array.from({ length: 8 }).map((_, i) => {
+                const fraction = i / 7;
                 const val = trendStats.min + fraction * (trendStats.max - trendStats.min);
                 const y = trendPaddingTop + trendChartHeight - fraction * trendChartHeight;
                 const roundedVal = Math.round(val);
 
+                // Format as shorthand e.g. 25k, -10k, 0
+                const formatYAxisVal = (valNum: number) => {
+                  const r = Math.round(valNum);
+                  if (Math.abs(r) >= 1000) {
+                    return `${(r / 1000).toFixed(0)}k`;
+                  }
+                  return `${r}`;
+                };
+
                 return (
-                  <g key={i} className="font-mono text-[9px] select-none text-slate-500">
-                    {/* Horizontal grid dashline */}
+                  <g key={i} className="font-mono text-[26px] select-none text-slate-300">
+                    {/* Horizontal grid line */}
                     <line
                       x1={trendPaddingLeft}
                       y1={y}
                       x2={trendSvgWidth - trendPaddingRight}
                       y2={y}
-                      stroke={roundedVal === 0 ? "rgba(255,255,255,0.25)" : "rgba(255,255,255,0.06)"}
+                      stroke={roundedVal === 0 ? "rgba(239, 68, 68, 0.45)" : "rgba(255,255,255,0.06)"}
                       strokeWidth={roundedVal === 0 ? 1.5 : 1}
                       strokeDasharray={roundedVal === 0 ? "none" : "3 3"}
                     />
                     {/* Tick Label */}
                     <text
-                      x={trendPaddingLeft - 10}
-                      y={y + 3}
+                      x={trendPaddingLeft - 12}
+                      y={y + 8}
                       textAnchor="end"
-                      fill={roundedVal === 0 ? "#94a3b8" : "#64748b"}
-                      className="font-medium"
+                      fill={roundedVal === 0 ? "#ef4444" : "#94a3b8"}
+                      className="font-bold text-[26px]"
                     >
-                      {roundedVal.toLocaleString('ru-RU')} ₼
+                      {formatYAxisVal(roundedVal)}
                     </text>
                   </g>
                 );
               })}
 
-              {/* X-axis tick descriptors (Dates labels at bounds) */}
-              {trendStats.points.length > 1 && (
-                <>
-                  {/* Min start date */}
+              {/* X-axis tick descriptors (Year labels aligned with vertical gridlines like high fidelity mockup) */}
+              {distinctYears.map(({ year, x }) => (
+                <g key={year} className="font-mono text-slate-400">
+                  {/* Vertical grid line */}
+                  <line
+                    x1={x}
+                    y1={trendPaddingTop}
+                    x2={x}
+                    y2={trendPaddingTop + trendChartHeight}
+                    stroke="rgba(255,255,255,0.08)"
+                    strokeWidth={1}
+                  />
+                  {/* Year text at bottom */}
                   <text
-                    x={trendStats.points[0].x}
+                    x={x}
                     y={trendSvgHeight - 12}
-                    textAnchor="start"
-                    className="font-display font-bold text-[10px] fill-slate-500"
+                    textAnchor="middle"
+                    className="font-display font-extrabold text-[27px] fill-slate-300"
                   >
-                    {formatRussianDate(trendStats.points[0].date).replace(' г.', '')}
+                    {year}
                   </text>
-                  
-                  {/* Middle descriptor */}
-                  {trendStats.points.length > 5 && (
-                    <text
-                      x={trendStats.points[Math.floor(trendStats.points.length / 2)].x}
-                      y={trendSvgHeight - 12}
-                      textAnchor="middle"
-                      className="font-display text-[9px] fill-slate-500 font-semibold"
-                    >
-                      Июль / Середина
-                    </text>
-                  )}
-
-                  {/* Max end date */}
-                  <text
-                    x={trendStats.points[trendStats.points.length - 1].x}
-                    y={trendSvgHeight - 12}
-                    textAnchor="end"
-                    className="font-display font-bold text-[10px] fill-slate-500"
-                  >
-                    {formatRussianDate(trendStats.points[trendStats.points.length - 1].date).replace(' г.', '')}
-                  </text>
-                </>
-              )}
+                </g>
+              ))}
 
               {/* Render computed paths (only if data exists) */}
               {hasTrendPoints && (
@@ -1046,11 +1026,6 @@ export function DashboardOverview({
               </div>
             )}
           </div>
-
-          <p className="text-center text-[11px] text-slate-400 italic mt-3 flex items-center justify-center gap-1">
-            <Calendar size={12} className="text-teal-400 shrink-0" />
-            Нажмите на точку или график в любой день, чтобы посмотреть доходы и расходы за выбранный день.
-          </p>
         </div>
 
         {/* Selected Day Transaction Breakdown Drawer */}
@@ -1120,7 +1095,7 @@ export function DashboardOverview({
         )}
 
         {/* --- HIGH-FIDELITY RUSSIAN HONEYMONEY DASHBOARD --- */}
-        <div className="bg-white/5 border border-white/5 rounded-2xl md:rounded-3xl p-3 sm:p-5 md:p-6 mb-8" id="honeymoney-panels-container">
+        <div className="w-full mb-8" id="honeymoney-panels-container">
           
           {/* Header Tab Selector */}
           <div className="flex items-center justify-between border-b border-white/5 pb-3 mb-4 md:mb-6">
@@ -1208,13 +1183,7 @@ export function DashboardOverview({
                   )}
                 </div>
 
-                {/* Simulated high-fidelity matching Treemap boxes */}
-                {categoryBreakdown.list.length > 0 && (
-                  <div className="mt-5 pt-3 border-t border-white/5">
-                    <span className="text-[9.5px] uppercase font-bold text-slate-500 tracking-wider">Карта распределения (Treemap)</span>
-                    {renderTreemap(categoryBreakdown.list, 'expense')}
-                  </div>
-                )}
+
               </div>
 
               {/* PANEL 2: INCOMES (ДОХОДЫ) */}
@@ -1262,13 +1231,7 @@ export function DashboardOverview({
                   )}
                 </div>
 
-                {/* Simulated high-fidelity matching Income Treemap */}
-                {incomeCategoryBreakdown.list.length > 0 && (
-                  <div className="mt-5 pt-3 border-t border-white/5">
-                    <span className="text-[9.5px] uppercase font-bold text-slate-500 tracking-wider">Карта источников (Treemap)</span>
-                    {renderTreemap(incomeCategoryBreakdown.list, 'income')}
-                  </div>
-                )}
+
               </div>
 
               {/* PANEL 3: ACCOUNTS (СЧЕТА) */}

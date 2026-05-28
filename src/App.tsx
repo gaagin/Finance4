@@ -765,7 +765,7 @@ export default function App() {
       <div className="absolute bottom-[-100px] right-[-100px] w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[120px] pointer-events-none z-0" />
 
       {/* 1. Header Navigation Bar */}
-      <header className="sticky top-0 bg-slate-950/40 backdrop-blur-2xl border-b border-white/10 z-50 px-3 sm:px-6 py-1.5 sm:py-2 flex items-center justify-between gap-2.5">
+      <header className="sticky top-0 bg-slate-950/40 backdrop-blur-2xl border-b border-white/10 z-50 px-2 sm:px-4 lg:px-5 py-1.5 sm:py-2 flex items-center justify-between gap-2.5">
         
         {/* Logo and Azerbaijan context branding */}
         <div className="flex items-center gap-2 z-10 min-w-0 flex-1">
@@ -810,7 +810,7 @@ export default function App() {
       </header>
 
       {/* 2. Primary Layout Grid */}
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-6 z-10 pb-24">
+      <main className="flex-1 max-w-none w-full mx-auto p-2 sm:p-4 lg:p-5 space-y-5 z-10 pb-24">
 
         {/* HoneyMoney Data Alert Banner */}
         {hasOldData && (
@@ -1098,8 +1098,8 @@ export default function App() {
       </div>
 
       {/* 4. Elegant footer */}
-      <footer className="bg-slate-950/40 backdrop-blur-md border-t border-white/5 py-6 px-4 mt-12 z-10">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+      <footer className="bg-slate-950/40 backdrop-blur-md border-t border-white/5 py-6 mt-12 z-10">
+        <div className="max-w-none w-full px-4 sm:px-6 lg:px-8 mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
           <div className="flex items-center gap-2">
             <span>MilliFinance 🇦🇿 © 2026. Разработано на русском языке для жителей Азербайджана.</span>
           </div>

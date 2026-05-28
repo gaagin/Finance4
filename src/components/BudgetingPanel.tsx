@@ -143,17 +143,7 @@ export function BudgetingPanel({
           )}
         </form>
 
-        <div className="mt-6 p-4 bg-amber-500/10 border border-amber-500/20 rounded-2xl text-xs text-amber-300 space-y-1.5">
-          <div className="flex items-center gap-1.5 font-bold">
-            <AlertCircle size={14} className="stroke-[2.5px] text-amber-400" />
-            <span>Индикатор предупреждений:</span>
-          </div>
-          <p>Бюджеты отслеживаются для текущего месяца (<b>Май 2026</b>).</p>
-          <ul className="list-disc pl-4 space-y-1 mt-1 text-slate-300">
-            <li>При тратах более <b className="text-amber-400">85%</b> шкала окрашивается в жёлтый цвет.</li>
-            <li>При превышении лимита <b className="text-rose-400">(более 100%)</b> шкала окрашивается в красный со статусом перерасхода.</li>
-          </ul>
-        </div>
+
       </div>
 
       {/* Right 2-Columns: Budgets Progress & List */}
@@ -284,10 +274,7 @@ export function BudgetingPanel({
           )}
         </div>
 
-        <div className="mt-4 flex items-center gap-2 p-3 bg-white/5 rounded-2xl text-xs text-teal-300 border border-white/10 shrink-0">
-          <Info size={14} className="shrink-0" />
-          <span>Бюджетирование позволяет контролировать бесконтрольные траты. Установите разумные рамки для «Кафе и Чайхана», продуктов или шопинга!</span>
-        </div>
+
       </div>
 
       {/* BUDGET EDIT MODAL */}

@@ -136,6 +136,12 @@ body:has(.dark) {
   border-color: #e2e8f0 !important;
 }
 
+#main-root-container:not(.dark) .bg-slate-900\/45,
+#main-root-container:not(.dark) .bg-slate-900\/40 {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+}
+
 #main-root-container:not(.dark) .bg-white\/15 {
   background-color: #cbd5e1 !important;
   color: #0f172a !important;

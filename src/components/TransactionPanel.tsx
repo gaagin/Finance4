@@ -341,10 +341,10 @@ export function TransactionPanel({
   }, [transactions, filterSearch, filterType, filterAccount, filterCategory, filterDateRange, customStartDate, customEndDate, sortField, sortOrder, categories, accounts]);
 
   return (
-    <div className="grid grid-cols-1 xl:grid-cols-3 gap-8" id="transactions-panel-layout">
+    <div className="w-full" id="transactions-panel-layout">
       
-      {/* 1. Transaction form wrapper (Left Column) */}
-      <div className="bg-white/5 backdrop-blur-md rounded-3xl p-6 border border-white/10 shadow-lg h-fit" id="transaction-form-panel">
+      {/* 1. Transaction form wrapper (Hidden / Removed) */}
+      <div className="hidden" id="transaction-form-panel">
         <div className="flex items-center justify-between mb-4 border-b border-white/5 pb-2">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-white/10 text-teal-300 border border-white/10 rounded-xl">
@@ -617,58 +617,58 @@ export function TransactionPanel({
         </form>
       </div>
 
-      {/* 2. Comprehensive transactions list with filtering (Right 2-Columns) */}
-      <div className="xl:col-span-2 bg-white/5 backdrop-blur-md rounded-3xl p-6 border border-white/10 shadow-lg flex flex-col justify-between" id="transactions-list-panel">
+      {/* 2. Comprehensive transactions list with filtering */}
+      <div className="w-full bg-white/5 backdrop-blur-md rounded-2xl p-4 md:p-5 border border-white/10 shadow-lg flex flex-col justify-between" id="transactions-list-panel">
         <div>
           
           {/* Header of list */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 mb-3.5">
             <div>
-              <h2 className="text-xl font-display font-bold text-white">История движения средств</h2>
-              <p className="text-xs text-slate-400">Найдено {filteredTransactions.length} операций из {transactions.length}</p>
+              <h2 className="text-base sm:text-lg font-display font-bold text-white leading-tight">История движения средств</h2>
+              <p className="text-[11px] text-slate-400">Найдено {filteredTransactions.length} операций из {transactions.length}</p>
             </div>
-
+ 
             {/* Quick Keyword search bar */}
-            <div className="relative w-full md:w-72">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
-                <Search size={15} />
+            <div className="relative w-full sm:w-64">
+              <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400">
+                <Search size={13} />
               </span>
               <input
                 type="text"
                 placeholder="Поиск по описанию ..."
                 value={filterSearch}
                 onChange={(e) => setFilterSearch(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 bg-slate-950/60 border border-white/10 rounded-xl text-xs text-white focus:ring-1 focus:ring-teal-400"
+                className="w-full pl-8 pr-4 py-1 bg-slate-950/60 border border-white/10 rounded-lg text-[11px] text-white focus:ring-1 focus:ring-teal-400"
               />
               {filterSearch && (
                 <button
                   onClick={() => setFilterSearch('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-xs cursor-pointer"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-[10px] cursor-pointer"
                 >
                   Сброс
                 </button>
               )}
             </div>
           </div>
-
+ 
           {/* Filtering Controls Row 1 */}
-          <div className="bg-white/5 border border-white/10 p-4 rounded-2xl mb-4 transition-all duration-300">
+          <div className="bg-white/5 border border-white/10 p-2.5 rounded-xl mb-2.5 transition-all duration-300">
             <button
               type="button"
               onClick={() => setIsFiltersExpanded(!isFiltersExpanded)}
-              className="flex items-center justify-between w-full text-xs text-slate-300 font-bold uppercase tracking-wider select-none cursor-pointer focus:outline-none"
+              className="flex items-center justify-between w-full text-[10.5px] text-slate-300 font-bold uppercase tracking-wider select-none cursor-pointer focus:outline-none"
             >
               <div className="flex items-center gap-1.5">
-                <Filter size={12} className="text-teal-400" />
+                <Filter size={10} className="text-teal-400" />
                 <span>Фильтры и сортировка</span>
                 {activeFiltersCount > 0 && (
-                  <span className="ml-2 bg-teal-500/20 text-teal-400 border border-teal-500/30 font-display font-extrabold text-[9px] px-1.5 py-0.5 rounded-full normal-case animate-pulse">
+                  <span className="ml-1.5 bg-teal-500/20 text-teal-400 border border-teal-500/30 font-display font-extrabold text-[8px] px-1 py-0.2 rounded-full normal-case animate-pulse">
                     Активно: {activeFiltersCount}
                   </span>
                 )}
               </div>
               <div className="text-slate-400 hover:text-white transition-colors">
-                {isFiltersExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                {isFiltersExpanded ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
               </div>
             </button>
 
@@ -790,17 +790,17 @@ export function TransactionPanel({
               </p>
             </div>
           ) : (
-            <div className="space-y-1.5 max-h-[520px] overflow-y-auto pr-1 custom-scrollbar">
+            <div className="space-y-1 max-h-[580px] overflow-y-auto pr-1 custom-scrollbar">
               
               {/* Column headings for desktop */}
-              <div className="hidden md:grid grid-cols-12 gap-3 px-4 py-2 text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+              <div className="hidden md:grid grid-cols-12 gap-2 px-3 py-1 text-[9px] uppercase font-bold text-slate-400 tracking-wider">
                 <div className="col-span-3">Категория / Описание</div>
                 <div className="col-span-3">Счет</div>
                 <div className="col-span-2 cursor-pointer select-none hover:text-white flex items-center gap-1" onClick={() => toggleSort('date')}>
-                  Дата <ArrowUpDown size={10} />
+                  Дата <ArrowUpDown size={8} />
                 </div>
                 <div className="col-span-2 cursor-pointer select-none hover:text-white text-right flex items-center justify-end gap-1" onClick={() => toggleSort('amount')}>
-                  Сумма <ArrowUpDown size={10} />
+                  Сумма <ArrowUpDown size={8} />
                 </div>
                 <div className="col-span-2 text-right">Действия</div>
               </div>
@@ -815,7 +815,7 @@ export function TransactionPanel({
                 return (
                   <div
                     key={tx.id}
-                    className={`grid grid-cols-1 md:grid-cols-12 gap-2 items-center py-1.5 px-3 sm:px-4 rounded-xl border transition-all hover:shadow-xs group ${
+                    className={`grid grid-cols-12 gap-y-1 gap-x-2 items-center py-1.5 md:py-1 px-2.5 sm:px-3 rounded-lg border transition-all hover:shadow-xs group ${
                       editingTransaction?.id === tx.id
                         ? 'bg-amber-500/10 border-amber-500/30'
                         : isTransfer
@@ -826,61 +826,61 @@ export function TransactionPanel({
                     }`}
                   >
                     {/* Category & Custom Description desc */}
-                    <div className="col-span-3 flex items-center gap-2">
+                    <div className="col-span-8 md:col-span-3 flex items-center gap-1.5 min-w-0">
                       <div
-                        className="w-7 h-7 rounded-lg flex items-center justify-center text-white shrink-0"
+                        className="w-5 h-5 rounded-md flex items-center justify-center text-white shrink-0 opacity-90"
                         style={{ backgroundColor: isTransfer ? '#f59e0b' : (cat?.color || '#3b82f6') }}
                       >
-                        {isTransfer ? <ArrowUpDown size={12} /> : <IconComponent name={cat?.icon || 'HelpCircle'} size={12} />}
+                        {isTransfer ? <ArrowUpDown size={9} /> : <IconComponent name={cat?.icon || 'HelpCircle'} size={9} />}
                       </div>
                       <div className="min-w-0">
-                        <h4 className="font-semibold text-xs text-slate-200 truncate leading-tight">
+                        <h4 className="font-semibold text-[10.5px] text-slate-200 truncate leading-tight">
                           {tx.description || (isTransfer ? 'Перевод' : (cat?.name || 'Без описания'))}
                         </h4>
-                        <span className="text-[9.5px] text-slate-400 uppercase tracking-wide font-medium block leading-none mt-0.5">
+                        <span className="text-[8px] text-slate-400 uppercase tracking-wide font-medium block leading-none mt-0.5">
                           {isTransfer ? 'Перевод' : (cat?.name || 'Другое')}
                         </span>
                       </div>
                     </div>
 
                     {/* Associated Account & Card Link badge */}
-                    <div className="col-span-3 flex flex-wrap items-center gap-1.5 md:opacity-100">
-                      <span className="text-[10px] font-semibold text-slate-300 bg-white/10 px-2 py-0.5 rounded-md truncate max-w-[130px]" title={acc?.name}>
+                    <div className="col-span-4 md:col-span-3 flex flex-wrap items-center gap-1 md:opacity-100 min-w-0">
+                      <span className="text-[8.5px] font-semibold text-slate-350 bg-white/10 px-1 py-0.2 rounded truncate max-w-[110px]" title={acc?.name}>
                         {acc?.name || 'Неизвестно'}
                       </span>
                       {card && (
-                        <span className="text-[9px] font-bold text-teal-300 bg-teal-500/10 border border-teal-500/20 px-1.5 py-0.2 rounded flex items-center gap-0.5" title={`${card.bank} (${card.name})`}>
-                          <CreditCard size={9} />
+                        <span className="text-[7.5px] font-bold text-teal-350 bg-teal-500/10 border border-teal-500/20 px-1 py-0.2 rounded flex items-center gap-0.5" title={`${card.bank} (${card.name})`}>
+                          <CreditCard size={7} />
                           {card.bank.split(' ')[0]} *{card.lastFour}
                         </span>
                       )}
                     </div>
 
                     {/* Date */}
-                    <div className="col-span-2 text-xs text-slate-400 font-mono">
+                    <div className="col-span-3 md:col-span-2 text-[9px] md:text-[10px] text-slate-400 font-mono">
                       {tx.date}
                     </div>
 
                     {/* Transaction sum */}
-                    <div className="col-span-2 font-display font-black text-xs sm:text-sm md:text-right leading-none">
+                    <div className="col-span-4 md:col-span-2 font-display font-extrabold text-[11px] sm:text-[12.5px] text-right md:text-right leading-none">
                       <span className={isTransfer ? (tx.transferType === 'in' ? 'text-teal-400' : 'text-amber-400') : (isIncome ? 'text-emerald-400' : 'text-white')}>
                         {isTransfer ? (tx.transferType === 'in' ? '+' : '-') : (isIncome ? '+' : '-')}{tx.amount.toFixed(2)} ₼
                       </span>
                     </div>
 
                      {/* Action buttons */}
-                     <div className="col-span-2 flex items-center justify-end gap-1">
+                     <div className="col-span-5 md:col-span-2 flex items-center justify-end gap-1">
                        <button
                          onClick={() => {
                            onUpdateTransaction({ ...tx, displayInEditFormOnly: true } as any);
                          }}
-                         className="p-1 px-2.5 text-[10.5px] font-semibold bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-white/10 rounded-lg hover:bg-teal-500 hover:text-slate-950 dark:hover:bg-teal-450 dark:hover:text-slate-950 transition-all cursor-pointer flex items-center gap-1 shrink-0"
+                         className="p-0.5 px-1.5 text-[9px] font-semibold bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-white/10 rounded hover:bg-teal-500 hover:text-slate-950 dark:hover:bg-teal-450 dark:hover:text-slate-950 transition-all cursor-pointer flex items-center gap-0.5 shrink-0"
                          title="Редактировать запись"
                        >
-                         <Edit2 size={10} />
+                         <Edit2 size={9} />
                          <span className="md:hidden font-semibold">Изм</span>
                        </button>
- 
+  
                        <button
                          onClick={() => {
                            const associatedCat = categories.find(c => c.id === tx.categoryId);
@@ -891,10 +891,10 @@ export function TransactionPanel({
                              isIncome: isTransfer ? (tx.transferType === 'in') : (tx.type === 'income')
                            });
                          }}
-                         className="p-1 px-2.5 text-[10.5px] font-semibold bg-white/5 hover:bg-rose-500/15 hover:text-rose-400 text-slate-400 border border-white/5 hover:border-rose-500/35 rounded-lg transition-all cursor-pointer flex items-center gap-1 shrink-0"
+                         className="p-0.5 px-1.5 text-[9px] font-semibold bg-white/5 hover:bg-rose-500/15 hover:text-rose-400 text-slate-400 border border-white/5 hover:border-rose-500/35 rounded transition-all cursor-pointer flex items-center gap-0.5 shrink-0"
                          title="Удалить запись"
                        >
-                         <Trash2 size={10} />
+                         <Trash2 size={9} />
                          <span className="md:hidden font-semibold">Удал</span>
                        </button>
                      </div>
