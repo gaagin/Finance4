@@ -842,11 +842,6 @@ export function DashboardOverview({
               className="w-full h-full select-none"
               onMouseMove={handleTrendMouseMove}
               onMouseLeave={handleTrendMouseLeave}
-              onClick={() => {
-                if (hoveredPoint) {
-                  setSelectedTrendDate(hoveredPoint.date);
-                }
-              }}
             >
               <defs>
                 {/* Responsive dynamic bi-directional gradient: green/teal above zero, red/rose below zero */}
@@ -1020,118 +1015,15 @@ export function DashboardOverview({
                 <span className={`font-mono font-black text-sm ${hoveredPoint.balance >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
                   {Math.round(hoveredPoint.balance).toLocaleString('ru-RU')} ₼
                 </span>
-                <span className="text-[9px] text-slate-500 font-semibold leading-none mt-1">
-                  Нажмите, чтобы детализировать
-                </span>
               </div>
             )}
           </div>
         </div>
 
-        {/* Selected Day Transaction Breakdown Drawer */}
-        {selectedTrendDate && (
-          <div className="bg-slate-900/85 border border-white/10 rounded-2xl p-5 mb-8 animate-fade-in text-left shadow-lg">
-            <div className="flex items-center justify-between border-b border-white/5 pb-3 mb-4">
-              <div className="flex items-center gap-2">
-                <Calendar size={18} className="text-teal-400" />
-                <h4 className="font-extrabold text-xs text-white uppercase tracking-wider font-display">
-                  Анализ операций за {formatRussianDate(selectedTrendDate)}
-                </h4>
-              </div>
-              <button
-                onClick={() => setSelectedTrendDate(null)}
-                className="text-xs bg-white/10 hover:bg-white/20 text-slate-300 px-3 py-1 rounded-xl transition-all font-semibold cursor-pointer"
-              >
-                Закрыть детальный просмотр
-              </button>
-            </div>
-
-            {clickedDateTransactions.length === 0 ? (
-              <div className="text-center py-6">
-                <p className="text-xs text-slate-400 font-medium leading-normal">
-                  В этот день ({formatRussianDate(selectedTrendDate)}) в системе нет зафиксированных операций (транзакций или переводов).
-                </p>
-                <p className="text-[10px] text-slate-500 mt-1">Остаток на балансе оставался неизменным и составлял {Math.round(balanceTrendData.find(d => d.date === selectedTrendDate)?.balance || 0)} ₼.</p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[220px] overflow-y-auto pr-1 select-none custom-scrollbar">
-                 {clickedDateTransactions.map(tx => {
-                  const cat = categories.find(c => c.id === tx.categoryId);
-                  const acc = accounts.find(a => a.id === tx.accountId);
-                  const isTransfer = tx.type === 'transfer';
-                  const isInc = tx.type === 'income' || (isTransfer && tx.transferType === 'in');
-
-                  return (
-                    <div
-                      key={tx.id}
-                      className="flex items-center justify-between p-2 bg-slate-950/60 rounded-xl border border-white/5 hover:border-white/10 transition-colors"
-                    >
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <div
-                          className="w-7 h-7 rounded-lg flex items-center justify-center text-white shrink-0 shadow-xs"
-                          style={{ backgroundColor: isTransfer ? '#f59e0b' : (cat?.color || '#3b82f6') }}
-                        >
-                          {isTransfer ? <ArrowUpDown size={12} /> : <IconComponent name={cat?.icon || 'HelpCircle'} size={12} />}
-                        </div>
-                        <div className="min-w-0">
-                          <p className="text-xs font-bold text-slate-200 truncate leading-tight">{tx.description || (isTransfer ? 'Перевод' : (cat?.name || 'Операция'))}</p>
-                          <span className="text-[9.5px] text-slate-400 font-medium block mt-0.5">
-                            Счет: <b className="text-slate-300">{acc?.name || 'Неизвестно'}</b> • Категория: <b className="text-slate-300">{isTransfer ? 'Перевод' : (cat?.name || 'Прочее')}</b>
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="text-right shrink-0 pl-3">
-                        <span className={`font-mono text-xs font-black select-all ${isTransfer ? (tx.transferType === 'in' ? 'text-teal-400' : 'text-amber-400') : (isInc ? 'text-emerald-400' : 'text-rose-400')}`}>
-                          {isTransfer ? (tx.transferType === 'in' ? '+' : '-') : (isInc ? '+' : '-')}{Math.round(tx.amount)} ₼
-                        </span>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        )}
-
         {/* --- HIGH-FIDELITY RUSSIAN HONEYMONEY DASHBOARD --- */}
         <div className="w-full mb-8" id="honeymoney-panels-container">
           
-          {/* Header Tab Selector */}
-          <div className="flex items-center justify-between border-b border-white/5 pb-3 mb-4 md:mb-6">
-            <div className="flex items-center gap-4 sm:gap-6">
-              <button
-                onClick={() => setActiveDashboardTab('fact')}
-                className={`pb-3 pr-1 sm:pr-2 font-display text-sm font-black uppercase tracking-wider transition-all cursor-pointer relative ${
-                  activeDashboardTab === 'fact' ? 'text-amber-400' : 'text-slate-400 hover:text-slate-200'
-                }`}
-              >
-                Факт
-                {activeDashboardTab === 'fact' && (
-                  <span className="absolute bottom-0 left-0 right-1 sm:right-2 h-0.5 bg-amber-400 animate-fade-in" />
-                )}
-              </button>
-              
-              <button
-                onClick={() => setActiveDashboardTab('plan')}
-                className={`pb-3 pr-1 sm:pr-2 font-display text-sm font-black uppercase tracking-wider transition-all cursor-pointer relative ${
-                  activeDashboardTab === 'plan' ? 'text-amber-400' : 'text-slate-400 hover:text-slate-200'
-                }`}
-              >
-                План (Бюджет)
-                {activeDashboardTab === 'plan' && (
-                  <span className="absolute bottom-0 left-0 right-1 sm:right-2 h-0.5 bg-amber-400 animate-fade-in" />
-                )}
-              </button>
-            </div>
-
-            <span className="text-[10px] text-slate-500 font-mono hidden sm:block">
-              HoneyMoney Engine Active • {getPeriodLabel(analyticsTimeframe)}
-            </span>
-          </div>
-
-          {activeDashboardTab === 'fact' ? (
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
               
               {/* PANEL 1: EXPENSES (РАСХОДЫ) */}
               <div className="bg-slate-950/40 rounded-2xl p-3 sm:p-4 border border-white/5 flex flex-col justify-between" id="honey-expenses-panel">
@@ -1416,21 +1308,6 @@ export function DashboardOverview({
               </div>
 
             </div>
-          ) : (
-            <div className="p-8 text-center bg-slate-900/40 rounded-2xl border border-white/5 animate-fade-in">
-              <SlidersHorizontal className="text-amber-400 mx-auto mb-3" size={32} />
-              <b className="text-sm font-display font-black text-white uppercase tracking-wider block">Планирование (Бюджетная система конвертов)</b>
-              <p className="text-xs text-slate-400 max-w-lg mx-auto mt-2 leading-relaxed">
-                Система позволяет устанавливать лимиты расходования на следующий месяц. Конверты страхуют вас от импульсивных трат. Когда траты по категории превысят безопасные отметки (85% и выше), система сформирует предупреждающие Тосты на главной панели.
-              </p>
-              <button 
-                onClick={() => onQuickNavigate('accounts-categories')}
-                className="mt-5 px-4.5 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black rounded-xl transition-all uppercase tracking-wider font-display cursor-pointer"
-              >
-                Открыть Управление Конвертами
-              </button>
-            </div>
-          )}
 
         </div>
 
@@ -1583,6 +1460,8 @@ export function DashboardOverview({
                   <option value="2026">2026 год</option>
                   <option value="2025">2025 год</option>
                   <option value="2024">2024 год</option>
+                  <option value="2023">2023 год</option>
+                  <option value="2022">2022 год</option>
                 </select>
 
                 <select

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Transaction, Category, BudgetLimit, formatCategoryDisplayName } from '../types';
 import { IconComponent } from './IconComponent';
 import { Plus, Sliders, Trash2, Edit2, AlertCircle, CheckCircle2, TrendingUp, Info, X, AlertTriangle } from 'lucide-react';
+import { SearchableSelect } from './SearchableSelect';
 
 interface BudgetingPanelProps {
   transactions: Transaction[];
@@ -21,6 +22,7 @@ export function BudgetingPanel({
   const [selectedCategory, setSelectedCategory] = useState('');
   const [limitAmount, setLimitAmount] = useState('');
   const [isEditing, setIsEditing] = useState<string | null>(null); // holds categoryId being edited
+  const [isAddingBudget, setIsAddingBudget] = useState(false);
 
   // Budget delete confirmation state
   const [deleteConfirm, setDeleteConfirm] = useState<{ categoryId: string; categoryName: string } | null>(null);
@@ -53,6 +55,7 @@ export function BudgetingPanel({
     setSelectedCategory('');
     setLimitAmount('');
     setIsEditing(null);
+    setIsAddingBudget(false);
   };
 
   const handleStartEdit = (budget: BudgetLimit) => {
@@ -72,82 +75,10 @@ export function BudgetingPanel({
   const totalSpentInBudgeted = budgets.reduce((sum, b) => sum + getSpentForCategory(b.categoryId), 0);
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6" id="budgeting-panel-root">
+    <div className="w-full" id="budgeting-panel-root">
       
-      {/* Left Column: Set or Update Budget Forms */}
-      <div className="bg-white/5 backdrop-blur-md rounded-3xl p-6 border border-white/10 shadow-lg h-fit">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="p-2 bg-white/10 text-teal-300 border border-white/10 rounded-xl">
-            <Sliders size={20} />
-          </div>
-          <h3 className="font-display font-semibold text-white">
-            {isEditing ? 'Изменить лимит бюджета' : 'Установить лимит бюджета'}
-          </h3>
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {!isEditing ? (
-            <>
-              <div>
-                <label className="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">
-                  Категория расходов
-                </label>
-                <select
-                  value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="w-full p-3 bg-slate-950/60 border border-white/10 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-teal-400 text-slate-200 cursor-pointer"
-                >
-                  <option value="" className="bg-slate-950 text-slate-300">Выберите категорию...</option>
-                  {unbudgetedCategories.map(cat => (
-                    <option key={cat.id} value={cat.id} className="bg-slate-950 text-slate-300">
-                      {formatCategoryDisplayName(cat.name)}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">
-                  Месячный Лимит (₼, AZN)
-                </label>
-                <div className="relative">
-                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 font-display font-medium text-sm">
-                    ₼
-                  </span>
-                  <input
-                    type="number"
-                    step="any"
-                    min="1"
-                    placeholder="Например: 250"
-                    value={limitAmount}
-                    onChange={(e) => setLimitAmount(e.target.value)}
-                    className="w-full pl-8 pr-4 py-3 bg-slate-950/60 border border-white/10 rounded-xl text-sm font-display font-bold focus:outline-hidden focus:ring-2 focus:ring-teal-400 text-slate-200"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="flex gap-2 pt-2">
-                <button
-                  type="submit"
-                  className="flex-1 py-3 bg-teal-500 hover:bg-teal-400 active:bg-teal-600 text-slate-950 rounded-xl text-sm font-bold transition-all shadow-xs flex items-center justify-center gap-1 cursor-pointer"
-                >
-                  Создать лимит
-                </button>
-              </div>
-            </>
-          ) : (
-            <div className="p-4 py-6 border border-dashed border-teal-500/20 bg-teal-500/5 rounded-2xl text-center text-xs text-teal-300">
-              Лимит бюджета редактируется в модальном окне
-            </div>
-          )}
-        </form>
-
-
-      </div>
-
-      {/* Right 2-Columns: Budgets Progress & List */}
-      <div className="lg:col-span-2 bg-white/5 backdrop-blur-md rounded-3xl p-6 border border-white/10 shadow-lg flex flex-col justify-between">
+      {/* 2-Columns layout removed: Budgets Progress & List now takes full width */}
+      <div className="w-full bg-white/5 backdrop-blur-md rounded-3xl p-6 border border-white/10 shadow-lg flex flex-col justify-between">
         <div>
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-white/5">
             <div>
@@ -155,11 +86,21 @@ export function BudgetingPanel({
               <p className="text-xs text-slate-400">Свод показателей экономии по категориям за Май 2026</p>
             </div>
             
-            <div className="flex items-center gap-3 bg-white/5 px-4 py-2 rounded-xl border border-white/10">
-              <span className="text-xs text-slate-400">Общий бюджет:</span>
-              <span className="font-display font-extrabold text-white">
-                {totalSpentInBudgeted.toFixed(0)}₼ <span className="text-slate-500 font-normal">/</span> {totalBudgeted.toFixed(0)}₼
-              </span>
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="flex items-center gap-3 bg-white/5 px-4 py-2 rounded-xl border border-white/10">
+                <span className="text-xs text-slate-400">Общий бюджет:</span>
+                <span className="font-display font-extrabold text-white">
+                  {totalSpentInBudgeted.toFixed(0)}₼ <span className="text-slate-500 font-normal">/</span> {totalBudgeted.toFixed(0)}₼
+                </span>
+              </div>
+
+              <button
+                onClick={() => setIsAddingBudget(true)}
+                className="px-4 py-2 bg-teal-500 hover:bg-teal-400 active:bg-teal-600 text-slate-950 text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-md cursor-pointer flex items-center gap-1.5 shrink-0"
+              >
+                <Plus size={14} className="stroke-[2.5px]" />
+                Установить лимит
+              </button>
             </div>
           </div>
 
@@ -169,9 +110,16 @@ export function BudgetingPanel({
                 <Sliders size={28} />
               </div>
               <p className="text-slate-300 font-semibold text-sm">Ни один бюджетный лимит не установлен</p>
-              <p className="text-xs text-slate-400 max-w-sm mt-1">
-                Выберите категорию расходов на панели слева и задайте месячный лимит, чтобы отслеживать перелимиты и экономию.
+              <p className="text-xs text-slate-400 max-w-sm mt-1 mb-5">
+                Задайте месячный лимит по категориям расходов, чтобы отслеживать перерасходы и экономию.
               </p>
+              <button
+                onClick={() => setIsAddingBudget(true)}
+                className="px-4.5 py-2.5 bg-teal-500 hover:bg-teal-400 active:bg-teal-600 text-slate-950 text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-md cursor-pointer flex items-center gap-1.5"
+              >
+                <Plus size={14} className="stroke-[2.5px]" />
+                Установить лимит
+              </button>
             </div>
           ) : (
             <div className="space-y-6 max-h-[380px] overflow-y-auto pr-1 custom-scrollbar">
@@ -348,6 +296,116 @@ export function BudgetingPanel({
                   className="flex-1 py-2 bg-teal-500 hover:bg-teal-400 text-slate-950 text-xs font-bold uppercase tracking-wider rounded-xl transition-colors cursor-pointer"
                 >
                   Сохранить
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* BUDGET ADD MODAL */}
+      {isAddingBudget && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fade-in" id="add-budget-modal">
+          <div className="w-full max-w-sm bg-slate-900 border border-white/10 rounded-3xl shadow-2xl overflow-hidden text-left">
+            <div className="flex items-center justify-between px-6 py-5 border-b border-white/10 bg-white/5">
+              <div>
+                <h3 className="text-base font-display font-bold text-white flex items-center gap-2">
+                  <Sliders className="text-teal-400" size={18} />
+                  Установить лимит бюджета
+                </h3>
+                <p className="text-xs text-slate-400 mt-1">Ограничение трат по категории</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsAddingBudget(false);
+                  setSelectedCategory('');
+                  setLimitAmount('');
+                }}
+                className="p-1.5 hover:bg-white/10 text-slate-400 hover:text-white rounded-lg transition-colors cursor-pointer"
+              >
+                <X size={16} />
+              </button>
+            </div>
+            
+            <form onSubmit={handleSubmit} className="p-6 space-y-4">
+              <div>
+                <label className="block text-[11px] font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">
+                  Категория расходов
+                </label>
+                <SearchableSelect
+                  items={unbudgetedCategories}
+                  value={selectedCategory}
+                  onChange={(id) => setSelectedCategory(id)}
+                  placeholder="Выберите категорию..."
+                  searchPlaceholder="Поиск категории..."
+                  idKey="id"
+                  displayValue={(cat) => (
+                    <div className="flex items-center gap-2">
+                      <div
+                        className="w-4 h-4 rounded-sm flex items-center justify-center shrink-0"
+                        style={{ backgroundColor: cat.color }}
+                      >
+                        <span className="text-[10px] text-white">
+                          <IconComponent name={cat.icon || 'HelpCircle'} size={10} />
+                        </span>
+                      </div>
+                      <span className="truncate">{formatCategoryDisplayName(cat.name)}</span>
+                    </div>
+                  )}
+                  filterValue={(cat) => cat.name}
+                  renderItem={(cat) => (
+                    <div className="flex items-center gap-2 text-xs">
+                      <div
+                        className="w-4 h-4 rounded-md flex items-center justify-center text-white shrink-0"
+                        style={{ backgroundColor: cat.color }}
+                      >
+                        <IconComponent name={cat.icon || 'HelpCircle'} size={10} />
+                      </div>
+                      <span className="font-semibold">{formatCategoryDisplayName(cat.name)}</span>
+                    </div>
+                  )}
+                />
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">
+                  Месячный Лимит (₼, AZN)
+                </label>
+                <div className="relative">
+                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 font-display font-medium text-xs">
+                    ₼
+                  </span>
+                  <input
+                    type="number"
+                    step="any"
+                    min="1"
+                    placeholder="Например: 250"
+                    value={limitAmount}
+                    onChange={(e) => setLimitAmount(e.target.value)}
+                    className="w-full pl-8 pr-4 py-2.5 bg-slate-950/60 border border-white/10 rounded-xl text-sm font-display font-bold focus:outline-hidden focus:ring-2 focus:ring-teal-400 text-slate-200"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="flex gap-3 pt-4 border-t border-white/5">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsAddingBudget(false);
+                    setSelectedCategory('');
+                    setLimitAmount('');
+                  }}
+                  className="flex-1 py-2 bg-white/5 hover:bg-white/10 text-slate-350 text-xs font-semibold rounded-xl border border-white/5 transition-colors cursor-pointer"
+                >
+                  Отмена
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 py-2 bg-teal-500 hover:bg-teal-400 text-slate-950 text-xs font-bold uppercase tracking-wider rounded-xl transition-colors cursor-pointer"
+                >
+                  Создать
                 </button>
               </div>
             </form>

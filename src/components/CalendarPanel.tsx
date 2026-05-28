@@ -460,13 +460,7 @@ export function CalendarPanel({
         </div>
       </div>
 
-      {/* Info indicator box */}
-      <div className="mt-4 flex items-start gap-2 p-3 bg-white/5 rounded-2xl text-xs text-teal-300 border border-white/10">
-        <Info size={14} className="mt-0.5 shrink-0" />
-        <div>
-          <span className="font-semibold">Совет по просмотру:</span> На мобильных устройствах календарную сетку можно прокручивать по горизонтали пальцем, чтобы все наименования операций полностью помещались в ячейках. Дополнительно список операций внутри отдельного дня поддерживает обычный вертикальный скролл. Нажмите на любой день, чтобы мгновенно добавить запись!
-        </div>
-      </div>
+
 
       {/* Modern Add Transaction Modal directly on clicked calendar day */}
       <AddTransactionModal

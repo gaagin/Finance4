@@ -693,31 +693,63 @@ export function TransactionPanel({
                   {/* Filter by Account */}
                   <div>
                     <label className="block text-[10px] font-bold text-slate-400 mb-1">СЧЕТ</label>
-                    <select
+                    <SearchableSelect
+                      items={[{ id: 'all', name: 'Все счета', balance: 0 }, ...accounts]}
                       value={filterAccount}
-                      onChange={(e) => setFilterAccount(e.target.value)}
-                      className="w-full p-2 bg-slate-950 border border-white/10 rounded-lg text-xs text-slate-200 cursor-pointer"
-                    >
-                      <option value="all" className="bg-slate-950 text-slate-300">Все счета</option>
-                      {accounts.map(acc => (
-                        <option key={acc.id} value={acc.id} className="bg-slate-950 text-slate-300">{acc.name}</option>
-                      ))}
-                    </select>
+                      onChange={(id) => setFilterAccount(id)}
+                      placeholder="Все счета"
+                      searchPlaceholder="Поиск счета..."
+                      idKey="id"
+                      displayValue={(acc) => acc.name}
+                      filterValue={(acc) => acc.name}
+                      renderItem={(acc) => (
+                        <div className="flex justify-between items-center w-full text-xs">
+                          <span className="font-semibold">{acc.name}</span>
+                          {acc.id !== 'all' && (
+                            <span className="font-mono text-[9px] text-teal-400 bg-teal-500/10 px-1.5 py-0.5 rounded-md font-extrabold shrink-0 ml-2">
+                              {Math.round(acc.balance)} ₼
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    />
                   </div>
 
                   {/* Filter by Category */}
                   <div>
                     <label className="block text-[10px] font-bold text-slate-400 mb-1">КАТЕГОРИЯ</label>
-                    <select
+                    <SearchableSelect
+                      items={[{ id: 'all', name: 'Все категории', type: '', color: '', icon: '' } as any, ...categories]}
                       value={filterCategory}
-                      onChange={(e) => setFilterCategory(e.target.value)}
-                      className="w-full p-2 bg-slate-950 border border-white/10 rounded-lg text-xs text-slate-200 cursor-pointer"
-                    >
-                      <option value="all" className="bg-slate-950 text-slate-300">Все категории</option>
-                      {categories.map(cat => (
-                        <option key={cat.id} value={cat.id} className="bg-slate-950 text-slate-300">{cat.name} ({cat.type === 'income' ? 'д' : 'р'})</option>
-                      ))}
-                    </select>
+                      onChange={(id) => setFilterCategory(id)}
+                      placeholder="Все категории"
+                      searchPlaceholder="Поиск категории..."
+                      idKey="id"
+                      displayValue={(cat) => cat.id === 'all' ? 'Все категории' : formatCategoryDisplayName(cat.name)}
+                      filterValue={(cat) => cat.name}
+                      renderItem={(cat) => (
+                        <div className="flex items-center gap-2 text-xs">
+                          {cat.id !== 'all' ? (
+                            <>
+                              <div
+                                className="w-4 h-4 rounded-md flex items-center justify-center text-white shrink-0"
+                                style={{ backgroundColor: cat.color }}
+                              >
+                                <IconComponent name={cat.icon || 'HelpCircle'} size={10} />
+                              </div>
+                              <span className="font-semibold">
+                                {formatCategoryDisplayName(cat.name)} 
+                                <span className="text-[10px] text-slate-500 font-normal ml-1">
+                                  ({cat.type === 'income' ? 'доход' : 'расход'})
+                                </span>
+                              </span>
+                            </>
+                          ) : (
+                            <span className="font-semibold">{cat.name}</span>
+                          )}
+                        </div>
+                      )}
+                    />
                   </div>
 
                   {/* Filter by Date Preset */}
