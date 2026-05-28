@@ -24,6 +24,7 @@ interface DashboardOverviewProps {
     date: string;
   }) => void;
   addToast: (message: string, type: 'warning' | 'critical' | 'success') => void;
+  showMode?: 'quick-records' | 'analytics' | 'all';
 }
 
 export function DashboardOverview({
@@ -38,7 +39,8 @@ export function DashboardOverview({
   onGoogleLogout,
   onAddTransaction,
   onAddTransfer,
-  addToast
+  addToast,
+  showMode = 'all'
 }: DashboardOverviewProps) {
   
   // Custom states for export status
@@ -683,17 +685,34 @@ export function DashboardOverview({
   const donutStrokeWidth = 14;
   const donutCircumference = 2 * Math.PI * donutRadius;
 
+  if (showMode === 'quick-records') {
+    return (
+      <div className="space-y-6" id="dashboard-overview-view-quick">
+        {/* --- QUICK INTERACTIVE GESTURE TRANSACTION BUILDER --- */}
+        <QuickDragDropBuilder
+          accounts={accounts}
+          categories={categories}
+          onAddTransaction={onAddTransaction}
+          onAddTransfer={onAddTransfer}
+          addToast={addToast}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6" id="dashboard-overview-view">
       
-      {/* --- QUICK INTERACTIVE GESTURE TRANSACTION BUILDER --- */}
-      <QuickDragDropBuilder
-        accounts={accounts}
-        categories={categories}
-        onAddTransaction={onAddTransaction}
-        onAddTransfer={onAddTransfer}
-        addToast={addToast}
-      />
+      {showMode === 'all' && (
+        /* --- QUICK INTERACTIVE GESTURE TRANSACTION BUILDER --- */
+        <QuickDragDropBuilder
+          accounts={accounts}
+          categories={categories}
+          onAddTransaction={onAddTransaction}
+          onAddTransfer={onAddTransfer}
+          addToast={addToast}
+        />
+      )}
 
       {/* 2. Budget Threshold Warnings Section (only shown if warning triggers exist) */}
       {budgetWarnings.length > 0 && (
@@ -1070,18 +1089,18 @@ export function DashboardOverview({
                   return (
                     <div
                       key={tx.id}
-                      className="flex items-center justify-between p-3.5 bg-slate-950/60 rounded-xl border border-white/5 hover:border-white/10 transition-colors"
+                      className="flex items-center justify-between p-2 bg-slate-950/60 rounded-xl border border-white/5 hover:border-white/10 transition-colors"
                     >
-                      <div className="flex items-center gap-3 min-w-0">
+                      <div className="flex items-center gap-2.5 min-w-0">
                         <div
-                          className="w-8 h-8 rounded-lg flex items-center justify-center text-white shrink-0 shadow-xs"
+                          className="w-7 h-7 rounded-lg flex items-center justify-center text-white shrink-0 shadow-xs"
                           style={{ backgroundColor: isTransfer ? '#f59e0b' : (cat?.color || '#3b82f6') }}
                         >
-                          {isTransfer ? <ArrowUpDown size={14} /> : <IconComponent name={cat?.icon || 'HelpCircle'} size={14} />}
+                          {isTransfer ? <ArrowUpDown size={12} /> : <IconComponent name={cat?.icon || 'HelpCircle'} size={12} />}
                         </div>
                         <div className="min-w-0">
-                          <p className="text-xs font-bold text-slate-200 truncate">{tx.description || (isTransfer ? 'Перевод' : (cat?.name || 'Операция'))}</p>
-                          <span className="text-[10px] text-slate-400 font-medium block mt-0.5">
+                          <p className="text-xs font-bold text-slate-200 truncate leading-tight">{tx.description || (isTransfer ? 'Перевод' : (cat?.name || 'Операция'))}</p>
+                          <span className="text-[9.5px] text-slate-400 font-medium block mt-0.5">
                             Счет: <b className="text-slate-300">{acc?.name || 'Неизвестно'}</b> • Категория: <b className="text-slate-300">{isTransfer ? 'Перевод' : (cat?.name || 'Прочее')}</b>
                           </span>
                         </div>
@@ -1442,7 +1461,7 @@ export function DashboardOverview({
                 Система позволяет устанавливать лимиты расходования на следующий месяц. Конверты страхуют вас от импульсивных трат. Когда траты по категории превысят безопасные отметки (85% и выше), система сформирует предупреждающие Тосты на главной панели.
               </p>
               <button 
-                onClick={() => onQuickNavigate('budgeting')}
+                onClick={() => onQuickNavigate('accounts-categories')}
                 className="mt-5 px-4.5 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black rounded-xl transition-all uppercase tracking-wider font-display cursor-pointer"
               >
                 Открыть Управление Конвертами

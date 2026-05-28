@@ -277,13 +277,14 @@ export function QuickDragDropBuilder({
       return;
     }
 
-    setInfoCategoryId(cat.id);
-    if (categoryTooltipTimeoutRef.current) {
-      clearTimeout(categoryTooltipTimeoutRef.current);
+    // If no account is active, fallback to the first account automatically
+    if (sortedAccountsDisplay.length > 0) {
+      const activeAcc = sortedAccountsDisplay[0];
+      triggerQuickAmountModal(activeAcc, cat);
+      addToast(`Авто-счет: ${activeAcc.name}`, 'success');
+    } else {
+      addToast('Пожалуйста, сначала создайте счет в настройках.', 'warning');
     }
-    categoryTooltipTimeoutRef.current = setTimeout(() => {
-      setInfoCategoryId(null);
-    }, 4000); // 4 seconds visibility
   };
 
   const handleAccountClick = (acc: Account) => {
@@ -300,13 +301,6 @@ export function QuickDragDropBuilder({
     }
 
     setSelectedAccountSeq(acc);
-    setInfoAccountId(acc.id);
-    if (accountTooltipTimeoutRef.current) {
-      clearTimeout(accountTooltipTimeoutRef.current);
-    }
-    accountTooltipTimeoutRef.current = setTimeout(() => {
-      setInfoAccountId(null);
-    }, 4000); // 4 seconds visibility
   };
 
   // Touch specific absolute coordinate tracking for dragging indicator
@@ -663,61 +657,30 @@ export function QuickDragDropBuilder({
       {/* Decorative gradient corner */}
       <div className="absolute top-0 right-0 w-32 h-32 bg-teal-500/10 rounded-full blur-2xl pointer-events-none" />
 
-      {/* Header section */}
-      <div className="flex items-center justify-between mb-2 border-b border-white/5 pb-1.5">
-        <div className="flex items-center gap-1.5">
-          <div className="p-1 bg-teal-500/10 text-teal-300 border border-teal-500/20 rounded-md shrink-0">
-            <Sparkles size={13} className="animate-pulse" />
-          </div>
-          <div>
-            <h3 className="font-display font-bold text-slate-100 text-xs sm:text-sm leading-tight">
-              Быстрая запись
-            </h3>
-            <p className="text-[9px] text-slate-400 leading-none mt-0.5">
-              {isSortingMode
-                ? "Настройте порядок перетаскиванием или стрелочками 🚀"
-                : "Перенесите счет на категорию или другой счет для операции"}
-            </p>
-          </div>
-        </div>
-        <button
-          type="button"
-          onClick={() => setIsSortingMode(!isSortingMode)}
-          className={`flex items-center gap-1 px-2 py-1 rounded-lg border text-[10px] font-bold cursor-pointer transition-all shrink-0 ${
-            isSortingMode
-              ? 'border-emerald-500 bg-emerald-500/20 text-emerald-300 shadow-lg ring-1 ring-emerald-500/35'
-              : 'border-white/10 bg-white/5 text-slate-350 hover:bg-white/10 hover:border-white/20 active:scale-95'
-          }`}
-        >
-          <SlidersHorizontal size={11} />
-          {isSortingMode ? 'Готово' : 'Порядок'}
-        </button>
-      </div>
-
       {/* Main interactive area */}
       <div className="flex flex-col gap-2">
         {/* ROW 1: Source Accounts */}
         <div>
-          <span className="block text-[8.5px] font-bold text-slate-400 uppercase tracking-widest mb-0.5 select-none text-left flex flex-wrap items-center justify-between gap-1.5">
-            {selectedAccountSeq ? (
-              <span className="text-yellow-300 font-extrabold animate-pulse">
-                👉 Выбран счет: {selectedAccountSeq.name} (теперь нажмите на категорию или другой счет)
-              </span>
-            ) : (
-              <span>Шаг 1: Возьмите счет (Списание или Источник)</span>
-            )}
-            {!isSortingMode && infoAccountId && (
-              <span className="text-teal-350 font-extrabold normal-case font-mono text-[9.5px] bg-teal-950/40 px-1.5 py-0.2 rounded border border-teal-500/20 animate-pulse">
-                🔍 {accounts.find(a => a.id === infoAccountId)?.name}
-              </span>
-            )}
+          <span className="block text-[8.5px] font-bold text-slate-400 uppercase tracking-widest mb-0.5 select-none text-left flex items-center justify-between gap-1.5">
+            <span>{isSortingMode ? "⚙️ Сортировка" : "Счета"}</span>
+            <button
+              type="button"
+              onClick={() => setIsSortingMode(!isSortingMode)}
+              className={`flex items-center gap-1 px-1.5 py-0.5 rounded border text-[8px] font-extrabold cursor-pointer transition-all shrink-0 ${
+                isSortingMode
+                  ? 'border-emerald-500 bg-emerald-500/20 text-emerald-300 shadow-xs ring-1 ring-emerald-500/20'
+                  : 'border-white/10 bg-white/5 text-slate-300 hover:bg-white/10 hover:border-white/20 active:scale-95'
+              }`}
+            >
+              <SlidersHorizontal size={9} />
+              {isSortingMode ? 'Готово' : 'Порядок'}
+            </button>
           </span>
           <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-1">
             {sortedAccountsDisplay.map(acc => {
               const bgClass = acc.type === 'card' ? 'bg-indigo-500/10 text-indigo-300 border-indigo-500/20 hover:border-indigo-400/50' : 'bg-emerald-500/10 text-emerald-300 border-emerald-500/20 hover:border-emerald-400/50';
               const isActive = activeDragAccount?.id === acc.id;
               const isOverAcc = dragOverAccountId === acc.id;
-              const hasFocus = infoAccountId === acc.id;
               const isSeqSelected = selectedAccountSeq?.id === acc.id;
               
               return (
@@ -733,35 +696,29 @@ export function QuickDragDropBuilder({
                   onClick={() => !isSortingMode && handleAccountClick(acc)}
                   onTouchStart={(e) => {
                     if (isSortingMode) return;
-                    handleAccountClick(acc);
                     handleTouchStart(e, acc);
                   }}
                   onTouchMove={handleTouchMove}
                   onTouchEnd={handleTouchEnd}
                   className={`relative p-0.5 sm:p-1 rounded-lg border flex flex-col items-center justify-center text-center gap-0.5 transition-all select-none ${
                     isSeqSelected
-                      ? 'border-yellow-400 bg-yellow-500/20 scale-[1.04] ring-2 ring-yellow-400/50 shadow-md shadow-yellow-500/10'
+                      ? 'border-yellow-400 bg-yellow-500/20 scale-[1.04] ring-2 ring-yellow-400/50 shadow-md shadow-yellow-500/10 animate-pulse'
                       : isOverAcc 
                         ? 'border-indigo-400 bg-indigo-500/20 scale-[1.05]'
-                        : hasFocus && !isSortingMode
-                          ? 'border-teal-400 bg-teal-500/15 ring-1 ring-teal-400/40'
-                          : bgClass
+                        : bgClass
                   } ${
                     isActive ? 'scale-[1.03] ring-1 ring-teal-400 border-teal-400 bg-teal-500/20' : ''
                   } ${
                     isSortingMode ? 'cursor-default' : 'cursor-grab active:cursor-grabbing touch-none'
                   }`}
                   id={`drag-acc-${acc.id}`}
-                  style={{ minHeight: '38px' }}
+                  style={{ minHeight: '30px' }}
                 >
-                  <div className="w-3.5 h-3.5 bg-white/10 rounded flex items-center justify-center text-slate-200 pointer-events-none">
-                    <Wallet size={8} className="shrink-0" />
-                  </div>
                   <div className="text-center w-full min-w-0 pointer-events-none">
-                    <span className={`block font-bold text-[8px] leading-tight text-slate-205 px-0.5 ${
-                      hasFocus && !isSortingMode ? 'line-clamp-2 overflow-visible break-words h-auto' : 'truncate'
-                    }`}>{acc.name}</span>
-                    <span className="block text-[7.5px] font-mono leading-none opacity-80 mt-0.5 truncate">{Math.round(acc.balance)} ₼</span>
+                    <span className="block font-extrabold text-[9px] sm:text-[9.5px] leading-tight text-white px-0.5 truncate">{acc.name}</span>
+                    <span className={`block text-[10px] sm:text-[10.5px] font-mono font-black leading-none mt-0.5 select-none drop-shadow-xs ${
+                      acc.type === 'card' ? 'text-indigo-300' : 'text-emerald-300'
+                    }`}>{Math.round(acc.balance).toLocaleString('ru-RU')} ₼</span>
                   </div>
 
                   {isSortingMode && (
@@ -799,30 +756,16 @@ export function QuickDragDropBuilder({
           </div>
         </div>
 
-        {/* Arrow transition */}
-        <div className="flex justify-center -my-1 text-slate-500 select-none pointer-events-none">
-          <div className="flex items-center gap-1.5 bg-white/5 border border-white/10 px-2 py-0.5 rounded-full text-[9px] font-mono">
-            <CornerRightDown size={9} className="text-teal-400 animate-bounce" />
-            <span>ПЕРЕНЕСИТЕ СЮДА</span>
-          </div>
-        </div>
-
         {/* ROW 2: Destination Categories Grid */}
-        <div className="space-y-1.5">
+        <div className="space-y-1.5 mt-1">
           {/* Expense Categories */}
           <div>
             <span className="block text-[8.5px] font-bold text-slate-400 uppercase tracking-widest mb-0.5 select-none text-left flex flex-wrap items-center justify-between gap-1.5">
-              <span>Шаг 2: Отпустите на категории расходов (Списание средств)</span>
-              {infoCategoryId && expenseCategories.some(c => c.id === infoCategoryId) && (
-                <span className="text-teal-350 font-extrabold normal-case font-mono text-[9.5px] bg-teal-950/40 px-1.5 py-0.2 rounded border border-teal-500/20 animate-pulse">
-                  🔍 {categories.find(c => c.id === infoCategoryId)?.name}
-                </span>
-              )}
+              <span>Расходы</span>
             </span>
             <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 gap-1">
               {expenseCategories.map(cat => {
                 const isOver = dragOverCategoryId === cat.id;
-                const hasFocus = infoCategoryId === cat.id;
                 return (
                   <div
                     key={cat.id}
@@ -831,28 +774,20 @@ export function QuickDragDropBuilder({
                     onDragLeave={() => setDragOverCategoryId(null)}
                     onDrop={(e) => handleDropOnCategory(e, cat)}
                     onClick={() => !isSortingMode && handleCategoryClick(cat)}
-                    onTouchStart={(e) => {
-                      if (isSortingMode) return;
-                      handleCategoryClick(cat);
-                    }}
                     className={`relative p-0.5 sm:p-1 rounded-lg border flex flex-col items-center justify-center text-center gap-0.5 transition-all select-none ${
                       isOver 
                         ? 'border-emerald-400 bg-emerald-500/20 scale-[1.03] shadow-md shadow-emerald-500/5 ring-1 ring-emerald-400' 
-                        : hasFocus && !isSortingMode
-                          ? 'border-teal-400 bg-teal-500/15 ring-1 ring-teal-400/40 shadow-lg'
-                          : 'border-white/5 bg-white/5 hover:bg-white/10 hover:border-white/10'
+                        : 'border-white/5 bg-white/5 hover:bg-white/10 hover:border-white/10'
                     } ${
                       isSortingMode ? 'cursor-default' : 'cursor-pointer hover:scale-[1.04] active:scale-95'
                     }`}
                     id={`drop-cat-${cat.id}`}
-                    style={{ minHeight: '38px' }}
+                    style={{ minHeight: '32px' }}
                   >
                     <div className="w-3.5 h-3.5 bg-white/10 rounded flex items-center justify-center text-slate-200 pointer-events-none">
                       <IconComponent name={cat.icon} size={8} />
                     </div>
-                    <span className={`text-[8px] font-semibold font-sans tracking-tight leading-tight text-slate-300 max-w-full px-0.5 pointer-events-none text-center ${
-                      hasFocus && !isSortingMode ? 'line-clamp-2 overflow-visible break-words h-auto' : 'truncate'
-                    }`}>
+                    <span className="text-[8px] font-semibold font-sans tracking-tight leading-tight text-slate-300 max-w-full px-0.5 pointer-events-none text-center truncate font-sans">
                       {formatCategoryDisplayName(cat.name)}
                     </span>
 
@@ -895,17 +830,11 @@ export function QuickDragDropBuilder({
           {incomeCategories.length > 0 && (
             <div className="pt-1.5 border-t border-white/5">
               <span className="block text-[8.5px] font-bold text-slate-400 uppercase tracking-widest mb-0.5 select-none text-left flex flex-wrap items-center justify-between gap-1.5">
-                <span>Или отпустите на категории доходов (Пополнение баланса)</span>
-                {infoCategoryId && incomeCategories.some(c => c.id === infoCategoryId) && (
-                  <span className="text-emerald-350 font-extrabold normal-case font-mono text-[9.5px] bg-emerald-950/40 px-1.5 py-0.2 rounded border border-emerald-500/20 animate-pulse">
-                    🔍 {categories.find(c => c.id === infoCategoryId)?.name}
-                  </span>
-                )}
+                <span>Доходы</span>
               </span>
               <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 gap-1">
                 {incomeCategories.map(cat => {
                   const isOver = dragOverCategoryId === cat.id;
-                  const hasFocus = infoCategoryId === cat.id;
                   return (
                     <div
                       key={cat.id}
@@ -914,28 +843,20 @@ export function QuickDragDropBuilder({
                       onDragLeave={() => setDragOverCategoryId(null)}
                       onDrop={(e) => handleDropOnCategory(e, cat)}
                       onClick={() => !isSortingMode && handleCategoryClick(cat)}
-                      onTouchStart={(e) => {
-                        if (isSortingMode) return;
-                        handleCategoryClick(cat);
-                      }}
                       className={`relative p-0.5 sm:p-1 rounded-lg border flex flex-col items-center justify-center text-center gap-0.5 transition-all select-none ${
                         isOver 
                           ? 'border-emerald-400 bg-emerald-500/20 scale-[1.03] shadow-md shadow-emerald-500/5 ring-1 ring-emerald-400' 
-                          : hasFocus && !isSortingMode
-                            ? 'border-emerald-450 bg-emerald-500/15 ring-1 ring-emerald-400/40 shadow-lg'
-                            : 'border-white/5 bg-white/5 hover:bg-white/10 hover:border-white/10'
+                          : 'border-white/5 bg-white/5 hover:bg-white/10 hover:border-white/10'
                       } ${
                         isSortingMode ? 'cursor-default' : 'cursor-pointer hover:scale-[1.04] active:scale-95'
                       }`}
                       id={`drop-cat-${cat.id}`}
-                      style={{ minHeight: '38px' }}
+                      style={{ minHeight: '32px' }}
                     >
                       <div className="w-3.5 h-3.5 bg-white/10 rounded flex items-center justify-center text-emerald-400 pointer-events-none">
                         <IconComponent name={cat.icon} size={8} />
                       </div>
-                      <span className={`text-[8px] font-semibold font-sans tracking-tight leading-tight text-emerald-300 max-w-full px-0.5 pointer-events-none text-center ${
-                        hasFocus && !isSortingMode ? 'line-clamp-2 overflow-visible break-words h-auto' : 'truncate'
-                      }`}>
+                      <span className="text-[8px] font-semibold font-sans tracking-tight leading-tight text-emerald-300 max-w-full px-0.5 pointer-events-none text-center truncate">
                         {formatCategoryDisplayName(cat.name)}
                       </span>
 
@@ -996,76 +917,76 @@ export function QuickDragDropBuilder({
       {/* THE QUICK TRANSACTION RECORDING MODAL */}
       {activeTxData && (
         <div 
-          className="fixed inset-0 bg-slate-950/80 backdrop-blur-xs z-[10000] flex items-center justify-center p-4 overflow-y-auto font-sans"
+          className="fixed inset-0 bg-slate-950/80 backdrop-blur-xs z-[10000] flex items-center justify-center p-2 xs:p-4 overflow-y-auto font-sans"
           id="quick-transaction-modal"
           onClick={() => setActiveTxData(null)}
         >
           <div 
-            className="w-full max-w-[390px] bg-white text-slate-900 rounded-[28px] p-6 shadow-2xl border border-slate-100 relative animate-scale-up my-auto flex flex-col gap-4 select-none"
+            className="w-full max-w-[340px] bg-white text-slate-900 rounded-3xl p-4 sm:p-5 shadow-2xl border border-slate-100 relative animate-scale-up my-auto flex flex-col gap-3.5 select-none"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
             <div className="flex items-center justify-between relative">
               <div className="w-full text-center">
-                <span className="text-[11px] font-black uppercase tracking-widest text-slate-500">
+                <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">
                   {activeTxData.category.type === 'income' ? 'ДОХОД' : 'РАСХОД'}
                 </span>
               </div>
               <button
                 onClick={() => setActiveTxData(null)}
-                className="absolute right-0 top-1/2 -translate-y-1/2 bg-slate-100 hover:bg-slate-200 text-slate-400 hover:text-slate-600 p-2 rounded-full transition-colors cursor-pointer"
+                className="absolute right-0 top-1/2 -translate-y-1/2 bg-slate-100 hover:bg-slate-200 text-slate-400 hover:text-slate-600 p-1.5 rounded-full transition-colors cursor-pointer"
               >
-                <X size={14} className="stroke-[2.5]" />
+                <X size={12} className="stroke-[2.5]" />
               </button>
             </div>
 
             {/* Visual connector of accounts and categories */}
-            <div className="flex items-center justify-between relative mt-2 px-2">
+            <div className="flex items-center justify-between relative mt-1 px-1">
               {/* Connector line behind */}
-              <div className="absolute left-1/2 top-7 -translate-y-1/2 w-[60%] -translate-x-1/2 h-[1px] bg-slate-100 z-0" />
+              <div className="absolute left-1/2 top-5.5 -translate-y-1/2 w-[55%] -translate-x-1/2 h-[1px] bg-slate-100 z-0" />
               
               {/* Connector pill */}
-              <div className="absolute left-1/2 top-7 -translate-y-1/2 -translate-x-1/2 px-2.5 py-1 bg-white border border-slate-200 rounded-full text-[8.5px] font-black uppercase tracking-widest text-slate-500 z-10 select-none shadow-xs whitespace-nowrap">
+              <div className="absolute left-1/2 top-5.5 -translate-y-1/2 -translate-x-1/2 px-2 py-0.5 bg-white border border-slate-200 rounded-full text-[8px] font-black uppercase tracking-widest text-slate-500 z-10 select-none shadow-xs whitespace-nowrap">
                 {activeTxData.category.type === 'income' ? 'ПОЛУЧИТЬ' : 'ПОТРАТИТЬ'}
               </div>
 
               {/* Source Account Bubble */}
               <div className="flex flex-col items-center flex-1 z-10 min-w-0">
-                <div className="w-14 h-14 rounded-full bg-indigo-500 text-white flex items-center justify-center shadow-md shadow-indigo-500/20 shrink-0">
-                  <CreditCard size={22} className="stroke-[2]" />
+                <div className="w-11 h-11 rounded-full bg-indigo-500 text-white flex items-center justify-center shadow-md shadow-indigo-500/20 shrink-0">
+                  <CreditCard size={18} className="stroke-[2]" />
                 </div>
-                <span className="mt-2 font-bold text-slate-800 text-[11px] sm:text-xs text-center leading-tight truncate w-full px-1">
+                <span className="mt-1 font-bold text-slate-800 text-[10px] sm:text-[11px] text-center leading-tight truncate w-full px-0.5">
                   {activeTxData.account.name}
                 </span>
-                <span className="text-[9px] text-slate-400 font-bold font-mono mt-0.5 whitespace-nowrap">
+                <span className="text-[8.5px] text-slate-400 font-bold font-mono mt-0.5 whitespace-nowrap">
                   {Math.round(activeTxData.account.balance).toLocaleString('ru-RU')} ₼
                 </span>
               </div>
 
               {/* Space in between */}
-              <div className="w-10 shrink-0 h-4" />
+              <div className="w-8 shrink-0 h-4" />
 
               {/* Destination Category Bubble */}
               <div className="flex flex-col items-center flex-1 z-10 min-w-0">
-                <div className="w-14 h-14 rounded-full bg-amber-500 text-white flex items-center justify-center shadow-md shadow-amber-500/20 shrink-0">
-                  <IconComponent name={activeTxData.category.icon} size={22} className="stroke-[2]" />
+                <div className="w-11 h-11 rounded-full bg-amber-500 text-white flex items-center justify-center shadow-md shadow-amber-500/20 shrink-0">
+                  <IconComponent name={activeTxData.category.icon} size={18} className="stroke-[2]" />
                 </div>
-                <span className="mt-2 font-bold text-slate-800 text-[11px] sm:text-xs text-center leading-tight truncate w-full px-1">
+                <span className="mt-1 font-bold text-slate-800 text-[10px] sm:text-[11px] text-center leading-tight truncate w-full px-0.5">
                   {formatCategoryDisplayName(activeTxData.category.name)}
                 </span>
-                <span className="text-[9px] text-slate-400 font-bold mt-0.5 whitespace-nowrap truncate max-w-full uppercase tracking-wider">
+                <span className="text-[8.5px] text-slate-400 font-bold mt-0.5 whitespace-nowrap truncate max-w-full uppercase tracking-wider">
                   {activeTxData.category.type === 'income' ? 'Пополнение' : 'Расход'}
                 </span>
               </div>
             </div>
 
             {/* Input container: СУММА ТРАНЗАКЦИИ */}
-            <div className="bg-[#f8fafc] rounded-2xl p-3 border border-[#f1f5f9] flex flex-col mt-1">
-              <label className="text-[8.5px] font-black text-slate-400 uppercase tracking-wider text-right mb-0.5 select-none self-end">
+            <div className="bg-[#f8fafc] rounded-xl py-2 px-3 border border-[#f1f5f9] flex flex-col mt-0.5">
+              <label className="text-[8px] font-black text-slate-400 uppercase tracking-wider text-right mb-0.5 select-none self-end">
                 СУММА ТРАНЗАКЦИИ
               </label>
-              <div className="flex items-center justify-between gap-2.5">
-                <span className="text-3xl font-display font-light text-[#94a3b8] select-none">
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-2xl font-display font-light text-[#94a3b8] select-none">
                   ₼
                 </span>
                 <div className="flex-1 text-right min-w-0 relative">
@@ -1078,36 +999,22 @@ export function QuickDragDropBuilder({
                       const val = e.target.value.replace(/[^0-9.]/g, '');
                       setAmount(val === '' ? '0' : val);
                     }}
-                    className="w-full bg-transparent border-none p-0 text-right font-display font-black text-emerald-600 text-3xl sm:text-4xl focus:outline-hidden focus:ring-0 placeholder-emerald-600/30"
+                    className="w-full bg-transparent border-none p-0 text-right font-display font-black text-emerald-600 text-2xl sm:text-3xl focus:outline-hidden focus:ring-0 placeholder-emerald-600/30"
                   />
                 </div>
               </div>
             </div>
 
-            {/* Quick additive amount shortcuts */}
-            <div className="grid grid-cols-4 gap-1.5 mt-0.5">
-              {[100, 500, 1000, 5000].map((val) => (
-                <button
-                  key={val}
-                  type="button"
-                  onClick={() => handleQuickAdd(val)}
-                  className="border border-[#e2e8f0] bg-[#f8fafc] hover:bg-[#f1f5f9] text-[#1e293b] font-display font-extrabold text-[11px] py-1.5 sm:py-2 rounded-xl text-center active:scale-[0.97] transition-all cursor-pointer"
-                >
-                  +{val.toLocaleString('ru-RU')}
-                </button>
-              ))}
-            </div>
-
             {/* Custom Keypad dialer */}
-            <div className="grid grid-cols-3 gap-1.5">
+            <div className="grid grid-cols-3 gap-1">
               {['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0', 'Стереть'].map((keyVal) => (
                 <button
                   key={keyVal}
                   type="button"
                   onClick={() => handleDialClick(keyVal)}
-                  className={`h-11 sm:h-12 font-display font-extrabold text-base sm:text-lg border border-[#f1f5f9] hover:border-[#e2e8f0] hover:bg-[#f8fafc] rounded-2xl flex items-center justify-center transition-all cursor-pointer select-none active:scale-[0.95] ${
+                  className={`h-9 sm:h-10 font-display font-extrabold text-sm sm:text-base border border-[#f1f5f9] hover:border-[#e2e8f0] hover:bg-[#f8fafc] rounded-xl flex items-center justify-center transition-all cursor-pointer select-none active:scale-[0.95] ${
                     keyVal === 'Стереть' 
-                      ? 'text-[#475569] text-xs font-sans font-bold hover:bg-rose-50/20' 
+                      ? 'text-[#475569] text-[10.5px] font-sans font-bold hover:bg-rose-50/20' 
                       : 'text-[#1e293b]'
                   }`}
                 >
@@ -1117,9 +1024,9 @@ export function QuickDragDropBuilder({
             </div>
 
             {/* Optional Comment Input with Document icon */}
-            <div className="space-y-1 text-left border-t border-slate-100 pt-2.5">
-              <label className="flex items-center gap-1.5 text-[#64748b] text-[9px] font-black uppercase tracking-wider">
-                <FileText size={12} className="text-[#94a3b8] shrink-0" />
+            <div className="space-y-1 text-left border-t border-slate-100 pt-2">
+              <label className="flex items-center gap-1.5 text-[#64748b] text-[8.5px] font-black uppercase tracking-wider">
+                <FileText size={10} className="text-[#94a3b8] shrink-0" />
                 <span>ДОБАВИТЬ КОММЕНТАРИЙ</span>
               </label>
               <input
@@ -1127,26 +1034,26 @@ export function QuickDragDropBuilder({
                 placeholder="Добавить комментарий..."
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="w-full px-3 py-2 bg-[#f8fafc] border border-[#f1f5f9] hover:border-[#e2e8f0] rounded-xl text-[11px] text-slate-700 placeholder-slate-400 focus:outline-hidden focus:ring-1 focus:ring-slate-300 focus:bg-white transition-all font-sans"
+                className="w-full px-2.5 py-1.5 bg-[#f8fafc] border border-[#f1f5f9] hover:border-[#e2e8f0] rounded-lg text-[10px] text-slate-700 placeholder-slate-400 focus:outline-hidden focus:ring-1 focus:ring-slate-300 focus:bg-white transition-all font-sans"
               />
             </div>
 
             {/* Form Bottom Actions */}
-            <div className="flex gap-3 pt-1">
+            <div className="flex gap-2.5 pt-0.5">
               <button
                 type="button"
                 onClick={() => {
                   setAmount('0');
                   setDescription('');
                 }}
-                className="flex-1 py-2.5 bg-[#f1f5f9] hover:bg-[#e2e8f0] text-[#475569] font-sans font-bold text-xs uppercase tracking-wider rounded-2xl cursor-pointer transition-all active:scale-[0.97] text-center"
+                className="flex-1 py-2 bg-[#f1f5f9] hover:bg-[#e2e8f0] text-[#475569] font-sans font-semibold text-[10.5px] uppercase tracking-wider rounded-xl cursor-pointer transition-all active:scale-[0.97] text-center"
               >
                 Очистить
               </button>
               <button
                 type="button"
-                onClick={handleSaveTransaction}
-                className="flex-1 py-2.5 bg-[#f1f5f9] hover:bg-[#e2e8f0] text-[#475569] font-sans font-extrabold text-xs uppercase tracking-wider rounded-2xl cursor-pointer transition-all active:scale-[0.97] text-center"
+                onClick={() => handleSaveTransaction()}
+                className="flex-1 py-2 bg-[#f1f5f9] hover:bg-[#e2e8f0] text-[#475569] font-sans font-extrabold text-[10.5px] uppercase tracking-wider rounded-xl cursor-pointer transition-all active:scale-[0.97] text-center"
               >
                 ✓ Сохранить
               </button>
@@ -1158,76 +1065,76 @@ export function QuickDragDropBuilder({
       {/* THE QUICK TRANSFER RECORDING MODAL */}
       {activeTransferData && (
         <div 
-          className="fixed inset-0 bg-slate-950/80 backdrop-blur-xs z-[10000] flex items-center justify-center p-4 overflow-y-auto font-sans"
+          className="fixed inset-0 bg-slate-950/80 backdrop-blur-xs z-[10000] flex items-center justify-center p-2 xs:p-4 overflow-y-auto font-sans"
           id="quick-transfer-modal"
           onClick={() => setActiveTransferData(null)}
         >
           <div 
-            className="w-full max-w-[390px] bg-white text-slate-900 rounded-[28px] p-6 shadow-2xl border border-slate-100 relative animate-scale-up my-auto flex flex-col gap-4 select-none"
+            className="w-full max-w-[340px] bg-white text-slate-900 rounded-3xl p-4 sm:p-5 shadow-2xl border border-slate-100 relative animate-scale-up my-auto flex flex-col gap-3.5 select-none"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
             <div className="flex items-center justify-between relative">
               <div className="w-full text-center">
-                <span className="text-[11px] font-black uppercase tracking-widest text-slate-500">
+                <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">
                   ПЕРЕВОД
                 </span>
               </div>
               <button
                 onClick={() => setActiveTransferData(null)}
-                className="absolute right-0 top-1/2 -translate-y-1/2 bg-slate-100 hover:bg-slate-200 text-slate-400 hover:text-slate-600 p-2 rounded-full transition-colors cursor-pointer"
+                className="absolute right-0 top-1/2 -translate-y-1/2 bg-slate-100 hover:bg-slate-200 text-slate-400 hover:text-slate-600 p-1.5 rounded-full transition-colors cursor-pointer"
               >
-                <X size={14} className="stroke-[2.5]" />
+                <X size={12} className="stroke-[2.5]" />
               </button>
             </div>
 
             {/* Visual connector of accounts */}
-            <div className="flex items-center justify-between relative mt-2 px-2">
+            <div className="flex items-center justify-between relative mt-1 px-1">
               {/* Connector line behind */}
-              <div className="absolute left-1/2 top-7 -translate-y-1/2 w-[60%] -translate-x-1/2 h-[1px] bg-slate-100 z-0" />
+              <div className="absolute left-1/2 top-5.5 -translate-y-1/2 w-[55%] -translate-x-1/2 h-[1px] bg-slate-100 z-0" />
               
               {/* Connector pill */}
-              <div className="absolute left-1/2 top-7 -translate-y-1/2 -translate-x-1/2 px-2.5 py-1 bg-white border border-slate-200 rounded-full text-[8.5px] font-black uppercase tracking-widest text-slate-500 z-10 select-none shadow-xs whitespace-nowrap">
+              <div className="absolute left-1/2 top-5.5 -translate-y-1/2 -translate-x-1/2 px-2 py-0.5 bg-white border border-slate-200 rounded-full text-[8px] font-black uppercase tracking-widest text-slate-500 z-10 select-none shadow-xs whitespace-nowrap">
                 ПЕРЕВЕСТИ
               </div>
 
               {/* Source Account Bubble */}
               <div className="flex flex-col items-center flex-1 z-10 min-w-0">
-                <div className="w-14 h-14 rounded-full bg-indigo-500 text-white flex items-center justify-center shadow-md shadow-indigo-500/20 shrink-0">
-                  <CreditCard size={22} className="stroke-[2]" />
+                <div className="w-11 h-11 rounded-full bg-indigo-500 text-white flex items-center justify-center shadow-md shadow-indigo-500/20 shrink-0">
+                  <CreditCard size={18} className="stroke-[2]" />
                 </div>
-                <span className="mt-2 font-bold text-slate-800 text-[11px] sm:text-xs text-center leading-tight truncate w-full px-1">
+                <span className="mt-1 font-bold text-slate-800 text-[10px] sm:text-[11px] text-center leading-tight truncate w-full px-0.5">
                   {activeTransferData.fromAccount.name}
                 </span>
-                <span className="text-[9px] text-slate-400 font-bold font-mono mt-0.5 whitespace-nowrap">
+                <span className="text-[8.5px] text-slate-400 font-bold font-mono mt-0.5 whitespace-nowrap">
                   {Math.round(activeTransferData.fromAccount.balance).toLocaleString('ru-RU')} ₼
                 </span>
               </div>
 
               {/* Space in between */}
-              <div className="w-10 shrink-0 h-4" />
+              <div className="w-8 shrink-0 h-4" />
 
               {/* Destination Account Bubble */}
               <div className="flex flex-col items-center flex-1 z-10 min-w-0">
-                <div className="w-14 h-14 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-md shadow-emerald-500/20 shrink-0">
-                  <CreditCard size={22} className="stroke-[2]" />
+                <div className="w-11 h-11 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-md shadow-emerald-500/20 shrink-0">
+                  <CreditCard size={18} className="stroke-[2]" />
                 </div>
-                <span className="mt-2 font-bold text-slate-800 text-[11px] sm:text-xs text-center leading-tight truncate w-full px-1">
+                <span className="mt-1 font-bold text-slate-800 text-[10px] sm:text-[11px] text-center leading-tight truncate w-full px-0.5">
                   {activeTransferData.toAccount.name}
                 </span>
-                <span className="text-[9px] text-slate-400 font-bold font-mono mt-0.5 whitespace-nowrap">
+                <span className="text-[8.5px] text-slate-400 font-bold font-mono mt-0.5 whitespace-nowrap">
                   {Math.round(activeTransferData.toAccount.balance).toLocaleString('ru-RU')} ₼
                 </span>
               </div>
             </div>
 
             {/* Input container: СУММА ТРАНЗАКЦИИ */}
-            <div className="bg-[#f8fafc] rounded-2xl p-3 border border-[#f1f5f9] flex flex-col mt-1">
-              <label className="text-[8.5px] font-black text-slate-400 uppercase tracking-wider text-right mb-0.5 select-none self-end">
+            <div className="bg-[#f8fafc] rounded-xl py-2 px-3 border border-[#f1f5f9] flex flex-col mt-0.5">
+              <label className="text-[8px] font-black text-slate-400 uppercase tracking-wider text-right mb-0.5 select-none self-end">
                 СУММА ТРАНЗАКЦИИ
               </label>
-              <div className="flex items-center justify-between gap-2.5">
-                <span className="text-3xl font-display font-light text-[#94a3b8] select-none">
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-2xl font-display font-light text-[#94a3b8] select-none">
                   ₼
                 </span>
                 <div className="flex-1 text-right min-w-0 relative">
@@ -1240,36 +1147,22 @@ export function QuickDragDropBuilder({
                       const val = e.target.value.replace(/[^0-9.]/g, '');
                       setAmount(val === '' ? '0' : val);
                     }}
-                    className="w-full bg-transparent border-none p-0 text-right font-display font-black text-indigo-600 text-3xl sm:text-4xl focus:outline-hidden focus:ring-0 placeholder-indigo-600/30"
+                    className="w-full bg-transparent border-none p-0 text-right font-display font-black text-indigo-600 text-2xl sm:text-3xl focus:outline-hidden focus:ring-0 placeholder-indigo-600/30"
                   />
                 </div>
               </div>
             </div>
 
-            {/* Quick additive amount shortcuts */}
-            <div className="grid grid-cols-4 gap-1.5 mt-0.5">
-              {[100, 500, 1000, 5000].map((val) => (
-                <button
-                  key={val}
-                  type="button"
-                  onClick={() => handleQuickAdd(val)}
-                  className="border border-[#e2e8f0] bg-[#f8fafc] hover:bg-[#f1f5f9] text-[#1e293b] font-display font-extrabold text-[11px] py-1.5 sm:py-2 rounded-xl text-center active:scale-[0.97] transition-all cursor-pointer"
-                >
-                  +{val.toLocaleString('ru-RU')}
-                </button>
-              ))}
-            </div>
-
             {/* Custom Keypad dialer */}
-            <div className="grid grid-cols-3 gap-1.5">
+            <div className="grid grid-cols-3 gap-1">
               {['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0', 'Стереть'].map((keyVal) => (
                 <button
                   key={keyVal}
                   type="button"
                   onClick={() => handleDialClick(keyVal)}
-                  className={`h-11 sm:h-12 font-display font-extrabold text-base sm:text-lg border border-[#f1f5f9] hover:border-[#e2e8f0] hover:bg-[#f8fafc] rounded-2xl flex items-center justify-center transition-all cursor-pointer select-none active:scale-[0.95] ${
+                  className={`h-9 sm:h-10 font-display font-extrabold text-sm sm:text-base border border-[#f1f5f9] hover:border-[#e2e8f0] hover:bg-[#f8fafc] rounded-xl flex items-center justify-center transition-all cursor-pointer select-none active:scale-[0.95] ${
                     keyVal === 'Стереть' 
-                      ? 'text-[#475569] text-xs font-sans font-bold hover:bg-rose-50/20' 
+                      ? 'text-[#475569] text-[10.5px] font-sans font-bold hover:bg-rose-50/20' 
                       : 'text-[#1e293b]'
                   }`}
                 >
@@ -1279,9 +1172,9 @@ export function QuickDragDropBuilder({
             </div>
 
             {/* Optional Comment Input with Document icon */}
-            <div className="space-y-1 text-left border-t border-slate-100 pt-2.5">
-              <label className="flex items-center gap-1.5 text-[#64748b] text-[9px] font-black uppercase tracking-wider">
-                <FileText size={12} className="text-[#94a3b8] shrink-0" />
+            <div className="space-y-1 text-left border-t border-slate-100 pt-2">
+              <label className="flex items-center gap-1.5 text-[#64748b] text-[8.5px] font-black uppercase tracking-wider">
+                <FileText size={10} className="text-[#94a3b8] shrink-0" />
                 <span>ДОБАВИТЬ КОММЕНТАРИЙ</span>
               </label>
               <input
@@ -1289,26 +1182,26 @@ export function QuickDragDropBuilder({
                 placeholder="Добавить комментарий..."
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="w-full px-3 py-2 bg-[#f8fafc] border border-[#f1f5f9] hover:border-[#e2e8f0] rounded-xl text-[11px] text-slate-700 placeholder-slate-400 focus:outline-hidden focus:ring-1 focus:ring-slate-300 focus:bg-white transition-all font-sans"
+                className="w-full px-2.5 py-1.5 bg-[#f8fafc] border border-[#f1f5f9] hover:border-[#e2e8f0] rounded-lg text-[10px] text-slate-700 placeholder-slate-400 focus:outline-hidden focus:ring-1 focus:ring-slate-300 focus:bg-white transition-all font-sans"
               />
             </div>
 
             {/* Form Bottom Actions */}
-            <div className="flex gap-3 pt-1">
+            <div className="flex gap-2.5 pt-0.5">
               <button
                 type="button"
                 onClick={() => {
                   setAmount('0');
                   setDescription('');
                 }}
-                className="flex-1 py-2.5 bg-[#f1f5f9] hover:bg-[#e2e8f0] text-[#475569] font-sans font-bold text-xs uppercase tracking-wider rounded-2xl cursor-pointer transition-all active:scale-[0.97] text-center"
+                className="flex-1 py-2 bg-[#f1f5f9] hover:bg-[#e2e8f0] text-[#475569] font-sans font-semibold text-[10.5px] uppercase tracking-wider rounded-xl cursor-pointer transition-all active:scale-[0.97] text-center"
               >
                 Очистить
               </button>
               <button
                 type="button"
-                onClick={handleSaveTransfer}
-                className="flex-1 py-2.5 bg-[#f1f5f9] hover:bg-[#e2e8f0] text-[#475569] font-sans font-extrabold text-xs uppercase tracking-wider rounded-2xl cursor-pointer transition-all active:scale-[0.97] text-center"
+                onClick={() => handleSaveTransfer()}
+                className="flex-1 py-2 bg-[#f1f5f9] hover:bg-[#e2e8f0] text-[#475569] font-sans font-extrabold text-[10.5px] uppercase tracking-wider rounded-xl cursor-pointer transition-all active:scale-[0.97] text-center"
               >
                 ✓ Сохранить
               </button>

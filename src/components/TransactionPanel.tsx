@@ -790,7 +790,7 @@ export function TransactionPanel({
               </p>
             </div>
           ) : (
-            <div className="space-y-2 max-h-[440px] overflow-y-auto pr-1 custom-scrollbar">
+            <div className="space-y-1.5 max-h-[520px] overflow-y-auto pr-1 custom-scrollbar">
               
               {/* Column headings for desktop */}
               <div className="hidden md:grid grid-cols-12 gap-3 px-4 py-2 text-[10px] uppercase font-bold text-slate-400 tracking-wider">
@@ -815,7 +815,7 @@ export function TransactionPanel({
                 return (
                   <div
                     key={tx.id}
-                    className={`grid grid-cols-1 md:grid-cols-12 gap-3 items-center p-3 px-4 rounded-2xl border transition-all hover:shadow-sm group ${
+                    className={`grid grid-cols-1 md:grid-cols-12 gap-2 items-center py-1.5 px-3 sm:px-4 rounded-xl border transition-all hover:shadow-xs group ${
                       editingTransaction?.id === tx.id
                         ? 'bg-amber-500/10 border-amber-500/30'
                         : isTransfer
@@ -826,18 +826,18 @@ export function TransactionPanel({
                     }`}
                   >
                     {/* Category & Custom Description desc */}
-                    <div className="col-span-3 flex items-center gap-3">
+                    <div className="col-span-3 flex items-center gap-2">
                       <div
-                        className="w-8 h-8 rounded-lg flex items-center justify-center text-white shrink-0"
+                        className="w-7 h-7 rounded-lg flex items-center justify-center text-white shrink-0"
                         style={{ backgroundColor: isTransfer ? '#f59e0b' : (cat?.color || '#3b82f6') }}
                       >
-                        {isTransfer ? <ArrowUpDown size={14} /> : <IconComponent name={cat?.icon || 'HelpCircle'} size={14} />}
+                        {isTransfer ? <ArrowUpDown size={12} /> : <IconComponent name={cat?.icon || 'HelpCircle'} size={12} />}
                       </div>
                       <div className="min-w-0">
                         <h4 className="font-semibold text-xs text-slate-200 truncate leading-tight">
                           {tx.description || (isTransfer ? 'Перевод' : (cat?.name || 'Без описания'))}
                         </h4>
-                        <span className="text-[10px] text-slate-400 uppercase tracking-wide font-medium">
+                        <span className="text-[9.5px] text-slate-400 uppercase tracking-wide font-medium block leading-none mt-0.5">
                           {isTransfer ? 'Перевод' : (cat?.name || 'Другое')}
                         </span>
                       </div>
@@ -845,11 +845,11 @@ export function TransactionPanel({
 
                     {/* Associated Account & Card Link badge */}
                     <div className="col-span-3 flex flex-wrap items-center gap-1.5 md:opacity-100">
-                      <span className="text-[11px] font-semibold text-slate-300 bg-white/10 px-2 py-0.5 rounded-md truncate max-w-[130px]" title={acc?.name}>
+                      <span className="text-[10px] font-semibold text-slate-300 bg-white/10 px-2 py-0.5 rounded-md truncate max-w-[130px]" title={acc?.name}>
                         {acc?.name || 'Неизвестно'}
                       </span>
                       {card && (
-                        <span className="text-[9px] font-bold text-teal-300 bg-teal-500/10 border border-teal-500/20 px-1.5 py-0.5 rounded-md flex items-center gap-0.5" title={`${card.bank} (${card.name})`}>
+                        <span className="text-[9px] font-bold text-teal-300 bg-teal-500/10 border border-teal-500/20 px-1.5 py-0.2 rounded flex items-center gap-0.5" title={`${card.bank} (${card.name})`}>
                           <CreditCard size={9} />
                           {card.bank.split(' ')[0]} *{card.lastFour}
                         </span>
@@ -862,22 +862,22 @@ export function TransactionPanel({
                     </div>
 
                     {/* Transaction sum */}
-                    <div className="col-span-2 font-display font-extrabold text-sm md:text-right leading-none">
+                    <div className="col-span-2 font-display font-black text-xs sm:text-sm md:text-right leading-none">
                       <span className={isTransfer ? (tx.transferType === 'in' ? 'text-teal-400' : 'text-amber-400') : (isIncome ? 'text-emerald-400' : 'text-white')}>
                         {isTransfer ? (tx.transferType === 'in' ? '+' : '-') : (isIncome ? '+' : '-')}{tx.amount.toFixed(2)} ₼
                       </span>
                     </div>
 
                      {/* Action buttons */}
-                     <div className="col-span-2 flex items-center justify-end gap-1.5">
+                     <div className="col-span-2 flex items-center justify-end gap-1">
                        <button
                          onClick={() => {
                            onUpdateTransaction({ ...tx, displayInEditFormOnly: true } as any);
                          }}
-                         className="p-1.5 px-2.5 text-[11px] font-semibold bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-white/10 rounded-xl hover:bg-teal-500 hover:text-slate-950 dark:hover:bg-teal-450 dark:hover:text-slate-950 transition-all cursor-pointer flex items-center gap-1 shrink-0"
+                         className="p-1 px-2.5 text-[10.5px] font-semibold bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-white/10 rounded-lg hover:bg-teal-500 hover:text-slate-950 dark:hover:bg-teal-450 dark:hover:text-slate-950 transition-all cursor-pointer flex items-center gap-1 shrink-0"
                          title="Редактировать запись"
                        >
-                         <Edit2 size={11} />
+                         <Edit2 size={10} />
                          <span className="md:hidden font-semibold">Изм</span>
                        </button>
  
@@ -891,10 +891,10 @@ export function TransactionPanel({
                              isIncome: isTransfer ? (tx.transferType === 'in') : (tx.type === 'income')
                            });
                          }}
-                         className="p-1.5 px-2.5 text-[11px] font-semibold bg-white/5 hover:bg-rose-500/15 hover:text-rose-400 text-slate-400 border border-white/5 hover:border-rose-500/35 rounded-xl transition-all cursor-pointer flex items-center gap-1 shrink-0"
+                         className="p-1 px-2.5 text-[10.5px] font-semibold bg-white/5 hover:bg-rose-500/15 hover:text-rose-400 text-slate-400 border border-white/5 hover:border-rose-500/35 rounded-lg transition-all cursor-pointer flex items-center gap-1 shrink-0"
                          title="Удалить запись"
                        >
-                         <Trash2 size={11} />
+                         <Trash2 size={10} />
                          <span className="md:hidden font-semibold">Удал</span>
                        </button>
                      </div>

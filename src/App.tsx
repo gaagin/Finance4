@@ -6,7 +6,7 @@ import { TransactionPanel } from './components/TransactionPanel';
 import { AccountsCategoriesPanel } from './components/AccountsCategoriesPanel';
 import { BudgetingPanel } from './components/BudgetingPanel';
 import { CalendarPanel } from './components/CalendarPanel';
-import { LayoutDashboard, ReceiptText, Calendar, SlidersHorizontal, Settings, Flame, Bell, AlertTriangle, XCircle, CheckCircle, Info, LogIn, LogOut, ShieldAlert, X, RefreshCw, FolderOpen } from 'lucide-react';
+import { LayoutDashboard, ReceiptText, Calendar, SlidersHorizontal, Settings, Flame, Bell, AlertTriangle, XCircle, CheckCircle, Info, LogIn, LogOut, ShieldAlert, X, RefreshCw, FolderOpen, TrendingUp } from 'lucide-react';
 import { initAuth, logout, googleSignIn, db } from './googleAuth';
 import { User } from 'firebase/auth';
 import { doc, onSnapshot, getDoc } from 'firebase/firestore';
@@ -56,6 +56,7 @@ export default function App() {
 
   // 3. Navigation between Views (Tabs)
   const [activeTab, setActiveTab] = useState<string>('overview');
+  const [accountsSubTab, setAccountsSubTab] = useState<'accounts' | 'budget'>('accounts');
 
   // Intercollegiate states passing to support instant add-on-day or edits
   const [preselectedDate, setPreselectedDate] = useState<string | null>(null);
@@ -855,6 +856,25 @@ export default function App() {
               onAddTransaction={handleAddTransaction}
               onAddTransfer={handleAddTransfer}
               addToast={addToast}
+              showMode="quick-records"
+            />
+          )}
+
+          {activeTab === 'analytics' && (
+            <DashboardOverview
+              transactions={data.transactions}
+              categories={data.categories}
+              accounts={data.accounts}
+              budgets={data.budgets}
+              onQuickNavigate={handleQuickNavigate}
+              currentUser={currentUser}
+              gAccessToken={gAccessToken}
+              onGoogleLogin={handleGoogleLogin}
+              onGoogleLogout={handleGoogleLogout}
+              onAddTransaction={handleAddTransaction}
+              onAddTransfer={handleAddTransfer}
+              addToast={addToast}
+              showMode="analytics"
             />
           )}
 
@@ -888,33 +908,59 @@ export default function App() {
             />
           )}
 
-          {activeTab === 'budgeting' && (
-            <BudgetingPanel
-              transactions={data.transactions}
-              categories={data.categories}
-              budgets={data.budgets}
-              onSaveBudget={handleSaveBudget}
-              onDeleteBudget={handleDeleteBudget}
-            />
-          )}
-
           {activeTab === 'accounts-categories' && (
-            <AccountsCategoriesPanel
-              accounts={data.accounts}
-              categories={data.categories}
-              cards={data.cards || []}
-              onAddAccount={handleAddAccount}
-              onUpdateAccount={handleUpdateAccount}
-              onDeleteAccount={handleDeleteAccount}
-              onAddCategory={handleAddCategory}
-              onUpdateCategory={handleUpdateCategory}
-              onDeleteCategory={handleDeleteCategory}
-              onAddCard={handleAddCard}
-              onUpdateCard={handleUpdateCard}
-              onDeleteCard={handleDeleteCard}
-              theme={theme}
-              onThemeChange={setTheme}
-            />
+            <div className="space-y-6">
+              {/* Internal sub-tab selector for accounts and budgeting limits */}
+              <div className="flex bg-white/5 p-1 rounded-2xl border border-white/10 max-w-sm sm:max-w-md">
+                <button
+                  onClick={() => setAccountsSubTab('accounts')}
+                  className={`flex-1 py-2 px-3 text-[11px] sm:text-xs font-bold rounded-xl transition-all cursor-pointer ${
+                    accountsSubTab === 'accounts'
+                      ? 'bg-gradient-to-r from-teal-400 to-emerald-400 text-slate-950 font-black shadow-md'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  Счета и Категории
+                </button>
+                <button
+                  onClick={() => setAccountsSubTab('budget')}
+                  className={`flex-1 py-2 px-3 text-[11px] sm:text-xs font-bold rounded-xl transition-all cursor-pointer ${
+                    accountsSubTab === 'budget'
+                      ? 'bg-gradient-to-r from-teal-400 to-emerald-400 text-slate-950 font-black shadow-md'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  Лимиты Бюджета
+                </button>
+              </div>
+
+              {accountsSubTab === 'accounts' ? (
+                <AccountsCategoriesPanel
+                  accounts={data.accounts}
+                  categories={data.categories}
+                  cards={data.cards || []}
+                  onAddAccount={handleAddAccount}
+                  onUpdateAccount={handleUpdateAccount}
+                  onDeleteAccount={handleDeleteAccount}
+                  onAddCategory={handleAddCategory}
+                  onUpdateCategory={handleUpdateCategory}
+                  onDeleteCategory={handleDeleteCategory}
+                  onAddCard={handleAddCard}
+                  onUpdateCard={handleUpdateCard}
+                  onDeleteCard={handleDeleteCard}
+                  theme={theme}
+                  onThemeChange={setTheme}
+                />
+              ) : (
+                <BudgetingPanel
+                  transactions={data.transactions}
+                  categories={data.categories}
+                  budgets={data.budgets}
+                  onSaveBudget={handleSaveBudget}
+                  onDeleteBudget={handleDeleteBudget}
+                />
+              )}
+            </div>
           )}
         </div>
 
@@ -922,19 +968,19 @@ export default function App() {
 
       {/* Navigation tabs row: fixed bottom nav bar (always visible, not scrollable, optimized for smartphones) */}
       <div 
-        className={`fixed bottom-0 left-0 right-0 w-full border-t px-2 pt-2 flex justify-around items-center gap-1 z-[999] transition-colors duration-200 ${
+        className={`fixed bottom-0 left-0 right-0 w-full border-t px-1.5 pt-1 flex justify-around items-center gap-0.5 z-[999] transition-colors duration-200 ${
           theme === 'dark'
-            ? 'bg-[#0f172a] border-white/10 text-slate-100 shadow-[0_-8px_30px_rgba(0,0,0,0.6)]'
-            : 'bg-white border-slate-200/80 text-slate-800 shadow-[0_-8px_30px_rgba(0,0,0,0.08)]'
+            ? 'bg-[#0f172a]/95 backdrop-blur-md border-white/10 text-slate-100 shadow-[0_-8px_30px_rgba(0,0,0,0.6)]'
+            : 'bg-white/95 backdrop-blur-md border-slate-200/80 text-slate-800 shadow-[0_-8px_30px_rgba(0,0,0,0.08)]'
         }`}
         id="fixed-bottom-nav"
         style={{
-          paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 12px)'
+          paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 5px)'
         }}
       >
         <button
           onClick={() => handleQuickNavigate('overview')}
-          className={`flex flex-col items-center justify-center py-1.5 px-1 rounded-xl transition-all flex-1 min-w-0 select-none cursor-pointer group ${
+          className={`flex flex-col items-center justify-center py-0.5 px-0.5 rounded-lg transition-all flex-1 min-w-0 select-none cursor-pointer group ${
             activeTab === 'overview'
               ? theme === 'dark'
                 ? 'bg-teal-500/15 text-teal-300 border border-teal-500/20 shadow-inner font-bold'
@@ -944,13 +990,13 @@ export default function App() {
                 : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100 border border-transparent'
           }`}
         >
-          <LayoutDashboard size={18} className="transition-transform group-active:scale-90" />
-          <span className="text-[9.5px] sm:text-[11px] font-bold tracking-wide mt-0.5 truncate">Обзор</span>
+          <LayoutDashboard size={16} className="transition-transform group-active:scale-90" />
+          <span className="text-[9px] sm:text-[10.5px] font-bold tracking-normal mt-0.5 truncate">Обзор</span>
         </button>
 
         <button
           onClick={() => handleQuickNavigate('transactions')}
-          className={`flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all flex-1 min-w-0 select-none relative cursor-pointer group ${
+          className={`flex flex-col items-center justify-center py-0.5 px-0.5 rounded-lg transition-all flex-1 min-w-0 select-none relative cursor-pointer group ${
             activeTab === 'transactions'
               ? theme === 'dark'
                 ? 'bg-teal-500/15 text-teal-300 border border-teal-500/20 shadow-inner font-bold'
@@ -960,16 +1006,16 @@ export default function App() {
                 : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100 border border-transparent'
           }`}
         >
-          <ReceiptText size={18} className="transition-transform group-active:scale-90" />
-          <span className="text-[9.5px] sm:text-[11px] font-bold tracking-wide mt-0.5 truncate">Журнал</span>
+          <ReceiptText size={16} className="transition-transform group-active:scale-90" />
+          <span className="text-[9px] sm:text-[10.5px] font-bold tracking-normal mt-0.5 truncate">Журнал</span>
           {preselectedDate && (
-            <span className="absolute top-1.5 right-1/2 translate-x-3 w-1.5 h-1.5 bg-rose-500 rounded-full animate-ping" />
+            <span className="absolute top-1 right-1/2 translate-x-3 w-1.5 h-1.5 bg-rose-500 rounded-full animate-ping" />
           )}
         </button>
 
         <button
           onClick={() => handleQuickNavigate('calendar')}
-          className={`flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all flex-1 min-w-0 select-none cursor-pointer group ${
+          className={`flex flex-col items-center justify-center py-0.5 px-0.5 rounded-lg transition-all flex-1 min-w-0 select-none cursor-pointer group ${
             activeTab === 'calendar'
               ? theme === 'dark'
                 ? 'bg-teal-500/15 text-teal-300 border border-teal-500/20 shadow-inner font-bold'
@@ -979,14 +1025,14 @@ export default function App() {
                 : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100 border border-transparent'
           }`}
         >
-          <Calendar size={18} className="transition-transform group-active:scale-90" />
-          <span className="text-[9.5px] sm:text-[11px] font-bold tracking-wide mt-0.5 truncate">Календарь</span>
+          <Calendar size={16} className="transition-transform group-active:scale-90" />
+          <span className="text-[9px] sm:text-[10.5px] font-bold tracking-normal mt-0.5 truncate">Календарь</span>
         </button>
 
         <button
-          onClick={() => handleQuickNavigate('budgeting')}
-          className={`flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all flex-1 min-w-0 select-none cursor-pointer group ${
-            activeTab === 'budgeting'
+          onClick={() => handleQuickNavigate('analytics')}
+          className={`flex flex-col items-center justify-center py-0.5 px-0.5 rounded-lg transition-all flex-1 min-w-0 select-none cursor-pointer group ${
+            activeTab === 'analytics'
               ? theme === 'dark'
                 ? 'bg-teal-500/15 text-teal-300 border border-teal-500/20 shadow-inner font-bold'
                 : 'bg-teal-500/10 text-teal-600 border border-teal-500/20 shadow-sm font-bold'
@@ -995,13 +1041,13 @@ export default function App() {
                 : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100 border border-transparent'
           }`}
         >
-          <SlidersHorizontal size={18} className="transition-transform group-active:scale-90" />
-          <span className="text-[9.5px] sm:text-[11px] font-bold tracking-wide mt-0.5 truncate">Бюджет</span>
+          <TrendingUp size={16} className="transition-transform group-active:scale-90" />
+          <span className="text-[9px] sm:text-[10.5px] font-bold tracking-normal mt-0.5 truncate">Аналитика</span>
         </button>
 
         <button
           onClick={() => handleQuickNavigate('accounts-categories')}
-          className={`flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all flex-1 min-w-0 select-none cursor-pointer group ${
+          className={`flex flex-col items-center justify-center py-0.5 px-0.5 rounded-lg transition-all flex-1 min-w-0 select-none cursor-pointer group ${
             activeTab === 'accounts-categories'
               ? theme === 'dark'
                 ? 'bg-teal-500/15 text-teal-300 border border-teal-500/20 shadow-inner font-bold'
@@ -1011,8 +1057,8 @@ export default function App() {
                 : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100 border border-transparent'
           }`}
         >
-          <Settings size={18} className="transition-transform group-active:scale-90" />
-          <span className="text-[9.5px] sm:text-[11px] font-bold tracking-wide mt-0.5 truncate">Счета</span>
+          <Settings size={16} className="transition-transform group-active:scale-90" />
+          <span className="text-[9px] sm:text-[10.5px] font-bold tracking-normal mt-0.5 truncate">Счета и Бюджет</span>
         </button>
       </div>
 
