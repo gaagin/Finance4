@@ -359,7 +359,7 @@ export function CalendarPanel({
                     setDraggedOverDate(null);
                     dragMovedRef.current = false;
                   }}
-                  className={`min-h-[105px] sm:min-h-[140px] flex flex-col justify-between p-1.5 rounded-xl border transition-all group cursor-pointer ${
+                  className={`min-h-[85px] sm:min-h-[115px] flex flex-col justify-between p-1 rounded-lg border transition-all group cursor-pointer ${
                     cell.isCurrentMonth
                       ? 'bg-white/5 border-white/10 hover:border-teal-400/50 hover:bg-white/15 hover:shadow-md'
                       : 'bg-transparent border-white/5 text-slate-500'
@@ -368,9 +368,9 @@ export function CalendarPanel({
                   }`}
                 >
                   {/* Day Header row */}
-                  <div className="flex items-center justify-between mb-1">
+                  <div className="flex items-center justify-between mb-0.5">
                     <span
-                      className={`text-xs font-display font-extrabold flex items-center justify-center w-5 h-5 rounded-md ${
+                      className={`text-[10px] font-display font-extrabold flex items-center justify-center w-4 h-4 rounded-md ${
                         isTodayStr
                           ? 'bg-teal-400 text-slate-950'
                           : cell.isCurrentMonth
@@ -391,14 +391,14 @@ export function CalendarPanel({
                         className="opacity-100 md:opacity-0 group-hover:opacity-100 p-0.5 hover:bg-white/10 rounded text-slate-400 hover:text-white transition-all cursor-pointer"
                         title="Добавить расход/доход"
                       >
-                        <Plus size={12} />
+                        <Plus size={10} />
                       </button>
                     )}
                   </div>
 
                   {/* Transactions List with SCROLLBAR enabled specifically for mobile/desktop wrapping constraints */}
                   <div 
-                    className="flex-1 overflow-y-auto max-h-[65px] sm:max-h-[92px] space-y-1 custom-scrollbar pr-0.5 select-none"
+                    className="flex-1 overflow-y-auto max-h-[48px] sm:max-h-[72px] space-y-1 custom-scrollbar pr-0.5 select-none"
                     onTouchStart={(e) => e.stopPropagation()} // allows direct finger scroll over cells on touchscreens
                   >
                     {dayTransactions.map(tx => {

@@ -572,32 +572,7 @@ export function TransactionPanel({
             />
           </div>
 
-          {/* Optional Bank Card linkage (HIDDEN FOR TRANSFERS) */}
-          {activeFormType !== 'transfer' && (
-            <div>
-              <label className="block text-[11px] font-semibold text-slate-400 mb-1 uppercase tracking-wider flex items-center gap-1 text-left">
-                <CreditCard size={12} className="text-teal-300" />
-                Привязать банковскую карту (Опционально)
-              </label>
-              <select
-                value={cardId || ''}
-                onChange={(e) => setCardId(e.target.value || undefined)}
-                className="w-full p-2.5 bg-slate-950/60 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-teal-400 text-slate-200 cursor-pointer text-ellipsis"
-              >
-                <option value="" className="bg-slate-950 text-slate-400">Без пластиковой карты (m10/Наличные)</option>
-                {cards.map(card => (
-                  <option key={card.id} value={card.id} className="bg-slate-950 text-slate-200">
-                    {card.bank} •••• {card.lastFour} ({card.name})
-                  </option>
-                ))}
-              </select>
-              {cards.length === 0 && (
-                <span className="text-[10px] text-slate-500 mt-1 block">
-                  У вас нет привязанных карт. Их можно добавить на вкладке «Категории и Счета».
-                </span>
-              )}
-            </div>
-          )}
+
 
           {/* Action buttons */}
           <div className="flex gap-2 pt-2">
@@ -947,247 +922,266 @@ export function TransactionPanel({
       {/* TRANSACTION EDIT MODAL */}
       {editingTransaction && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fade-in">
-          <div className="w-full max-w-md bg-slate-900 border border-white/10 rounded-3xl shadow-2xl overflow-hidden text-left" id="edit-transaction-modal">
-            <div className="flex items-center justify-between px-6 py-5 border-b border-white/10 bg-white/5">
+          <div className="w-full max-w-md bg-slate-900 border border-white/10 rounded-3xl shadow-2xl overflow-hidden text-left flex flex-col max-h-[95vh]" id="edit-transaction-modal">
+            <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/10 bg-white/5 shrink-0">
               <div>
-                <h3 className="text-base font-display font-bold text-white flex items-center gap-2">
-                  <Edit2 className="text-teal-400" size={18} />
+                <h3 className="text-sm sm:text-base font-display font-bold text-white flex items-center gap-2">
+                  <Edit2 className="text-teal-400" size={16} />
                   Редактировать операцию
                 </h3>
-                <p className="text-xs text-slate-400 mt-1">Изменение деталей платежа</p>
+                <p className="text-[11px] text-slate-450 mt-0.5">Изменение деталей платежа</p>
               </div>
               <button
                 type="button"
                 onClick={onCancelEditing}
                 className="p-1.5 hover:bg-white/10 text-slate-400 hover:text-white rounded-lg transition-colors cursor-pointer"
               >
-                <X size={16} />
+                <X size={15} />
               </button>
             </div>
 
-            <form onSubmit={handleEditFormSubmit} className="p-6 space-y-4">
+            <form onSubmit={handleEditFormSubmit} className="p-4 sm:p-5 space-y-3.5 overflow-y-auto custom-scrollbar flex-1">
               {/* Type Toggle switcher */}
               <div className="flex bg-slate-950 p-1 rounded-xl border border-white/5">
                 <button
                   type="button"
                   onClick={() => handleEditTypeChange('expense')}
-                  className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                  className={`flex-1 py-1 text-[11px] font-bold rounded-lg transition-all flex items-center justify-center gap-1 cursor-pointer ${
                     editType === 'expense'
                       ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
                       : 'text-slate-400 hover:text-white'
                   }`}
                 >
-                  <ArrowDownLeft size={13} />
+                  <ArrowDownLeft size={12} />
                   Расход
                 </button>
                 <button
                   type="button"
                   onClick={() => handleEditTypeChange('income')}
-                  className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                  className={`flex-1 py-1 text-[11px] font-bold rounded-lg transition-all flex items-center justify-center gap-1 cursor-pointer ${
                     editType === 'income'
                       ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
                       : 'text-slate-400 hover:text-white'
                   }`}
                 >
-                  <ArrowUpRight size={13} />
+                  <ArrowUpRight size={12} />
                   Доход
                 </button>
                 <button
                   type="button"
                   onClick={() => handleEditTypeChange('transfer')}
-                  className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                  className={`flex-1 py-1 text-[11px] font-bold rounded-lg transition-all flex items-center justify-center gap-1 cursor-pointer ${
                     editType === 'transfer'
                       ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30 shadow-xs'
                       : 'text-slate-400 hover:text-white'
                   }`}
                 >
-                  <ArrowUpDown size={13} />
+                  <ArrowUpDown size={12} />
                   Перевод
                 </button>
               </div>
 
-              {/* Amount input */}
-              <div>
-                <label className="block text-[11px] font-semibold text-slate-400 mb-1 uppercase tracking-wider">
-                  Сумма в Манатах (₼)
-                </label>
-                <div className="relative">
-                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 font-display font-extrabold text-slate-400 text-sm">
-                    ₼
-                  </span>
+              {/* Row 1: Amount & Date */}
+              <div className="grid grid-cols-2 gap-3">
+                {/* Amount input */}
+                <div>
+                  <label className="block text-[10px] font-bold text-slate-400 mb-1 uppercase tracking-wider select-none">
+                    Сумма в ₼
+                  </label>
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 font-display font-black text-slate-400 text-xs">
+                      ₼
+                    </span>
+                    <input
+                      type="number"
+                      step="any"
+                      min="0.01"
+                      placeholder="0.00"
+                      value={editAmount}
+                      onChange={(e) => setEditAmount(e.target.value)}
+                      className="w-full pl-6 pr-3 py-1.5 bg-slate-950/60 border border-white/10 rounded-xl text-xs font-display font-extrabold text-slate-200 focus:outline-hidden focus:ring-1 focus:ring-teal-400"
+                      required
+                    />
+                  </div>
+                </div>
+
+                {/* Date selection */}
+                <div>
+                  <label className="block text-[10px] font-bold text-slate-400 mb-1 uppercase tracking-wider flex items-center gap-1 select-none">
+                    <Calendar size={11} />
+                    Дата
+                  </label>
                   <input
-                    type="number"
-                    step="any"
-                    min="0.01"
-                    placeholder="0.00"
-                    value={editAmount}
-                    onChange={(e) => setEditAmount(e.target.value)}
-                    className="w-full pl-8 pr-4 py-2 bg-slate-950/60 border border-white/10 rounded-xl text-sm font-display font-bold text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-teal-400"
+                    type="date"
+                    value={editDate}
+                    onChange={(e) => setEditDate(e.target.value)}
+                    className="w-full p-1.5 bg-slate-950/60 border border-white/10 rounded-xl text-xs text-slate-200"
                     required
                   />
                 </div>
               </div>
 
-              {/* Account selection */}
-              <div>
-                <label className="block text-[11px] font-semibold text-slate-400 mb-1 uppercase tracking-wider flex items-center gap-1.5 select-none text-left">
-                  <CreditCard size={12} className={editType === 'transfer' ? 'text-amber-400' : ''} />
-                  {editType === 'transfer' ? 'Счет списания (Откуда)' : 'Счет'}
-                </label>
-                <SearchableSelect
-                  items={accounts}
-                  value={editAccountId}
-                  onChange={(id) => setEditAccountId(id)}
-                  placeholder="Выберите счет..."
-                  searchPlaceholder="Поиск счета..."
-                  idKey="id"
-                  displayValue={(acc) => `${acc.name} (${Math.round(acc.balance)} ₼)`}
-                  filterValue={(acc) => acc.name}
-                  renderItem={(acc) => (
-                    <div className="flex justify-between items-center w-full text-xs">
-                      <span className="font-semibold">{acc.name}</span>
-                      <span className="font-mono text-[9px] text-teal-400 bg-teal-500/10 px-1.5 py-0.5 rounded-md font-extrabold shrink-0 ml-2">
-                        {Math.round(acc.balance)} ₼
-                      </span>
-                    </div>
-                  )}
-                />
-              </div>
-
-              {/* Destination Account selection (TRANSFER ONLY) */}
-              {editType === 'transfer' && (
-                <div className="animate-fade-in text-left">
-                  <label className="block text-[11px] font-semibold text-slate-400 mb-1 uppercase tracking-wider flex items-center gap-1.5 select-none">
-                    <CreditCard size={12} className="text-emerald-400" />
-                    Счет зачисления (Куда)
-                  </label>
-                  <SearchableSelect
-                    items={accounts.filter(acc => acc.id !== editAccountId)}
-                    value={editTransferAccountId}
-                    onChange={(id) => setEditTransferAccountId(id)}
-                    placeholder="Выберите счет зачисления..."
-                    searchPlaceholder="Поиск счета..."
-                    idKey="id"
-                    displayValue={(acc) => `${acc.name} (${Math.round(acc.balance)} ₼)`}
-                    filterValue={(acc) => acc.name}
-                    renderItem={(acc) => (
-                      <div className="flex justify-between items-center w-full text-xs">
-                        <span className="font-semibold">{acc.name}</span>
-                        <span className="font-mono text-[9px] text-teal-400 bg-teal-500/10 px-1.5 py-0.5 rounded-md font-extrabold shrink-0 ml-2">
-                          {Math.round(acc.balance)} ₼
-                        </span>
-                      </div>
-                    )}
-                  />
-                </div>
-              )}
-
-              {/* Category selection */}
-              {editType !== 'transfer' && (
-                <div>
-                  <label className="block text-[11px] font-semibold text-slate-400 mb-1 uppercase tracking-wider flex items-center gap-1.5 select-none">
-                    <Tag size={12} />
-                    Категория
-                  </label>
-                  <SearchableSelect
-                    items={categories.filter(c => c.type === editType)}
-                    value={editCategoryId}
-                    onChange={(id) => setEditCategoryId(id)}
-                    placeholder="Выберите категорию..."
-                    searchPlaceholder="Поиск категории..."
-                    idKey="id"
-                    displayValue={(cat) => (
-                      <div className="flex items-center gap-2 text-xs">
-                        <div
-                          className="w-4 h-4 rounded-sm flex items-center justify-center shrink-0"
-                          style={{ backgroundColor: cat.color }}
-                        >
-                          <span className="text-[10px] text-white">
-                            <IconComponent name={cat.icon || 'HelpCircle'} size={10} />
+              {/* Row 2: Accounts / Categories */}
+              {editType !== 'transfer' ? (
+                <div className="grid grid-cols-2 gap-3">
+                  {/* Account selection */}
+                  <div>
+                    <label className="block text-[10px] font-bold text-slate-400 mb-1 uppercase tracking-wider flex items-center gap-1 select-none text-left">
+                      <CreditCard size={11} />
+                      Счет
+                    </label>
+                    <SearchableSelect
+                      compact={true}
+                      items={accounts}
+                      value={editAccountId}
+                      onChange={(id) => setEditAccountId(id)}
+                      placeholder="Счет..."
+                      searchPlaceholder="Поиск..."
+                      idKey="id"
+                      displayValue={(acc) => `${acc.name}`}
+                      filterValue={(acc) => acc.name}
+                      renderItem={(acc) => (
+                        <div className="flex justify-between items-center w-full text-xs">
+                          <span className="font-semibold">{acc.name}</span>
+                          <span className="font-mono text-[9px] text-teal-400 bg-teal-500/10 px-1.5 py-0.5 rounded-md font-extrabold shrink-0 ml-2">
+                            {Math.round(acc.balance)} ₼
                           </span>
                         </div>
-                        <span className="truncate">{formatCategoryDisplayName(cat.name)}</span>
-                      </div>
-                    )}
-                    filterValue={(cat) => cat.name}
-                    renderItem={(cat) => (
-                      <div className="flex items-center gap-2 text-xs">
-                        <div
-                          className="w-4 h-4 rounded-md flex items-center justify-center text-white shrink-0"
-                          style={{ backgroundColor: cat.color }}
-                        >
-                          <IconComponent name={cat.icon || 'HelpCircle'} size={10} />
+                      )}
+                    />
+                  </div>
+
+                  {/* Category selection */}
+                  <div>
+                    <label className="block text-[10px] font-bold text-slate-400 mb-1 uppercase tracking-wider flex items-center gap-1 select-none">
+                      <Tag size={11} />
+                      Категория
+                    </label>
+                    <SearchableSelect
+                      compact={true}
+                      items={categories.filter(c => c.type === editType)}
+                      value={editCategoryId}
+                      onChange={(id) => setEditCategoryId(id)}
+                      placeholder="Категория..."
+                      searchPlaceholder="Поиск..."
+                      idKey="id"
+                      displayValue={(cat) => (
+                        <div className="flex items-center gap-1 text-xs">
+                          <div
+                            className="w-3.5 h-3.5 rounded-sm flex items-center justify-center shrink-0"
+                            style={{ backgroundColor: cat.color }}
+                          >
+                            <span className="text-[9px] text-white">
+                              <IconComponent name={cat.icon || 'HelpCircle'} size={9} />
+                            </span>
+                          </div>
+                          <span className="truncate">{formatCategoryDisplayName(cat.name)}</span>
                         </div>
-                        <span className="font-semibold">{formatCategoryDisplayName(cat.name)}</span>
-                      </div>
-                    )}
+                      )}
+                      filterValue={(cat) => cat.name}
+                      renderItem={(cat) => (
+                        <div className="flex items-center gap-1.5 text-xs">
+                          <div
+                            className="w-3.5 h-3.5 rounded-md flex items-center justify-center text-white shrink-0"
+                            style={{ backgroundColor: cat.color }}
+                          >
+                            <IconComponent name={cat.icon || 'HelpCircle'} size={9} />
+                          </div>
+                          <span className="font-semibold">{formatCategoryDisplayName(cat.name)}</span>
+                        </div>
+                      )}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 gap-3">
+                  {/* Account scisaniya select */}
+                  <div>
+                    <label className="block text-[10px] font-bold text-slate-400 mb-1 uppercase tracking-wider flex items-center gap-1 select-none text-left">
+                      <CreditCard size={11} className="text-amber-400" />
+                      Откуда
+                    </label>
+                    <SearchableSelect
+                      compact={true}
+                      items={accounts}
+                      value={editAccountId}
+                      onChange={(id) => setEditAccountId(id)}
+                      placeholder="Счет..."
+                      searchPlaceholder="Поиск..."
+                      idKey="id"
+                      displayValue={(acc) => `${acc.name}`}
+                      filterValue={(acc) => acc.name}
+                      renderItem={(acc) => (
+                        <div className="flex justify-between items-center w-full text-xs">
+                          <span className="font-semibold">{acc.name}</span>
+                          <span className="font-mono text-[9px] text-teal-400 bg-teal-500/10 px-1.5 py-0.5 rounded-md font-extrabold shrink-0 ml-2">
+                            {Math.round(acc.balance)} ₼
+                          </span>
+                        </div>
+                      )}
+                    />
+                  </div>
+
+                  {/* Destination Account selection */}
+                  <div>
+                    <label className="block text-[10px] font-bold text-slate-400 mb-1 uppercase tracking-wider flex items-center gap-1 select-none text-left">
+                      <CreditCard size={11} className="text-emerald-400" />
+                      Куда
+                    </label>
+                    <SearchableSelect
+                      compact={true}
+                      items={accounts.filter(acc => acc.id !== editAccountId)}
+                      value={editTransferAccountId}
+                      onChange={(id) => setEditTransferAccountId(id)}
+                      placeholder="Счет..."
+                      searchPlaceholder="Поиск..."
+                      idKey="id"
+                      displayValue={(acc) => `${acc.name}`}
+                      filterValue={(acc) => acc.name}
+                      renderItem={(acc) => (
+                        <div className="flex justify-between items-center w-full text-xs">
+                          <span className="font-semibold">{acc.name}</span>
+                          <span className="font-mono text-[9px] text-teal-400 bg-teal-500/10 px-1.5 py-0.5 rounded-md font-extrabold shrink-0 ml-2">
+                            {Math.round(acc.balance)} ₼
+                          </span>
+                        </div>
+                      )}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Row 3: Description & Plastik card */}
+              <div className={`grid ${editType !== 'transfer' ? 'grid-cols-2' : 'grid-cols-1'} gap-3`}>
+                {/* Description selection */}
+                <div>
+                  <label className="block text-[10px] font-bold text-slate-400 mb-1 uppercase tracking-wider">
+                    Примечание
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Примечание..."
+                    value={editDescription}
+                    onChange={(e) => setEditDescription(e.target.value)}
+                    className="w-full p-1.5 bg-slate-950/60 border border-white/10 rounded-xl text-xs text-slate-200 placeholder-slate-600"
                   />
                 </div>
-              )}
 
-              {/* Date selection */}
-              <div>
-                <label className="block text-[11px] font-semibold text-slate-400 mb-1 uppercase tracking-wider flex items-center gap-1">
-                  <Calendar size={12} />
-                  Дата
-                </label>
-                <input
-                  type="date"
-                  value={editDate}
-                  onChange={(e) => setEditDate(e.target.value)}
-                  className="w-full p-2 bg-slate-950/60 border border-white/10 rounded-xl text-xs text-slate-200"
-                  required
-                />
+
               </div>
-
-              {/* Description selection */}
-              <div>
-                <label className="block text-[11px] font-semibold text-slate-400 mb-1 uppercase tracking-wider">
-                  Описание / Примечание
-                </label>
-                <input
-                  type="text"
-                  placeholder="Примечание..."
-                  value={editDescription}
-                  onChange={(e) => setEditDescription(e.target.value)}
-                  className="w-full p-2 bg-slate-950/60 border border-white/10 rounded-xl text-xs text-slate-200 placeholder-slate-600"
-                />
-              </div>
-
-              {/* Card selection */}
-              {editType !== 'transfer' && (
-                <div>
-                  <label className="block text-[11px] font-semibold text-slate-400 mb-1 uppercase tracking-wider flex items-center gap-1">
-                    <CreditCard size={12} className="text-teal-300" />
-                    Привязать пластиковую карту (Опционально)
-                  </label>
-                  <select
-                    value={editCardId || ''}
-                    onChange={(e) => setEditCardId(e.target.value || undefined)}
-                    className="w-full p-2 bg-slate-950/60 border border-white/10 rounded-xl text-xs text-slate-200 cursor-pointer text-ellipsis"
-                  >
-                    <option value="" className="bg-slate-950 text-slate-400">Без пластиковой карты (m10/Наличные)</option>
-                    {cards.map(card => (
-                      <option key={card.id} value={card.id} className="bg-slate-950 text-slate-200">
-                        {card.bank} •••• {card.lastFour} ({card.name})
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              )}
 
               {/* Form Action button block */}
-              <div className="flex gap-3 pt-4 border-t border-white/5">
+              <div className="flex gap-3 pt-4 border-t border-white/5 shrink-0">
                 <button
                   type="button"
                   onClick={onCancelEditing}
-                  className="flex-1 py-2 bg-white/5 hover:bg-white/10 text-slate-350 text-xs font-semibold rounded-xl border border-white/5 transition-colors cursor-pointer text-center"
+                  className="flex-1 py-2.5 bg-white/5 hover:bg-white/10 text-slate-350 text-xs font-semibold rounded-xl border border-white/5 transition-colors cursor-pointer text-center"
                 >
                   Отмена
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2 bg-teal-500 hover:bg-teal-400 text-slate-950 text-xs font-bold uppercase tracking-wider rounded-xl transition-colors cursor-pointer text-center"
+                  className="flex-1 py-2.5 bg-teal-500 hover:bg-teal-400 text-slate-950 text-xs font-bold uppercase tracking-wider rounded-xl transition-colors cursor-pointer text-center"
                 >
                   Сохранить
                 </button>
