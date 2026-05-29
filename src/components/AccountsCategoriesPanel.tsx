@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Account, Category, TransactionType, BankCard } from '../types';
+import { Account, Category, TransactionType, BankCard, formatCategoryDisplayName } from '../types';
 import { IconComponent, AVAILABLE_ICONS } from './IconComponent';
 import { Plus, Trash2, Edit2, Wallet, PlusCircle, Check, Info, CreditCard, Sun, Moon, X, AlertTriangle } from 'lucide-react';
 
@@ -84,6 +84,78 @@ export function AccountsCategoriesPanel({
   const [catColor, setCatColor] = useState('#3b82f6');
   const [catQuickEntry, setCatQuickEntry] = useState(true);
   const [editingCategoryId, setEditingCategoryId] = useState<string | null>(null);
+  const [catIsSub, setCatIsSub] = useState(false);
+  const [catParentId, setCatParentId] = useState('none');
+
+  // Group categories into parent -> subcategories for layout and select drops
+  const getGroupedCategories = () => {
+    const activeCats = categories.filter(cat => cat.type === activeCategoryTab);
+    const separators = ['/', '—', '–', '-', '−'];
+    
+    const topLevel: Category[] = [];
+    const subCatsMap: { [parentId: string]: Category[] } = {};
+    const orphanedSubs: Category[] = [];
+
+    const nameMap = new Map<string, Category>();
+    activeCats.forEach(cat => {
+      nameMap.set(cat.name.trim().toLowerCase(), cat);
+    });
+
+    activeCats.forEach(cat => {
+      let isSub = false;
+      for (const sep of separators) {
+        if (cat.name.includes(sep)) {
+          const parts = cat.name.split(sep);
+          const parentPart = parts[0].trim().toLowerCase();
+          const parentCat = nameMap.get(parentPart);
+          
+          if (parentCat && parentCat.id !== cat.id) {
+            isSub = true;
+            if (!subCatsMap[parentCat.id]) {
+              subCatsMap[parentCat.id] = [];
+            }
+            subCatsMap[parentCat.id].push(cat);
+            break;
+          }
+        }
+      }
+      if (!isSub) {
+        let hasSelfParentInName = false;
+        for (const sep of separators) {
+          if (cat.name.includes(sep)) {
+            const parts = cat.name.split(sep);
+            const parentPart = parts[0].trim().toLowerCase();
+            if (nameMap.has(parentPart) && nameMap.get(parentPart)?.id !== cat.id) {
+              hasSelfParentInName = true;
+            }
+          }
+        }
+        if (!hasSelfParentInName) {
+          topLevel.push(cat);
+        } else {
+          orphanedSubs.push(cat);
+        }
+      }
+    });
+
+    // Handle orphaned subs if any
+    orphanedSubs.forEach(cat => {
+      topLevel.push(cat);
+    });
+
+    return { topLevel, subCatsMap };
+  };
+
+  // List of possible parent categories
+  const parentCandidates = categories.filter(c => 
+    c.type === activeCategoryTab && 
+    c.id !== editingCategoryId && 
+    !c.name.includes('/') && 
+    !c.name.includes('-') && 
+    !c.name.includes('—') && 
+    !c.name.includes('–') && 
+    !c.name.includes('−')
+  );
 
   // Card Form Submission
   const handleCardSubmit = (e: React.FormEvent) => {
@@ -201,21 +273,36 @@ export function AccountsCategoriesPanel({
     e.preventDefault();
     if (!catName.trim()) return;
 
+    let finalName = catName.trim();
+    let finalIcon = catIcon;
+    let finalColor = catColor;
+
+    if (catIsSub && catParentId !== 'none') {
+      const parentCat = categories.find(c => c.id === catParentId);
+      if (parentCat) {
+        // Use dash since they requested: "После тире писалось."
+        finalName = `${parentCat.name} - ${catName.trim()}`;
+        // Automatically inherit icon and color from parent if not altered
+        finalIcon = parentCat.icon;
+        finalColor = parentCat.color;
+      }
+    }
+
     if (editingCategoryId) {
       onUpdateCategory({
         id: editingCategoryId,
-        name: catName,
-        icon: catIcon,
-        color: catColor,
+        name: finalName,
+        icon: finalIcon,
+        color: finalColor,
         type: activeCategoryTab,
         quickEntry: catQuickEntry
       });
       setEditingCategoryId(null);
     } else {
       onAddCategory({
-        name: catName,
-        icon: catIcon,
-        color: catColor,
+        name: finalName,
+        icon: finalIcon,
+        color: finalColor,
         type: activeCategoryTab,
         quickEntry: catQuickEntry
       });
@@ -227,6 +314,8 @@ export function AccountsCategoriesPanel({
     setCatIcon('HelpCircle');
     setCatColor('#3b82f6');
     setCatQuickEntry(true);
+    setCatIsSub(false);
+    setCatParentId('none');
   };
 
   const handleCancelAddCategory = () => {
@@ -235,11 +324,42 @@ export function AccountsCategoriesPanel({
     setCatIcon('HelpCircle');
     setCatColor('#3b82f6');
     setCatQuickEntry(true);
+    setCatIsSub(false);
+    setCatParentId('none');
   };
 
   const handleEditCategory = (cat: Category) => {
     setEditingCategoryId(cat.id);
-    setCatName(cat.name);
+    
+    // Parse name to see if it has a subcategory structure
+    const separators = ['/', '—', '–', '-', '−'];
+    let parsedParentId = 'none';
+    let parsedSubName = cat.name;
+    let isSub = false;
+
+    for (const sep of separators) {
+      if (cat.name.includes(sep)) {
+        const parts = cat.name.split(sep);
+        const parentPart = parts[0].trim();
+        const subPart = parts.slice(1).join(sep).trim();
+        
+        const parentCat = categories.find(
+          c => c.name.trim().toLowerCase() === parentPart.toLowerCase() && 
+          c.type === cat.type && 
+          c.id !== cat.id
+        );
+        if (parentCat) {
+          parsedParentId = parentCat.id;
+          parsedSubName = subPart;
+          isSub = true;
+          break;
+        }
+      }
+    }
+
+    setCatIsSub(isSub);
+    setCatParentId(parsedParentId);
+    setCatName(parsedSubName);
     setCatIcon(cat.icon);
     setCatColor(cat.color);
     setCatQuickEntry(cat.quickEntry !== false);
@@ -251,6 +371,8 @@ export function AccountsCategoriesPanel({
     setCatIcon('HelpCircle');
     setCatColor('#3b82f6');
     setCatQuickEntry(true);
+    setCatIsSub(false);
+    setCatParentId('none');
   };
 
   return (
@@ -478,76 +600,166 @@ export function AccountsCategoriesPanel({
           {/* List categorized by Active selection */}
           <div className="max-h-[320px] overflow-y-auto pr-1 custom-scrollbar">
             <div className="border border-slate-200 dark:border-white/10 rounded-2xl overflow-hidden bg-white dark:bg-slate-900/40 divide-y divide-slate-100 dark:divide-white/5 shadow-xs">
-              {categories
-                .filter(cat => cat.type === activeCategoryTab)
-                .map(cat => (
-                  <div
-                    key={cat.id}
-                    className={`flex items-center justify-between p-3 bg-transparent transition-all border-b last:border-0 ${
-                      theme === 'dark'
-                        ? 'hover:bg-white/5 border-white/5'
-                        : 'hover:bg-slate-50/50 border-slate-150'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      <div
-                        className="w-8 h-8 rounded-lg flex items-center justify-center text-white shrink-0 shadow-xs"
-                        style={{ backgroundColor: cat.color }}
-                      >
-                        <IconComponent name={cat.icon} size={15} />
-                      </div>
-                      <div className="min-w-0">
-                        <div className="flex items-center gap-1.5 flex-wrap">
-                          <span className={`font-semibold text-xs truncate ${
-                            theme === 'dark' ? 'text-slate-200' : 'text-slate-800'
-                          }`}>{cat.name}</span>
-                          {cat.quickEntry !== false ? (
-                            <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[9px] font-bold rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0">
-                              <Check size={8} className="stroke-[3px]" />
-                              <span>Быстрая</span>
-                            </span>
-                          ) : (
-                            <span className="inline-flex items-center px-1.5 py-0.5 text-[9px] font-bold rounded-md bg-slate-500/10 text-slate-400 border border-slate-500/20 shrink-0">
-                              <span>Скрыта</span>
-                            </span>
-                          )}
+              {(() => {
+                const { topLevel, subCatsMap } = getGroupedCategories();
+                if (topLevel.length === 0) {
+                  return (
+                    <div className="p-8 text-center text-xs text-slate-500">
+                      Категории не найдены. Создайте первую категорию!
+                    </div>
+                  );
+                }
+                
+                const elements: React.ReactNode[] = [];
+                
+                topLevel.forEach(parent => {
+                  elements.push(
+                    <div
+                      key={parent.id}
+                      className={`flex items-center justify-between p-3 bg-transparent transition-all border-b last:border-0 ${
+                        theme === 'dark'
+                          ? 'hover:bg-white/5 border-white/5'
+                          : 'hover:bg-slate-50/50 border-slate-150'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div
+                          className="w-8 h-8 rounded-lg flex items-center justify-center text-white shrink-0 shadow-xs"
+                          style={{ backgroundColor: parent.color }}
+                        >
+                          <IconComponent name={parent.icon} size={15} />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <span className={`font-bold text-xs truncate ${
+                              theme === 'dark' ? 'text-slate-100' : 'text-slate-900'
+                            }`}>{parent.name}</span>
+                            {parent.quickEntry !== false ? (
+                              <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[9px] font-bold rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0">
+                                <Check size={8} className="stroke-[3px]" />
+                                <span>Быстрая</span>
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center px-1.5 py-0.5 text-[9px] font-bold rounded-md bg-slate-500/10 text-slate-400 border border-slate-500/20 shrink-0">
+                                <span>Скрыта</span>
+                              </span>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    <div className="flex items-center gap-1.5 shrink-0">
-                      <button
-                        onClick={() => handleEditCategory(cat)}
-                        className={`p-1 px-1.5 rounded-lg transition-all cursor-pointer flex items-center justify-center shrink-0 ${
-                          theme === 'dark'
-                            ? 'hover:bg-white/10 text-slate-400 hover:text-white'
-                            : 'hover:bg-slate-150 text-slate-500 hover:text-slate-900'
-                        }`}
-                        title="Изменить"
-                      >
-                        <Edit2 size={12} />
-                      </button>
-                      
-                      <button
-                        onClick={() => {
-                          const count = categories.filter(c => c.type === activeCategoryTab).length;
-                          if (count > 2) {
-                            setDeleteConfirm({ id: cat.id, type: 'category', name: cat.name });
-                          }
-                        }}
-                        disabled={categories.filter(c => c.type === activeCategoryTab).length <= 2}
-                        className={`p-1 disabled:opacity-30 rounded-lg transition-colors cursor-pointer shrink-0 ${
-                          theme === 'dark'
-                            ? 'hover:bg-rose-500/10 text-slate-400 hover:text-rose-450'
-                            : 'hover:bg-rose-100 text-slate-500 hover:text-rose-650'
-                        }`}
-                        title="Удалить категорию"
-                      >
-                        <Trash2 size={11} />
-                      </button>
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        <button
+                          onClick={() => handleEditCategory(parent)}
+                          className={`p-1 px-1.5 rounded-lg transition-all cursor-pointer flex items-center justify-center shrink-0 ${
+                            theme === 'dark'
+                              ? 'hover:bg-white/10 text-slate-400 hover:text-white'
+                              : 'hover:bg-slate-150 text-slate-500 hover:text-slate-900'
+                          }`}
+                          title="Изменить"
+                        >
+                          <Edit2 size={12} />
+                        </button>
+                        
+                        <button
+                          onClick={() => {
+                            const count = categories.filter(c => c.type === activeCategoryTab).length;
+                            if (count > 2) {
+                              setDeleteConfirm({ id: parent.id, type: 'category', name: parent.name });
+                            }
+                          }}
+                          disabled={categories.filter(c => c.type === activeCategoryTab).length <= 2}
+                          className={`p-1 disabled:opacity-30 rounded-lg transition-colors cursor-pointer shrink-0 ${
+                            theme === 'dark'
+                              ? 'hover:bg-rose-500/10 text-slate-400 hover:text-rose-450'
+                              : 'hover:bg-rose-100 text-slate-500 hover:text-rose-650'
+                          }`}
+                          title="Удалить категорию"
+                        >
+                          <Trash2 size={11} />
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                  
+                  const kids = subCatsMap[parent.id] || [];
+                  kids.forEach(sub => {
+                    elements.push(
+                      <div
+                        key={sub.id}
+                        className={`flex items-center justify-between p-2.5 pl-9 transition-all border-b last:border-0 ${
+                          theme === 'dark'
+                            ? 'hover:bg-white/7 border-white/5 bg-white/[0.01]'
+                            : 'hover:bg-slate-50/70 border-slate-150 bg-slate-50/30'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2 min-w-0">
+                          <div className={`w-3 h-3 border-l-2 border-b-2 rounded-bl-md shrink-0 -mt-1.5 ${
+                            theme === 'dark' ? 'border-white/15' : 'border-slate-300'
+                          }`} />
+                          
+                          <div
+                            className="w-5.5 h-5.5 rounded-md flex items-center justify-center text-white shrink-0 shadow-xs"
+                            style={{ backgroundColor: sub.color }}
+                          >
+                            <span className="text-[9px] text-white">
+                              <IconComponent name={sub.icon} size={11} />
+                            </span>
+                          </div>
+                          
+                          <div className="min-w-0">
+                            <div className="flex items-center gap-1.5 flex-wrap">
+                              <span className={`font-semibold text-xs truncate ${
+                                theme === 'dark' ? 'text-slate-300' : 'text-slate-705'
+                              }`}>{formatCategoryDisplayName(sub.name)}</span>
+                              {sub.quickEntry !== false ? (
+                                <span className="inline-flex items-center gap-0.5 px-1 py-0.5 text-[8px] font-bold rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0">
+                                  <Check size={6} className="stroke-[3px]" />
+                                  <span>Быстрая</span>
+                                </span>
+                              ) : null}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          <button
+                            onClick={() => handleEditCategory(sub)}
+                            className={`p-1 px-1.5 rounded-lg transition-all cursor-pointer flex items-center justify-center shrink-0 ${
+                              theme === 'dark'
+                                ? 'hover:bg-white/10 text-slate-400 hover:text-white'
+                                : 'hover:bg-slate-150 text-slate-500 hover:text-slate-900'
+                            }`}
+                            title="Изменить подкатегорию"
+                          >
+                            <Edit2 size={11} />
+                          </button>
+                          
+                          <button
+                            onClick={() => {
+                              const count = categories.filter(c => c.type === activeCategoryTab).length;
+                              if (count > 2) {
+                                setDeleteConfirm({ id: sub.id, type: 'category', name: sub.name });
+                              }
+                            }}
+                            disabled={categories.filter(c => c.type === activeCategoryTab).length <= 2}
+                            className={`p-1 disabled:opacity-30 rounded-lg transition-colors cursor-pointer shrink-0 ${
+                              theme === 'dark'
+                                ? 'hover:bg-rose-500/10 text-slate-400 hover:text-rose-450'
+                                : 'hover:bg-rose-100 text-slate-500 hover:text-rose-650'
+                            }`}
+                            title="Удалить подкатегорию"
+                          >
+                            <Trash2 size={11} />
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  });
+                });
+                
+                return <div className="divide-y divide-slate-100 dark:divide-white/5">{elements}</div>;
+              })()}
             </div>
           </div>
         </div>
@@ -791,6 +1003,62 @@ export function AccountsCategoriesPanel({
                     className="w-full px-3 py-2 bg-slate-950/60 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-teal-400 text-slate-200"
                     required
                   />
+                </div>
+
+                <div className="pt-1">
+                  <div className="flex flex-col gap-2 p-3 bg-slate-950/40 border border-white/10 rounded-xl">
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="checkbox"
+                        id="edit-cat-is-sub"
+                        checked={catIsSub}
+                        onChange={(e) => {
+                          setCatIsSub(e.target.checked);
+                          if (e.target.checked && parentCandidates.length > 0 && catParentId === 'none') {
+                            setCatParentId(parentCandidates[0].id);
+                            setCatIcon(parentCandidates[0].icon);
+                            setCatColor(parentCandidates[0].color);
+                          } else if (!e.target.checked) {
+                            setCatParentId('none');
+                          }
+                        }}
+                        className="w-4 h-4 rounded border-white/10 bg-slate-950 text-amber-400 focus:ring-amber-500 cursor-pointer"
+                      />
+                      <label htmlFor="edit-cat-is-sub" className="text-xs font-semibold text-slate-300 cursor-pointer select-none">
+                        Это подкатегория
+                      </label>
+                    </div>
+                    
+                    {catIsSub && (
+                      <div className="mt-2 pl-7 space-y-2">
+                        <label className="block text-[10px] font-semibold text-slate-400 mb-0.5">Родительская категория</label>
+                        {parentCandidates.length > 0 ? (
+                          <select
+                            value={catParentId}
+                            onChange={(e) => {
+                              const pId = e.target.value;
+                              setCatParentId(pId);
+                              const parent = parentCandidates.find(c => c.id === pId);
+                              if (parent) {
+                                setCatIcon(parent.icon);
+                                setCatColor(parent.color);
+                              }
+                            }}
+                            className="w-full px-2.5 py-1.5 bg-slate-900 border border-white/10 rounded-lg text-xs text-slate-200 cursor-pointer focus:ring-1 focus:ring-amber-500"
+                          >
+                            <option value="none" disabled>Выберите родителя...</option>
+                            {parentCandidates.map(p => (
+                              <option key={p.id} value={p.id} className="bg-slate-950 text-slate-250">
+                                {p.name}
+                              </option>
+                            ))}
+                          </select>
+                        ) : (
+                          <p className="text-[10px] text-amber-400/80">Пока нет доступных родительских категорий. Сначала создайте основную категорию.</p>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 <div>
@@ -1150,6 +1418,63 @@ export function AccountsCategoriesPanel({
                     className="w-full px-3 py-2 bg-slate-950/60 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-teal-400 text-slate-200"
                     required
                   />
+                </div>
+
+                <div className="pt-1">
+                  <div className="flex flex-col gap-2 p-3 bg-slate-950/40 border border-white/10 rounded-xl">
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="checkbox"
+                        id="add-cat-is-sub"
+                        checked={catIsSub}
+                        onChange={(e) => {
+                          setCatIsSub(e.target.checked);
+                          if (e.target.checked && parentCandidates.length > 0 && catParentId === 'none') {
+                            setCatParentId(parentCandidates[0].id);
+                            // Autofill parent settings
+                            setCatIcon(parentCandidates[0].icon);
+                            setCatColor(parentCandidates[0].color);
+                          } else if (!e.target.checked) {
+                            setCatParentId('none');
+                          }
+                        }}
+                        className="w-4 h-4 rounded border-white/10 bg-slate-950 text-amber-400 focus:ring-amber-500 cursor-pointer"
+                      />
+                      <label htmlFor="add-cat-is-sub" className="text-xs font-semibold text-slate-300 cursor-pointer select-none">
+                        Это подкатегория
+                      </label>
+                    </div>
+                    
+                    {catIsSub && (
+                      <div className="mt-2 pl-7 space-y-2">
+                        <label className="block text-[10px] font-semibold text-slate-400 mb-0.5">Родительская категория</label>
+                        {parentCandidates.length > 0 ? (
+                          <select
+                            value={catParentId}
+                            onChange={(e) => {
+                              const pId = e.target.value;
+                              setCatParentId(pId);
+                              const parent = parentCandidates.find(c => c.id === pId);
+                              if (parent) {
+                                setCatIcon(parent.icon);
+                                setCatColor(parent.color);
+                              }
+                            }}
+                            className="w-full px-2.5 py-1.5 bg-slate-900 border border-white/10 rounded-lg text-xs text-slate-200 cursor-pointer focus:ring-1 focus:ring-amber-500"
+                          >
+                            <option value="none" disabled>Выберите родителя...</option>
+                            {parentCandidates.map(p => (
+                              <option key={p.id} value={p.id} className="bg-slate-950 text-slate-250">
+                                {p.name}
+                              </option>
+                            ))}
+                          </select>
+                        ) : (
+                          <p className="text-[10px] text-amber-400/80">Пока нет доступных родительских категорий. Сначала создайте основную категорию.</p>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 <div>
