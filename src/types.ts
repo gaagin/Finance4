@@ -7,6 +7,7 @@ export interface Account {
   balance: number;
   color: string; // Tailwind color classes
   quickEntry?: boolean;
+  updatedAt?: number;
 }
 
 export interface Category {
@@ -16,6 +17,7 @@ export interface Category {
   color: string; // Hex color or tailwind class
   type: TransactionType;
   quickEntry?: boolean;
+  updatedAt?: number;
 }
 
 export interface BankCard {
@@ -23,6 +25,7 @@ export interface BankCard {
   name: string;      // Название карты (например: Зарплатная Birbank)
   bank: string;      // Банк (например: Kapital Bank, ABB, Pasha Bank)
   lastFour: string;  // Последние 4 цифры
+  updatedAt?: number;
 }
 
 export interface Transaction {
@@ -42,6 +45,7 @@ export interface Transaction {
 export interface BudgetLimit {
   categoryId: string;
   limitAmount: number;
+  updatedAt?: number;
 }
 
 export interface FinanceData {

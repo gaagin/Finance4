@@ -136,27 +136,53 @@ export default function App() {
       console.log('Debounced background auto-sync to Google Sheets is running...');
       isSyncingRef.current = true;
 
-      let deletedIds: string[] = [];
+      const deletedIds = {
+        transactions: [] as string[],
+        accounts: [] as string[],
+        categories: [] as string[],
+        cards: [] as string[],
+        budgets: [] as string[]
+      };
+
       try {
-        const saved = localStorage.getItem('milli_deleted_tx_ids');
-        if (saved) deletedIds = JSON.parse(saved);
+        const txSaved = localStorage.getItem('milli_deleted_tx_ids');
+        if (txSaved) deletedIds.transactions = JSON.parse(txSaved);
+
+        const accSaved = localStorage.getItem('milli_deleted_account_ids');
+        if (accSaved) deletedIds.accounts = JSON.parse(accSaved);
+
+        const catSaved = localStorage.getItem('milli_deleted_category_ids');
+        if (catSaved) deletedIds.categories = JSON.parse(catSaved);
+
+        const cardSaved = localStorage.getItem('milli_deleted_card_ids');
+        if (cardSaved) deletedIds.cards = JSON.parse(cardSaved);
+
+        const bSaved = localStorage.getItem('milli_deleted_budget_ids');
+        if (bSaved) deletedIds.budgets = JSON.parse(bSaved);
       } catch {}
 
       import('./googleSheetsSyncService').then(async ({ syncWithGoogleSheets }) => {
         try {
-          const result = await syncWithGoogleSheets(gAccessToken, data.transactions, deletedIds);
+          const result = await syncWithGoogleSheets(gAccessToken, data, deletedIds);
           
           hasUnsavedSyncChangesRef.current = false;
 
           // If there were modifications in Google Sheets that we merged back:
-          if (result.addedToLocal > 0 || result.updatedOnLocal > 0 || result.deletedFromLocal > 0) {
-            setData(prev => ({
-              ...prev,
-              transactions: result.mergedTransactions
-            }));
+          const hasLocalChanges = 
+            Object.values(result.addedToLocal).reduce((a: number, b: any) => a + (Number(b) || 0), 0) +
+            Object.values(result.updatedOnLocal).reduce((a: number, b: any) => a + (Number(b) || 0), 0) +
+            Object.values(result.deletedFromLocal).reduce((a: number, b: any) => a + (Number(b) || 0), 0);
+
+          if (hasLocalChanges > 0) {
+            setData(result.mergedData);
           }
           
           localStorage.removeItem('milli_deleted_tx_ids');
+          localStorage.removeItem('milli_deleted_account_ids');
+          localStorage.removeItem('milli_deleted_category_ids');
+          localStorage.removeItem('milli_deleted_card_ids');
+          localStorage.removeItem('milli_deleted_budget_ids');
+
           const nowStr = new Date().toLocaleString('ru-RU');
           localStorage.setItem('milli_last_sync_time', nowStr);
           localStorage.setItem('milli_last_sync_result', JSON.stringify(result));
@@ -171,7 +197,7 @@ export default function App() {
     }, 5000);
 
     return () => clearTimeout(timer);
-  }, [data.transactions, gAccessToken]);
+  }, [data, gAccessToken]);
 
   // Reliable Auto-sync on exiting page, losing focus, or switching tabs
   useEffect(() => {
@@ -180,18 +206,43 @@ export default function App() {
 
       console.log('Page is being hidden/unloaded. Saving pending changes to Google Sheets instantly...');
       
-      let deletedIds: string[] = [];
+      const deletedIds = {
+        transactions: [] as string[],
+        accounts: [] as string[],
+        categories: [] as string[],
+        cards: [] as string[],
+        budgets: [] as string[]
+      };
+
       try {
-        const saved = localStorage.getItem('milli_deleted_tx_ids');
-        if (saved) deletedIds = JSON.parse(saved);
+        const txSaved = localStorage.getItem('milli_deleted_tx_ids');
+        if (txSaved) deletedIds.transactions = JSON.parse(txSaved);
+
+        const accSaved = localStorage.getItem('milli_deleted_account_ids');
+        if (accSaved) deletedIds.accounts = JSON.parse(accSaved);
+
+        const catSaved = localStorage.getItem('milli_deleted_category_ids');
+        if (catSaved) deletedIds.categories = JSON.parse(catSaved);
+
+        const cardSaved = localStorage.getItem('milli_deleted_card_ids');
+        if (cardSaved) deletedIds.cards = JSON.parse(cardSaved);
+
+        const bSaved = localStorage.getItem('milli_deleted_budget_ids');
+        if (bSaved) deletedIds.budgets = JSON.parse(bSaved);
       } catch {}
 
       import('./googleSheetsSyncService').then(async ({ syncWithGoogleSheets }) => {
         try {
           isSyncingRef.current = true;
-          const result = await syncWithGoogleSheets(gAccessToken, dataRef.current.transactions, deletedIds);
+          const result = await syncWithGoogleSheets(gAccessToken, dataRef.current, deletedIds);
           hasUnsavedSyncChangesRef.current = false;
+          
           localStorage.removeItem('milli_deleted_tx_ids');
+          localStorage.removeItem('milli_deleted_account_ids');
+          localStorage.removeItem('milli_deleted_category_ids');
+          localStorage.removeItem('milli_deleted_card_ids');
+          localStorage.removeItem('milli_deleted_budget_ids');
+
           const nowStr = new Date().toLocaleString('ru-RU');
           localStorage.setItem('milli_last_sync_time', nowStr);
           localStorage.setItem('milli_last_sync_result', JSON.stringify(result));
@@ -389,11 +440,30 @@ export default function App() {
   };
 
   // --- BUSINESS LOGIC: ACCOUNTS ---
+  const trackDeletedIds = (key: string, ...ids: string[]) => {
+    try {
+      const saved = localStorage.getItem(key);
+      const list: string[] = saved ? JSON.parse(saved) : [];
+      let updated = false;
+      for (const id of ids) {
+        if (!list.includes(id)) {
+          list.push(id);
+          updated = true;
+        }
+      }
+      if (updated) {
+        localStorage.setItem(key, JSON.stringify(list));
+      }
+    } catch (e) {
+      console.error(`Error tracking deleted IDs for ${key}:`, e);
+    }
+  };
+
   const handleAddAccount = (newAcc: Omit<Account, 'id'>) => {
     const newId = `acc-${Date.now()}`;
     const nextData = {
       ...data,
-      accounts: [...data.accounts, { ...newAcc, id: newId }]
+      accounts: [...data.accounts, { ...newAcc, id: newId, updatedAt: Date.now() }]
     };
     setData(nextData);
     saveToFirebaseDirectly(nextData);
@@ -402,7 +472,7 @@ export default function App() {
   const handleUpdateAccount = (updatedAcc: Account) => {
     const nextData = {
       ...data,
-      accounts: data.accounts.map(a => a.id === updatedAcc.id ? updatedAcc : a)
+      accounts: data.accounts.map(a => a.id === updatedAcc.id ? { ...updatedAcc, updatedAt: Date.now() } : a)
     };
     setData(nextData);
     saveToFirebaseDirectly(nextData);
@@ -418,6 +488,7 @@ export default function App() {
       ...data,
       accounts: data.accounts.filter(a => a.id !== id)
     };
+    trackDeletedIds('milli_deleted_account_ids', id);
     setData(nextData);
     saveToFirebaseDirectly(nextData);
   };
@@ -425,7 +496,7 @@ export default function App() {
   const handleReorderAccounts = (newAccounts: Account[]) => {
     const nextData = {
       ...data,
-      accounts: newAccounts
+      accounts: newAccounts.map(a => ({ ...a, updatedAt: Date.now() }))
     };
     setData(nextData);
     saveToFirebaseDirectly(nextData);
@@ -436,7 +507,7 @@ export default function App() {
     const id = `card-${Date.now()}`;
     const nextData = {
       ...data,
-      cards: [...(data.cards || []), { ...newCard, id }]
+      cards: [...(data.cards || []), { ...newCard, id, updatedAt: Date.now() }]
     };
     setData(nextData);
     saveToFirebaseDirectly(nextData);
@@ -445,7 +516,7 @@ export default function App() {
   const handleUpdateCard = (updatedCard: BankCard) => {
     const nextData = {
       ...data,
-      cards: (data.cards || []).map(c => c.id === updatedCard.id ? updatedCard : c)
+      cards: (data.cards || []).map(c => c.id === updatedCard.id ? { ...updatedCard, updatedAt: Date.now() } : c)
     };
     setData(nextData);
     saveToFirebaseDirectly(nextData);
@@ -455,8 +526,9 @@ export default function App() {
     const nextData = {
       ...data,
       cards: (data.cards || []).filter(c => c.id !== id),
-      transactions: data.transactions.map(t => t.cardId === id ? { ...t, cardId: undefined } : t)
+      transactions: data.transactions.map(t => t.cardId === id ? { ...t, cardId: undefined, updatedAt: Date.now() } : t)
     };
+    trackDeletedIds('milli_deleted_card_ids', id);
     setData(nextData);
     saveToFirebaseDirectly(nextData);
   };
@@ -466,7 +538,7 @@ export default function App() {
     const newId = `cat-${Date.now()}`;
     const nextData = {
       ...data,
-      categories: [...data.categories, { ...newCat, id: newId }]
+      categories: [...data.categories, { ...newCat, id: newId, updatedAt: Date.now() }]
     };
     setData(nextData);
     saveToFirebaseDirectly(nextData);
@@ -475,7 +547,7 @@ export default function App() {
   const handleUpdateCategory = (updatedCat: Category) => {
     const nextData = {
       ...data,
-      categories: data.categories.map(c => c.id === updatedCat.id ? updatedCat : c)
+      categories: data.categories.map(c => c.id === updatedCat.id ? { ...updatedCat, updatedAt: Date.now() } : c)
     };
     setData(nextData);
     saveToFirebaseDirectly(nextData);
@@ -491,28 +563,14 @@ export default function App() {
       ...data,
       categories: data.categories.filter(c => c.id !== id)
     };
+    trackDeletedIds('milli_deleted_category_ids', id);
     setData(nextData);
     saveToFirebaseDirectly(nextData);
   };
 
   // --- BUSINESS LOGIC: TRANSACTIONS & BALANCES (Delta Adjustment Engine) ---
   const trackDeletedTransactionIds = (...ids: string[]) => {
-    try {
-      const saved = localStorage.getItem('milli_deleted_tx_ids');
-      const list: string[] = saved ? JSON.parse(saved) : [];
-      let updated = false;
-      for (const id of ids) {
-        if (!list.includes(id)) {
-          list.push(id);
-          updated = true;
-        }
-      }
-      if (updated) {
-        localStorage.setItem('milli_deleted_tx_ids', JSON.stringify(list));
-      }
-    } catch (e) {
-      console.error('Error tracking deleted transactions:', e);
-    }
+    trackDeletedIds('milli_deleted_tx_ids', ...ids);
   };
 
   const handleAddTransaction = (newTx: Omit<Transaction, 'id'>) => {
@@ -897,9 +955,9 @@ export default function App() {
     const exists = data.budgets.some(b => b.categoryId === categoryId);
     let newBudgets;
     if (exists) {
-      newBudgets = data.budgets.map(b => b.categoryId === categoryId ? { categoryId, limitAmount } : b);
+      newBudgets = data.budgets.map(b => b.categoryId === categoryId ? { categoryId, limitAmount, updatedAt: Date.now() } : b);
     } else {
-      newBudgets = [...data.budgets, { categoryId, limitAmount }];
+      newBudgets = [...data.budgets, { categoryId, limitAmount, updatedAt: Date.now() }];
     }
 
     const nextData = {
@@ -916,6 +974,7 @@ export default function App() {
       ...data,
       budgets: data.budgets.filter(b => b.categoryId !== categoryId)
     };
+    trackDeletedIds('milli_deleted_budget_ids', categoryId);
     setData(nextData);
     saveToFirebaseDirectly(nextData);
   };
@@ -1222,15 +1281,14 @@ export default function App() {
               )}
               {accountsSubTab === 'sync' && (
                 <GoogleSheetsSyncPanel
-                  transactions={data.transactions}
+                  financeData={data}
                   currentUser={currentUser}
                   gAccessToken={gAccessToken}
                   onGoogleLogin={handleGoogleLogin}
                   onGoogleLogout={handleGoogleLogout}
-                  onSyncSuccess={(mergedTxs) => {
-                    const nextData = { ...data, transactions: mergedTxs };
-                    setData(nextData);
-                    saveToFirebaseDirectly(nextData);
+                  onSyncSuccess={(mergedData) => {
+                    setData(mergedData);
+                    saveToFirebaseDirectly(mergedData);
                   }}
                   theme={theme}
                   addToast={addToast}

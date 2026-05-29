@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { Transaction } from '../types';
-import { syncWithGoogleSheets, SyncResult } from '../googleSheetsSyncService';
+import { FinanceData } from '../types';
+import { syncWithGoogleSheets, FullSyncResult } from '../googleSheetsSyncService';
 import { Cloud, RefreshCw, FileSpreadsheet, ExternalLink, CheckCircle, AlertCircle, Trash2, LogIn, LogOut, Database, ListChecks } from 'lucide-react';
 
 interface GoogleSheetsSyncPanelProps {
-  transactions: Transaction[];
+  financeData: FinanceData;
   currentUser: any;
   gAccessToken: string | null;
   onGoogleLogin: () => void;
   onGoogleLogout: () => void;
-  onSyncSuccess: (mergedTransactions: Transaction[]) => void;
+  onSyncSuccess: (mergedData: FinanceData) => void;
   theme: 'light' | 'dark';
   addToast: (msg: string, type: 'success' | 'warning' | 'critical') => void;
 }
 
 export function GoogleSheetsSyncPanel({
-  transactions,
+  financeData,
   currentUser,
   gAccessToken,
   onGoogleLogin,
@@ -26,7 +26,7 @@ export function GoogleSheetsSyncPanel({
 }: GoogleSheetsSyncPanelProps) {
   const [syncing, setSyncing] = useState<boolean>(false);
   const [errMessage, setErrMessage] = useState<string>('');
-  const [lastResult, setLastResult] = useState<SyncResult | null>(null);
+  const [lastResult, setLastResult] = useState<FullSyncResult | null>(null);
   const [lastSyncTime, setLastSyncTime] = useState<string | null>(null);
 
   // Read persisted last sync status from localStorage
@@ -43,10 +43,10 @@ export function GoogleSheetsSyncPanel({
     }
   }, []);
 
-  // Compute local alterations
-  const getDeletedCount = (): number => {
+  // Compute local alterations for deleted items
+  const getDeletedCount = (key: string): number => {
     try {
-      const saved = localStorage.getItem('milli_deleted_tx_ids');
+      const saved = localStorage.getItem(key);
       if (!saved) return 0;
       const list = JSON.parse(saved);
       return Array.isArray(list) ? list.length : 0;
@@ -55,14 +55,23 @@ export function GoogleSheetsSyncPanel({
     }
   };
 
-  const getUnsyncedLocalCount = (): number => {
-    // Transactions with an updatedAt field that have never been synced / created after may also be tracked
-    return transactions.filter(t => t.updatedAt).length;
+  const getTotalDeletedCount = (): number => {
+    return (
+      getDeletedCount('milli_deleted_tx_ids') +
+      getDeletedCount('milli_deleted_account_ids') +
+      getDeletedCount('milli_deleted_category_ids') +
+      getDeletedCount('milli_deleted_card_ids') +
+      getDeletedCount('milli_deleted_budget_ids')
+    );
   };
 
-  const clearDeletionLog = () => {
+  const clearAllDeletionLogs = () => {
     localStorage.removeItem('milli_deleted_tx_ids');
-    addToast('Локальный лог удалений успешно сброшен', 'success');
+    localStorage.removeItem('milli_deleted_account_ids');
+    localStorage.removeItem('milli_deleted_category_ids');
+    localStorage.removeItem('milli_deleted_card_ids');
+    localStorage.removeItem('milli_deleted_budget_ids');
+    addToast('Локальные логи удалений успешно сброшены', 'success');
   };
 
   const handleSyncNow = async () => {
@@ -74,23 +83,46 @@ export function GoogleSheetsSyncPanel({
     setSyncing(true);
     setErrMessage('');
     try {
-      // 1. Retrieve the local list of deleted transaction IDs
-      let deletedIds: string[] = [];
+      // 1. Retrieve the local list of deleted IDs across all entities
+      let deletedIds = {
+        transactions: [] as string[],
+        accounts: [] as string[],
+        categories: [] as string[],
+        cards: [] as string[],
+        budgets: [] as string[]
+      };
+
       try {
-        const saved = localStorage.getItem('milli_deleted_tx_ids');
-        if (saved) deletedIds = JSON.parse(saved);
+        const txSaved = localStorage.getItem('milli_deleted_tx_ids');
+        if (txSaved) deletedIds.transactions = JSON.parse(txSaved);
+
+        const accSaved = localStorage.getItem('milli_deleted_account_ids');
+        if (accSaved) deletedIds.accounts = JSON.parse(accSaved);
+
+        const catSaved = localStorage.getItem('milli_deleted_category_ids');
+        if (catSaved) deletedIds.categories = JSON.parse(catSaved);
+
+        const cardSaved = localStorage.getItem('milli_deleted_card_ids');
+        if (cardSaved) deletedIds.cards = JSON.parse(cardSaved);
+
+        const bSaved = localStorage.getItem('milli_deleted_budget_ids');
+        if (bSaved) deletedIds.budgets = JSON.parse(bSaved);
       } catch (e) {
         console.error('Error parsing deleted IDs', e);
       }
 
       // 2. Perform synchronization
-      const result = await syncWithGoogleSheets(gAccessToken, transactions, deletedIds);
+      const result = await syncWithGoogleSheets(gAccessToken, financeData, deletedIds);
 
       // 3. Update local state in Parent
-      onSyncSuccess(result.mergedTransactions);
+      onSyncSuccess(result.mergedData);
 
-      // 4. Clear the local list of deleted transaction IDs since they are synced
+      // 4. Clear all local deletion records since they are synchronized
       localStorage.removeItem('milli_deleted_tx_ids');
+      localStorage.removeItem('milli_deleted_account_ids');
+      localStorage.removeItem('milli_deleted_category_ids');
+      localStorage.removeItem('milli_deleted_card_ids');
+      localStorage.removeItem('milli_deleted_budget_ids');
 
       // 5. Update UI stats and persist details
       const nowStr = new Date().toLocaleString('ru-RU');
@@ -110,6 +142,18 @@ export function GoogleSheetsSyncPanel({
   };
 
   const isDark = theme === 'dark';
+
+  const sumRecord = (rec: any): number => {
+    if (typeof rec === 'number') return rec;
+    if (!rec) return 0;
+    return (Object.values(rec) as any[]).reduce<number>((acc, val) => acc + (Number(val) || 0), 0);
+  };
+
+  const getEntityCount = (rec: any, entityKey: string): number => {
+    if (!rec) return 0;
+    if (typeof rec === 'number') return entityKey === 'transactions' ? rec : 0;
+    return Number(rec[entityKey]) || 0;
+  };
 
   return (
     <div className={`p-6 rounded-3xl border transition-all duration-350 ${
@@ -158,7 +202,7 @@ export function GoogleSheetsSyncPanel({
               className={`w-full sm:w-auto py-1.5 px-4 text-xs font-black rounded-xl transition-all cursor-pointer flex items-center justify-center gap-2 border ${
                 isDark 
                   ? 'border-white/10 hover:bg-white/5 text-slate-300' 
-                  : 'border-slate-200 hover:bg-slate-100 text-slate-600'
+                   : 'border-slate-200 hover:bg-slate-100 text-slate-600'
               }`}
               id="google-disconnect-btn"
             >
@@ -187,9 +231,9 @@ export function GoogleSheetsSyncPanel({
           <span>Как работает дельта-синхронизация?</span>
         </p>
         <ul className="list-disc list-inside space-y-1.5 text-slate-400 ml-1 pl-1">
-          <li>Импортируются и экспортируются <b>исключительно новые и измененные записи</b> на основе временных меток изменений.</li>
-          <li><b>Двусторонний обмен:</b> любые добавления или корректировки в Google Таблице будут скачаны в MillFinance, а ваши локальные изменения отправятся в облако.</li>
-          <li><b>Безопасное удаление:</b> операции, удаленные вами в приложении, автоматически стираются из строки таблицы Google.</li>
+          <li>Импортируются и экспортируются <b>все данные</b>: транзакции, счета, лимиты, категории и карты на основе временных меток изменений.</li>
+          <li><b>Двусторонний обмен:</b> любые добавления или корректировки (включая галочку «Быстрый ввод» в свойствах счетов на смартфоне или ПК) будут синхронизированы в обе стороны.</li>
+          <li><b>Безопасное удаление:</b> счета, карты или транзакции, удаленные вами на одном устройстве, автоматически списываются из облака при сеансе связи.</li>
         </ul>
       </div>
 
@@ -199,17 +243,17 @@ export function GoogleSheetsSyncPanel({
           isDark ? 'bg-white/5 border-white/5' : 'bg-slate-50 border-slate-100'
         }`}>
           <div className="text-[10px] text-slate-400 uppercase font-mono tracking-wider">Всего операций в приложении</div>
-          <div className="text-lg font-black mt-1 font-mono">{transactions.length}</div>
+          <div className="text-lg font-black mt-1 font-mono">{financeData.transactions?.length || 0}</div>
         </div>
         <div className={`p-3.5 rounded-2xl border text-center ${
           isDark ? 'bg-white/5 border-white/5' : 'bg-slate-50 border-slate-100'
         }`}>
-          <div className="text-[10px] text-slate-400 uppercase font-mono tracking-wider">Очередь на удаление</div>
+          <div className="text-[10px] text-slate-400 uppercase font-mono tracking-wider">Изменений в очереди</div>
           <div className="text-lg font-black mt-1 font-mono flex items-center justify-center gap-1.5">
-            <span className={getDeletedCount() > 0 ? 'text-rose-400' : ''}>{getDeletedCount()}</span>
-            {getDeletedCount() > 0 && (
+            <span className={getTotalDeletedCount() > 0 ? 'text-rose-400' : ''}>{getTotalDeletedCount()}</span>
+            {getTotalDeletedCount() > 0 && (
               <button 
-                onClick={clearDeletionLog}
+                onClick={clearAllDeletionLogs}
                 className="p-1 rounded-md hover:bg-rose-500/10 text-slate-400 hover:text-rose-400 transition-colors cursor-pointer"
                 title="Сбросить лог удалений"
               >
@@ -264,25 +308,54 @@ export function GoogleSheetsSyncPanel({
 
           <div className="grid grid-cols-2 gap-x-6 gap-y-1.5 text-xs font-mono ml-1.5">
             <div className="flex justify-between border-b border-dashed border-slate-800 pb-1">
-              <span className="text-slate-450 text-[11px]">Выгружено в таблицу:</span>
-              <span className="text-teal-400 font-black">{lastResult.addedToSheet + lastResult.updatedOnSheet}</span>
+              <span className="text-slate-400 text-[11px]">Выгружено в таблицу:</span>
+              <span className="text-teal-400 font-black">{sumRecord(lastResult.addedToSheet) + sumRecord(lastResult.updatedOnSheet)}</span>
             </div>
             <div className="flex justify-between border-b border-dashed border-slate-800 pb-1">
-              <span className="text-slate-450 text-[11px]">Закачано локально:</span>
-              <span className="text-teal-400 font-black">{lastResult.addedToLocal + lastResult.updatedOnLocal}</span>
+              <span className="text-slate-400 text-[11px]">Закачано локально:</span>
+              <span className="text-teal-400 font-black">{sumRecord(lastResult.addedToLocal) + sumRecord(lastResult.updatedOnLocal)}</span>
             </div>
-            <div className="flex justify-between border-b border-dashed border-slate-800 pb-1sm">
-              <span className="text-slate-450 text-[11px]">Стерто из таблицы:</span>
-              <span className="text-rose-400 font-black">{lastResult.deletedFromSheet}</span>
+            <div className="flex justify-between border-b border-dashed border-slate-800 pb-1">
+              <span className="text-slate-400 text-[11px]">Стерто из таблицы:</span>
+              <span className="text-rose-400 font-black">{sumRecord(lastResult.deletedFromSheet)}</span>
             </div>
-            <div className="flex justify-between border-b border-dashed border-slate-800 pb-1sm">
-              <span className="text-slate-450 text-[11px]">Стерто локально:</span>
-              <span className="text-rose-400 font-black">{lastResult.deletedFromLocal}</span>
+            <div className="flex justify-between border-b border-dashed border-slate-800 pb-1">
+              <span className="text-slate-400 text-[11px]">Стерто локально:</span>
+              <span className="text-rose-400 font-black">{sumRecord(lastResult.deletedFromLocal)}</span>
+            </div>
+          </div>
+
+          {/* Breakdown stats */}
+          <div className="pt-2 text-[10px] space-y-1 text-slate-400 font-mono border-t border-slate-800/30">
+            <div className="text-[9px] uppercase tracking-wider font-extrabold text-slate-500 mb-1">Детализация изменений:</div>
+            <div className="flex justify-between">
+              <span>Транзакции (доб / обн):</span>
+              <span>
+                {getEntityCount(lastResult.addedToSheet, 'transactions') + getEntityCount(lastResult.addedToLocal, 'transactions')}+ / {getEntityCount(lastResult.updatedOnSheet, 'transactions') + getEntityCount(lastResult.updatedOnLocal, 'transactions')}~
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span>Счета (доб / обн):</span>
+              <span>
+                {getEntityCount(lastResult.addedToSheet, 'accounts') + getEntityCount(lastResult.addedToLocal, 'accounts')}+ / {getEntityCount(lastResult.updatedOnSheet, 'accounts') + getEntityCount(lastResult.updatedOnLocal, 'accounts')}~
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span>Категории (доб / обн):</span>
+              <span>
+                {getEntityCount(lastResult.addedToSheet, 'categories') + getEntityCount(lastResult.addedToLocal, 'categories')}+ / {getEntityCount(lastResult.updatedOnSheet, 'categories') + getEntityCount(lastResult.updatedOnLocal, 'categories')}~
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span>Карты (доб / обн):</span>
+              <span>
+                {getEntityCount(lastResult.addedToSheet, 'cards') + getEntityCount(lastResult.addedToLocal, 'cards')}+ / {getEntityCount(lastResult.updatedOnSheet, 'cards') + getEntityCount(lastResult.updatedOnLocal, 'cards')}~
+              </span>
             </div>
           </div>
 
           {lastResult.spreadsheetUrl && (
-            <div className="pt-2 flex justify-start">
+            <div className="pt-2 flex justify-start border-t border-slate-800/30">
               <a
                 href={lastResult.spreadsheetUrl}
                 target="_blank"
