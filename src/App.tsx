@@ -8,12 +8,9 @@ import { BudgetingPanel } from './components/BudgetingPanel';
 import { CalendarPanel } from './components/CalendarPanel';
 import { GoogleSheetsSyncPanel } from './components/GoogleSheetsSyncPanel';
 import { LayoutDashboard, ReceiptText, Calendar, SlidersHorizontal, Settings, Flame, Bell, AlertTriangle, XCircle, CheckCircle, Info, LogIn, LogOut, ShieldAlert, X, RefreshCw, FolderOpen, TrendingUp, Sun, Moon } from 'lucide-react';
-import { initAuth, logout, googleSignIn, db } from './googleAuth';
+import { initAuth, logout, googleSignIn } from './googleAuth';
 import { User } from 'firebase/auth';
-import { doc, onSnapshot, getDoc } from 'firebase/firestore';
-import { getUserFinanceData, saveUserFinanceData, testConnection, subscribeToUserFinanceData, reinitUserFinanceData } from './firebaseService';
 import { parseAndStandardizeJsonToFinanceData } from './honeyJsonConverter';
-import firebaseConfig from '../firebase-applet-config.json';
 
 export default function App() {
   
@@ -280,44 +277,15 @@ export default function App() {
   };
 
   const saveToFirebaseDirectly = async (nextData: FinanceData) => {
-    // Synchronization temporarily disabled as requested. Local changes are safe in LocalStorage.
+    // Only LocalStorage and Google Sheets are used for syncing now.
     return;
-  };
-
-  const handleForceImportCSVToFirebase = async () => {
-    if (!currentUser) return;
-    if (confirm(`Вы уверены, что хотите принудительно залить все данные HoneyMoney из файла honey_export.json напрямую в базу данных Firebase? Это полностью удалит все старые транзакции и перезапишет счета на свежие данные (${initialFinanceData.transactions.length} операций).`)) {
-      setIsFirebaseLoading(true);
-      setFirebaseSyncError(null);
-      try {
-        addToast(`Старт импорта JSON... Запись всех ${initialFinanceData.transactions.length} транзакций в Firebase Firestore с полной очисткой старых записей... ⏳`, "success");
-        await reinitUserFinanceData(currentUser.uid, currentUser.email || "", initialFinanceData);
-        lastFetchedDataRef.current = JSON.stringify(initialFinanceData);
-        setData(initialFinanceData);
-        addToast("Все данные из honey_export.json успешно залиты в Firebase! Старые данные удалены. ☁️🎉", "success");
-      } catch (err: any) {
-        console.error("Ошибка принудительного импорта JSON в Firebase:", err);
-        let msg = err?.message || String(err);
-        try {
-          const parsed = JSON.parse(msg);
-          msg = parsed.error || msg;
-        } catch {}
-        setFirebaseSyncError(msg);
-        addToast(`Не удалось залить JSON: ${msg}`, "critical" as any);
-      } finally {
-        setIsFirebaseLoading(false);
-      }
-    }
   };
 
   const handleUploadCustomJson = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const isCloud = !!currentUser;
-    const confirmMessage = isCloud 
-      ? `Вы уверены, что хотите загрузить файл "${file.name}" с вашего ПК в облако Firebase? Это ПОЛНОСТЬЮ УДАЛИТ И ПЕРЕЗАПИШЕТ все текущие транзакции и счета в облаке текущими данными из выбранного файла.`
-      : `Вы уверены, что хотите импортировать файл "${file.name}" с вашего ПК в локальное хранилище браузера? Это заменит текущие данные в браузере. Вы сможете синхронизировать их с облаком при последующем входе.`;
+    const confirmMessage = `Вы уверены, что хотите импортировать файл "${file.name}" с вашего ПК? Это заменит текущие данные в браузере и автоматически синхронизирует их с Google Sheets.`;
 
     if (!confirm(confirmMessage)) {
       e.target.value = '';
@@ -340,18 +308,11 @@ export default function App() {
           const parsedData = parseAndStandardizeJsonToFinanceData(text);
           const numTxs = parsedData.transactions.length;
 
-          if (isCloud && currentUser) {
-            addToast(`Успешно распознано ${numTxs} транзакций! Запись в БД Firebase... ⏳`, "success");
-            await reinitUserFinanceData(currentUser.uid, currentUser.email || "", parsedData);
-            lastFetchedDataRef.current = JSON.stringify(parsedData);
-            setData(parsedData);
-            addToast(`Успешно загружено: ${numTxs} транзакций из "${file.name}" в облако! 🎉☁️`, "success");
-          } else {
-            addToast(`Успешно распознано ${numTxs} транзакций! Сохранение локально... 💾`, "success");
-            localStorage.setItem('milli_finance_data_v8_realonly_clean', JSON.stringify(parsedData));
-            setData(parsedData);
-            addToast(`Успешно загружено: ${numTxs} транзакций из "${file.name}" в локальный кэш! 💻🎉 Войдите в Firebase для сохранения в облаке.`, "success");
-          }
+          addToast(`Успешно распознано ${numTxs} транзакций! Сохранение локально... 💾`, "success");
+          localStorage.setItem('milli_finance_data_v8_realonly_clean', JSON.stringify(parsedData));
+          setData(parsedData);
+          hasUnsavedSyncChangesRef.current = true; // Mark as unsaved so background Google Sheets sync is triggered
+          addToast(`Успешно загружено: ${numTxs} транзакций из "${file.name}"! Данные будут синхронизированы в Google Drive. 🎉`, "success");
         } catch (innerErr: any) {
           console.error("Ошибка импорта загруженного файла:", innerErr);
           const msg = innerErr?.message || String(innerErr);
