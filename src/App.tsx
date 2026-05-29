@@ -61,6 +61,7 @@ export default function App() {
   // Intercollegiate states passing to support instant add-on-day or edits
   const [preselectedDate, setPreselectedDate] = useState<string | null>(null);
   const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
+  const lastTabBeforeEditRef = useRef<string | null>(null);
 
   // Google Sheets Authentication Integration state
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -267,6 +268,7 @@ export default function App() {
 
   // Triggered when editing transaction from calendar cell or overview list
   const handleEditTransactionStart = (tx: Transaction) => {
+    lastTabBeforeEditRef.current = activeTab;
     setEditingTransaction(tx);
     setPreselectedDate(null);
     setActiveTab('transactions');
@@ -718,6 +720,10 @@ export default function App() {
     setData(nextData);
     saveToFirebaseDirectly(nextData);
     setEditingTransaction(null);
+    if (lastTabBeforeEditRef.current) {
+      setActiveTab(lastTabBeforeEditRef.current);
+      lastTabBeforeEditRef.current = null;
+    }
   };
 
   // --- BUSINESS LOGIC: BUDGETS ---
@@ -931,7 +937,13 @@ export default function App() {
               preselectedDate={preselectedDate}
               onClearPreselectedDate={() => setPreselectedDate(null)}
               editingTransaction={editingTransaction}
-              onCancelEditing={() => setEditingTransaction(null)}
+              onCancelEditing={() => {
+                setEditingTransaction(null);
+                if (lastTabBeforeEditRef.current) {
+                  setActiveTab(lastTabBeforeEditRef.current);
+                  lastTabBeforeEditRef.current = null;
+                }
+              }}
               onAddTransfer={handleAddTransfer}
             />
           )}

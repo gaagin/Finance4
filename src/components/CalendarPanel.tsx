@@ -495,8 +495,10 @@ export function CalendarPanel({
                           title={`${cat?.name || 'Другое'}: ${tx.amount} ₼ — ${tx.description || ''}`}
                         >
                           <div className="flex items-center justify-between gap-1">
-                            <span className="font-semibold truncate">{tx.description || cat?.name || 'Инфо'}</span>
-                            <span className="font-mono font-bold shrink-0">
+                            <span className="font-bold text-[9px] sm:text-[9.5px] uppercase tracking-wide truncate">
+                              {tx.type === 'transfer' ? 'Перевод' : (cat?.name || 'Другое')}
+                            </span>
+                            <span className="font-mono font-bold text-[9.5px] shrink-0">
                               {isIncome ? '+' : '-'}{Math.round(tx.amount)}₼
                             </span>
                           </div>
