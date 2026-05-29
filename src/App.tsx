@@ -6,6 +6,7 @@ import { TransactionPanel } from './components/TransactionPanel';
 import { AccountsCategoriesPanel } from './components/AccountsCategoriesPanel';
 import { BudgetingPanel } from './components/BudgetingPanel';
 import { CalendarPanel } from './components/CalendarPanel';
+import { GoogleSheetsSyncPanel } from './components/GoogleSheetsSyncPanel';
 import { LayoutDashboard, ReceiptText, Calendar, SlidersHorizontal, Settings, Flame, Bell, AlertTriangle, XCircle, CheckCircle, Info, LogIn, LogOut, ShieldAlert, X, RefreshCw, FolderOpen, TrendingUp, Sun, Moon } from 'lucide-react';
 import { initAuth, logout, googleSignIn, db } from './googleAuth';
 import { User } from 'firebase/auth';
@@ -56,7 +57,7 @@ export default function App() {
 
   // 3. Navigation between Views (Tabs)
   const [activeTab, setActiveTab] = useState<string>('overview');
-  const [accountsSubTab, setAccountsSubTab] = useState<'accounts' | 'budget'>('accounts');
+  const [accountsSubTab, setAccountsSubTab] = useState<'accounts' | 'budget' | 'sync'>('accounts');
 
   // Calendar persistent states to align monthly scope & focuses upon returning from modals or edits
   const [calendarCurrentDate, setCalendarCurrentDate] = useState<Date>(new Date()); // Default dynamically to today's date (May 2026)
@@ -416,10 +417,30 @@ export default function App() {
   };
 
   // --- BUSINESS LOGIC: TRANSACTIONS & BALANCES (Delta Adjustment Engine) ---
+  const trackDeletedTransactionIds = (...ids: string[]) => {
+    try {
+      const saved = localStorage.getItem('milli_deleted_tx_ids');
+      const list: string[] = saved ? JSON.parse(saved) : [];
+      let updated = false;
+      for (const id of ids) {
+        if (!list.includes(id)) {
+          list.push(id);
+          updated = true;
+        }
+      }
+      if (updated) {
+        localStorage.setItem('milli_deleted_tx_ids', JSON.stringify(list));
+      }
+    } catch (e) {
+      console.error('Error tracking deleted transactions:', e);
+    }
+  };
+
   const handleAddTransaction = (newTx: Omit<Transaction, 'id'>) => {
     const tx: Transaction = {
       ...newTx,
-      id: `tx-${Date.now()}`
+      id: `tx-${Date.now()}`,
+      updatedAt: Date.now()
     };
 
     // Modify associated bank account balance
@@ -465,6 +486,7 @@ export default function App() {
       transferAccountId: transfer.toAccountId,
       date: transfer.date,
       description: transfer.description.trim() || `Перевод в счет ${toAcc.name}`,
+      updatedAt: Date.now()
     };
 
     const txTo: Transaction = {
@@ -477,6 +499,7 @@ export default function App() {
       transferAccountId: transfer.fromAccountId,
       date: transfer.date,
       description: transfer.description.trim() || `Перевод со счета ${fromAcc.name}`,
+      updatedAt: Date.now()
     };
 
     const updatedAccounts = data.accounts.map(acc => {
@@ -534,6 +557,13 @@ export default function App() {
       }
       return balanceAdjust !== 0 ? { ...acc, balance: acc.balance + balanceAdjust } : acc;
     });
+
+    // Log deleted IDs for Google Sheets delta sync
+    if (otherTx) {
+      trackDeletedTransactionIds(id, otherTx.id);
+    } else {
+      trackDeletedTransactionIds(id);
+    }
 
     const nextData = {
       ...data,
@@ -707,6 +737,7 @@ export default function App() {
         });
         // Filter out the counterpart from transactions
         finalTransactions = finalTransactions.filter(t => t.id !== counterpartTx.id);
+        trackDeletedTransactionIds(counterpartTx.id);
       }
 
       // Apply updatedTx (regular income/expense)
@@ -745,10 +776,32 @@ export default function App() {
       finalTransactions = finalTransactions.map(t => t.id === updatedTx.id ? updatedTx : t);
     }
 
+    const now = Date.now();
+    const finalTransactionsWithTimestamps = finalTransactions.map(newTx => {
+      const oldTx = data.transactions.find(t => t.id === newTx.id);
+      if (!oldTx) {
+        return { ...newTx, updatedAt: now };
+      }
+      const changed = 
+        oldTx.amount !== newTx.amount ||
+        oldTx.date !== newTx.date ||
+        oldTx.description !== newTx.description ||
+        oldTx.accountId !== newTx.accountId ||
+        oldTx.categoryId !== newTx.categoryId ||
+        oldTx.cardId !== newTx.cardId ||
+        oldTx.transferAccountId !== newTx.transferAccountId ||
+        oldTx.transferType !== newTx.transferType;
+      
+      if (changed) {
+        return { ...newTx, updatedAt: now };
+      }
+      return newTx;
+    });
+
     const nextData = {
       ...data,
       accounts: finalAccounts,
-      transactions: finalTransactions
+      transactions: finalTransactionsWithTimestamps
     };
 
     setData(nextData);
@@ -991,6 +1044,7 @@ export default function App() {
                 }
               }}
               onAddTransfer={handleAddTransfer}
+              theme={theme}
             />
           )}
 
@@ -1044,9 +1098,22 @@ export default function App() {
                 >
                   Лимиты Бюджета
                 </button>
+                <button
+                  onClick={() => setAccountsSubTab('sync')}
+                  className={`flex-1 py-1.5 px-3 text-[11.5px] sm:text-xs font-bold rounded-xl transition-all cursor-pointer ${
+                    accountsSubTab === 'sync'
+                      ? 'bg-gradient-to-r from-teal-400 to-emerald-400 text-slate-950 font-black shadow-md'
+                      : theme === 'dark'
+                        ? 'text-slate-400 hover:text-white'
+                        : 'text-slate-500 hover:text-slate-900'
+                  }`}
+                  id="tab-btn-sync"
+                >
+                  Синхронизация Google
+                </button>
               </div>
 
-              {accountsSubTab === 'accounts' ? (
+              {accountsSubTab === 'accounts' && (
                 <AccountsCategoriesPanel
                   accounts={data.accounts}
                   categories={data.categories}
@@ -1063,7 +1130,8 @@ export default function App() {
                   theme={theme}
                   onThemeChange={setTheme}
                 />
-              ) : (
+              )}
+              {accountsSubTab === 'budget' && (
                 <BudgetingPanel
                   transactions={data.transactions}
                   categories={data.categories}
@@ -1071,6 +1139,22 @@ export default function App() {
                   onSaveBudget={handleSaveBudget}
                   onDeleteBudget={handleDeleteBudget}
                   theme={theme}
+                />
+              )}
+              {accountsSubTab === 'sync' && (
+                <GoogleSheetsSyncPanel
+                  transactions={data.transactions}
+                  currentUser={currentUser}
+                  gAccessToken={gAccessToken}
+                  onGoogleLogin={handleGoogleLogin}
+                  onGoogleLogout={handleGoogleLogout}
+                  onSyncSuccess={(mergedTxs) => {
+                    const nextData = { ...data, transactions: mergedTxs };
+                    setData(nextData);
+                    saveToFirebaseDirectly(nextData);
+                  }}
+                  theme={theme}
+                  addToast={addToast}
                 />
               )}
             </div>

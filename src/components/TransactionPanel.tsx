@@ -23,6 +23,7 @@ interface TransactionPanelProps {
     description: string;
     date: string;
   }) => void;
+  theme?: 'light' | 'dark';
 }
 
 export function TransactionPanel({
@@ -37,7 +38,8 @@ export function TransactionPanel({
   onClearPreselectedDate,
   editingTransaction = null,
   onCancelEditing,
-  onAddTransfer
+  onAddTransfer,
+  theme = 'dark'
 }: TransactionPanelProps) {
   
   // New Quick Add Transaction state
@@ -819,18 +821,32 @@ export function TransactionPanel({
                 const isIncome = tx.type === 'income';
                 const isTransfer = tx.type === 'transfer';
 
+                const isSelected = editingTransaction?.id === tx.id;
+                let bgBorderClass = '';
+
+                if (isSelected) {
+                  bgBorderClass = theme === 'dark'
+                    ? 'bg-amber-500/15 border-amber-500/40 shadow-inner'
+                    : 'bg-amber-50 border-amber-300 shadow-sm';
+                } else if (isTransfer) {
+                  bgBorderClass = theme === 'dark'
+                    ? 'bg-amber-500/5 hover:bg-amber-500/10 border-amber-500/15 shadow-xs'
+                    : 'bg-amber-50 border-amber-200 shadow-xs hover:bg-amber-100/50';
+                } else if (isIncome) {
+                  bgBorderClass = theme === 'dark'
+                    ? 'bg-emerald-500/5 hover:bg-emerald-500/10 border-emerald-500/15 shadow-xs'
+                    : 'bg-emerald-50 border-emerald-200 shadow-xs hover:bg-emerald-100/50';
+                } else {
+                  // Expense
+                  bgBorderClass = theme === 'dark'
+                    ? 'bg-rose-500/5 hover:bg-rose-500/10 border-rose-500/15 shadow-xs'
+                    : 'bg-rose-50 border-rose-200 shadow-xs hover:bg-rose-100/50';
+                }
+
                 return (
                   <div
                     key={tx.id}
-                    className={`grid grid-cols-12 gap-y-1 gap-x-2 items-center py-1.5 md:py-1 px-2.5 sm:px-3 rounded-lg border transition-all hover:shadow-xs group ${
-                      editingTransaction?.id === tx.id
-                        ? 'bg-amber-500/10 border-amber-500/30'
-                        : isTransfer
-                        ? 'bg-amber-500/5 hover:bg-amber-500/10 border-amber-500/10'
-                        : isIncome
-                        ? 'bg-emerald-500/5 hover:bg-emerald-500/10 border-white/5'
-                        : 'bg-white/5 hover:bg-white/10 border-white/5'
-                    }`}
+                    className={`grid grid-cols-12 gap-y-1 gap-x-2 items-center py-1.5 md:py-1 px-2.5 sm:px-3 rounded-xl border transition-all group ${bgBorderClass}`}
                   >
                     {/* Category & Custom Description desc */}
                     <div className="col-span-8 md:col-span-3 flex items-center gap-1.5 min-w-0">
@@ -841,10 +857,14 @@ export function TransactionPanel({
                         {isTransfer ? <ArrowUpDown size={9} /> : <IconComponent name={cat?.icon || 'HelpCircle'} size={9} />}
                       </div>
                       <div className="min-w-0">
-                        <h4 className="font-semibold text-[10.5px] text-slate-200 truncate leading-tight">
+                        <h4 className={`font-semibold text-[10.5px] truncate leading-tight ${
+                          theme === 'dark' ? 'text-slate-200' : 'text-slate-800'
+                        }`}>
                           {tx.description || (isTransfer ? 'Перевод' : (cat?.name || 'Без описания'))}
                         </h4>
-                        <span className="text-[8px] text-slate-400 uppercase tracking-wide font-medium block leading-none mt-0.5">
+                        <span className={`text-[8px] uppercase tracking-wide font-medium block leading-none mt-0.5 ${
+                          theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
+                        }`}>
                           {isTransfer ? 'Перевод' : (cat?.name || 'Другое')}
                         </span>
                       </div>
@@ -852,11 +872,19 @@ export function TransactionPanel({
 
                     {/* Associated Account & Card Link badge */}
                     <div className="col-span-4 md:col-span-3 flex flex-wrap items-center gap-1 md:opacity-100 min-w-0">
-                      <span className="text-[8.5px] font-semibold text-slate-350 bg-white/10 px-1 py-0.2 rounded truncate max-w-[110px]" title={acc?.name}>
+                      <span className={`text-[8.5px] font-semibold px-1 py-0.2 rounded truncate max-w-[110px] ${
+                        theme === 'dark' 
+                          ? 'text-slate-350 bg-white/10' 
+                          : 'text-slate-700 bg-slate-200/60 border border-slate-300/20'
+                      }`} title={acc?.name}>
                         {acc?.name || 'Неизвестно'}
                       </span>
                       {card && (
-                        <span className="text-[7.5px] font-bold text-teal-350 bg-teal-500/10 border border-teal-500/20 px-1 py-0.2 rounded flex items-center gap-0.5" title={`${card.bank} (${card.name})`}>
+                        <span className={`text-[7.5px] font-bold px-1 py-0.2 rounded flex items-center gap-0.5 border ${
+                          theme === 'dark'
+                            ? 'text-teal-355 bg-teal-500/10 border-teal-500/20'
+                            : 'text-teal-800 bg-teal-500/10 border-teal-500/30'
+                        }`} title={`${card.bank} (${card.name})`}>
                           <CreditCard size={7} />
                           {card.bank.split(' ')[0]} *{card.lastFour}
                         </span>
@@ -864,13 +892,21 @@ export function TransactionPanel({
                     </div>
 
                     {/* Date */}
-                    <div className="col-span-3 md:col-span-2 text-[9px] md:text-[10px] text-slate-400 font-mono">
+                    <div className={`col-span-3 md:col-span-2 text-[9px] md:text-[10px] font-mono ${
+                      theme === 'dark' ? 'text-slate-400' : 'text-slate-550'
+                    }`}>
                       {tx.date}
                     </div>
 
                     {/* Transaction sum */}
                     <div className="col-span-4 md:col-span-2 font-display font-extrabold text-[11px] sm:text-[12.5px] text-right md:text-right leading-none">
-                      <span className={isTransfer ? (tx.transferType === 'in' ? 'text-teal-400' : 'text-amber-400') : (isIncome ? 'text-emerald-400' : 'text-white')}>
+                      <span className={
+                        isTransfer 
+                          ? (tx.transferType === 'in' ? (theme === 'dark' ? 'text-teal-400' : 'text-teal-600') : (theme === 'dark' ? 'text-amber-400' : 'text-amber-600'))
+                          : (isIncome 
+                              ? (theme === 'dark' ? 'text-emerald-400' : 'text-emerald-600') 
+                              : (theme === 'dark' ? 'text-rose-400' : 'text-rose-600'))
+                      }>
                         {isTransfer ? (tx.transferType === 'in' ? '+' : '-') : (isIncome ? '+' : '-')}{tx.amount.toFixed(2)} ₼
                       </span>
                     </div>

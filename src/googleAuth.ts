@@ -11,6 +11,7 @@ export const db = getFirestore(app);
 export const provider = new GoogleAuthProvider();
 // Required Google Sheets scope for full spreadsheet reading/writing
 provider.addScope('https://www.googleapis.com/auth/spreadsheets');
+provider.addScope('https://www.googleapis.com/auth/drive.file');
 
 let cachedAccessToken: string | null = null;
 let isSigningIn = false;

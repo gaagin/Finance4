@@ -36,6 +36,7 @@ export interface Transaction {
   cardId?: string; // Связанная банковская карта (опционально)
   transferAccountId?: string; // Другой счет перевода (опционально)
   transferType?: 'out' | 'in'; // Направление ('out' - списание, 'in' - зачисление)
+  updatedAt?: number; // Временная метка изменения для дельта-синхронизации (в мс)
 }
 
 export interface BudgetLimit {

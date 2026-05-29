@@ -1,9 +1,9 @@
 {
-  "apiKey": "AIzaSyBq-b7xXllZI8L_Xo444C7QJ5HMP2zyzsQ",
-  "authDomain": "finance4-fb2fe.firebaseapp.com",
-  "projectId": "finance4-fb2fe",
-  "storageBucket": "finance4-fb2fe.firebasestorage.app",
-  "messagingSenderId": "648335804706",
-  "appId": "1:648335804706:web:1ce04b407bdbda66593d7b",
-  "measurementId": "G-4GCFFTJ0RV"
+  "projectId": "gen-lang-client-0281180945",
+  "appId": "1:1048535470505:web:ffc99abed998d217aaf4b8",
+  "apiKey": "AIzaSyBeAXpN__6bPryAAqWSBXck-ZfidyEEZbw",
+  "authDomain": "gen-lang-client-0281180945.firebaseapp.com",
+  "storageBucket": "gen-lang-client-0281180945.firebasestorage.app",
+  "messagingSenderId": "1048535470505",
+  "measurementId": ""
 }
