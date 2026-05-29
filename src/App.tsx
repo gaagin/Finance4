@@ -11,7 +11,7 @@ import { LayoutDashboard, ReceiptText, Calendar, SlidersHorizontal, Settings, Fl
 import { initAuth, logout, googleSignIn, db } from './googleAuth';
 import { User } from 'firebase/auth';
 import { doc, onSnapshot, getDoc } from 'firebase/firestore';
-import { getUserFinanceData, saveUserFinanceData, testConnection, subscribeToUserFinanceData, reinitUserFinanceData, getUserSettings, saveUserSettings } from './firebaseService';
+import { getUserFinanceData, saveUserFinanceData, testConnection, subscribeToUserFinanceData, reinitUserFinanceData } from './firebaseService';
 import { parseAndStandardizeJsonToFinanceData } from './honeyJsonConverter';
 import firebaseConfig from '../firebase-applet-config.json';
 
@@ -34,9 +34,6 @@ export default function App() {
   });
 
   const [isFirebaseLoading, setIsFirebaseLoading] = useState(false);
-  const [isSettingsLoadedFromCloud, setIsSettingsLoadedFromCloud] = useState(false);
-  const isSettingsLoadedRef = useRef(false);
-  const isLocalSettingsChangeRef = useRef(false);
   const isLoadedFromFirebase = useRef(false);
   const lastFetchedDataRef = useRef<string | null>(null);
   const isWritingToFirebaseRef = useRef(false);
@@ -87,141 +84,14 @@ export default function App() {
   const [firebaseSyncError, setFirebaseSyncError] = useState<string | null>(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
 
-  // Helper to stringify settings consistently ignoring undefined / null difference and key ordering
-  const cleanForCompare = (obj: any): string => {
-    const sortKeysAndClean = (item: any): any => {
-      if (item === null || item === undefined) {
-        return undefined;
-      }
-      if (Array.isArray(item)) {
-        return item.map(sortKeysAndClean);
-      }
-      if (typeof item === 'object') {
-        const sortedObj: any = {};
-        Object.keys(item)
-          .sort()
-          .forEach((key) => {
-            const val = item[key];
-            if (val !== undefined && val !== null) {
-              sortedObj[key] = sortKeysAndClean(val);
-            }
-          });
-        return sortedObj;
-      }
-      return item;
-    };
-
-    return JSON.stringify(sortKeysAndClean(obj));
-  };
-
-  // Subscribe to user personalized settings (accounts, categories, budgets, cards) in Firestore for real-time synchronization between devices
+  // Subscribe to Firebase Firestore user document for real-time synchronization between multiple devices (Temporarily disabled as requested)
   useEffect(() => {
-    if (!currentUser) {
-      setIsSettingsLoadedFromCloud(false);
-      isSettingsLoadedRef.current = false;
-      return;
+    if (currentUser) {
+      isLoadedFromFirebase.current = true;
+      setIsFirebaseLoading(false);
+      setFirebaseSyncError(null);
     }
-
-    setIsFirebaseLoading(true);
-    setFirebaseSyncError(null);
-
-    const userDocRef = doc(db, 'users', currentUser.uid);
-
-    const unsubscribe = onSnapshot(userDocRef, (snapshot) => {
-      setIsFirebaseLoading(false);
-      if (snapshot.exists()) {
-        const cloudSettings = snapshot.data();
-
-        // Skip updating local state if changes are pending writes (ie. triggered by this current device)
-        if (snapshot.metadata.hasPendingWrites) {
-          return;
-        }
-
-        const localData = dataRef.current;
-
-        const cloudAccounts = cloudSettings.accounts;
-        const localAccounts = localData.accounts;
-        const hasAccountsChanged = cloudAccounts && cloudAccounts.length > 0 && cleanForCompare(cloudAccounts) !== cleanForCompare(localAccounts);
-
-        const cloudCategories = cloudSettings.categories;
-        const localCategories = localData.categories;
-        const hasCategoriesChanged = cloudCategories && cloudCategories.length > 0 && cleanForCompare(cloudCategories) !== cleanForCompare(localCategories);
-
-        const cloudBudgets = cloudSettings.budgets;
-        const localBudgets = localData.budgets;
-        const hasBudgetsChanged = cloudBudgets && cleanForCompare(cloudBudgets) !== cleanForCompare(localBudgets);
-
-        const cloudCards = cloudSettings.cards;
-        const localCards = localData.cards;
-        const hasCardsChanged = cloudCards && cleanForCompare(cloudCards) !== cleanForCompare(localCards);
-
-        if (hasAccountsChanged || hasCategoriesChanged || hasBudgetsChanged || hasCardsChanged) {
-          console.log('Real-time sync: settings changed in Firestore, merging...');
-          
-          setData(prev => ({
-            ...prev,
-            accounts: cloudAccounts && cloudAccounts.length > 0 ? cloudAccounts : prev.accounts,
-            categories: cloudCategories && cloudCategories.length > 0 ? cloudCategories : prev.categories,
-            budgets: cloudBudgets || prev.budgets,
-            cards: cloudCards || prev.cards,
-          }));
-
-          // Only show toast if settings were already initially loaded
-          if (isSettingsLoadedRef.current) {
-            addToast('Настройки обновлены на другом устройстве! ☁️📱', 'success');
-          }
-        }
-
-        setIsSettingsLoadedFromCloud(true);
-        isSettingsLoadedRef.current = true;
-      } else {
-        // First time login or document does not exist yet! Back up current local settings to firestore
-        const email = currentUser.email || '';
-        saveUserSettings(currentUser.uid, email, {
-          accounts: dataRef.current.accounts,
-          categories: dataRef.current.categories,
-          budgets: dataRef.current.budgets,
-          cards: dataRef.current.cards || []
-        }).then(() => {
-          console.log('Seeded initial settings to Cloud Firestore in real-time hook');
-          setIsSettingsLoadedFromCloud(true);
-          isSettingsLoadedRef.current = true;
-        }).catch((err: any) => {
-          console.error('Failed to seed initial settings:', err);
-        });
-      }
-    }, (err) => {
-      console.error('Error on real-time settings snapshot:', err);
-      setFirebaseSyncError(err?.message || 'Не удалось настроить авто-синхронизацию настроек');
-      setIsFirebaseLoading(false);
-    });
-
-    return () => unsubscribe();
   }, [currentUser]);
-
-  // Auto-sync customized settings to Firestore whenever they change
-  useEffect(() => {
-    if (!currentUser || !isSettingsLoadedFromCloud) return;
-    if (!isLocalSettingsChangeRef.current) return;
-
-    const timer = setTimeout(async () => {
-      console.log('Auto-saving updated settings (accounts, categories, budgets, cards) to Firestore...');
-      try {
-        const email = currentUser.email || '';
-        await saveUserSettings(currentUser.uid, email, {
-          accounts: data.accounts,
-          categories: data.categories,
-          budgets: data.budgets,
-          cards: data.cards || []
-        });
-        isLocalSettingsChangeRef.current = false;
-      } catch (err) {
-        console.error('Error auto-saving settings to Firestore:', err);
-      }
-    }, 1500); // 1.5s debounce to make sure rapid clicks/toggles are grouped
-
-    return () => clearTimeout(timer);
-  }, [data.accounts, data.categories, data.budgets, data.cards, currentUser, isSettingsLoadedFromCloud]);
 
   const isSyncingRef = useRef<boolean>(false);
   const hasUnsavedSyncChangesRef = useRef<boolean>(false);
@@ -559,7 +429,6 @@ export default function App() {
 
   // --- BUSINESS LOGIC: ACCOUNTS ---
   const handleAddAccount = (newAcc: Omit<Account, 'id'>) => {
-    isLocalSettingsChangeRef.current = true;
     const newId = `acc-${Date.now()}`;
     const nextData = {
       ...data,
@@ -570,7 +439,6 @@ export default function App() {
   };
 
   const handleUpdateAccount = (updatedAcc: Account) => {
-    isLocalSettingsChangeRef.current = true;
     const nextData = {
       ...data,
       accounts: data.accounts.map(a => a.id === updatedAcc.id ? updatedAcc : a)
@@ -585,7 +453,6 @@ export default function App() {
       alert(`Невозможно удалить этот счет. Он используется в ${count} платежных операциях. Сначала перенесите или удалите эти операции.`);
       return;
     }
-    isLocalSettingsChangeRef.current = true;
     const nextData = {
       ...data,
       accounts: data.accounts.filter(a => a.id !== id)
@@ -595,7 +462,6 @@ export default function App() {
   };
 
   const handleReorderAccounts = (newAccounts: Account[]) => {
-    isLocalSettingsChangeRef.current = true;
     const nextData = {
       ...data,
       accounts: newAccounts
@@ -606,7 +472,6 @@ export default function App() {
 
   // --- BUSINESS LOGIC: BANK CARDS ---
   const handleAddCard = (newCard: Omit<BankCard, 'id'>) => {
-    isLocalSettingsChangeRef.current = true;
     const id = `card-${Date.now()}`;
     const nextData = {
       ...data,
@@ -617,7 +482,6 @@ export default function App() {
   };
 
   const handleUpdateCard = (updatedCard: BankCard) => {
-    isLocalSettingsChangeRef.current = true;
     const nextData = {
       ...data,
       cards: (data.cards || []).map(c => c.id === updatedCard.id ? updatedCard : c)
@@ -627,7 +491,6 @@ export default function App() {
   };
 
   const handleDeleteCard = (id: string) => {
-    isLocalSettingsChangeRef.current = true;
     const nextData = {
       ...data,
       cards: (data.cards || []).filter(c => c.id !== id),
@@ -639,7 +502,6 @@ export default function App() {
 
   // --- BUSINESS LOGIC: CATEGORIES ---
   const handleAddCategory = (newCat: Omit<Category, 'id'>) => {
-    isLocalSettingsChangeRef.current = true;
     const newId = `cat-${Date.now()}`;
     const nextData = {
       ...data,
@@ -650,7 +512,6 @@ export default function App() {
   };
 
   const handleUpdateCategory = (updatedCat: Category) => {
-    isLocalSettingsChangeRef.current = true;
     const nextData = {
       ...data,
       categories: data.categories.map(c => c.id === updatedCat.id ? updatedCat : c)
@@ -665,7 +526,6 @@ export default function App() {
       alert(`Невозможно удалить эту категорию. К ней привязано ${count} операций расходов или доходов.`);
       return;
     }
-    isLocalSettingsChangeRef.current = true;
     const nextData = {
       ...data,
       categories: data.categories.filter(c => c.id !== id)
@@ -1073,7 +933,6 @@ export default function App() {
 
   // --- BUSINESS LOGIC: BUDGETS ---
   const handleSaveBudget = (categoryId: string, limitAmount: number) => {
-    isLocalSettingsChangeRef.current = true;
     const exists = data.budgets.some(b => b.categoryId === categoryId);
     let newBudgets;
     if (exists) {
@@ -1092,7 +951,6 @@ export default function App() {
   };
 
   const handleDeleteBudget = (categoryId: string) => {
-    isLocalSettingsChangeRef.current = true;
     const nextData = {
       ...data,
       budgets: data.budgets.filter(b => b.categoryId !== categoryId)
