@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+    <linearGradient id="brandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2dd4bf" />
+      <stop offset="100%" stop-color="#0d9488" />
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <rect width="192" height="192" rx="48" fill="url(#bgGrad)"/>
+  <!-- Decorative glow underneath -->
+  <circle cx="96" cy="96" r="50" fill="#2dd4bf" opacity="0.15" filter="blur(15px)" />
+  <!-- Stylized Azerbaijani Manat (₼) magnified to fit smaller size nicely -->
+  <g transform="translate(67, 48)" stroke="url(#brandGrad)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M 4 48 Q 28 4 53 48" stroke-width="14" />
+    <path d="M 4 67 Q 28 22 53 67" stroke-width="9" opacity="0.8" />
+    <path d="M 15 37 H 42" stroke-width="8" />
+    <path d="M 15 56 H 42" stroke-width="8" />
+    <path d="M 28 52 V 101" stroke-width="13" />
+  </g>
+</svg>

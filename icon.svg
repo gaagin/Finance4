@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+    <linearGradient id="brandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2dd4bf" />
+      <stop offset="100%" stop-color="#0d9488" />
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <rect width="512" height="512" rx="128" fill="url(#bgGrad)"/>
+  <!-- Decorative glow underneath -->
+  <circle cx="256" cy="256" r="140" fill="#2dd4bf" opacity="0.15" filter="blur(40px)" />
+  <!-- Stylized Azerbaijani Manat (₼) -->
+  <g transform="translate(180, 130)" stroke="url(#brandGrad)" stroke-width="32" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <!-- High tech arches and bars -->
+    <path d="M 10 130 Q 75 10 140 130" stroke-width="36" />
+    <path d="M 10 180 Q 75 60 140 180" stroke-width="24" opacity="0.8" />
+    <!-- Vertical lines / stem -->
+    <path d="M 40 100 H 110" stroke-width="22" />
+    <path d="M 40 150 H 110" stroke-width="22" />
+    <!-- Stem below -->
+    <path d="M 75 140 V 270" stroke-width="34" />
+  </g>
+</svg>
