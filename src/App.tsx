@@ -6,7 +6,7 @@ import { TransactionPanel } from './components/TransactionPanel';
 import { AccountsCategoriesPanel } from './components/AccountsCategoriesPanel';
 import { BudgetingPanel } from './components/BudgetingPanel';
 import { CalendarPanel } from './components/CalendarPanel';
-import { LayoutDashboard, ReceiptText, Calendar, SlidersHorizontal, Settings, Flame, Bell, AlertTriangle, XCircle, CheckCircle, Info, LogIn, LogOut, ShieldAlert, X, RefreshCw, FolderOpen, TrendingUp } from 'lucide-react';
+import { LayoutDashboard, ReceiptText, Calendar, SlidersHorizontal, Settings, Flame, Bell, AlertTriangle, XCircle, CheckCircle, Info, LogIn, LogOut, ShieldAlert, X, RefreshCw, FolderOpen, TrendingUp, Sun, Moon } from 'lucide-react';
 import { initAuth, logout, googleSignIn, db } from './googleAuth';
 import { User } from 'firebase/auth';
 import { doc, onSnapshot, getDoc } from 'firebase/firestore';
@@ -837,6 +837,18 @@ export default function App() {
           </div>
 
           <button
+            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            className={`flex items-center justify-center p-1.5 border rounded-lg transition-all cursor-pointer shrink-0 ${
+              theme === 'dark'
+                ? 'border-white/10 hover:border-teal-500/50 bg-white/5 hover:bg-white/10 text-amber-400'
+                : 'border-slate-200 hover:border-teal-500/50 bg-white hover:bg-slate-100 text-indigo-600 shadow-xs'
+            }`}
+            title={theme === 'dark' ? 'Переключить на светлую тему' : 'Переключить на темную тему'}
+          >
+            {theme === 'dark' ? <Sun size={12} className="text-amber-400" /> : <Moon size={12} className="text-indigo-600" />}
+          </button>
+
+          <button
             onClick={handleResetData}
             className={`flex items-center justify-center gap-0.5 p-1 sm:px-2 py-1 border text-[9px] sm:text-[10.5px] font-semibold rounded-lg transition-all cursor-pointer ${
               theme === 'dark'
@@ -964,23 +976,31 @@ export default function App() {
           {activeTab === 'accounts-categories' && (
             <div className="space-y-6">
               {/* Internal sub-tab selector for accounts and budgeting limits */}
-              <div className="flex bg-white/5 p-1 rounded-2xl border border-white/10 max-w-sm sm:max-w-md">
+              <div className={`flex p-1 rounded-2xl border max-w-sm sm:max-w-md transition-colors duration-200 ${
+                theme === 'dark'
+                  ? 'bg-white/5 border-white/10'
+                  : 'bg-slate-100 border-slate-200 shadow-xs'
+              }`}>
                 <button
                   onClick={() => setAccountsSubTab('accounts')}
-                  className={`flex-1 py-2 px-3 text-[11px] sm:text-xs font-bold rounded-xl transition-all cursor-pointer ${
+                  className={`flex-1 py-1.5 px-3 text-[11.5px] sm:text-xs font-bold rounded-xl transition-all cursor-pointer ${
                     accountsSubTab === 'accounts'
                       ? 'bg-gradient-to-r from-teal-400 to-emerald-400 text-slate-950 font-black shadow-md'
-                      : 'text-slate-400 hover:text-white'
+                      : theme === 'dark'
+                        ? 'text-slate-400 hover:text-white'
+                        : 'text-slate-500 hover:text-slate-900'
                   }`}
                 >
                   Счета и Категории
                 </button>
                 <button
                   onClick={() => setAccountsSubTab('budget')}
-                  className={`flex-1 py-2 px-3 text-[11px] sm:text-xs font-bold rounded-xl transition-all cursor-pointer ${
+                  className={`flex-1 py-1.5 px-3 text-[11.5px] sm:text-xs font-bold rounded-xl transition-all cursor-pointer ${
                     accountsSubTab === 'budget'
                       ? 'bg-gradient-to-r from-teal-400 to-emerald-400 text-slate-950 font-black shadow-md'
-                      : 'text-slate-400 hover:text-white'
+                      : theme === 'dark'
+                        ? 'text-slate-400 hover:text-white'
+                        : 'text-slate-500 hover:text-slate-900'
                   }`}
                 >
                   Лимиты Бюджета
@@ -1011,6 +1031,7 @@ export default function App() {
                   budgets={data.budgets}
                   onSaveBudget={handleSaveBudget}
                   onDeleteBudget={handleDeleteBudget}
+                  theme={theme}
                 />
               )}
             </div>

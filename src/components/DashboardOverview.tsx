@@ -48,6 +48,9 @@ export function DashboardOverview({
   onReorderAccounts
 }: DashboardOverviewProps) {
   
+  const visibleAccounts = useMemo(() => accounts.filter(a => a.quickEntry !== false), [accounts]);
+  const visibleCategories = useMemo(() => categories.filter(c => c.quickEntry !== false), [categories]);
+
   // Custom states for export status
   const [exportStatus, setExportStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [exportedSpreadsheetUrl, setExportedSpreadsheetUrl] = useState<string | null>(null);
@@ -900,8 +903,8 @@ export function DashboardOverview({
       <div className="space-y-6" id="dashboard-overview-view-quick">
         {/* --- QUICK INTERACTIVE GESTURE TRANSACTION BUILDER --- */}
         <QuickDragDropBuilder
-          accounts={accounts}
-          categories={categories}
+          accounts={visibleAccounts}
+          categories={visibleCategories}
           onAddTransaction={onAddTransaction}
           onAddTransfer={onAddTransfer}
           addToast={addToast}
@@ -916,8 +919,8 @@ export function DashboardOverview({
       {showMode === 'all' && (
         /* --- QUICK INTERACTIVE GESTURE TRANSACTION BUILDER --- */
         <QuickDragDropBuilder
-          accounts={accounts}
-          categories={categories}
+          accounts={visibleAccounts}
+          categories={visibleCategories}
           onAddTransaction={onAddTransaction}
           onAddTransfer={onAddTransfer}
           addToast={addToast}
@@ -954,7 +957,7 @@ export function DashboardOverview({
             </select>
 
             <SearchableSelect
-              items={[{ id: 'all', name: 'По всем счетам', balance: 0 }, ...accounts]}
+              items={[{ id: 'all', name: 'По всем счетам', balance: 0 }, ...visibleAccounts]}
               value={analyticsAccount}
               onChange={(id) => setAnalyticsAccount(id)}
               placeholder="По всем счетам"
@@ -1111,13 +1114,13 @@ export function DashboardOverview({
                     const kopilkaName = 'Копилка';
                     const savingsAccountsList = ['Акции ABB', 'Digihesab Samira', 'Зарубежные акции', 'Облигации ABB', 'Digideposit Samira', 'Депозит-Подушка безопасности', 'ABB kredit kart', 'TamKart Virtual', 'Страхование жизни', 'Цифровая карта', 'YapiKrediBank kredit', 'DigiHesab 2 Ilqar'];
 
-                    const ordinaryAccs = accounts.filter(a => ordinaryAccountsList.includes(a.name) && a.name !== kopilkaName);
+                    const ordinaryAccs = visibleAccounts.filter(a => ordinaryAccountsList.includes(a.name) && a.name !== kopilkaName);
                     const ordinarySumVal = ordinaryAccs.reduce((sum, a) => sum + a.balance, 0);
 
-                    const kopilkaAcc = accounts.find(a => a.name === kopilkaName);
+                    const kopilkaAcc = visibleAccounts.find(a => a.name === kopilkaName);
                     const kopilkaBalVal = kopilkaAcc ? kopilkaAcc.balance : 0;
 
-                    const savingsAccs = accounts.filter(a => savingsAccountsList.includes(a.name) || (a.type === 'savings' && a.name !== kopilkaName));
+                    const savingsAccs = visibleAccounts.filter(a => savingsAccountsList.includes(a.name) || (a.type === 'savings' && a.name !== kopilkaName));
                     const savingsSumVal = savingsAccs.reduce((sum, a) => sum + a.balance, 0);
 
                     // Reorder lists reactively if actively sorting
@@ -1394,7 +1397,7 @@ export function DashboardOverview({
                 </select>
 
                 <SearchableSelect
-                  items={[{ id: 'all', name: 'Все счета', balance: 0 }, ...accounts]}
+                  items={[{ id: 'all', name: 'Все счета', balance: 0 }, ...visibleAccounts]}
                   value={barAccount}
                   onChange={(id) => setBarAccount(id)}
                   placeholder="Все счета"
@@ -1417,7 +1420,7 @@ export function DashboardOverview({
                 />
 
                 <SearchableSelect
-                  items={[{ id: 'all', name: 'Все категории', color: '', icon: '', type: '' } as any, ...categories]}
+                  items={[{ id: 'all', name: 'Все категории', color: '', icon: '', type: '' } as any, ...visibleCategories]}
                   value={barCategory}
                   onChange={(id) => setBarCategory(id)}
                   placeholder="Все категории"
@@ -1640,7 +1643,7 @@ export function DashboardOverview({
                 </select>
 
                 <SearchableSelect
-                  items={[{ id: 'all', name: 'Все счета', balance: 0 }, ...accounts]}
+                  items={[{ id: 'all', name: 'Все счета', balance: 0 }, ...visibleAccounts]}
                   value={donutAccount}
                   onChange={(id) => setDonutAccount(id)}
                   placeholder="Все счета"
@@ -1808,7 +1811,7 @@ export function DashboardOverview({
                 </select>
 
                 <SearchableSelect
-                  items={[{ id: 'all', name: 'Все счета', balance: 0 }, ...accounts]}
+                  items={[{ id: 'all', name: 'Все счета', balance: 0 }, ...visibleAccounts]}
                   value={lineAccount}
                   onChange={(id) => setLineAccount(id)}
                   placeholder="Все счета"

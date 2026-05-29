@@ -69,6 +69,7 @@ export function AccountsCategoriesPanel({
   const [accType, setAccType] = useState('card');
   const [accBalance, setAccBalance] = useState('');
   const [accColor, setAccColor] = useState('text-sky-600');
+  const [accQuickEntry, setAccQuickEntry] = useState(true);
   const [editingAccountId, setEditingAccountId] = useState<string | null>(null);
 
   // Bank Card form states
@@ -81,6 +82,7 @@ export function AccountsCategoriesPanel({
   const [catName, setCatName] = useState('');
   const [catIcon, setCatIcon] = useState('HelpCircle');
   const [catColor, setCatColor] = useState('#3b82f6');
+  const [catQuickEntry, setCatQuickEntry] = useState(true);
   const [editingCategoryId, setEditingCategoryId] = useState<string | null>(null);
 
   // Card Form Submission
@@ -144,7 +146,8 @@ export function AccountsCategoriesPanel({
         name: accName,
         type: accType,
         balance: Number(accBalance),
-        color: accColor
+        color: accColor,
+        quickEntry: accQuickEntry
       });
       setEditingAccountId(null);
     } else {
@@ -152,7 +155,8 @@ export function AccountsCategoriesPanel({
         name: accName,
         type: accType,
         balance: Number(accBalance),
-        color: accColor
+        color: accColor,
+        quickEntry: accQuickEntry
       });
       setIsAddAccountOpen(false);
     }
@@ -162,6 +166,7 @@ export function AccountsCategoriesPanel({
     setAccBalance('');
     setAccType('card');
     setAccColor('text-sky-600');
+    setAccQuickEntry(true);
   };
 
   const handleEditAccount = (acc: Account) => {
@@ -170,6 +175,7 @@ export function AccountsCategoriesPanel({
     setAccType(acc.type);
     setAccBalance(acc.balance.toString());
     setAccColor(acc.color);
+    setAccQuickEntry(acc.quickEntry !== false);
   };
 
   const handleCancelAccountEdit = () => {
@@ -178,6 +184,7 @@ export function AccountsCategoriesPanel({
     setAccBalance('');
     setAccType('card');
     setAccColor('text-sky-600');
+    setAccQuickEntry(true);
   };
 
   const handleCancelAddAccount = () => {
@@ -186,6 +193,7 @@ export function AccountsCategoriesPanel({
     setAccBalance('');
     setAccType('card');
     setAccColor('text-sky-600');
+    setAccQuickEntry(true);
   };
 
   // Category Form Submission
@@ -199,7 +207,8 @@ export function AccountsCategoriesPanel({
         name: catName,
         icon: catIcon,
         color: catColor,
-        type: activeCategoryTab
+        type: activeCategoryTab,
+        quickEntry: catQuickEntry
       });
       setEditingCategoryId(null);
     } else {
@@ -207,7 +216,8 @@ export function AccountsCategoriesPanel({
         name: catName,
         icon: catIcon,
         color: catColor,
-        type: activeCategoryTab
+        type: activeCategoryTab,
+        quickEntry: catQuickEntry
       });
       setIsAddCategoryOpen(false);
     }
@@ -216,6 +226,7 @@ export function AccountsCategoriesPanel({
     setCatName('');
     setCatIcon('HelpCircle');
     setCatColor('#3b82f6');
+    setCatQuickEntry(true);
   };
 
   const handleCancelAddCategory = () => {
@@ -223,6 +234,7 @@ export function AccountsCategoriesPanel({
     setCatName('');
     setCatIcon('HelpCircle');
     setCatColor('#3b82f6');
+    setCatQuickEntry(true);
   };
 
   const handleEditCategory = (cat: Category) => {
@@ -230,6 +242,7 @@ export function AccountsCategoriesPanel({
     setCatName(cat.name);
     setCatIcon(cat.icon);
     setCatColor(cat.color);
+    setCatQuickEntry(cat.quickEntry !== false);
   };
 
   const handleCancelCategoryEdit = () => {
@@ -237,66 +250,11 @@ export function AccountsCategoriesPanel({
     setCatName('');
     setCatIcon('HelpCircle');
     setCatColor('#3b82f6');
+    setCatQuickEntry(true);
   };
 
   return (
     <div className="grid grid-cols-1 xl:grid-cols-2 gap-8" id="accounts-categories-root">
-      
-      {/* Theme Selection Toggle */}
-      <div className={`xl:col-span-2 backdrop-blur-md rounded-3xl p-5 border shadow-lg flex flex-col sm:flex-row items-center justify-between gap-4 mb-2 transition-colors duration-200 ${
-        theme === 'dark'
-          ? 'bg-slate-900/40 border-white/10'
-          : 'bg-white border-slate-200'
-      }`}>
-        <div className="flex items-center gap-3">
-          <div className={`p-2.5 rounded-xl border transition-colors ${
-            theme === 'dark'
-              ? 'bg-white/10 border-white/10 text-teal-300'
-              : 'bg-slate-100 border-slate-200 text-teal-600'
-          }`}>
-             {theme === 'light' ? <Sun size={20} className="text-amber-500 shrink-0" /> : <Moon size={20} className="text-indigo-400 shrink-0" />}
-          </div>
-          <div>
-            <h3 className={`font-display font-bold text-base leading-tight ${
-              theme === 'dark' ? 'text-white' : 'text-slate-900'
-            }`}>Тема оформления</h3>
-            <p className={`text-xs mt-1 ${
-              theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
-            }`}>Светлая тема установлена по умолчанию. Вы можете переключить её на темную.</p>
-          </div>
-        </div>
-
-        <div className={`flex p-1 rounded-xl border shrink-0 transition-colors self-start sm:self-auto ${
-          theme === 'dark'
-            ? 'bg-slate-950/60 border-white/10'
-            : 'bg-slate-100 border-slate-200'
-        }`}>
-          <button
-            type="button"
-            onClick={() => onThemeChange('light')}
-            className={`px-4 py-2 text-xs font-bold rounded-lg transition-all flex items-center gap-2 cursor-pointer ${
-              theme === 'light'
-                ? 'bg-white text-slate-900 shadow-sm border border-slate-200/50'
-                : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
-            }`}
-          >
-            <Sun size={14} />
-            Светлая
-          </button>
-          <button
-            type="button"
-            onClick={() => onThemeChange('dark')}
-            className={`px-4 py-2 text-xs font-bold rounded-lg transition-all flex items-center gap-2 cursor-pointer ${
-              theme === 'dark'
-                ? 'bg-white/15 dark:bg-slate-800 text-white border border-white/10 shadow-xs'
-                : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
-            }`}
-          >
-            <Moon size={14} />
-            Темная
-          </button>
-        </div>
-      </div>
       
       {/* COLUMN 1: Accounts Management */}
       <div className={`backdrop-blur-md rounded-3xl p-6 border shadow-lg flex flex-col justify-between transition-colors duration-200 ${
@@ -367,10 +325,22 @@ export function AccountsCategoriesPanel({
                       </div>
 
                       <div className="min-w-0">
-                        <h4 className={`font-semibold text-sm leading-tight truncate ${
-                          theme === 'dark' ? 'text-slate-200' : 'text-slate-800'
-                        }`}>{acc.name}</h4>
-                        <p className={`text-[10px] font-medium uppercase tracking-wider ${
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <h4 className={`font-semibold text-sm leading-tight truncate ${
+                            theme === 'dark' ? 'text-slate-200' : 'text-slate-800'
+                          }`}>{acc.name}</h4>
+                          {acc.quickEntry !== false ? (
+                            <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[9px] font-bold rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0">
+                              <Check size={8} className="stroke-[3px]" />
+                              <span>Быстрая</span>
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center px-1.5 py-0.5 text-[9px] font-bold rounded-md bg-slate-500/10 text-slate-400 border border-slate-500/20 shrink-0">
+                              <span>Скрыт</span>
+                            </span>
+                          )}
+                        </div>
+                        <p className={`text-[10px] font-medium uppercase tracking-wider mt-0.5 ${
                           theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
                         }`}>{typeLabel}</p>
                       </div>
@@ -526,9 +496,23 @@ export function AccountsCategoriesPanel({
                       >
                         <IconComponent name={cat.icon} size={15} />
                       </div>
-                      <span className={`font-semibold text-xs truncate ${
-                        theme === 'dark' ? 'text-slate-200' : 'text-slate-800'
-                      }`}>{cat.name}</span>
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span className={`font-semibold text-xs truncate ${
+                            theme === 'dark' ? 'text-slate-200' : 'text-slate-800'
+                          }`}>{cat.name}</span>
+                          {cat.quickEntry !== false ? (
+                            <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[9px] font-bold rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0">
+                              <Check size={8} className="stroke-[3px]" />
+                              <span>Быстрая</span>
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center px-1.5 py-0.5 text-[9px] font-bold rounded-md bg-slate-500/10 text-slate-400 border border-slate-500/20 shrink-0">
+                              <span>Скрыта</span>
+                            </span>
+                          )}
+                        </div>
+                      </div>
                     </div>
 
                     <div className="flex items-center gap-1.5 shrink-0">
@@ -737,6 +721,21 @@ export function AccountsCategoriesPanel({
                     ))}
                   </div>
                 </div>
+
+                <div className="pt-2">
+                  <div className="flex items-center gap-3 p-3 bg-slate-950/40 border border-white/10 rounded-xl transition-all hover:bg-slate-950/60">
+                    <input
+                      type="checkbox"
+                      id="edit-acc-quick-entry"
+                      checked={accQuickEntry}
+                      onChange={(e) => setAccQuickEntry(e.target.checked)}
+                      className="w-4 h-4 rounded border-white/10 bg-slate-950 text-teal-400 focus:ring-teal-400 cursor-pointer"
+                    />
+                    <label htmlFor="edit-acc-quick-entry" className="text-xs font-semibold text-slate-300 cursor-pointer select-none">
+                      Быстрая запись (показывать на панели Главная)
+                    </label>
+                  </div>
+                </div>
               </div>
 
               <div className="flex gap-3 pt-4 border-t border-white/5">
@@ -831,6 +830,21 @@ export function AccountsCategoriesPanel({
                         <IconComponent name={ic.name} size={16} />
                       </button>
                     ))}
+                  </div>
+                </div>
+
+                <div className="pt-2">
+                  <div className="flex items-center gap-3 p-3 bg-slate-950/40 border border-white/10 rounded-xl transition-all hover:bg-slate-950/60">
+                    <input
+                      type="checkbox"
+                      id="edit-cat-quick-entry"
+                      checked={catQuickEntry}
+                      onChange={(e) => setCatQuickEntry(e.target.checked)}
+                      className="w-4 h-4 rounded border-white/10 bg-slate-950 text-amber-400 focus:ring-amber-500 cursor-pointer"
+                    />
+                    <label htmlFor="edit-cat-quick-entry" className="text-xs font-semibold text-slate-300 cursor-pointer select-none">
+                      Быстрая запись (показывать на панели Главная)
+                    </label>
                   </div>
                 </div>
               </div>
@@ -977,6 +991,21 @@ export function AccountsCategoriesPanel({
                         <span className={`w-3 h-3 rounded-full bg-current ${c}`} />
                       </button>
                     ))}
+                  </div>
+                </div>
+
+                <div className="pt-2">
+                  <div className="flex items-center gap-3 p-3 bg-slate-950/40 border border-white/10 rounded-xl transition-all hover:bg-slate-950/60">
+                    <input
+                      type="checkbox"
+                      id="add-acc-quick-entry"
+                      checked={accQuickEntry}
+                      onChange={(e) => setAccQuickEntry(e.target.checked)}
+                      className="w-4 h-4 rounded border-white/10 bg-slate-950 text-teal-400 focus:ring-teal-400 cursor-pointer"
+                    />
+                    <label htmlFor="add-acc-quick-entry" className="text-xs font-semibold text-slate-300 cursor-pointer select-none">
+                      Быстрая запись (показывать на панели Главная)
+                    </label>
                   </div>
                 </div>
               </div>
@@ -1161,6 +1190,21 @@ export function AccountsCategoriesPanel({
                         <IconComponent name={ic.name} size={16} />
                       </button>
                     ))}
+                  </div>
+                </div>
+
+                <div className="pt-2">
+                  <div className="flex items-center gap-3 p-3 bg-slate-950/40 border border-white/10 rounded-xl transition-all hover:bg-slate-950/60">
+                    <input
+                      type="checkbox"
+                      id="add-cat-quick-entry"
+                      checked={catQuickEntry}
+                      onChange={(e) => setCatQuickEntry(e.target.checked)}
+                      className="w-4 h-4 rounded border-white/10 bg-slate-950 text-amber-400 focus:ring-amber-500 cursor-pointer"
+                    />
+                    <label htmlFor="add-cat-quick-entry" className="text-xs font-semibold text-slate-300 cursor-pointer select-none">
+                      Быстрая запись (показывать на панели Главная)
+                    </label>
                   </div>
                 </div>
               </div>

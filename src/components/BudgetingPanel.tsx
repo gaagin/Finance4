@@ -10,6 +10,7 @@ interface BudgetingPanelProps {
   budgets: BudgetLimit[];
   onSaveBudget: (categoryId: string, amount: number) => void;
   onDeleteBudget: (categoryId: string) => void;
+  theme?: 'light' | 'dark';
 }
 
 export function BudgetingPanel({
@@ -17,7 +18,8 @@ export function BudgetingPanel({
   categories,
   budgets,
   onSaveBudget,
-  onDeleteBudget
+  onDeleteBudget,
+  theme = 'light'
 }: BudgetingPanelProps) {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [limitAmount, setLimitAmount] = useState('');
@@ -78,19 +80,37 @@ export function BudgetingPanel({
     <div className="w-full" id="budgeting-panel-root">
       
       {/* 2-Columns layout removed: Budgets Progress & List now takes full width */}
-      <div className="w-full bg-white/5 backdrop-blur-md rounded-3xl p-6 border border-white/10 shadow-lg flex flex-col justify-between">
+      <div className={`w-full backdrop-blur-md rounded-3xl p-6 border shadow-lg flex flex-col justify-between transition-colors duration-200 ${
+        theme === 'dark'
+          ? 'bg-slate-900/40 border-white/10'
+          : 'bg-white border-slate-200'
+      }`}>
         <div>
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-white/5">
+          <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b transition-colors duration-200 ${
+            theme === 'dark' ? 'border-b border-white/5' : 'border-b border-slate-100'
+          }`}>
             <div>
-              <h2 className="text-lg font-display font-bold text-white">Активные бюджетные лимиты</h2>
-              <p className="text-xs text-slate-400">Свод показателей экономии по категориям за Май 2026</p>
+              <h2 className={`text-lg font-display font-bold ${
+                theme === 'dark' ? 'text-white' : 'text-slate-900'
+              }`}>Активные бюджетные лимиты</h2>
+              <p className={`text-xs ${
+                theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
+              }`}>Свод показателей экономии по категориям за Май 2026</p>
             </div>
             
             <div className="flex flex-wrap items-center gap-3">
-              <div className="flex items-center gap-3 bg-white/5 px-4 py-2 rounded-xl border border-white/10">
-                <span className="text-xs text-slate-400">Общий бюджет:</span>
-                <span className="font-display font-extrabold text-white">
-                  {totalSpentInBudgeted.toFixed(0)}₼ <span className="text-slate-500 font-normal">/</span> {totalBudgeted.toFixed(0)}₼
+              <div className={`flex items-center gap-3 px-4 py-2 rounded-xl border transition-colors ${
+                theme === 'dark'
+                  ? 'bg-white/5 border-white/10'
+                  : 'bg-slate-50 border-slate-200'
+              }`}>
+                <span className={`text-xs ${
+                  theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
+                }`}>Общий бюджет:</span>
+                <span className={`font-display font-extrabold ${
+                  theme === 'dark' ? 'text-white' : 'text-slate-900'
+                }`}>
+                  {totalSpentInBudgeted.toFixed(0)}₼ <span className="text-slate-400 font-normal">/</span> {totalBudgeted.toFixed(0)}₼
                 </span>
               </div>
 
@@ -106,11 +126,19 @@ export function BudgetingPanel({
 
           {budgets.length === 0 ? (
             <div className="text-center py-12 flex flex-col items-center justify-center">
-              <div className="w-16 h-16 bg-white/5 text-slate-400 border border-white/10 rounded-full flex items-center justify-center mb-3">
+              <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-3 border transition-colors ${
+                theme === 'dark'
+                  ? 'bg-white/5 border-white/10 text-slate-400'
+                  : 'bg-slate-50 border-slate-200 text-slate-500'
+              }`}>
                 <Sliders size={28} />
               </div>
-              <p className="text-slate-300 font-semibold text-sm">Ни один бюджетный лимит не установлен</p>
-              <p className="text-xs text-slate-400 max-w-sm mt-1 mb-5">
+              <p className={`font-semibold text-sm ${
+                theme === 'dark' ? 'text-slate-300' : 'text-slate-705'
+              }`}>Ни один бюджетный лимит не установлен</p>
+              <p className={`text-xs max-w-sm mt-1 mb-5 leading-relaxed ${
+                theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
+              }`}>
                 Задайте месячный лимит по категориям расходов, чтобы отслеживать перерасходы и экономию.
               </p>
               <button
@@ -154,17 +182,23 @@ export function BudgetingPanel({
                 }
 
                 return (
-                  <div key={b.categoryId} className="p-4 bg-white/5 border border-white/10 rounded-2xl transition-all hover:bg-white/10">
+                  <div key={b.categoryId} className={`p-4 border rounded-2xl transition-all ${
+                    theme === 'dark'
+                      ? 'bg-white/5 border-white/10 hover:bg-white/10'
+                      : 'bg-slate-50 border-slate-200 hover:bg-slate-100'
+                  }`}>
                     <div className="flex items-center justify-between gap-3 mb-2.5">
                       <div className="flex items-center gap-3">
                         <div
-                          className="w-10 h-10 rounded-xl flex items-center justify-center text-white"
+                          className="w-10 h-10 rounded-xl flex items-center justify-center text-white shrink-0"
                           style={{ backgroundColor: cat.color }}
                         >
                           <IconComponent name={cat.icon} size={20} />
                         </div>
                         <div>
-                          <h4 className="font-semibold text-sm text-slate-200">{formatCategoryDisplayName(cat.name)}</h4>
+                          <h4 className={`font-semibold text-sm ${
+                            theme === 'dark' ? 'text-slate-200' : 'text-slate-800'
+                          }`}>{formatCategoryDisplayName(cat.name)}</h4>
                           <span className={`inline-flex items-center text-[10px] uppercase tracking-wider font-extrabold px-2 py-0.5 rounded-md border ${badgeStyle} mt-0.5`}>
                             {statusLabel}
                           </span>
@@ -174,7 +208,11 @@ export function BudgetingPanel({
                       <div className="flex items-center gap-3">
                         <button
                           onClick={() => handleStartEdit(b)}
-                          className="p-2 bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-white/10 rounded-xl hover:bg-teal-500 hover:text-slate-950 dark:hover:bg-teal-450 dark:hover:text-slate-950 transition-all cursor-pointer flex items-center justify-center shrink-0"
+                          className={`p-2 border rounded-xl hover:bg-teal-500 hover:text-slate-950 transition-all cursor-pointer flex items-center justify-center shrink-0 ${
+                            theme === 'dark'
+                              ? 'bg-white/10 text-slate-200 border-white/10'
+                              : 'bg-slate-100 text-slate-700 border-slate-300'
+                          }`}
                           title="Редактировать лимит"
                         >
                           <Edit2 size={13} />
@@ -184,7 +222,11 @@ export function BudgetingPanel({
                             const categoryName = categories.find(c => c.id === b.categoryId)?.name || 'Категория';
                             setDeleteConfirm({ categoryId: b.categoryId, categoryName });
                           }}
-                          className="p-1.5 bg-white/5 hover:bg-rose-500/15 text-slate-400 hover:text-rose-400 border border-white/5 hover:border-rose-500/35 rounded-lg transition-colors cursor-pointer"
+                          className={`p-1.5 border rounded-lg transition-colors cursor-pointer ${
+                            theme === 'dark'
+                              ? 'bg-white/5 border-white/5 text-slate-400 hover:bg-rose-500/15 hover:text-rose-400 hover:border-rose-500/35'
+                              : 'bg-slate-100 border-slate-300 text-slate-500 hover:bg-rose-100 hover:text-rose-600 hover:border-rose-250'
+                          }`}
                           title="Удалить бюджетный лимит"
                         >
                           <Trash2 size={13} />
@@ -194,12 +236,16 @@ export function BudgetingPanel({
 
                     {/* Progress Bar */}
                     <div className="mt-4">
-                      <div className="flex justify-between text-xs font-display font-medium text-slate-400 mb-1.5">
-                        <span>Расход: <b className="text-white">{spent.toFixed(1)} ₼</b></span>
-                        <span>Лимит: <b className="text-white">{b.limitAmount.toFixed(0)} ₼</b></span>
+                      <div className={`flex justify-between text-xs font-display font-medium mb-1.5 ${
+                        theme === 'dark' ? 'text-slate-400' : 'text-slate-505'
+                      }`}>
+                        <span>Расход: <b className={theme === 'dark' ? 'text-white' : 'text-slate-800'}>{spent.toFixed(1)} ₼</b></span>
+                        <span>Лимит: <b className={theme === 'dark' ? 'text-white' : 'text-slate-800'}>{b.limitAmount.toFixed(0)} ₼</b></span>
                       </div>
 
-                      <div className="w-full h-2.5 bg-white/10 rounded-full overflow-hidden border border-white/5">
+                      <div className={`w-full h-2.5 rounded-full overflow-hidden border ${
+                        theme === 'dark' ? 'bg-white/10 border-white/5' : 'bg-slate-200 border-slate-200/50'
+                      }`}>
                         <div
                           className={`h-full rounded-full transition-all duration-500 ${progressColor}`}
                           style={{ width: `${Math.min(percent, 100)}%` }}
@@ -207,11 +253,11 @@ export function BudgetingPanel({
                       </div>
 
                       <div className="flex items-center justify-between text-[11px] mt-1.5">
-                        <span className="text-slate-400">Использовано {percent.toFixed(0)}%</span>
+                        <span className={theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}>Использовано {percent.toFixed(0)}%</span>
                         {remaining >= 0 ? (
-                          <span className="text-emerald-400 font-semibold">Осталось: +{remaining.toFixed(1)} ₼</span>
+                          <span className="text-emerald-500 font-semibold">Осталось: +{remaining.toFixed(1)} ₼</span>
                         ) : (
-                          <span className="text-rose-400 font-bold">Превышение: {Math.abs(remaining).toFixed(1)} ₼</span>
+                          <span className="text-rose-500 font-bold">Превышение: {Math.abs(remaining).toFixed(1)} ₼</span>
                         )}
                       </div>
                     </div>
@@ -228,19 +274,35 @@ export function BudgetingPanel({
       {/* BUDGET EDIT MODAL */}
       {isEditing && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fade-in">
-          <div className="w-full max-w-sm bg-slate-900 border border-white/10 rounded-3xl shadow-2xl overflow-hidden text-left">
-            <div className="flex items-center justify-between px-6 py-5 border-b border-white/10 bg-white/5">
+          <div className={`w-full max-w-sm border rounded-3xl shadow-2xl overflow-hidden text-left transition-colors duration-200 ${
+            theme === 'dark'
+              ? 'bg-slate-900 border-white/10'
+              : 'bg-white border-slate-200'
+          }`}>
+            <div className={`flex items-center justify-between px-6 py-5 border-b transition-colors duration-200 ${
+              theme === 'dark'
+                ? 'border-white/10 bg-white/5'
+                : 'border-slate-100 bg-slate-50'
+            }`}>
               <div>
-                <h3 className="text-base font-display font-bold text-white flex items-center gap-2">
+                <h3 className={`text-base font-display font-bold flex items-center gap-2 ${
+                  theme === 'dark' ? 'text-white' : 'text-slate-900'
+                }`}>
                   <Sliders className="text-teal-400" size={18} />
                   Редактировать бюджетный лимит
                 </h3>
-                <p className="text-xs text-slate-400 mt-1">Корректировка месячной суммы</p>
+                <p className={`text-xs mt-1 ${
+                  theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
+                }`}>Корректировка месячной суммы</p>
               </div>
               <button
                 type="button"
                 onClick={handleCancelEdit}
-                className="p-1.5 hover:bg-white/10 text-slate-400 hover:text-white rounded-lg transition-colors cursor-pointer"
+                className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
+                  theme === 'dark'
+                    ? 'hover:bg-white/10 text-slate-400 hover:text-white'
+                    : 'hover:bg-slate-100 text-slate-500 hover:text-slate-900'
+                }`}
               >
                 <X size={16} />
               </button>
@@ -248,13 +310,19 @@ export function BudgetingPanel({
             
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
               <div>
-                <label className="block text-[11px] font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">
+                <label className={`block text-[11px] font-semibold mb-1.5 uppercase tracking-wider ${
+                  theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
+                }`}>
                   Категория расходов
                 </label>
                 <select
                   disabled
                   value={selectedCategory}
-                  className="w-full p-3 bg-slate-950/40 border border-white/10 rounded-xl text-xs text-slate-400 cursor-not-allowed opacity-60"
+                  className={`w-full p-3 border rounded-xl text-xs cursor-not-allowed opacity-60 ${
+                    theme === 'dark'
+                      ? 'bg-slate-950/40 border-white/10 text-slate-400'
+                      : 'bg-slate-100 border-slate-200 text-slate-500'
+                  }`}
                 >
                   <option value={isEditing}>
                     {categories.find(c => c.id === isEditing)?.name || 'Текущая категория'}
@@ -263,7 +331,9 @@ export function BudgetingPanel({
               </div>
 
               <div>
-                <label className="block text-[11px] font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">
+                <label className={`block text-[11px] font-semibold mb-1.5 uppercase tracking-wider ${
+                  theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
+                }`}>
                   Новый Лимит (₼, AZN)
                 </label>
                 <div className="relative">
@@ -277,23 +347,33 @@ export function BudgetingPanel({
                     placeholder="Сумма"
                     value={limitAmount}
                     onChange={(e) => setLimitAmount(e.target.value)}
-                    className="w-full pl-8 pr-4 py-2.5 bg-slate-950/60 border border-white/10 rounded-xl text-sm font-display font-bold focus:outline-hidden focus:ring-2 focus:ring-teal-400 text-slate-200"
+                    className={`w-full pl-8 pr-4 py-2.5 border rounded-xl text-sm font-display font-bold focus:outline-hidden focus:ring-2 focus:ring-teal-400 ${
+                      theme === 'dark'
+                        ? 'bg-slate-950/60 border-white/10 text-slate-200'
+                        : 'bg-slate-50 border-slate-200 text-slate-800'
+                    }`}
                     required
                   />
                 </div>
               </div>
 
-              <div className="flex gap-3 pt-4 border-t border-white/5">
+              <div className={`flex gap-3 pt-4 border-t ${
+                theme === 'dark' ? 'border-white/5' : 'border-slate-100'
+              }`}>
                 <button
                   type="button"
                   onClick={handleCancelEdit}
-                  className="flex-1 py-2 bg-white/5 hover:bg-white/10 text-slate-350 text-xs font-semibold rounded-xl border border-white/5 transition-colors cursor-pointer"
+                  className={`flex-1 py-2 text-xs font-semibold rounded-xl border transition-colors cursor-pointer ${
+                    theme === 'dark'
+                      ? 'bg-white/5 border-white/5 text-slate-350 hover:bg-white/10 hover:text-white'
+                      : 'bg-slate-100 border-slate-200 text-slate-600 hover:bg-slate-250 hover:text-slate-800'
+                  }`}
                 >
                   Отмена
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2 bg-teal-500 hover:bg-teal-400 text-slate-950 text-xs font-bold uppercase tracking-wider rounded-xl transition-colors cursor-pointer"
+                  className="flex-1 py-2 bg-teal-500 hover:bg-teal-400 text-slate-950 text-xs font-bold uppercase tracking-wider rounded-xl transition-colors cursor-pointer shadow-md"
                 >
                   Сохранить
                 </button>
@@ -306,14 +386,26 @@ export function BudgetingPanel({
       {/* BUDGET ADD MODAL */}
       {isAddingBudget && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fade-in" id="add-budget-modal">
-          <div className="w-full max-w-sm bg-slate-900 border border-white/10 rounded-3xl shadow-2xl overflow-hidden text-left">
-            <div className="flex items-center justify-between px-6 py-5 border-b border-white/10 bg-white/5">
+          <div className={`w-full max-w-sm border rounded-3xl shadow-2xl overflow-hidden text-left transition-colors duration-200 ${
+            theme === 'dark'
+              ? 'bg-slate-900 border-white/10'
+              : 'bg-white border-slate-200'
+          }`}>
+            <div className={`flex items-center justify-between px-6 py-5 border-b transition-colors duration-200 ${
+              theme === 'dark'
+                ? 'border-white/10 bg-white/5'
+                : 'border-slate-100 bg-slate-50'
+            }`}>
               <div>
-                <h3 className="text-base font-display font-bold text-white flex items-center gap-2">
+                <h3 className={`text-base font-display font-bold flex items-center gap-2 ${
+                  theme === 'dark' ? 'text-white' : 'text-slate-900'
+                }`}>
                   <Sliders className="text-teal-400" size={18} />
                   Установить лимит бюджета
                 </h3>
-                <p className="text-xs text-slate-400 mt-1">Ограничение трат по категории</p>
+                <p className={`text-xs mt-1 ${
+                  theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
+                }`}>Ограничение трат по категории</p>
               </div>
               <button
                 type="button"
@@ -322,7 +414,11 @@ export function BudgetingPanel({
                   setSelectedCategory('');
                   setLimitAmount('');
                 }}
-                className="p-1.5 hover:bg-white/10 text-slate-400 hover:text-white rounded-lg transition-colors cursor-pointer"
+                className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
+                  theme === 'dark'
+                    ? 'hover:bg-white/10 text-slate-400 hover:text-white'
+                    : 'hover:bg-slate-100 text-slate-500 hover:text-slate-900'
+                }`}
               >
                 <X size={16} />
               </button>
@@ -330,7 +426,9 @@ export function BudgetingPanel({
             
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
               <div>
-                <label className="block text-[11px] font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">
+                <label className={`block text-[11px] font-semibold mb-1.5 uppercase tracking-wider ${
+                  theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
+                }`}>
                   Категория расходов
                 </label>
                 <SearchableSelect
@@ -340,6 +438,7 @@ export function BudgetingPanel({
                   placeholder="Выберите категорию..."
                   searchPlaceholder="Поиск категории..."
                   idKey="id"
+                  theme={theme}
                   displayValue={(cat) => (
                     <div className="flex items-center gap-2">
                       <div
@@ -369,7 +468,9 @@ export function BudgetingPanel({
               </div>
 
               <div>
-                <label className="block text-[11px] font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">
+                <label className={`block text-[11px] font-semibold mb-1.5 uppercase tracking-wider ${
+                  theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
+                }`}>
                   Месячный Лимит (₼, AZN)
                 </label>
                 <div className="relative">
@@ -383,13 +484,19 @@ export function BudgetingPanel({
                     placeholder="Например: 250"
                     value={limitAmount}
                     onChange={(e) => setLimitAmount(e.target.value)}
-                    className="w-full pl-8 pr-4 py-2.5 bg-slate-950/60 border border-white/10 rounded-xl text-sm font-display font-bold focus:outline-hidden focus:ring-2 focus:ring-teal-400 text-slate-200"
+                    className={`w-full pl-8 pr-4 py-2.5 border rounded-xl text-sm font-display font-bold focus:outline-hidden focus:ring-2 focus:ring-teal-400 ${
+                      theme === 'dark'
+                        ? 'bg-slate-950/60 border-white/10 text-slate-200'
+                        : 'bg-slate-55 border-slate-200 text-slate-800'
+                    }`}
                     required
                   />
                 </div>
               </div>
 
-              <div className="flex gap-3 pt-4 border-t border-white/5">
+              <div className={`flex gap-3 pt-4 border-t ${
+                theme === 'dark' ? 'border-white/5' : 'border-slate-100'
+              }`}>
                 <button
                   type="button"
                   onClick={() => {
@@ -397,13 +504,17 @@ export function BudgetingPanel({
                     setSelectedCategory('');
                     setLimitAmount('');
                   }}
-                  className="flex-1 py-2 bg-white/5 hover:bg-white/10 text-slate-350 text-xs font-semibold rounded-xl border border-white/5 transition-colors cursor-pointer"
+                  className={`flex-1 py-2 text-xs font-semibold rounded-xl border transition-colors cursor-pointer ${
+                    theme === 'dark'
+                      ? 'bg-white/5 border-white/5 text-slate-350 hover:bg-white/10 hover:text-white'
+                      : 'bg-slate-100 border-slate-200 text-slate-600 hover:bg-slate-250 hover:text-slate-800'
+                  }`}
                 >
                   Отмена
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2 bg-teal-500 hover:bg-teal-400 text-slate-950 text-xs font-bold uppercase tracking-wider rounded-xl transition-colors cursor-pointer"
+                  className="flex-1 py-2 bg-teal-500 hover:bg-teal-400 text-slate-950 text-xs font-bold uppercase tracking-wider rounded-xl transition-colors cursor-pointer shadow-md"
                 >
                   Создать
                 </button>
@@ -416,23 +527,39 @@ export function BudgetingPanel({
       {/* DELETE CONFIRMATION MODAL */}
       {deleteConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
-          <div className="w-full max-w-sm bg-slate-900 border border-white/10 rounded-3xl shadow-2xl p-6 text-center space-y-4 animate-scale-up" id="delete-budget-modal">
+          <div className={`w-full max-w-sm border rounded-3xl p-6 text-center space-y-4 animate-scale-up transition-colors duration-200 ${
+            theme === 'dark'
+              ? 'bg-slate-900 border-white/10'
+              : 'bg-white border-slate-200 shadow-2xl'
+          }`} id="delete-budget-modal">
             <div className="w-12 h-12 bg-rose-500/10 text-rose-400 border border-rose-500/20 rounded-full flex items-center justify-center mx-auto">
               <Trash2 size={22} className="stroke-[2.5px]" />
             </div>
             
-            <div className="space-y-1.5 animate-none">
-              <h3 className="text-base font-display font-bold text-white">Удалить лимит бюджета?</h3>
-              <p className="text-xs text-slate-400 leading-relaxed text-balance text-left sm:text-center">
-                Вы действительно хотите удалить бюджетный лимит для категории <span className="text-white font-semibold">"{deleteConfirm.categoryName}"</span>? Статистика расходов не исчезнет, но лимит больше не будет отслеживаться.
+            <div className="space-y-1.5 animate-none text-center">
+              <h3 className={`text-base font-display font-bold ${
+                theme === 'dark' ? 'text-white' : 'text-slate-900'
+              }`}>Удалить лимит бюджета?</h3>
+              <p className={`text-xs leading-relaxed text-balance text-center ${
+                theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
+              }`}>
+                Вы действительно хотите удалить бюджетный лимит для категории <span className={`font-semibold ${
+                  theme === 'dark' ? 'text-white' : 'text-slate-800'
+                }`}>"{deleteConfirm.categoryName}"</span>? Статистика расходов не исчезнет, но лимит больше не будет отслеживаться.
               </p>
             </div>
 
-            <div className="flex gap-3 pt-2">
+            <div className={`flex gap-3 pt-2 border-t ${
+              theme === 'dark' ? 'border-white/5' : 'border-slate-50'
+            }`}>
               <button
                 type="button"
                 onClick={() => setDeleteConfirm(null)}
-                className="flex-1 py-2.5 bg-white/5 hover:bg-white/10 text-slate-350 text-xs font-semibold rounded-xl border border-white/5 transition-colors cursor-pointer"
+                className={`flex-1 py-2.5 text-xs font-semibold rounded-xl border transition-colors cursor-pointer ${
+                  theme === 'dark'
+                    ? 'bg-white/5 border-white/5 text-slate-350 hover:bg-white/10 hover:text-white'
+                    : 'bg-slate-100 border-slate-200 text-slate-600 hover:bg-slate-200 hover:text-slate-850'
+                }`}
               >
                 Отмена
               </button>

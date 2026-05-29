@@ -6,6 +6,7 @@ export interface Account {
   type: string; // 'cash' | 'card' | 'savings' | 'other'
   balance: number;
   color: string; // Tailwind color classes
+  quickEntry?: boolean;
 }
 
 export interface Category {
@@ -14,6 +15,7 @@ export interface Category {
   icon: string; // Lucide icon name
   color: string; // Hex color or tailwind class
   type: TransactionType;
+  quickEntry?: boolean;
 }
 
 export interface BankCard {
