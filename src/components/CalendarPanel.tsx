@@ -19,6 +19,11 @@ interface CalendarPanelProps {
     date: string;
   }) => void;
   onUpdateTransaction: (transaction: Transaction) => void;
+  onDeleteTransaction: (id: string) => void;
+  currentDate: Date;
+  setCurrentDate: (date: Date) => void;
+  clickedDate: string;
+  setClickedDate: (date: string) => void;
 }
 
 const MONTHS_RU = [
@@ -36,22 +41,36 @@ export function CalendarPanel({
   onEditTransaction,
   onAddTransaction,
   onAddTransfer,
-  onUpdateTransaction
+  onUpdateTransaction,
+  onDeleteTransaction,
+  currentDate,
+  setCurrentDate,
+  clickedDate,
+  setClickedDate
 }: CalendarPanelProps) {
-  // Default to May 2026, based on user's current date context
-  const [currentDate, setCurrentDate] = useState(new Date(2026, 4, 1)); // Month index 4 is May
   const [selectedDayData, setSelectedDayData] = useState<{ date: string; txs: Transaction[] } | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [clickedDate, setClickedDate] = useState(() => {
-    const d = new Date();
-    const year = d.getFullYear();
-    const month = String(d.getMonth() + 1).padStart(2, '0');
-    const day = String(d.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  });
+
+  // Smooth scroll to the currently focused/clicked date cell on mount to restore focus
+  React.useEffect(() => {
+    if (clickedDate) {
+      const timer = setTimeout(() => {
+        const cellElement = document.querySelector(`[data-date="${clickedDate}"]`);
+        if (cellElement) {
+          cellElement.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   // Drag and drop states for pointer/touch support
-  const [draggingTxId, setDraggingTxId] = useState<string | null>(null);
+  const [draggingTxId, setDraggingTxIdState] = useState<string | null>(null);
+  const draggingTxIdRef = useRef<string | null>(null);
+  const setDraggingTxId = (id: string | null) => {
+    draggingTxIdRef.current = id;
+    setDraggingTxIdState(id);
+  };
   const [draggedOverDate, setDraggedOverDate] = useState<string | null>(null);
   const dragMovedRef = useRef(false);
 
@@ -348,7 +367,7 @@ export function CalendarPanel({
                   }}
                   onDrop={(e) => {
                     e.preventDefault();
-                    const txId = e.dataTransfer.getData('transactionId') || draggingTxId;
+                    const txId = e.dataTransfer.getData('text/plain') || e.dataTransfer.getData('transactionId') || draggingTxIdRef.current;
                     if (txId) {
                       const txToMove = transactions.find(t => t.id === txId);
                       if (txToMove && txToMove.date !== cell.dateString) {
@@ -409,7 +428,10 @@ export function CalendarPanel({
                           key={tx.id}
                           draggable={cell.isCurrentMonth}
                           onDragStart={(e) => {
-                            e.dataTransfer.setData('transactionId', tx.id);
+                            e.dataTransfer.setData('text/plain', tx.id);
+                            try {
+                              e.dataTransfer.setData('transactionId', tx.id);
+                            } catch (_) {}
                             setDraggingTxId(tx.id);
                             dragMovedRef.current = false;
                           }}
@@ -437,7 +459,7 @@ export function CalendarPanel({
                                   navigator.vibrate(50);
                                 } catch (_) {}
                               }
-                            }, 1000);
+                            }, 250);
                           }}
                           onTouchMove={(e) => handleTouchMove(e, tx.id)}
                           onTouchEnd={() => {
@@ -446,8 +468,8 @@ export function CalendarPanel({
                               touchTimerRef.current = null;
                             }
 
-                            if (isTouchDraggingActiveRef.current && draggingTxId && draggedOverDate) {
-                              const txToMove = transactions.find(t => t.id === draggingTxId);
+                            if (isTouchDraggingActiveRef.current && draggedOverDate) {
+                              const txToMove = transactions.find(t => t.id === tx.id);
                               if (txToMove && txToMove.date !== draggedOverDate) {
                                 onUpdateTransaction({ ...txToMove, date: draggedOverDate });
                               }
@@ -485,7 +507,7 @@ export function CalendarPanel({
                           style={{
                             touchAction: draggingTxId === tx.id ? 'none' : 'pan-y'
                           }}
-                          className={`text-[10px] p-1 rounded-sm leading-tight transition-all cursor-pointer border truncate select-none ${
+                          className={`text-[10px] p-1 rounded-sm leading-tight transition-all cursor-pointer border truncate select-none group/tx ${
                             draggingTxId === tx.id ? 'opacity-40 border-dashed border-teal-500 bg-teal-100/10' : ''
                           } ${
                             isIncome

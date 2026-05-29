@@ -58,6 +58,16 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<string>('overview');
   const [accountsSubTab, setAccountsSubTab] = useState<'accounts' | 'budget'>('accounts');
 
+  // Calendar persistent states to align monthly scope & focuses upon returning from modals or edits
+  const [calendarCurrentDate, setCalendarCurrentDate] = useState<Date>(new Date(2026, 4, 1)); // Default to May 2026
+  const [calendarClickedDate, setCalendarClickedDate] = useState<string>(() => {
+    const d = new Date();
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  });
+
   // Intercollegiate states passing to support instant add-on-day or edits
   const [preselectedDate, setPreselectedDate] = useState<string | null>(null);
   const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
@@ -263,6 +273,12 @@ export default function App() {
   const handleAddTransactionOnDate = (date: string) => {
     setPreselectedDate(date);
     setEditingTransaction(null);
+    setCalendarClickedDate(date);
+    const txYear = parseInt(date.substring(0, 4));
+    const txMonth = parseInt(date.substring(5, 7)) - 1; // 0-based
+    if (!isNaN(txYear) && !isNaN(txMonth)) {
+      setCalendarCurrentDate(new Date(txYear, txMonth, 1));
+    }
     setActiveTab('transactions');
   };
 
@@ -271,6 +287,16 @@ export default function App() {
     lastTabBeforeEditRef.current = activeTab;
     setEditingTransaction(tx);
     setPreselectedDate(null);
+
+    if (tx.date) {
+      setCalendarClickedDate(tx.date);
+      const txYear = parseInt(tx.date.substring(0, 4));
+      const txMonth = parseInt(tx.date.substring(5, 7)) - 1; // 0-based
+      if (!isNaN(txYear) && !isNaN(txMonth)) {
+        setCalendarCurrentDate(new Date(txYear, txMonth, 1));
+      }
+    }
+
     setActiveTab('transactions');
   };
 
@@ -970,6 +996,11 @@ export default function App() {
               onAddTransaction={handleAddTransaction}
               onAddTransfer={handleAddTransfer}
               onUpdateTransaction={handleUpdateTransaction}
+              onDeleteTransaction={handleDeleteTransaction}
+              currentDate={calendarCurrentDate}
+              setCurrentDate={setCalendarCurrentDate}
+              clickedDate={calendarClickedDate}
+              setClickedDate={setCalendarClickedDate}
             />
           )}
 

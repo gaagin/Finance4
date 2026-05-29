@@ -1174,6 +1174,23 @@ export function TransactionPanel({
               <div className="flex gap-3 pt-4 border-t border-white/5 shrink-0">
                 <button
                   type="button"
+                  onClick={() => {
+                    const cat = categories.find(c => c.id === editingTransaction.categoryId);
+                    setDeleteConfirm({
+                      id: editingTransaction.id,
+                      description: editingTransaction.description || cat?.name || (editingTransaction.type === 'transfer' ? 'Перевод' : 'Без описания'),
+                      amount: editingTransaction.amount,
+                      isIncome: editingTransaction.type === 'income'
+                    });
+                  }}
+                  className="px-3.5 py-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 hover:text-red-350 text-xs font-bold rounded-xl border border-red-500/20 active:scale-95 transition-all cursor-pointer flex items-center justify-center gap-1.5 shrink-0"
+                  title="Удалить операцию"
+                >
+                  <Trash2 size={13} className="stroke-[2.5px]" />
+                  <span>Удалить</span>
+                </button>
+                <button
+                  type="button"
                   onClick={onCancelEditing}
                   className="flex-1 py-2.5 bg-white/5 hover:bg-white/10 text-slate-350 text-xs font-semibold rounded-xl border border-white/5 transition-colors cursor-pointer text-center"
                 >
@@ -1220,6 +1237,7 @@ export function TransactionPanel({
                 onClick={() => {
                   onDeleteTransaction(deleteConfirm.id);
                   setDeleteConfirm(null);
+                  if (onCancelEditing) onCancelEditing();
                 }}
                 className="flex-1 py-2.5 bg-rose-500 hover:bg-rose-600 text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-md shadow-rose-500/10 hover:shadow-rose-500/20 cursor-pointer"
               >
