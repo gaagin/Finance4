@@ -243,25 +243,41 @@ export function AccountsCategoriesPanel({
     <div className="grid grid-cols-1 xl:grid-cols-2 gap-8" id="accounts-categories-root">
       
       {/* Theme Selection Toggle */}
-      <div className="xl:col-span-2 bg-white/5 backdrop-blur-md rounded-3xl p-5 border border-white/10 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-4 mb-2">
+      <div className={`xl:col-span-2 backdrop-blur-md rounded-3xl p-5 border shadow-lg flex flex-col sm:flex-row items-center justify-between gap-4 mb-2 transition-colors duration-200 ${
+        theme === 'dark'
+          ? 'bg-slate-900/40 border-white/10'
+          : 'bg-white border-slate-200'
+      }`}>
         <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-white/10 text-teal-300 border border-white/10 rounded-xl">
+          <div className={`p-2.5 rounded-xl border transition-colors ${
+            theme === 'dark'
+              ? 'bg-white/10 border-white/10 text-teal-300'
+              : 'bg-slate-100 border-slate-200 text-teal-600'
+          }`}>
              {theme === 'light' ? <Sun size={20} className="text-amber-500 shrink-0" /> : <Moon size={20} className="text-indigo-400 shrink-0" />}
           </div>
           <div>
-            <h3 className="font-display font-bold text-white text-base leading-tight">Тема оформления</h3>
-            <p className="text-xs text-slate-400 mt-1">Светлая тема установлена по умолчанию. Вы можете переключить её на темную.</p>
+            <h3 className={`font-display font-bold text-base leading-tight ${
+              theme === 'dark' ? 'text-white' : 'text-slate-900'
+            }`}>Тема оформления</h3>
+            <p className={`text-xs mt-1 ${
+              theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
+            }`}>Светлая тема установлена по умолчанию. Вы можете переключить её на темную.</p>
           </div>
         </div>
 
-        <div className="flex bg-slate-900/60 p-1 rounded-xl border border-white/10 shrink-0 self-start sm:self-auto">
+        <div className={`flex p-1 rounded-xl border shrink-0 transition-colors self-start sm:self-auto ${
+          theme === 'dark'
+            ? 'bg-slate-950/60 border-white/10'
+            : 'bg-slate-100 border-slate-200'
+        }`}>
           <button
             type="button"
             onClick={() => onThemeChange('light')}
             className={`px-4 py-2 text-xs font-bold rounded-lg transition-all flex items-center gap-2 cursor-pointer ${
               theme === 'light'
-                ? 'bg-white text-slate-900 shadow-sm'
-                : 'text-slate-400 hover:text-white'
+                ? 'bg-white text-slate-900 shadow-sm border border-slate-200/50'
+                : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
             }`}
           >
             <Sun size={14} />
@@ -272,8 +288,8 @@ export function AccountsCategoriesPanel({
             onClick={() => onThemeChange('dark')}
             className={`px-4 py-2 text-xs font-bold rounded-lg transition-all flex items-center gap-2 cursor-pointer ${
               theme === 'dark'
-                ? 'bg-white/15 text-white border border-white/10 shadow-xs'
-                : 'text-slate-400 hover:text-white'
+                ? 'bg-white/15 dark:bg-slate-800 text-white border border-white/10 shadow-xs'
+                : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
             }`}
           >
             <Moon size={14} />
@@ -283,21 +299,39 @@ export function AccountsCategoriesPanel({
       </div>
       
       {/* COLUMN 1: Accounts Management */}
-      <div className="bg-white/5 backdrop-blur-md rounded-3xl p-6 border border-white/10 shadow-lg flex flex-col justify-between" id="accounts-management">
+      <div className={`backdrop-blur-md rounded-3xl p-6 border shadow-lg flex flex-col justify-between transition-colors duration-200 ${
+        theme === 'dark'
+          ? 'bg-slate-900/40 border-white/10'
+          : 'bg-white border-slate-200'
+      }`} id="accounts-management">
         <div>
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-2 border-b border-white/5">
+          <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-2 border-b transition-colors duration-200 ${
+            theme === 'dark' ? 'border-b border-white/5' : 'border-b border-slate-100'
+          }`}>
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-white/10 text-teal-300 border border-white/10 rounded-xl">
+              <div className={`p-2 rounded-xl border transition-colors ${
+                theme === 'dark'
+                  ? 'bg-white/10 border-white/10 text-teal-300'
+                  : 'bg-slate-100 border-slate-200 text-teal-600'
+              }`}>
                 <Wallet size={20} />
               </div>
               <div>
-                <h3 className="font-display font-bold text-white text-lg">Счета и Карты</h3>
-                <p className="text-xs text-slate-400">Настройка банковских балансов и платежных карт</p>
+                <h3 className={`font-display font-bold text-lg ${
+                  theme === 'dark' ? 'text-white' : 'text-slate-900'
+                }`}>Счета и Карты</h3>
+                <p className={`text-xs ${
+                  theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
+                }`}>Настройка банковских балансов и платежных карт</p>
               </div>
             </div>
 
             {/* Sub-tab selection toggle */}
-            <div className="flex bg-slate-900/60 p-1 rounded-xl border border-white/10 self-start sm:self-auto shrink-0">
+            <div className={`flex p-1 rounded-xl border self-start sm:self-auto shrink-0 transition-colors duration-200 ${
+              theme === 'dark'
+                ? 'bg-slate-950/60 border-white/10'
+                : 'bg-slate-100 border-slate-200'
+            }`}>
               <button
                 type="button"
                 onClick={() => {
@@ -306,8 +340,10 @@ export function AccountsCategoriesPanel({
                 }}
                 className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
                   leftTab === 'accounts'
-                    ? 'bg-white/15 text-white border border-white/10 shadow-xs'
-                    : 'text-slate-400 hover:text-white'
+                    ? theme === 'dark'
+                      ? 'bg-white/15 text-white border border-white/10 shadow-xs'
+                      : 'bg-white text-slate-900 shadow-md border border-slate-200/50'
+                    : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
                 }`}
               >
                 Балансы
@@ -320,8 +356,10 @@ export function AccountsCategoriesPanel({
                 }}
                 className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
                   leftTab === 'cards'
-                    ? 'bg-white/15 text-white border border-white/10 shadow-xs'
-                    : 'text-slate-400 hover:text-white'
+                    ? theme === 'dark'
+                      ? 'bg-white/15 text-white border border-white/10 shadow-xs'
+                      : 'bg-white text-slate-900 shadow-md border border-slate-200/50'
+                    : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
                 }`}
               >
                 Карт-счет
@@ -355,13 +393,17 @@ export function AccountsCategoriesPanel({
             /* 2B. Bank Card List */
             <div className="max-h-[360px] overflow-y-auto pr-1 col-span-1 custom-scrollbar">
               {cards.length === 0 ? (
-                <div className="text-center py-12 text-slate-450 border border-dashed border-white/10 rounded-2xl bg-white/5">
+                <div className={`text-center py-12 border border-dashed rounded-2xl ${
+                  theme === 'dark'
+                    ? 'text-slate-450 border-white/10 bg-white/5'
+                    : 'text-slate-500 border-slate-200 bg-slate-50'
+                }`}>
                   <CreditCard className="mx-auto mb-2 opacity-30 text-teal-300" size={24} />
-                  <p className="text-xs font-semibold text-slate-350">У вас пока нет привязанных пластиковых карт</p>
+                  <p className="text-xs font-semibold text-slate-350 dark:text-slate-400">У вас пока нет привязанных пластиковых карт</p>
                   <p className="text-[10px] text-slate-500 mt-1">Заполните форму повыше для учета карт Kapital, ABB, Unibank и др.</p>
                 </div>
               ) : (
-                <div className="border border-slate-200 dark:border-white/10 rounded-2xl overflow-hidden bg-white dark:bg-slate-900/40 divide-y divide-slate-100 dark:divide-white/5">
+                <div className="border border-slate-200 dark:border-white/10 rounded-2xl overflow-hidden bg-white dark:bg-slate-900/40 divide-y divide-slate-100 dark:divide-white/5 shadow-xs">
                   {cards.map(card => {
                     let bankColorClass = "bg-rose-500"; // Kapital
                     if (card.bank === 'ABB') bankColorClass = "bg-blue-500";
@@ -374,17 +416,27 @@ export function AccountsCategoriesPanel({
                     return (
                       <div
                         key={card.id}
-                        className="flex items-center justify-between p-3 bg-transparent hover:bg-white/5 transition-all relative pl-5 overflow-hidden"
+                        className={`flex items-center justify-between p-3 bg-transparent transition-all relative pl-5 overflow-hidden border-b last:border-0 ${
+                          theme === 'dark'
+                            ? 'hover:bg-white/5 border-white/5'
+                            : 'hover:bg-slate-50/50 border-slate-150'
+                        }`}
                       >
                         {/* A tiny colorful side edge indicator for bank branding */}
                         <div className={`absolute left-0 top-0 bottom-0 w-1 ${bankColorClass}`} />
 
                         <div className="flex items-center gap-3 z-10 min-w-0">
-                          <div className="w-10 h-7 rounded bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
-                            <CreditCard size={14} className="text-slate-300" />
+                          <div className={`w-10 h-7 rounded border flex items-center justify-center shrink-0 transition-colors ${
+                            theme === 'dark'
+                              ? 'bg-white/5 border-white/10'
+                              : 'bg-slate-100 border-slate-200'
+                          }`}>
+                            <CreditCard size={14} className={theme === 'dark' ? 'text-slate-300' : 'text-slate-650'} />
                           </div>
                           <div className="min-w-0">
-                            <h4 className="font-semibold text-xs leading-none text-slate-100 truncate">
+                            <h4 className={`font-semibold text-xs leading-none truncate ${
+                              theme === 'dark' ? 'text-slate-100' : 'text-slate-800'
+                            }`}>
                               {card.name}
                             </h4>
                             <span className="text-[9px] font-bold uppercase tracking-wider text-slate-500 mt-1 block">
@@ -397,7 +449,11 @@ export function AccountsCategoriesPanel({
                           <button
                             type="button"
                             onClick={() => handleEditCard(card)}
-                            className="p-1 px-1.5 hover:bg-white/10 text-slate-400 hover:text-white rounded-lg transition-all cursor-pointer flex items-center justify-center shrink-0"
+                            className={`p-1 px-1.5 rounded-lg transition-all cursor-pointer flex items-center justify-center shrink-0 ${
+                              theme === 'dark'
+                                ? 'hover:bg-white/10 text-slate-400 hover:text-white'
+                                : 'hover:bg-slate-150 text-slate-500 hover:text-slate-900'
+                            }`}
                             title="Редактировать параметры"
                           >
                             <Edit2 size={12} />
@@ -405,7 +461,11 @@ export function AccountsCategoriesPanel({
                           <button
                             type="button"
                             onClick={() => setDeleteConfirm({ id: card.id, type: 'card', name: `${card.bank} (•••• ${card.lastFour})` })}
-                            className="p-1 hover:bg-rose-500/10 text-slate-400 hover:text-rose-450 rounded-lg transition-colors cursor-pointer shrink-0"
+                            className={`p-1 rounded-lg transition-colors cursor-pointer shrink-0 ${
+                              theme === 'dark'
+                                ? 'hover:bg-rose-500/10 text-slate-400 hover:text-rose-450'
+                                : 'hover:bg-rose-100 text-slate-500 hover:text-rose-650'
+                            }`}
                             title="Удалить карту"
                           >
                             <Trash2 size={11} />
@@ -420,7 +480,7 @@ export function AccountsCategoriesPanel({
           ) : (
             /* 2A. Account list rendering */
             <div className="max-h-[360px] overflow-y-auto pr-1 custom-scrollbar">
-              <div className="border border-slate-200 dark:border-white/10 rounded-2xl overflow-hidden bg-white dark:bg-slate-900/40 divide-y divide-slate-100 dark:divide-white/5">
+              <div className="border border-slate-200 dark:border-white/10 rounded-2xl overflow-hidden bg-white dark:bg-slate-900/40 divide-y divide-slate-100 dark:divide-white/5 shadow-xs">
                 {accounts.map(acc => {
                   const totalUsed = acc.balance;
                   let typeLabel = 'Карта';
@@ -430,30 +490,48 @@ export function AccountsCategoriesPanel({
                   return (
                     <div
                       key={acc.id}
-                      className="flex items-center justify-between p-3 bg-transparent hover:bg-white/5 transition-all"
+                      className={`flex items-center justify-between p-3 bg-transparent transition-all border-b last:border-0 ${
+                        theme === 'dark'
+                          ? 'hover:bg-white/5 border-white/5'
+                          : 'hover:bg-slate-50/50 border-slate-150'
+                      }`}
                     >
                       <div className="flex items-center gap-3 min-w-0">
-                        <div className="w-10 h-10 rounded-xl bg-slate-950 border border-white/10 flex items-center justify-center shrink-0">
+                        <div className={`w-10 h-10 rounded-xl border flex items-center justify-center shrink-0 transition-colors ${
+                          theme === 'dark'
+                            ? 'bg-slate-950 border-white/10'
+                            : 'bg-slate-100 border-slate-200'
+                        }`}>
                           <span className={`font-display font-extrabold text-lg ${acc.color}`}>
                             {acc.name[0]?.toUpperCase() || 'S'}
                           </span>
                         </div>
 
                         <div className="min-w-0">
-                          <h4 className="font-semibold text-slate-200 text-sm leading-tight truncate">{acc.name}</h4>
-                          <p className="text-[10px] text-slate-400 font-medium uppercase tracking-wider">{typeLabel}</p>
+                          <h4 className={`font-semibold text-sm leading-tight truncate ${
+                            theme === 'dark' ? 'text-slate-200' : 'text-slate-800'
+                          }`}>{acc.name}</h4>
+                          <p className={`text-[10px] font-medium uppercase tracking-wider ${
+                            theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
+                          }`}>{typeLabel}</p>
                         </div>
                       </div>
 
                       <div className="flex items-center gap-3 shrink-0">
                         <div className="text-right">
-                          <span className="font-display font-extrabold text-slate-200 text-sm">{totalUsed.toFixed(2)} ₼</span>
+                          <span className={`font-display font-extrabold text-sm ${
+                            theme === 'dark' ? 'text-slate-200' : 'text-slate-850'
+                          }`}>{totalUsed.toFixed(2)} ₼</span>
                         </div>
 
                         <div className="flex items-center gap-1.5 shrink-0">
                           <button
                             onClick={() => handleEditAccount(acc)}
-                            className="p-1 px-1.5 hover:bg-white/10 text-slate-400 hover:text-white rounded-lg transition-all cursor-pointer flex items-center justify-center shrink-0"
+                            className={`p-1 px-1.5 rounded-lg transition-all cursor-pointer flex items-center justify-center shrink-0 ${
+                              theme === 'dark'
+                                ? 'hover:bg-white/10 text-slate-400 hover:text-white'
+                                : 'hover:bg-slate-150 text-slate-500 hover:text-slate-900'
+                            }`}
                             title="Изменить счет"
                           >
                             <Edit2 size={13} />
@@ -466,7 +544,11 @@ export function AccountsCategoriesPanel({
                               }
                             }}
                             disabled={accounts.length <= 1} // Prevent deleting the last remaining account
-                            className="p-1 hover:bg-rose-500/10 text-slate-400 hover:text-rose-400 disabled:opacity-30 rounded-lg transition-colors cursor-pointer shrink-0"
+                            className={`p-1 disabled:opacity-30 rounded-lg transition-colors cursor-pointer shrink-0 ${
+                              theme === 'dark'
+                                ? 'hover:bg-rose-500/10 text-slate-400 hover:text-rose-450'
+                                : 'hover:bg-rose-100 text-slate-500 hover:text-rose-650'
+                            }`}
                             title={accounts.length === 1 ? 'Нельзя удалить единственный счет' : 'Удалить счет'}
                           >
                             <Trash2 size={12} />
@@ -485,22 +567,41 @@ export function AccountsCategoriesPanel({
       </div>
 
       {/* COLUMN 2: Categories Management with Internal Tabs (Expense vs Income) */}
-      <div className="bg-white/5 backdrop-blur-md rounded-3xl p-6 border border-white/10 shadow-lg flex flex-col justify-between" id="categories-management">
+      <div className={`backdrop-blur-md rounded-3xl p-6 border shadow-lg flex flex-col justify-between transition-colors duration-200 ${
+        theme === 'dark'
+          ? 'bg-slate-900/40 border-white/10'
+          : 'bg-white border-slate-200'
+      }`} id="categories-management">
         <div>
-          <div className="flex items-center justify-between gap-4 mb-6 pb-2 border-b border-white/5">
+          <div className={`flex items-center justify-between gap-4 mb-6 pb-2 border-b transition-colors duration-200 ${
+            theme === 'dark' ? 'border-b border-white/5' : 'border-b border-slate-100'
+          }`}>
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-white/10 text-amber-400 border border-white/10 rounded-xl">
+              <div className={`p-2 rounded-xl border transition-colors ${
+                theme === 'dark'
+                  ? 'bg-white/10 border-white/10 text-amber-400'
+                  : 'bg-slate-100 border-slate-200 text-amber-600'
+              }`}>
                 <PlusCircle size={20} />
               </div>
               <div>
-                <h3 className="font-display font-bold text-white text-lg">Категории</h3>
-                <p className="text-xs text-slate-400">Организуйте статьи трат и доходов</p>
+                <h3 className={`font-display font-bold text-lg ${
+                  theme === 'dark' ? 'text-white' : 'text-slate-900'
+                }`}>Категории</h3>
+                <p className={`text-xs ${
+                  theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
+                }`}>Организуйте статьи трат и доходов</p>
               </div>
             </div>
 
             {/* Exp vs Inc Tabs */}
-            <div className="flex bg-slate-900/60 p-1 rounded-xl border border-white/10">
+            <div className={`flex p-1 rounded-xl border transition-colors duration-200 ${
+              theme === 'dark'
+                ? 'bg-slate-950/60 border-white/10'
+                : 'bg-slate-100 border-slate-200'
+            }`}>
               <button
+                type="button"
                 onClick={() => {
                   setActiveCategoryTab('expense');
                   setEditingCategoryId(null);
@@ -508,13 +609,16 @@ export function AccountsCategoriesPanel({
                 }}
                 className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
                   activeCategoryTab === 'expense'
-                    ? 'bg-white/15 text-white border border-white/10 shadow-xs'
-                    : 'text-slate-400 hover:text-white'
+                    ? theme === 'dark'
+                      ? 'bg-white/15 text-white border border-white/10 shadow-xs'
+                      : 'bg-white text-slate-900 shadow-md border border-slate-200/50'
+                    : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
                 }`}
               >
                 Расходы
               </button>
               <button
+                type="button"
                 onClick={() => {
                   setActiveCategoryTab('income');
                   setEditingCategoryId(null);
@@ -522,8 +626,10 @@ export function AccountsCategoriesPanel({
                 }}
                 className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
                   activeCategoryTab === 'income'
-                    ? 'bg-white/15 text-white border border-white/10 shadow-xs'
-                    : 'text-slate-400 hover:text-white'
+                    ? theme === 'dark'
+                      ? 'bg-white/15 text-white border border-white/10 shadow-xs'
+                      : 'bg-white text-slate-900 shadow-md border border-slate-200/50'
+                    : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
                 }`}
               >
                 Доходы
@@ -543,28 +649,38 @@ export function AccountsCategoriesPanel({
 
           {/* List categorized by Active selection */}
           <div className="max-h-[320px] overflow-y-auto pr-1 custom-scrollbar">
-            <div className="border border-slate-200 dark:border-white/10 rounded-2xl overflow-hidden bg-white dark:bg-slate-900/40 divide-y divide-slate-100 dark:divide-white/5">
+            <div className="border border-slate-200 dark:border-white/10 rounded-2xl overflow-hidden bg-white dark:bg-slate-900/40 divide-y divide-slate-100 dark:divide-white/5 shadow-xs">
               {categories
                 .filter(cat => cat.type === activeCategoryTab)
                 .map(cat => (
                   <div
                     key={cat.id}
-                    className="flex items-center justify-between p-3 bg-transparent hover:bg-white/5 transition-all"
+                    className={`flex items-center justify-between p-3 bg-transparent transition-all border-b last:border-0 ${
+                      theme === 'dark'
+                        ? 'hover:bg-white/5 border-white/5'
+                        : 'hover:bg-slate-50/50 border-slate-150'
+                    }`}
                   >
                     <div className="flex items-center gap-2.5 min-w-0">
                       <div
-                        className="w-8 h-8 rounded-lg flex items-center justify-center text-white shrink-0"
+                        className="w-8 h-8 rounded-lg flex items-center justify-center text-white shrink-0 shadow-xs"
                         style={{ backgroundColor: cat.color }}
                       >
                         <IconComponent name={cat.icon} size={15} />
                       </div>
-                      <span className="font-semibold text-slate-200 text-xs truncate">{cat.name}</span>
+                      <span className={`font-semibold text-xs truncate ${
+                        theme === 'dark' ? 'text-slate-200' : 'text-slate-800'
+                      }`}>{cat.name}</span>
                     </div>
 
                     <div className="flex items-center gap-1.5 shrink-0">
                       <button
                         onClick={() => handleEditCategory(cat)}
-                        className="p-1 px-1.5 hover:bg-white/10 text-slate-400 hover:text-white rounded-lg transition-all cursor-pointer flex items-center justify-center shrink-0"
+                        className={`p-1 px-1.5 rounded-lg transition-all cursor-pointer flex items-center justify-center shrink-0 ${
+                          theme === 'dark'
+                            ? 'hover:bg-white/10 text-slate-400 hover:text-white'
+                            : 'hover:bg-slate-150 text-slate-500 hover:text-slate-900'
+                        }`}
                         title="Изменить"
                       >
                         <Edit2 size={12} />
@@ -578,7 +694,11 @@ export function AccountsCategoriesPanel({
                           }
                         }}
                         disabled={categories.filter(c => c.type === activeCategoryTab).length <= 2}
-                        className="p-1 hover:bg-rose-500/10 text-slate-400 hover:text-rose-400 disabled:opacity-30 rounded-lg transition-colors cursor-pointer shrink-0"
+                        className={`p-1 disabled:opacity-30 rounded-lg transition-colors cursor-pointer shrink-0 ${
+                          theme === 'dark'
+                            ? 'hover:bg-rose-500/10 text-slate-400 hover:text-rose-450'
+                            : 'hover:bg-rose-100 text-slate-500 hover:text-rose-650'
+                        }`}
                         title="Удалить категорию"
                       >
                         <Trash2 size={11} />

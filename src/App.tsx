@@ -306,6 +306,15 @@ export default function App() {
     saveToFirebaseDirectly(nextData);
   };
 
+  const handleReorderAccounts = (newAccounts: Account[]) => {
+    const nextData = {
+      ...data,
+      accounts: newAccounts
+    };
+    setData(nextData);
+    saveToFirebaseDirectly(nextData);
+  };
+
   // --- BUSINESS LOGIC: BANK CARDS ---
   const handleAddCard = (newCard: Omit<BankCard, 'id'>) => {
     const id = `card-${Date.now()}`;
@@ -758,14 +767,22 @@ export default function App() {
   const hasOldData = data.accounts.some(acc => acc.name.includes('Капитал') || acc.name.includes('BakuKart') || acc.name.includes('Чайхана'));
 
   return (
-    <div className={`min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans antialiased selection:bg-teal-500 selection:text-slate-950 relative overflow-x-hidden ${theme === 'dark' ? 'dark' : ''}`} id="main-root-container">
+    <div className={`min-h-screen flex flex-col font-sans antialiased selection:bg-teal-500 selection:text-slate-950 relative overflow-x-hidden transition-colors duration-200 ${
+      theme === 'dark'
+        ? 'bg-slate-950 text-slate-100 dark'
+        : 'bg-slate-50 text-slate-900'
+    }`} id="main-root-container">
       
       {/* Decorative Blur Blobs for Frosted Glass Backdrop effect */}
       <div className="absolute top-[-100px] left-[-100px] w-[500px] h-[500px] bg-teal-500/10 rounded-full blur-[120px] pointer-events-none z-0" />
       <div className="absolute bottom-[-100px] right-[-100px] w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[120px] pointer-events-none z-0" />
 
       {/* 1. Header Navigation Bar */}
-      <header className="sticky top-0 bg-slate-950/40 backdrop-blur-2xl border-b border-white/10 z-50 px-2 sm:px-4 lg:px-5 py-1.5 sm:py-2 flex items-center justify-between gap-2.5">
+      <header className={`sticky top-0 backdrop-blur-2xl border-b z-50 px-2 sm:px-4 lg:px-5 py-1.5 sm:py-2 flex items-center justify-between gap-2.5 transition-colors duration-200 ${
+        theme === 'dark'
+          ? 'bg-slate-950/40 border-white/10'
+          : 'bg-white/70 border-slate-200'
+      }`}>
         
         {/* Logo and Azerbaijan context branding */}
         <div className="flex items-center gap-2 z-10 min-w-0 flex-1">
@@ -774,32 +791,52 @@ export default function App() {
           </div>
           <div className="min-w-0">
             <div className="flex items-center gap-1 leading-none flex-wrap">
-              <h1 className="text-xs sm:text-sm font-display font-black tracking-tight text-white truncate">MilliFinance</h1>
+              <h1 className={`text-xs sm:text-sm font-display font-black tracking-tight truncate ${
+                theme === 'dark' ? 'text-white' : 'text-slate-900'
+              }`}>MilliFinance</h1>
               <div className="flex items-center gap-0.5 shrink-0">
-                <span className="flex items-center gap-0.5 px-0.9 py-0.2 bg-white/10 rounded text-[7px] font-bold text-teal-300 border border-white/5">
+                <span className={`flex items-center gap-0.5 px-0.9 py-0.2 rounded text-[7px] font-bold border ${
+                  theme === 'dark'
+                    ? 'bg-white/10 border-white/5 text-teal-300'
+                    : 'bg-slate-100 border-slate-200 text-teal-800'
+                }`}>
                   AZN
                 </span>
-                <span className="flex items-center gap-0.5 px-0.9 py-0.2 bg-emerald-500/15 rounded text-[7px] font-bold text-emerald-300 border border-emerald-500/5" title="Все ваши данные хранятся конфиденциально и безопасно на вашем устройстве">
+                <span className={`flex items-center gap-0.5 px-0.9 py-0.2 rounded text-[7px] font-bold border ${
+                  theme === 'dark'
+                    ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/5'
+                    : 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                }`} title="Все ваши данные хранятся конфиденциально и безопасно на вашем устройстве">
                   🔒 Локально
                 </span>
               </div>
             </div>
-            <p className="text-[9px] sm:text-[10px] text-slate-400 mt-0.5 truncate leading-none">Умный домашний бюджет Азербайджана</p>
+            <p className={`text-[9px] sm:text-[10px] mt-0.5 truncate leading-none ${
+              theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
+            }`}>Умный домашний бюджет Азербайджана</p>
           </div>
         </div>
 
         {/* Global stats block (Overall Capital indicator) and settings reset button */}
         <div className="flex items-center gap-1.5 sm:gap-3 shrink-0 z-10">
           <div className="text-right">
-            <span className="block text-[7.5px] sm:text-[8.5px] text-slate-400 font-bold uppercase tracking-wider leading-none">Всего</span>
-            <span className="text-xs sm:text-sm font-display font-black text-teal-300 tracking-tight leading-none block mt-0.5">
+            <span className={`block text-[7.5px] sm:text-[8.5px] font-bold uppercase tracking-wider leading-none ${
+              theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
+            }`}>Всего</span>
+            <span className={`text-xs sm:text-sm font-display font-black tracking-tight leading-none block mt-0.5 ${
+              theme === 'dark' ? 'text-teal-300' : 'text-teal-650 font-extrabold'
+            }`}>
               {overallCapital.toFixed(0)} ₼
             </span>
           </div>
 
           <button
             onClick={handleResetData}
-            className="flex items-center justify-center gap-0.5 p-1 sm:px-2 py-1 border border-white/10 hover:border-rose-500/50 bg-white/5 hover:bg-rose-500/10 text-slate-350 hover:text-rose-400 text-[9px] sm:text-[10.5px] font-semibold rounded-lg transition-all cursor-pointer"
+            className={`flex items-center justify-center gap-0.5 p-1 sm:px-2 py-1 border text-[9px] sm:text-[10.5px] font-semibold rounded-lg transition-all cursor-pointer ${
+              theme === 'dark'
+                ? 'border-white/10 hover:border-rose-500/50 bg-white/5 hover:bg-rose-500/10 text-slate-350 hover:text-rose-400'
+                : 'border-slate-200 hover:border-rose-500/50 bg-white hover:bg-rose-550/10 text-slate-600 hover:text-rose-600 shadow-xs'
+            }`}
             title="Сбросить все до реального экспорта HoneyMoney"
           >
             <Flame size={11} className="text-rose-500" />
@@ -857,6 +894,8 @@ export default function App() {
               onAddTransfer={handleAddTransfer}
               addToast={addToast}
               showMode="quick-records"
+              theme={theme}
+              onReorderAccounts={handleReorderAccounts}
             />
           )}
 
@@ -875,6 +914,8 @@ export default function App() {
               onAddTransfer={handleAddTransfer}
               addToast={addToast}
               showMode="analytics"
+              theme={theme}
+              onReorderAccounts={handleReorderAccounts}
             />
           )}
 
@@ -991,7 +1032,7 @@ export default function App() {
           }`}
         >
           <LayoutDashboard size={16} className="transition-transform group-active:scale-90" />
-          <span className="text-[9px] sm:text-[10.5px] font-bold tracking-normal mt-0.5 truncate">Обзор</span>
+          <span className="text-[9px] sm:text-[10.5px] font-bold tracking-normal mt-0.5 truncate">Главная</span>
         </button>
 
         <button

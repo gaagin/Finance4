@@ -12,6 +12,7 @@ interface SearchableSelectProps<T> {
   renderItem: (item: T) => React.ReactNode;
   idKey: keyof T;
   className?: string;
+  compact?: boolean;
 }
 
 export function SearchableSelect<T>({
@@ -25,6 +26,7 @@ export function SearchableSelect<T>({
   renderItem,
   idKey,
   className = "",
+  compact = false,
 }: SearchableSelectProps<T>) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -63,12 +65,14 @@ export function SearchableSelect<T>({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between bg-slate-950 border border-white/10 rounded-2xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-400 transition-all text-left cursor-pointer"
+        className={`w-full flex items-center justify-between bg-slate-950 border border-white/10 text-white focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-400 transition-all text-left cursor-pointer ${
+          compact ? 'rounded-xl px-2.5 py-1 text-[11px]' : 'rounded-2xl px-3.5 py-2.5 text-sm'
+        }`}
       >
-        <span className="truncate">
+        <span className="truncate w-full block">
           {selectedItem ? displayValue(selectedItem) : <span className="text-slate-500">{placeholder}</span>}
         </span>
-        <ChevronDown size={16} className={`text-slate-400 transition-transform shrink-0 ml-2 ${isOpen ? 'rotate-180' : ''}`} />
+        <ChevronDown size={compact ? 12 : 16} className={`text-slate-400 transition-transform shrink-0 ml-1.5 ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
       {/* Dropdown Menu */}

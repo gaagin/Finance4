@@ -4,6 +4,7 @@ import { IconComponent } from './IconComponent';
 import { Wallet, ArrowUpRight, ArrowDownLeft, TrendingUp, AlertTriangle, Filter, Calendar, HelpCircle, FileSpreadsheet, Download, RefreshCw, LogIn, LogOut, CheckCircle, AlertCircle, ArrowUpDown, SlidersHorizontal } from 'lucide-react';
 import { exportToGoogleSheets } from '../googleSheetsService';
 import { QuickDragDropBuilder } from './QuickDragDropBuilder';
+import { SearchableSelect } from './SearchableSelect';
 
 interface DashboardOverviewProps {
   transactions: Transaction[];
@@ -25,6 +26,8 @@ interface DashboardOverviewProps {
   }) => void;
   addToast: (message: string, type: 'warning' | 'critical' | 'success') => void;
   showMode?: 'quick-records' | 'analytics' | 'all';
+  theme?: 'light' | 'dark';
+  onReorderAccounts?: (newAccounts: Account[]) => void;
 }
 
 export function DashboardOverview({
@@ -40,7 +43,9 @@ export function DashboardOverview({
   onAddTransaction,
   onAddTransfer,
   addToast,
-  showMode = 'all'
+  showMode = 'all',
+  theme = 'light',
+  onReorderAccounts
 }: DashboardOverviewProps) {
   
   // Custom states for export status
@@ -70,6 +75,127 @@ export function DashboardOverview({
   const [isOrdinaryGroupExpanded, setIsOrdinaryGroupExpanded] = useState(true);
   const [isSavingsGroupExpanded, setIsSavingsGroupExpanded] = useState(true);
   const [showSubcategories, setShowSubcategories] = useState(false);
+
+  // Sorting Accounts via hold-drag-and-drop
+  const [draggedAccountId, setDraggedAccountId] = useState<string | null>(null);
+  const [dragGroupType, setDragGroupType] = useState<'ordinary' | 'savings' | null>(null);
+  const [startY, setStartY] = useState<number>(0);
+  const [currentY, setCurrentY] = useState<number>(0);
+  const [draggedInitialIndex, setDraggedInitialIndex] = useState<number>(0);
+  const [draggingListIds, setDraggingListIds] = useState<string[]>([]);
+  const holdTimerRef = useRef<any>(null);
+  const pointerIdRef = useRef<number | null>(null);
+
+  const handleAccountPointerDown = (
+    e: React.PointerEvent<HTMLDivElement>, 
+    accountId: string, 
+    index: number, 
+    groupType: 'ordinary' | 'savings',
+    currentGroupIds: string[]
+  ) => {
+    if (e.button !== 0) return; // Only primary button clicks / touch presses
+    
+    const clientY = e.clientY;
+    setStartY(clientY);
+    setCurrentY(clientY);
+    
+    pointerIdRef.current = e.pointerId;
+    const target = e.currentTarget;
+    
+    // Clear any leftover timer
+    if (holdTimerRef.current) {
+      clearTimeout(holdTimerRef.current);
+    }
+    
+    // Start long-press hold timer (200ms) to distinguish from tap/click
+    holdTimerRef.current = setTimeout(() => {
+      try {
+        target.setPointerCapture(e.pointerId);
+      } catch (err) {
+        console.error("Failed to set pointer capture", err);
+      }
+      
+      setDraggedAccountId(accountId);
+      setDragGroupType(groupType);
+      setDraggedInitialIndex(index);
+      setDraggingListIds(currentGroupIds);
+      
+      if (typeof navigator !== 'undefined' && navigator.vibrate) {
+        navigator.vibrate(25);
+      }
+    }, 200);
+  };
+
+  const handleAccountPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    const clientY = e.clientY;
+    
+    if (!draggedAccountId) {
+      // If long press is pending, check if they moved too far vertically (which implies scrolling, not drag)
+      if (holdTimerRef.current && Math.abs(clientY - startY) > 8) {
+        clearTimeout(holdTimerRef.current);
+        holdTimerRef.current = null;
+      }
+      return;
+    }
+    
+    e.preventDefault();
+    setCurrentY(clientY);
+  };
+
+  const handleAccountPointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (holdTimerRef.current) {
+      clearTimeout(holdTimerRef.current);
+      holdTimerRef.current = null;
+    }
+    
+    if (pointerIdRef.current !== null) {
+      try {
+        e.currentTarget.releasePointerCapture(pointerIdRef.current);
+      } catch (err) {}
+      pointerIdRef.current = null;
+    }
+
+    if (draggedAccountId && dragGroupType) {
+      const ITEM_HEIGHT = 35;
+      const diffY = currentY - startY;
+      const offset = Math.round(diffY / ITEM_HEIGHT);
+      let targetIndex = draggedInitialIndex + offset;
+      
+      const listLength = draggingListIds.length;
+      targetIndex = Math.max(0, Math.min(listLength - 1, targetIndex));
+
+      if (targetIndex !== draggedInitialIndex && listLength > 0) {
+        const finalIds = [...draggingListIds];
+        const [movedId] = finalIds.splice(draggedInitialIndex, 1);
+        finalIds.splice(targetIndex, 0, movedId);
+        
+        const groupAccountsMap = new Map<string, Account>();
+        accounts.forEach(a => {
+          if (finalIds.includes(a.id)) {
+            groupAccountsMap.set(a.id, a);
+          }
+        });
+        
+        const reorderedGroup = finalIds.map(id => groupAccountsMap.get(id)!).filter(Boolean);
+        
+        let groupIndex = 0;
+        const reorderedGlobalAccounts = accounts.map(a => {
+          if (finalIds.includes(a.id)) {
+            return reorderedGroup[groupIndex++];
+          }
+          return a;
+        });
+        
+        if (onReorderAccounts) {
+          onReorderAccounts(reorderedGlobalAccounts);
+        }
+      }
+    }
+    
+    setDraggedAccountId(null);
+    setDragGroupType(null);
+    setDraggingListIds([]);
+  };
 
   // Render a beautifully styled representation of the distribution weight (formerly grid Treemap)
   const renderTreemap = (items: any[], type: 'income' | 'expense') => {
@@ -453,6 +579,9 @@ export function DashboardOverview({
   // Donut chart interactive tracker
   const [hoveredDonutSlice, setHoveredDonutSlice] = useState<number | null>(null);
 
+  // Bar chart selected/clicked state
+  const [clickedBarIdx, setClickedBarIdx] = useState<number | null>(null);
+
   // Total money trend chart interactive states
   const [hoveredPoint, setHoveredPoint] = useState<{ x: number; y: number; date: string; balance: number } | null>(null);
   const [selectedTrendDate, setSelectedTrendDate] = useState<string | null>(null);
@@ -642,18 +771,81 @@ export function DashboardOverview({
     };
   }, [balanceTrendData, trendChartWidth, trendChartHeight, trendPaddingLeft, trendPaddingTop]);
 
-  // Compute distinct years present in the selected timeframe data to align vertical year gridlines
-  const distinctYears = useMemo(() => {
+  // Dynamic X-axis ticks (years, months, or days depending on selected period)
+  const trendTicks = useMemo(() => {
+    if (!trendStats || !trendStats.points || trendStats.points.length === 0) return [];
+    
+    // Case 1: Individual Year selected (e.g. '2026', '2025', etc.) -> show MONTHS
+    if (['2026', '2025', '2024', '2023', '2022'].includes(lineTimeframe)) {
+      const monthsMap: { [monthNum: string]: { label: string; x: number } } = {};
+      const monthNamesRu: { [key: string]: string } = {
+        '01': 'Янв', '02': 'Фев', '03': 'Мар', '04': 'Апр', '05': 'Май', '06': 'Июн',
+        '07': 'Июл', '08': 'Авг', '09': 'Сен', '10': 'Окт', '11': 'Ноя', '12': 'Дек'
+      };
+
+      trendStats.points.forEach((pt) => {
+        const monthNum = pt.date.substring(5, 7); // '01', '02', etc.
+        // We register the first point that occurs in this month
+        if (!monthsMap[monthNum]) {
+          monthsMap[monthNum] = {
+            label: monthNamesRu[monthNum] || monthNum,
+            x: pt.x
+          };
+        }
+      });
+
+      return Object.entries(monthsMap)
+        .map(([monthNum, data]) => ({ key: monthNum, label: data.label, x: data.x }))
+        .sort((a, b) => a.key.localeCompare(b.key));
+    }
+
+    // Case 2: Individual Month selected (e.g. 'may', 'april', etc.) -> show DAYS (e.g. 1st, 5th, 10th, 15th, 20th, 25th)
+    if (lineTimeframe === 'may' || lineTimeframe === 'april') {
+      const dayIntervals = [1, 5, 10, 15, 20, 25, 31];
+      const daysMap: { [day: number]: { label: string; x: number } } = {};
+
+      trendStats.points.forEach((pt) => {
+        const dayVal = parseInt(pt.date.substring(8, 10), 10);
+        // Find closest or exact match in dayIntervals
+        const matchingInterval = dayIntervals.find(d => d === dayVal);
+        if (matchingInterval !== undefined && !daysMap[matchingInterval]) {
+          const formattedLabel = `${matchingInterval}`;
+          daysMap[matchingInterval] = {
+            label: formattedLabel,
+            x: pt.x
+          };
+        }
+      });
+
+      // Let's also ensure at least the very first and very last point gets a tick if there are too few points
+      if (Object.keys(daysMap).length < 2 && trendStats.points.length > 1) {
+        const firstPt = trendStats.points[0];
+        const lastPt = trendStats.points[trendStats.points.length - 1];
+        const getDayStr = (d: string) => parseInt(d.substring(8, 10), 10).toString();
+        return [
+          { key: 'first', label: getDayStr(firstPt.date), x: firstPt.x },
+          { key: 'last', label: getDayStr(lastPt.date), x: lastPt.x }
+        ];
+      }
+
+      return Object.entries(daysMap)
+        .map(([dayNum, data]) => ({ key: dayNum, label: data.label, x: data.x }))
+        .sort((a, b) => parseInt(a.key, 10) - parseInt(b.key, 10));
+    }
+
+    // Case 3: "All Time" selected -> show distinct YEARS
     const yearsMap: { [year: string]: number } = {};
-    if (!trendStats || !trendStats.points) return [];
     trendStats.points.forEach((pt) => {
       const yr = pt.date.substring(0, 4);
       if (!yearsMap[yr]) {
         yearsMap[yr] = pt.x;
       }
     });
-    return Object.entries(yearsMap).map(([year, x]) => ({ year, x }));
-  }, [trendStats.points]);
+
+    return Object.entries(yearsMap)
+      .map(([year, x]) => ({ key: year, label: year, x }))
+      .sort((a, b) => a.key.localeCompare(b.key));
+  }, [trendStats, lineTimeframe]);
 
   const handleTrendMouseMove = (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
     if (!svgRef.current || trendStats.points.length === 0) return;
@@ -738,18 +930,18 @@ export function DashboardOverview({
       <div className="w-full space-y-6">
         
         {/* Dynamic Analytics Configuration panel */}
-        <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4 pb-4 border-b border-white/5 mb-6">
+        <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-2 pb-2 border-b border-white/5 mb-2">
           <div>
             <h3 className="text-lg font-display font-bold text-white">Аналитика и графики</h3>
             <p className="text-xs text-slate-400">Свободные настройки фильтров для визуализации распределения капитала</p>
           </div>
 
           {/* Interactive filter controls directly manipulating active charts */}
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-2">
             <select
               value={analyticsTimeframe}
               onChange={(e) => setAnalyticsTimeframe(e.target.value as any)}
-              className="px-3 py-1.5 bg-slate-900 border border-white/10 rounded-xl text-xs text-white focus:outline-hidden focus:ring-1 focus:ring-teal-400 cursor-pointer font-semibold"
+              className="px-3 py-1 bg-slate-900 border border-white/10 rounded-xl text-xs text-white focus:outline-hidden focus:ring-1 focus:ring-teal-400 cursor-pointer font-semibold"
             >
               <option value="all">За всё время (С 2022)</option>
               <option value="may">Май 2026 (Текущий)</option>
@@ -761,264 +953,32 @@ export function DashboardOverview({
               <option value="2022">2022 год</option>
             </select>
 
-            <select
+            <SearchableSelect
+              items={[{ id: 'all', name: 'По всем счетам', balance: 0 }, ...accounts]}
               value={analyticsAccount}
-              onChange={(e) => setAnalyticsAccount(e.target.value)}
-              className="px-3 py-1.5 bg-slate-900 border border-white/10 rounded-xl text-xs text-white focus:outline-hidden focus:ring-1 focus:ring-teal-400 cursor-pointer font-semibold"
-            >
-              <option value="all">По всем счетам</option>
-              {accounts.map(acc => (
-                <option key={acc.id} value={acc.id}>Счет: {acc.name}</option>
-              ))}
-            </select>
+              onChange={(id) => setAnalyticsAccount(id)}
+              placeholder="По всем счетам"
+              searchPlaceholder="Поиск счета..."
+              idKey="id"
+              className="min-w-[160px] sm:min-w-[180px]"
+              compact={true}
+              displayValue={(acc) => acc.id === 'all' ? 'По всем счетам' : `Счет: ${acc.name}`}
+              filterValue={(acc) => acc.name}
+              renderItem={(acc) => (
+                <div className="flex justify-between items-center w-full text-xs">
+                  <span className="font-semibold">{acc.id === 'all' ? acc.name : `Счет: ${acc.name}`}</span>
+                  {acc.id !== 'all' && (
+                    <span className="font-mono text-[9px] text-teal-400 bg-teal-500/10 px-1.5 py-0.5 rounded-md font-extrabold shrink-0 ml-2">
+                      {Math.round(acc.balance)} ₼
+                    </span>
+                  )}
+                </div>
+              )}
+            />
           </div>
         </div>
 
-        {/* Real-time Dynamic Wallet Balance Trend Card (Total Money Over Time) */}
-        <div className="border border-white/5 rounded-2xl p-5 bg-white/5 mb-8 relative group" id="total-assets-trend-card">
-          
-          {/* Header metadata showing start and end balances like the high-fidelity screenshot */}
-          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 border-b border-white/5 pb-4 mb-4">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full sm:w-auto">
-              <div>
-                <h4 className="font-semibold text-sm text-teal-300 leading-tight">Баланс и активы с течением времени</h4>
-                <p className="text-[10px] text-slate-400 mt-0.5">Динамический график общего капитала с учетом совершенных транзакций</p>
-              </div>
 
-              {/* Local chart filters */}
-              <div className="flex flex-wrap items-center gap-1.5 mt-2 sm:mt-0">
-                <select
-                  value={lineTimeframe}
-                  onChange={(e) => setLineTimeframe(e.target.value as any)}
-                  className="px-2 py-1 bg-slate-900 border border-white/10 rounded-lg text-[10px] text-white focus:outline-hidden cursor-pointer font-bold uppercase tracking-wider"
-                >
-                  <option value="all">Период: Все время</option>
-                  <option value="may">Май 2026</option>
-                  <option value="april">Апрель 2026</option>
-                  <option value="2026">2026 год</option>
-                  <option value="2025">2025 год</option>
-                  <option value="2024">2024 год</option>
-                  <option value="2023">2023 год</option>
-                  <option value="2022">2022 год</option>
-                </select>
-
-                <select
-                  value={lineAccount}
-                  onChange={(e) => setLineAccount(e.target.value)}
-                  className="px-2 py-1 bg-slate-900 border border-white/10 rounded-lg text-[10px] text-white focus:outline-hidden cursor-pointer font-bold uppercase tracking-wider"
-                >
-                  <option value="all">Счет: Все счета</option>
-                  {accounts.map(acc => (
-                    <option key={acc.id} value={acc.id}>{acc.name}</option>
-                  ))}
-                </select>
-
-                <select
-                  value={lineType}
-                  onChange={(e) => setLineType(e.target.value as any)}
-                  className="px-2 py-1 bg-slate-900 border border-white/10 rounded-lg text-[10px] text-white focus:outline-hidden cursor-pointer font-bold uppercase tracking-wider"
-                >
-                  <option value="all">Операции: Все</option>
-                  <option value="expense">Только Расходы</option>
-                  <option value="income">Только Доходы</option>
-                </select>
-              </div>
-            </div>
-            
-            {hasTrendPoints && firstPoint && lastPoint && (
-              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-slate-100 font-display font-bold text-xl sm:text-3xl px-1.5 mb-3">
-                <span className="opacity-90">{formatRussianDate(firstPoint.date).replace(' г.', '')}</span>
-                <span className="opacity-30 font-normal select-none">—</span>
-                <span className="opacity-90">{formatRussianDate(lastPoint.date).replace(' г.', '')}</span>
-              </div>
-            )}
-          </div>
-
-          <div className="relative w-full h-[220px] sm:h-[300px]" id="trend-svg-container">
-            {/* SVG Area Chart */}
-            <svg
-              ref={svgRef}
-              viewBox={`0 0 ${trendSvgWidth} ${trendSvgHeight}`}
-              className="w-full h-full select-none"
-              onMouseMove={handleTrendMouseMove}
-              onMouseLeave={handleTrendMouseLeave}
-            >
-              <defs>
-                {/* Responsive dynamic bi-directional gradient: green/teal above zero, red/rose below zero */}
-                <linearGradient id="areaFillGrad" x1="0" y1="yZero" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#10b981" stopOpacity="0.25" />
-                  <stop offset={`${trendStats.zeroPercent}%`} stopColor="#10b981" stopOpacity="0.0" />
-                  <stop offset={`${trendStats.zeroPercent}%`} stopColor="#ef4444" stopOpacity="0.0" />
-                  <stop offset="100%" stopColor="#ef4444" stopOpacity="0.25" />
-                </linearGradient>
-
-                <linearGradient id="strokeLineGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#10b981" stopOpacity="1" />
-                  <stop offset={`${trendStats.zeroPercent}%`} stopColor="#14b8a6" stopOpacity="1" />
-                  <stop offset={`${trendStats.zeroPercent}%`} stopColor="#ef4444" stopOpacity="1" />
-                  <stop offset="100%" stopColor="#ef4444" stopOpacity="1" />
-                </linearGradient>
-              </defs>
-
-              {/* Dynamic Y Axis Gridlines and Labels (8 ticks as in mockup) */}
-              {Array.from({ length: 8 }).map((_, i) => {
-                const fraction = i / 7;
-                const val = trendStats.min + fraction * (trendStats.max - trendStats.min);
-                const y = trendPaddingTop + trendChartHeight - fraction * trendChartHeight;
-                const roundedVal = Math.round(val);
-
-                // Format as shorthand e.g. 25k, -10k, 0
-                const formatYAxisVal = (valNum: number) => {
-                  const r = Math.round(valNum);
-                  if (Math.abs(r) >= 1000) {
-                    return `${(r / 1000).toFixed(0)}k`;
-                  }
-                  return `${r}`;
-                };
-
-                return (
-                  <g key={i} className="font-mono text-[26px] select-none text-slate-300">
-                    {/* Horizontal grid line */}
-                    <line
-                      x1={trendPaddingLeft}
-                      y1={y}
-                      x2={trendSvgWidth - trendPaddingRight}
-                      y2={y}
-                      stroke={roundedVal === 0 ? "rgba(239, 68, 68, 0.45)" : "rgba(255,255,255,0.06)"}
-                      strokeWidth={roundedVal === 0 ? 1.5 : 1}
-                      strokeDasharray={roundedVal === 0 ? "none" : "3 3"}
-                    />
-                    {/* Tick Label */}
-                    <text
-                      x={trendPaddingLeft - 12}
-                      y={y + 8}
-                      textAnchor="end"
-                      fill={roundedVal === 0 ? "#ef4444" : "#94a3b8"}
-                      className="font-bold text-[26px]"
-                    >
-                      {formatYAxisVal(roundedVal)}
-                    </text>
-                  </g>
-                );
-              })}
-
-              {/* X-axis tick descriptors (Year labels aligned with vertical gridlines like high fidelity mockup) */}
-              {distinctYears.map(({ year, x }) => (
-                <g key={year} className="font-mono text-slate-400">
-                  {/* Vertical grid line */}
-                  <line
-                    x1={x}
-                    y1={trendPaddingTop}
-                    x2={x}
-                    y2={trendPaddingTop + trendChartHeight}
-                    stroke="rgba(255,255,255,0.08)"
-                    strokeWidth={1}
-                  />
-                  {/* Year text at bottom */}
-                  <text
-                    x={x}
-                    y={trendSvgHeight - 12}
-                    textAnchor="middle"
-                    className="font-display font-extrabold text-[27px] fill-slate-300"
-                  >
-                    {year}
-                  </text>
-                </g>
-              ))}
-
-              {/* Render computed paths (only if data exists) */}
-              {hasTrendPoints && (
-                <>
-                  {/* Shaded Area underneath */}
-                  <path
-                    d={trendStats.areaPath}
-                    fill="url(#areaFillGrad)"
-                    className="transition-all duration-300"
-                  />
-                  {/* Solid stroke curve */}
-                  <path
-                    d={trendStats.linePath}
-                    fill="none"
-                    stroke="url(#strokeLineGrad)"
-                    strokeWidth={2.5}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="transition-all duration-300"
-                  />
-
-                  {/* Highlight start point node */}
-                  <circle
-                    cx={trendStats.points[0].x}
-                    cy={trendStats.points[0].y}
-                    r={3.5}
-                    fill="#10b981"
-                    stroke="#1e293b"
-                    strokeWidth={1.5}
-                  />
-
-                  {/* Highlight end point node */}
-                  <circle
-                    cx={trendStats.points[trendStats.points.length - 1].x}
-                    cy={trendStats.points[trendStats.points.length - 1].y}
-                    r={3.5}
-                    fill="#14b8a6"
-                    stroke="#1e293b"
-                    strokeWidth={1.5}
-                  />
-                </>
-              )}
-
-              {/* Hover highlight line & marker dots */}
-              {hoveredPoint && (
-                <g className="animate-fade-in">
-                  <line
-                    x1={hoveredPoint.x}
-                    y1={trendPaddingTop}
-                    x2={hoveredPoint.x}
-                    y2={trendPaddingTop + trendChartHeight}
-                    stroke="rgba(255,255,255,0.25)"
-                    strokeWidth={1.2}
-                    strokeDasharray="2 2"
-                  />
-                  {/* Outer glow ring */}
-                  <circle
-                    cx={hoveredPoint.x}
-                    cy={hoveredPoint.y}
-                    r={7}
-                    fill="rgba(20, 184, 166, 0.3)"
-                  />
-                  {/* Inner focal core */}
-                  <circle
-                    cx={hoveredPoint.x}
-                    cy={hoveredPoint.y}
-                    r={3.5}
-                    fill={hoveredPoint.balance >= 0 ? "#10b981" : "#ef4444"}
-                    stroke="#fff"
-                    strokeWidth={1.5}
-                  />
-                </g>
-              )}
-            </svg>
-
-            {/* Float overlay information tooltip absolute wrapper */}
-            {hoveredPoint && (
-              <div 
-                className="absolute bg-slate-900 border border-white/10 text-white rounded-2xl p-3 shadow-2xl pointer-events-none z-30 flex flex-col gap-1 min-w-[150px] text-center"
-                style={{ 
-                  left: `${Math.max(12, Math.min(88, (hoveredPoint.x / trendSvgWidth) * 100))}%`, 
-                  top: '40%', 
-                  transform: 'translate(-50%, -50%)',
-                  boxShadow: '0 10px 30px -10px rgba(0,0,0,0.8), 0 0 15px 1px rgba(255,255,255,0.03)'
-                }}
-              >
-                <b className="text-slate-400 text-[10px] tracking-wider uppercase">{formatRussianDate(hoveredPoint.date)}</b>
-                <span className={`font-mono font-black text-sm ${hoveredPoint.balance >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
-                  {Math.round(hoveredPoint.balance).toLocaleString('ru-RU')} ₼
-                </span>
-              </div>
-            )}
-          </div>
-        </div>
 
         {/* --- HIGH-FIDELITY RUSSIAN HONEYMONEY DASHBOARD --- */}
         <div className="w-full mb-8" id="honeymoney-panels-container">
@@ -1160,6 +1120,10 @@ export function DashboardOverview({
                     const savingsAccs = accounts.filter(a => savingsAccountsList.includes(a.name) || (a.type === 'savings' && a.name !== kopilkaName));
                     const savingsSumVal = savingsAccs.reduce((sum, a) => sum + a.balance, 0);
 
+                    // Reorder lists reactively if actively sorting
+                    const ordinaryAccsIds = ordinaryAccs.map(a => a.id);
+                    const savingsAccsIds = savingsAccs.map(a => a.id);
+
                     return (
                       <div className="space-y-4">
                         
@@ -1186,23 +1150,62 @@ export function DashboardOverview({
 
                           {/* List items */}
                           {isOrdinaryGroupExpanded && (
-                            <div className="mt-1 space-y-1 pl-2 animate-fade-in max-h-[175px] overflow-y-auto pr-1">
-                              {ordinaryAccs.map(acc => {
+                            <div className="mt-1 space-y-1 pl-2 animate-fade-in max-h-[220px] overflow-y-auto pr-1">
+                              {ordinaryAccs.map((acc, index) => {
+                                const isDraggingThis = acc.id === draggedAccountId;
+                                const isDraggingGroup = draggedAccountId && dragGroupType === 'ordinary';
+                                let translationY = 0;
+                                let transitionStyle = 'transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1)';
+                                
+                                if (isDraggingThis) {
+                                  translationY = currentY - startY;
+                                  transitionStyle = 'none';
+                                } else if (isDraggingGroup) {
+                                  const ITEM_HEIGHT = 35;
+                                  const diffY = currentY - startY;
+                                  const offset = Math.round(diffY / ITEM_HEIGHT);
+                                  let targetIndex = draggedInitialIndex + offset;
+                                  targetIndex = Math.max(0, Math.min(ordinaryAccs.length - 1, targetIndex));
+                                  
+                                  if (targetIndex > draggedInitialIndex) {
+                                    if (index > draggedInitialIndex && index <= targetIndex) {
+                                      translationY = -ITEM_HEIGHT;
+                                    }
+                                  } else if (targetIndex < draggedInitialIndex) {
+                                    if (index < draggedInitialIndex && index >= targetIndex) {
+                                      translationY = ITEM_HEIGHT;
+                                    }
+                                  }
+                                }
+
                                 return (
                                   <div 
                                     key={acc.id}
-                                    className="group flex items-center justify-between p-1.5 rounded-lg hover:bg-white/5 transition-all text-xs gap-3 min-w-0"
+                                    onPointerDown={(e) => handleAccountPointerDown(e, acc.id, index, 'ordinary', ordinaryAccsIds)}
+                                    onPointerMove={handleAccountPointerMove}
+                                    onPointerUp={handleAccountPointerUp}
+                                    style={{
+                                      transform: translationY ? `translateY(${translationY}px)` : undefined,
+                                      transition: transitionStyle,
+                                      touchAction: 'none',
+                                    }}
+                                    className={`group flex items-center justify-between p-1.5 rounded-lg text-xs gap-3 min-w-0 select-none cursor-grab active:cursor-grabbing ${
+                                      isDraggingThis 
+                                        ? 'bg-teal-500/10 border border-teal-500/35 shadow-xl shadow-teal-500/10 relative z-50 scale-[1.03] transition-none!' 
+                                        : 'hover:bg-white/5 border border-transparent'
+                                    }`}
                                   >
-                                    <span className="font-semibold text-slate-400 group-hover:text-white flex items-center gap-1.5 min-w-0">
+                                    <span className="font-semibold text-slate-400 group-hover:text-white flex items-center gap-1.5 min-w-0 pointer-events-none">
                                       <span className="w-1 h-3 bg-amber-400 rounded-xs shrink-0" />
                                       <span className="truncate">{acc.name}</span>
                                     </span>
-                                    <div className="flex items-center gap-2 shrink-0">
+                                    <div className="flex items-center gap-2 shrink-0 pointer-events-none">
                                       <span className="font-mono font-bold text-slate-200 select-all whitespace-nowrap">
                                         {Math.round(acc.balance).toLocaleString('ru-RU')} ₼
                                       </span>
-                                      <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 pr-1 shrink-0">
+                                      <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 pr-1 shrink-0 pointer-events-auto">
                                         <button 
+                                          onPointerDown={(e) => e.stopPropagation()}
                                           onClick={() => onQuickNavigate('categories')} 
                                           className="text-[10px] hover:text-white text-slate-500 cursor-pointer" 
                                           title="Редактировать"
@@ -1210,6 +1213,7 @@ export function DashboardOverview({
                                           ✏️
                                         </button>
                                         <button 
+                                          onPointerDown={(e) => e.stopPropagation()}
                                           onClick={() => onQuickNavigate('transactions')} 
                                           className="text-[10px] hover:text-white text-slate-500 cursor-pointer" 
                                           title="Журнал"
@@ -1261,23 +1265,62 @@ export function DashboardOverview({
 
                           {/* List items */}
                           {isSavingsGroupExpanded && (
-                            <div className="mt-1 space-y-1 pl-2 animate-fade-in max-h-[175px] overflow-y-auto pr-1">
-                              {savingsAccs.map(acc => {
+                            <div className="mt-1 space-y-1 pl-2 animate-fade-in max-h-[220px] overflow-y-auto pr-1">
+                              {savingsAccs.map((acc, index) => {
+                                const isDraggingThis = acc.id === draggedAccountId;
+                                const isDraggingGroup = draggedAccountId && dragGroupType === 'savings';
+                                let translationY = 0;
+                                let transitionStyle = 'transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1)';
+                                
+                                if (isDraggingThis) {
+                                  translationY = currentY - startY;
+                                  transitionStyle = 'none';
+                                } else if (isDraggingGroup) {
+                                  const ITEM_HEIGHT = 35;
+                                  const diffY = currentY - startY;
+                                  const offset = Math.round(diffY / ITEM_HEIGHT);
+                                  let targetIndex = draggedInitialIndex + offset;
+                                  targetIndex = Math.max(0, Math.min(savingsAccs.length - 1, targetIndex));
+                                  
+                                  if (targetIndex > draggedInitialIndex) {
+                                    if (index > draggedInitialIndex && index <= targetIndex) {
+                                      translationY = -ITEM_HEIGHT;
+                                    }
+                                  } else if (targetIndex < draggedInitialIndex) {
+                                    if (index < draggedInitialIndex && index >= targetIndex) {
+                                      translationY = ITEM_HEIGHT;
+                                    }
+                                  }
+                                }
+
                                 return (
                                   <div 
                                     key={acc.id}
-                                    className="group flex items-center justify-between p-1.5 rounded-lg hover:bg-white/5 transition-all text-xs gap-3 min-w-0"
+                                    onPointerDown={(e) => handleAccountPointerDown(e, acc.id, index, 'savings', savingsAccsIds)}
+                                    onPointerMove={handleAccountPointerMove}
+                                    onPointerUp={handleAccountPointerUp}
+                                    style={{
+                                      transform: translationY ? `translateY(${translationY}px)` : undefined,
+                                      transition: transitionStyle,
+                                      touchAction: 'none',
+                                    }}
+                                    className={`group flex items-center justify-between p-1.5 rounded-lg text-xs gap-3 min-w-0 select-none cursor-grab active:cursor-grabbing ${
+                                      isDraggingThis 
+                                        ? 'bg-teal-500/10 border border-teal-500/35 shadow-xl shadow-teal-500/10 relative z-50 scale-[1.03] transition-none!' 
+                                        : 'hover:bg-white/5 border border-transparent'
+                                    }`}
                                   >
-                                    <span className="font-semibold text-slate-400 group-hover:text-white flex items-center gap-1.5 min-w-0">
+                                    <span className="font-semibold text-slate-400 group-hover:text-white flex items-center gap-1.5 min-w-0 pointer-events-none">
                                       <span className="w-1 h-3 bg-lime-400 rounded-xs shrink-0" />
                                       <span className="truncate">{acc.name}</span>
                                     </span>
-                                    <div className="flex items-center gap-2 shrink-0">
+                                    <div className="flex items-center gap-2 shrink-0 pointer-events-none">
                                       <span className="font-mono font-bold text-slate-200 select-all whitespace-nowrap">
                                         {Math.round(acc.balance).toLocaleString('ru-RU')} ₼
                                       </span>
-                                      <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 pr-1 shrink-0">
+                                      <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 pr-1 shrink-0 pointer-events-auto">
                                         <button 
+                                          onPointerDown={(e) => e.stopPropagation()}
                                           onClick={() => onQuickNavigate('categories')} 
                                           className="text-[10px] hover:text-white text-slate-500 cursor-pointer" 
                                           title="Редактировать"
@@ -1285,6 +1328,7 @@ export function DashboardOverview({
                                           ✏️
                                         </button>
                                         <button 
+                                          onPointerDown={(e) => e.stopPropagation()}
                                           onClick={() => onQuickNavigate('transactions')} 
                                           className="text-[10px] hover:text-white text-slate-500 cursor-pointer" 
                                           title="Журнал"
@@ -1315,11 +1359,19 @@ export function DashboardOverview({
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
           
           {/* Chart 1: Monthly comparison bar chart */}
-          <div className="border border-white/5 rounded-2xl p-4 bg-white/5" id="monthly-bar-chart-card">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 mb-4 pb-2 border-b border-white/5">
+          <div className={`border rounded-3xl p-4 transition-colors duration-200 ${
+            theme === 'dark' ? 'border-white/5 bg-slate-900/40 backdrop-blur-md' : 'border-slate-200/80 bg-white shadow-md'
+          }`} id="monthly-bar-chart-card">
+            <div className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 mb-4 pb-2 border-b transition-colors duration-200 ${
+              theme === 'dark' ? 'border-white/5' : 'border-slate-100'
+            }`}>
               <div>
-                <h4 className="font-semibold text-sm text-teal-300 leading-tight">Сравнение доходов и расходов</h4>
-                <p className="text-[10px] text-slate-400 mt-0.5">Сравнение по {barYear === 'all' ? 'годам' : 'месяцам'} в AZN</p>
+                <h4 className={`font-semibold text-sm leading-tight ${
+                  theme === 'dark' ? 'text-teal-300' : 'text-teal-650'
+                }`}>Сравнение доходов и расходов</h4>
+                <p className={`text-[10px] mt-0.5 ${
+                  theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
+                }`}>Сравнение по {barYear === 'all' ? 'годам' : 'месяцам'} в AZN</p>
               </div>
 
               {/* Local interactive bar filters */}
@@ -1327,7 +1379,11 @@ export function DashboardOverview({
                 <select
                   value={barYear}
                   onChange={(e) => setBarYear(e.target.value as any)}
-                  className="px-1.5 py-0.5 bg-slate-900 border border-white/10 rounded-md text-[9.5px] text-white focus:outline-hidden cursor-pointer"
+                  className={`px-1.5 py-0.5 border rounded-md text-[9.5px] focus:outline-hidden cursor-pointer transition-colors duration-200 ${
+                    theme === 'dark'
+                      ? 'bg-slate-900 border-white/10 text-white'
+                      : 'bg-slate-50 border-slate-200 text-slate-800'
+                  }`}
                 >
                   <option value="all">Период: Все годы</option>
                   <option value="2026">2026 г.</option>
@@ -1337,27 +1393,60 @@ export function DashboardOverview({
                   <option value="2022">2022 г.</option>
                 </select>
 
-                <select
+                <SearchableSelect
+                  items={[{ id: 'all', name: 'Все счета', balance: 0 }, ...accounts]}
                   value={barAccount}
-                  onChange={(e) => setBarAccount(e.target.value)}
-                  className="px-1.5 py-0.5 bg-slate-900 border border-white/10 rounded-md text-[9.5px] text-white focus:outline-hidden cursor-pointer max-w-[95px] truncate"
-                >
-                  <option value="all">Все счета</option>
-                  {accounts.map(acc => (
-                    <option key={acc.id} value={acc.id}>{acc.name}</option>
-                  ))}
-                </select>
+                  onChange={(id) => setBarAccount(id)}
+                  placeholder="Все счета"
+                  searchPlaceholder="Поиск счета..."
+                  idKey="id"
+                  className="min-w-[110px] sm:min-w-[130px]"
+                  compact={true}
+                  displayValue={(acc) => acc.id === 'all' ? 'Все счета' : acc.name}
+                  filterValue={(acc) => acc.name}
+                  renderItem={(acc) => (
+                    <div className="flex justify-between items-center w-full text-[11px]">
+                      <span className="font-semibold">{acc.name}</span>
+                      {acc.id !== 'all' && (
+                        <span className="font-mono text-[9px] text-teal-400 bg-teal-500/10 px-1.5 py-0.5 rounded-md font-extrabold shrink-0 ml-2">
+                          {Math.round(acc.balance)} ₼
+                        </span>
+                      )}
+                    </div>
+                  )}
+                />
 
-                <select
+                <SearchableSelect
+                  items={[{ id: 'all', name: 'Все категории', color: '', icon: '', type: '' } as any, ...categories]}
                   value={barCategory}
-                  onChange={(e) => setBarCategory(e.target.value)}
-                  className="px-1.5 py-0.5 bg-slate-900 border border-white/10 rounded-md text-[9.5px] text-white focus:outline-hidden cursor-pointer max-w-[95px] truncate"
-                >
-                  <option value="all">Все категории</option>
-                  {categories.map(cat => (
-                    <option key={cat.id} value={cat.id}>{cat.name}</option>
-                  ))}
-                </select>
+                  onChange={(id) => setBarCategory(id)}
+                  placeholder="Все категории"
+                  searchPlaceholder="Поиск категории..."
+                  idKey="id"
+                  className="min-w-[130px] sm:min-w-[150px]"
+                  compact={true}
+                  displayValue={(cat) => cat.id === 'all' ? 'Все категории' : formatCategoryDisplayName(cat.name)}
+                  filterValue={(cat) => cat.name}
+                  renderItem={(cat) => (
+                    <div className="flex items-center gap-2 text-[11px]">
+                      {cat.id !== 'all' ? (
+                        <>
+                          <div
+                            className="w-3.5 h-3.5 rounded-sm flex items-center justify-center text-white shrink-0"
+                            style={{ backgroundColor: cat.color }}
+                          >
+                            <IconComponent name={cat.icon || 'HelpCircle'} size={9} />
+                          </div>
+                          <span className="font-semibold truncate">
+                            {formatCategoryDisplayName(cat.name)}
+                          </span>
+                        </>
+                      ) : (
+                        <span className="font-semibold">{cat.name}</span>
+                      )}
+                    </div>
+                  )}
+                />
               </div>
             </div>
 
@@ -1370,10 +1459,12 @@ export function DashboardOverview({
                 const maxChartAmount = Math.ceil(peakAmount * 1.15);
                 return (
                   <>
-                    <div className="absolute inset-0 flex flex-col justify-between pointer-events-none pb-5 text-[10px] font-mono text-slate-500">
-                      <div className="border-b border-dashed border-white/10 w-full pt-1"><span>{maxChartAmount.toFixed(0)} AZN</span></div>
-                      <div className="border-b border-dashed border-white/10 w-full pt-1"><span>{(maxChartAmount / 2).toFixed(0)} AZN</span></div>
-                      <div className="border-b border-dashed border-white/5 w-full pt-1"><span>{(maxChartAmount / 4).toFixed(0)} AZN</span></div>
+                    <div className={`absolute inset-0 flex flex-col justify-between pointer-events-none pb-5 text-[10px] font-mono transition-colors duration-200 ${
+                      theme === 'dark' ? 'text-slate-500' : 'text-slate-600'
+                    }`}>
+                      <div className={`border-b border-dashed w-full pt-1 ${theme === 'dark' ? 'border-white/10' : 'border-slate-200'}`}><span>{maxChartAmount.toFixed(0)} AZN</span></div>
+                      <div className={`border-b border-dashed w-full pt-1 ${theme === 'dark' ? 'border-white/10' : 'border-slate-200'}`}><span>{(maxChartAmount / 2).toFixed(0)} AZN</span></div>
+                      <div className={`border-b border-dashed w-full pt-1 ${theme === 'dark' ? 'border-white/5' : 'border-slate-200'}`}><span>{(maxChartAmount / 4).toFixed(0)} AZN</span></div>
                       <div className="w-full"><span>0 AZN</span></div>
                     </div>
 
@@ -1382,15 +1473,27 @@ export function DashboardOverview({
                       {monthlyBarSummary.map((bar, idx) => {
                         const incHeight = Math.min((bar.income / maxChartAmount) * 100, 100);
                         const expHeight = Math.min((bar.expense / maxChartAmount) * 100, 100);
+                        const isSelected = clickedBarIdx === idx;
+                        const hasSelection = clickedBarIdx !== null;
 
                         return (
-                          <div key={idx} className="flex flex-col items-center justify-end h-full w-20 group relative">
+                          <div 
+                            key={idx} 
+                            onClick={() => setClickedBarIdx(clickedBarIdx === idx ? null : idx)}
+                            className={`flex flex-col items-center justify-end h-full w-20 group relative cursor-pointer transition-all duration-300 ${
+                              hasSelection && !isSelected ? 'opacity-35 scale-95 filter saturate-50' : 'opacity-100 scale-100'
+                            }`}
+                          >
                             
                             {/* Live hover information tooltip */}
-                            <div className="absolute top-0 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-900 text-white rounded-lg p-2 text-[10px] shadow-lg pointer-events-none z-50 flex flex-col gap-1 min-w-[100px] text-center border border-white/10">
-                              <span className="font-bold border-b border-white/5 pb-0.5">{bar.label}</span>
-                              <span className="text-emerald-400 font-mono">Доход: {bar.income.toFixed(0)}₼</span>
-                              <span className="text-rose-400 font-mono">Расход: {bar.expense.toFixed(0)}₼</span>
+                            <div className={`absolute -top-4 transition-all duration-200 rounded-lg p-2 text-[10px] shadow-lg pointer-events-none z-40 flex flex-col gap-1 min-w-[100px] text-center border ${
+                              isSelected 
+                                ? `opacity-100 scale-105 ${theme === 'dark' ? 'bg-slate-900 border-teal-500 text-white shadow-[0_0_15px_rgba(20,184,166,0.3)]' : 'bg-white border-teal-500 text-slate-800 shadow-md shadow-teal-100'}`
+                                : `opacity-0 group-hover:opacity-100 ${theme === 'dark' ? 'bg-slate-900 border-white/10 text-white' : 'bg-white border-slate-200 text-slate-800'}`
+                            }`}>
+                              <span className={`font-bold border-b pb-0.5 ${theme === 'dark' ? 'border-white/5' : 'border-slate-100'}`}>{bar.label}</span>
+                              <span className="text-emerald-500 font-mono font-bold">Доход: {bar.income.toFixed(0)}₼</span>
+                              <span className="text-rose-500 font-mono font-bold">Расход: {bar.expense.toFixed(0)}₼</span>
                             </div>
 
                             {/* Side by side dual bars container */}
@@ -1398,16 +1501,24 @@ export function DashboardOverview({
                               {/* Income Bar column */}
                               <div 
                                 style={{ height: `${incHeight}%` }} 
-                                className="w-4 bg-emerald-500 rounded-t-lg transition-all duration-700 hover:scale-x-115 cursor-pointer hover:bg-emerald-400 shadow-xs" 
+                                className={`w-4 bg-emerald-500 rounded-t-lg transition-all duration-500 hover:scale-x-115 cursor-pointer hover:bg-emerald-400 shadow-xs ${
+                                  isSelected ? (theme === 'dark' ? 'ring-2 ring-emerald-400 ring-offset-2 ring-offset-slate-900' : 'ring-2 ring-emerald-500 ring-offset-2 ring-offset-white') : ''
+                                }`} 
                               />
                               {/* Expense Bar column */}
                               <div 
                                 style={{ height: `${expHeight}%` }} 
-                                className="w-4 bg-rose-500 rounded-t-lg transition-all duration-700 hover:scale-x-115 cursor-pointer hover:bg-rose-400 shadow-xs" 
+                                className={`w-4 bg-rose-500 rounded-t-lg transition-all duration-500 hover:scale-x-115 cursor-pointer hover:bg-rose-400 shadow-xs ${
+                                  isSelected ? (theme === 'dark' ? 'ring-2 ring-rose-400 ring-offset-2 ring-offset-slate-900' : 'ring-2 ring-rose-500 ring-offset-2 ring-offset-white') : ''
+                                }`} 
                               />
                             </div>
 
-                            <span className="mt-2 text-xs font-semibold text-slate-300">{bar.label}</span>
+                            <span className={`mt-2 text-xs font-semibold ${
+                              isSelected 
+                                ? 'text-teal-400 underline decoration-teal-450 decoration-2 underline-offset-4' 
+                                : (theme === 'dark' ? 'text-slate-300' : 'text-slate-600')
+                            }`}>{bar.label}</span>
                           </div>
                         );
                       })}
@@ -1419,23 +1530,87 @@ export function DashboardOverview({
 
             {/* Legend guide flags */}
             <div className="flex items-center gap-4 justify-center mt-3 text-xs">
-              <div className="flex items-center gap-1.5 font-medium text-slate-300">
+              <div className={`flex items-center gap-1.5 font-medium ${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'}`}>
                 <span className="w-3 h-3 bg-emerald-500 rounded-full" />
                 <span>Доходы (Оборот)</span>
               </div>
-              <div className="flex items-center gap-1.5 font-medium text-slate-300">
+              <div className={`flex items-center gap-1.5 font-medium ${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'}`}>
                 <span className="w-3 h-3 bg-rose-500 rounded-full" />
                 <span>Расходы (Фиксация)</span>
               </div>
             </div>
+
+            {/* Selected Column Direct Summary Panel */}
+            {clickedBarIdx !== null && monthlyBarSummary[clickedBarIdx] && (() => {
+              const selectedBar = monthlyBarSummary[clickedBarIdx];
+              const netBalance = selectedBar.income - selectedBar.expense;
+              return (
+                <div className={`mt-4 p-3 rounded-2xl border flex flex-col sm:flex-row items-center justify-between gap-3 transition-all duration-300 ${
+                  theme === 'dark'
+                    ? 'bg-teal-950/15 border-teal-500/20 text-slate-200'
+                    : 'bg-teal-50/50 border-teal-100 text-slate-700'
+                }`}>
+                  <div className="flex items-center gap-2">
+                    <span className={`text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md ${
+                      theme === 'dark' ? 'bg-teal-500/20 text-teal-350' : 'bg-teal-100 text-teal-800 font-extrabold'
+                    }`}>
+                      {selectedBar.label}
+                    </span>
+                    <span className="text-xs font-semibold">Итоги периода:</span>
+                  </div>
+                  
+                  <div className="flex items-center gap-4 flex-wrap">
+                    <div className="flex flex-col items-center sm:items-start">
+                      <span className="text-[9px] uppercase tracking-wider text-slate-400 font-bold">Доходы:</span>
+                      <span className="font-mono text-xs font-bold text-emerald-500">
+                        {Math.round(selectedBar.income).toLocaleString('ru-RU')} ₼
+                      </span>
+                    </div>
+
+                    <div className="flex flex-col items-center sm:items-start">
+                      <span className="text-[9px] uppercase tracking-wider text-slate-400 font-bold">Расходы:</span>
+                      <span className="font-mono text-xs font-bold text-rose-500">
+                        {Math.round(selectedBar.expense).toLocaleString('ru-RU')} ₼
+                      </span>
+                    </div>
+
+                    <div className="flex flex-col items-center sm:items-start border-l border-slate-200 dark:border-white/10 pl-4">
+                      <span className="text-[9px] uppercase tracking-wider text-slate-400 font-bold">Разница:</span>
+                      <span className={`font-mono text-xs font-bold ${netBalance >= 0 ? 'text-emerald-550' : 'text-rose-550'}`}>
+                        {netBalance >= 0 ? '+' : ''}{Math.round(netBalance).toLocaleString('ru-RU')} ₼
+                      </span>
+                    </div>
+
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setClickedBarIdx(null);
+                      }}
+                      className="ml-2 hover:bg-slate-200 dark:hover:bg-white/10 rounded-full p-1 cursor-pointer transition-colors text-xs"
+                      title="Сбросить выбор"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                </div>
+              );
+            })()}
           </div>
 
           {/* Chart 2: Category breakdown donut chart */}
-          <div className="border border-white/5 rounded-2xl p-4 bg-white/5 flex flex-col justify-between" id="category-distribution-card">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 mb-4 pb-2 border-b border-white/5">
+          <div className={`border rounded-3xl p-4 flex flex-col justify-between transition-colors duration-200 ${
+            theme === 'dark' ? 'border-white/5 bg-slate-900/40 backdrop-blur-md' : 'border-slate-200/80 bg-white shadow-md'
+          }`} id="category-distribution-card">
+            <div className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 mb-4 pb-2 border-b transition-colors duration-200 ${
+              theme === 'dark' ? 'border-white/5' : 'border-slate-100'
+            }`}>
               <div>
-                <h4 className="font-semibold text-sm text-teal-300 leading-tight">Доли и структура операций</h4>
-                <p className="text-[10px] text-slate-400 mt-0.5">Структура за {getPeriodLabel(donutTimeframe)}</p>
+                <h4 className={`font-semibold text-sm leading-tight ${
+                  theme === 'dark' ? 'text-teal-300' : 'text-teal-650'
+                }`}>Доли и структура операций</h4>
+                <p className={`text-[10px] mt-0.5 ${
+                  theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
+                }`}>Структура за {getPeriodLabel(donutTimeframe)}</p>
               </div>
 
               {/* Local interactive donut filters */}
@@ -1464,16 +1639,28 @@ export function DashboardOverview({
                   <option value="2022">2022 год</option>
                 </select>
 
-                <select
+                <SearchableSelect
+                  items={[{ id: 'all', name: 'Все счета', balance: 0 }, ...accounts]}
                   value={donutAccount}
-                  onChange={(e) => setDonutAccount(e.target.value)}
-                  className="px-1.5 py-0.5 bg-slate-900 border border-white/10 rounded-md text-[9.5px] text-white focus:outline-hidden cursor-pointer max-w-[85px] truncate"
-                >
-                  <option value="all">Все счета</option>
-                  {accounts.map(acc => (
-                    <option key={acc.id} value={acc.id}>{acc.name}</option>
-                  ))}
-                </select>
+                  onChange={(id) => setDonutAccount(id)}
+                  placeholder="Все счета"
+                  searchPlaceholder="Поиск счета..."
+                  idKey="id"
+                  className="min-w-[110px] sm:min-w-[130px]"
+                  compact={true}
+                  displayValue={(acc) => acc.id === 'all' ? 'Все счета' : acc.name}
+                  filterValue={(acc) => acc.name}
+                  renderItem={(acc) => (
+                    <div className="flex justify-between items-center w-full text-[11px]">
+                      <span className="font-semibold">{acc.name}</span>
+                      {acc.id !== 'all' && (
+                        <span className="font-mono text-[9px] text-teal-400 bg-teal-500/10 px-1.5 py-0.5 rounded-md font-extrabold shrink-0 ml-2">
+                          {Math.round(acc.balance)} ₼
+                        </span>
+                      )}
+                    </div>
+                  )}
+                />
               </div>
             </div>
 
@@ -1522,25 +1709,25 @@ export function DashboardOverview({
                   <div className="absolute flex flex-col items-center justify-center text-center pointer-events-none select-none px-4">
                     {hoveredDonutSlice !== null && donutCategoryBreakdown.list[hoveredDonutSlice] ? (
                       <>
-                        <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider truncate max-w-[110px]">
+                        <span className={`text-[10px] font-semibold uppercase tracking-wider truncate max-w-[110px] ${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
                            {formatCategoryDisplayName(donutCategoryBreakdown.list[hoveredDonutSlice].category.name)}
                         </span>
-                        <span className="text-sm font-display font-black text-white leading-none mt-0.5">
+                        <span className={`text-sm font-display font-black leading-none mt-0.5 ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>
                           {donutCategoryBreakdown.list[hoveredDonutSlice].amount.toFixed(0)} ₼
                         </span>
-                        <span className="text-[9px] text-teal-300 font-extrabold mt-0.5">
+                        <span className="text-[9px] text-teal-500 font-extrabold mt-0.5">
                           {donutCategoryBreakdown.list[hoveredDonutSlice].percentage.toFixed(1)}%
                         </span>
                       </>
                     ) : (
                       <>
-                        <span className="text-[9px] text-slate-400 font-semibold uppercase tracking-wider">
+                        <span className={`text-[9px] font-semibold uppercase tracking-wider ${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
                           {donutType === 'expense' ? 'Всего трат' : 'Всего доходов'}
                         </span>
-                        <span className="text-base font-display font-black text-white leading-tight">
+                        <span className={`text-base font-display font-black leading-tight ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>
                           {donutCategoryBreakdown.total.toFixed(1)} ₼
                         </span>
-                        <span className="text-[9px] text-slate-400 leading-none mt-1">Наведите на сектор</span>
+                        <span className={`text-[9px] leading-none mt-1 ${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>Наведите на сектор</span>
                       </>
                     )}
                   </div>
@@ -1576,6 +1763,297 @@ export function DashboardOverview({
             )}
           </div>
 
+        </div>
+
+        {/* Real-time Dynamic Wallet Balance Trend Card (Total Money Over Time) */}
+        <div className={`border rounded-3xl p-5 relative group transition-colors duration-200 shadow-md ${
+          theme === 'dark'
+            ? 'border-white/5 bg-slate-900/40 backdrop-blur-md'
+            : 'border-slate-200/80 bg-white'
+        }`} id="total-assets-trend-card">
+          
+          {/* Header metadata showing start and end balances like the high-fidelity screenshot */}
+          <div className={`flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 border-b pb-4 mb-4 transition-colors duration-200 ${
+            theme === 'dark' ? 'border-white/5' : 'border-slate-100'
+          }`}>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full sm:w-auto">
+              <div>
+                <h4 className={`font-semibold text-sm leading-tight transition-colors duration-200 ${
+                  theme === 'dark' ? 'text-teal-300' : 'text-teal-650'
+                }`}>Баланс и активы с течением времени</h4>
+                <p className={`text-[10px] mt-0.5 ${
+                  theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
+                }`}>Динамический график общего капитала с учетом совершенных транзакций</p>
+              </div>
+
+              {/* Local chart filters */}
+              <div className="flex flex-wrap items-center gap-1.5 mt-2 sm:mt-0">
+                <select
+                  value={lineTimeframe}
+                  onChange={(e) => setLineTimeframe(e.target.value as any)}
+                  className={`px-2 py-1 border rounded-lg text-[10px] focus:outline-hidden cursor-pointer font-bold uppercase tracking-wider transition-colors duration-200 ${
+                    theme === 'dark'
+                      ? 'bg-slate-900 border-white/10 text-white'
+                      : 'bg-slate-50 border-slate-200 text-slate-800'
+                  }`}
+                >
+                  <option value="all">Период: Все время</option>
+                  <option value="may">Май 2026</option>
+                  <option value="april">Апрель 2026</option>
+                  <option value="2026">2026 год</option>
+                  <option value="2025">2025 год</option>
+                  <option value="2024">2024 год</option>
+                  <option value="2023">2023 год</option>
+                  <option value="2022">2022 год</option>
+                </select>
+
+                <SearchableSelect
+                  items={[{ id: 'all', name: 'Все счета', balance: 0 }, ...accounts]}
+                  value={lineAccount}
+                  onChange={(id) => setLineAccount(id)}
+                  placeholder="Все счета"
+                  searchPlaceholder="Поиск счета..."
+                  idKey="id"
+                  className="min-w-[120px] sm:min-w-[150px]"
+                  compact={true}
+                  displayValue={(acc) => acc.id === 'all' ? 'Счет: Все счета' : `Счет: ${acc.name}`}
+                  filterValue={(acc) => acc.name}
+                  renderItem={(acc) => (
+                    <div className="flex justify-between items-center w-full text-[11px]">
+                      <span className="font-semibold">{acc.name}</span>
+                      {acc.id !== 'all' && (
+                        <span className="font-mono text-[9px] text-teal-400 bg-teal-500/10 px-1.5 py-0.5 rounded-md font-extrabold shrink-0 ml-2">
+                          {Math.round(acc.balance)} ₼
+                        </span>
+                      )}
+                    </div>
+                  )}
+                />
+
+                <select
+                  value={lineType}
+                  onChange={(e) => setLineType(e.target.value as any)}
+                  className={`px-2 py-1 border rounded-lg text-[10px] focus:outline-hidden cursor-pointer font-bold uppercase tracking-wider transition-colors duration-200 ${
+                    theme === 'dark'
+                      ? 'bg-slate-900 border-white/10 text-white'
+                      : 'bg-slate-50 border-slate-200 text-slate-800'
+                  }`}
+                >
+                  <option value="all">Операции: Все</option>
+                  <option value="expense">Только Расходы</option>
+                  <option value="income">Только Доходы</option>
+                </select>
+              </div>
+            </div>
+            
+            {hasTrendPoints && firstPoint && lastPoint && (
+              <div className={`flex flex-wrap items-center gap-x-3 gap-y-1 font-display font-bold text-xl sm:text-3xl px-1.5 mb-3 transition-colors duration-200 ${
+                theme === 'dark' ? 'text-slate-100' : 'text-slate-800'
+              }`}>
+                <span className="opacity-90">{formatRussianDate(firstPoint.date).replace(' г.', '')}</span>
+                <span className="opacity-30 font-normal select-none">—</span>
+                <span className="opacity-90">{formatRussianDate(lastPoint.date).replace(' г.', '')}</span>
+              </div>
+            )}
+          </div>
+
+          <div className="relative w-full h-[220px] sm:h-[300px]" id="trend-svg-container">
+            {/* SVG Area Chart */}
+            <svg
+              ref={svgRef}
+              viewBox={`0 0 ${trendSvgWidth} ${trendSvgHeight}`}
+              className="w-full h-full select-none"
+              onMouseMove={handleTrendMouseMove}
+              onMouseLeave={handleTrendMouseLeave}
+            >
+              <defs>
+                {/* Responsive dynamic bi-directional gradient: green/teal above zero, red/rose below zero */}
+                <linearGradient id="areaFillGrad" x1="0" y1="yZero" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#10b981" stopOpacity="0.25" />
+                  <stop offset={`${trendStats.zeroPercent}%`} stopColor="#10b981" stopOpacity="0.0" />
+                  <stop offset={`${trendStats.zeroPercent}%`} stopColor="#ef4444" stopOpacity="0.0" />
+                  <stop offset="100%" stopColor="#ef4444" stopOpacity="0.25" />
+                </linearGradient>
+
+                <linearGradient id="strokeLineGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#10b981" stopOpacity="1" />
+                  <stop offset={`${trendStats.zeroPercent}%`} stopColor="#14b8a6" stopOpacity="1" />
+                  <stop offset={`${trendStats.zeroPercent}%`} stopColor="#ef4444" stopOpacity="1" />
+                  <stop offset="100%" stopColor="#ef4444" stopOpacity="1" />
+                </linearGradient>
+              </defs>
+
+              {/* Dynamic Y Axis Gridlines and Labels (8 ticks as in mockup) */}
+              {Array.from({ length: 8 }).map((_, i) => {
+                const fraction = i / 7;
+                const val = trendStats.min + fraction * (trendStats.max - trendStats.min);
+                const y = trendPaddingTop + trendChartHeight - fraction * trendChartHeight;
+                const roundedVal = Math.round(val);
+
+                // Format as shorthand e.g. 25k, -10k, 0
+                const formatYAxisVal = (valNum: number) => {
+                  const r = Math.round(valNum);
+                  if (Math.abs(r) >= 1000) {
+                    return `${(r / 1000).toFixed(0)}k`;
+                  }
+                  return `${r}`;
+                };
+
+                return (
+                  <g key={i} className="font-mono text-[26px] select-none text-slate-300">
+                    {/* Horizontal grid line */}
+                    <line
+                      x1={trendPaddingLeft}
+                      y1={y}
+                      x2={trendSvgWidth - trendPaddingRight}
+                      y2={y}
+                      stroke={roundedVal === 0 
+                        ? (theme === 'dark' ? "rgba(239, 68, 68, 0.45)" : "rgba(239, 68, 68, 0.55)") 
+                        : (theme === 'dark' ? "rgba(255, 255, 255, 0.12)" : "rgba(15, 23, 42, 0.12)")
+                      }
+                      strokeWidth={roundedVal === 0 ? 1.5 : 1}
+                      strokeDasharray={roundedVal === 0 ? "none" : "4 4"}
+                    />
+                    {/* Tick Label */}
+                    <text
+                      x={trendPaddingLeft - 12}
+                      y={y + 8}
+                      textAnchor="end"
+                      fill={roundedVal === 0 
+                        ? (theme === 'dark' ? "#f87171" : "#ef4444") 
+                        : (theme === 'dark' ? "#94a3b8" : "#475569")
+                      }
+                      className="font-bold text-[26px]"
+                    >
+                      {formatYAxisVal(roundedVal)}
+                    </text>
+                  </g>
+                );
+              })}
+
+              {/* X-axis tick descriptors (Adaptive labels aligned with vertical gridlines) */}
+              {trendTicks.map(({ key, label, x }) => (
+                <g key={key} className="font-mono text-slate-400">
+                  {/* Vertical grid line */}
+                  <line
+                    x1={x}
+                    y1={trendPaddingTop}
+                    x2={x}
+                    y2={trendPaddingTop + trendChartHeight}
+                    stroke={theme === 'dark' ? "rgba(255,255,255,0.08)" : "rgba(15,23,42,0.08)"}
+                    strokeWidth={1}
+                  />
+                  {/* Ticks text at bottom representing year, month, or day */}
+                  <text
+                    x={x}
+                    y={trendSvgHeight - 12}
+                    textAnchor="middle"
+                    fill={theme === 'dark' ? '#cbd5e1' : '#475569'}
+                    className="font-display font-bold text-[24px]"
+                  >
+                    {label}
+                  </text>
+                </g>
+              ))}
+
+              {/* Render computed paths (only if data exists) */}
+              {hasTrendPoints && (
+                <>
+                  {/* Shaded Area underneath */}
+                  <path
+                    d={trendStats.areaPath}
+                    fill="url(#areaFillGrad)"
+                    className="transition-all duration-300"
+                  />
+                  {/* Solid stroke curve */}
+                  <path
+                    d={trendStats.linePath}
+                    fill="none"
+                    stroke="url(#strokeLineGrad)"
+                    strokeWidth={2.5}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="transition-all duration-300"
+                  />
+
+                  {/* Highlight start point node */}
+                  <circle
+                    cx={trendStats.points[0].x}
+                    cy={trendStats.points[0].y}
+                    r={3.5}
+                    fill="#10b981"
+                    stroke={theme === 'dark' ? "#1e293b" : "#ffffff"}
+                    strokeWidth={1.5}
+                  />
+
+                  {/* Highlight end point node */}
+                  <circle
+                    cx={trendStats.points[trendStats.points.length - 1].x}
+                    cy={trendStats.points[trendStats.points.length - 1].y}
+                    r={3.5}
+                    fill="#14b8a6"
+                    stroke={theme === 'dark' ? "#1e293b" : "#ffffff"}
+                    strokeWidth={1.5}
+                  />
+                </>
+              )}
+
+              {/* Hover highlight line & marker dots */}
+              {hoveredPoint && (
+                <g className="animate-fade-in">
+                  <line
+                    x1={hoveredPoint.x}
+                    y1={trendPaddingTop}
+                    x2={hoveredPoint.x}
+                    y2={trendPaddingTop + trendChartHeight}
+                    stroke={theme === 'dark' ? "rgba(255,255,255,0.25)" : "rgba(15,23,42,0.25)"}
+                    strokeWidth={1.2}
+                    strokeDasharray="2 2"
+                  />
+                  {/* Outer glow ring */}
+                  <circle
+                    cx={hoveredPoint.x}
+                    cy={hoveredPoint.y}
+                    r={7}
+                    fill="rgba(20, 184, 166, 0.3)"
+                  />
+                  {/* Inner focal core */}
+                  <circle
+                    cx={hoveredPoint.x}
+                    cy={hoveredPoint.y}
+                    r={3.5}
+                    fill={hoveredPoint.balance >= 0 ? "#10b981" : "#ef4444"}
+                    stroke="#fff"
+                    strokeWidth={1.5}
+                  />
+                </g>
+              )}
+            </svg>
+
+            {/* Float overlay information tooltip absolute wrapper */}
+            {hoveredPoint && (
+              <div 
+                className={`absolute border rounded-2xl p-3 shadow-2xl pointer-events-none z-30 flex flex-col gap-1 min-w-[150px] text-center transition-colors duration-200 ${
+                  theme === 'dark'
+                    ? 'bg-slate-900 border-white/10 text-white'
+                    : 'bg-white border-slate-200 text-slate-800'
+                }`}
+                style={{ 
+                  left: `${Math.max(12, Math.min(88, (hoveredPoint.x / trendSvgWidth) * 100))}%`, 
+                  top: '40%', 
+                  transform: 'translate(-50%, -50%)',
+                  boxShadow: theme === 'dark'
+                    ? '0 10px 30px -10px rgba(0,0,0,0.8), 0 0 15px 1px rgba(255,255,255,0.03)'
+                    : '0 10px 30px -10px rgba(15,23,42,0.15)'
+                }}
+              >
+                <b className={`${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'} text-[10px] tracking-wider uppercase`}>{formatRussianDate(hoveredPoint.date)}</b>
+                <span className={`font-mono font-black text-sm ${hoveredPoint.balance >= 0 ? "text-emerald-500" : "text-rose-500"}`}>
+                  {Math.round(hoveredPoint.balance).toLocaleString('ru-RU')} ₼
+                </span>
+              </div>
+            )}
+          </div>
         </div>
 
       </div>

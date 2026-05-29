@@ -555,6 +555,13 @@ export function QuickDragDropBuilder({
     setActiveTxData({ account, category });
     setAmount('0');
     setDescription('');
+    
+    // Reset to current local date
+    const d = new Date();
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    setDate(`${year}-${month}-${day}`);
   };
 
   const triggerQuickTransferModal = (fromAccount: Account, toAccount: Account) => {
@@ -562,6 +569,13 @@ export function QuickDragDropBuilder({
     setActiveTransferData({ fromAccount, toAccount });
     setAmount('0');
     setDescription('');
+
+    // Reset to current local date
+    const d = new Date();
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    setDate(`${year}-${month}-${day}`);
   };
 
   const handleDialClick = (val: string) => {
@@ -776,18 +790,15 @@ export function QuickDragDropBuilder({
                     onClick={() => !isSortingMode && handleCategoryClick(cat)}
                     className={`relative p-0.5 sm:p-1 rounded-lg border flex flex-col items-center justify-center text-center gap-0.5 transition-all select-none ${
                       isOver 
-                        ? 'border-emerald-400 bg-emerald-500/20 scale-[1.03] shadow-md shadow-emerald-500/5 ring-1 ring-emerald-400' 
-                        : 'border-white/5 bg-white/5 hover:bg-white/10 hover:border-white/10'
+                        ? 'border-rose-400 bg-rose-500/25 scale-[1.03] shadow-md shadow-rose-500/10 ring-1 ring-rose-400' 
+                        : 'border-rose-500/15 bg-rose-500/10 hover:bg-rose-500/20 hover:border-rose-500/30'
                     } ${
                       isSortingMode ? 'cursor-default' : 'cursor-pointer hover:scale-[1.04] active:scale-95'
                     }`}
                     id={`drop-cat-${cat.id}`}
                     style={{ minHeight: '32px' }}
                   >
-                    <div className="w-3.5 h-3.5 bg-white/10 rounded flex items-center justify-center text-slate-200 pointer-events-none">
-                      <IconComponent name={cat.icon} size={8} />
-                    </div>
-                    <span className="text-[8px] font-semibold font-sans tracking-tight leading-tight text-slate-300 max-w-full px-0.5 pointer-events-none text-center truncate font-sans">
+                    <span className="text-[9px] sm:text-[9.5px] font-black font-sans tracking-tight leading-normal text-white max-w-full px-0.5 pointer-events-none text-center uppercase break-words">
                       {formatCategoryDisplayName(cat.name)}
                     </span>
 
@@ -845,18 +856,15 @@ export function QuickDragDropBuilder({
                       onClick={() => !isSortingMode && handleCategoryClick(cat)}
                       className={`relative p-0.5 sm:p-1 rounded-lg border flex flex-col items-center justify-center text-center gap-0.5 transition-all select-none ${
                         isOver 
-                          ? 'border-emerald-400 bg-emerald-500/20 scale-[1.03] shadow-md shadow-emerald-500/5 ring-1 ring-emerald-400' 
-                          : 'border-white/5 bg-white/5 hover:bg-white/10 hover:border-white/10'
+                          ? 'border-emerald-400 bg-emerald-500/25 scale-[1.03] shadow-md shadow-emerald-500/10 ring-1 ring-emerald-400' 
+                          : 'border-emerald-500/15 bg-emerald-500/10 hover:bg-emerald-500/20 hover:border-emerald-500/30'
                       } ${
                         isSortingMode ? 'cursor-default' : 'cursor-pointer hover:scale-[1.04] active:scale-95'
                       }`}
                       id={`drop-cat-${cat.id}`}
                       style={{ minHeight: '32px' }}
                     >
-                      <div className="w-3.5 h-3.5 bg-white/10 rounded flex items-center justify-center text-emerald-400 pointer-events-none">
-                        <IconComponent name={cat.icon} size={8} />
-                      </div>
-                      <span className="text-[8px] font-semibold font-sans tracking-tight leading-tight text-emerald-300 max-w-full px-0.5 pointer-events-none text-center truncate">
+                      <span className="text-[9px] sm:text-[9.5px] font-black font-sans tracking-tight leading-normal text-white max-w-full px-0.5 pointer-events-none text-center uppercase break-words">
                         {formatCategoryDisplayName(cat.name)}
                       </span>
 
@@ -1006,36 +1014,54 @@ export function QuickDragDropBuilder({
             </div>
 
             {/* Custom Keypad dialer */}
-            <div className="grid grid-cols-3 gap-1">
-              {['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0', 'Стереть'].map((keyVal) => (
-                <button
-                  key={keyVal}
-                  type="button"
-                  onClick={() => handleDialClick(keyVal)}
-                  className={`h-9 sm:h-10 font-display font-extrabold text-sm sm:text-base border border-[#f1f5f9] hover:border-[#e2e8f0] hover:bg-[#f8fafc] rounded-xl flex items-center justify-center transition-all cursor-pointer select-none active:scale-[0.95] ${
-                    keyVal === 'Стереть' 
-                      ? 'text-[#475569] text-[10.5px] font-sans font-bold hover:bg-rose-50/20' 
-                      : 'text-[#1e293b]'
-                  }`}
-                >
-                  {keyVal}
-                </button>
-              ))}
+            <div className="grid grid-cols-3 gap-1.5 my-1">
+              {['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0', 'Стереть'].map((keyVal) => {
+                const isErase = keyVal === 'Стереть';
+                return (
+                  <button
+                    key={keyVal}
+                    type="button"
+                    onClick={() => handleDialClick(keyVal)}
+                    className={`h-10 sm:h-11 font-sans font-black text-sm sm:text-base rounded-xl flex items-center justify-center transition-all cursor-pointer select-none border-2 active:scale-95 active:translate-y-[1.5px] active:shadow-none ${
+                      isErase 
+                        ? 'bg-rose-50 border-rose-200 hover:bg-rose-100/90 hover:border-rose-300 text-rose-600 shadow-[0_2.5px_0_rgba(244,63,94,0.18)] text-[11px]' 
+                        : 'bg-white border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-800 shadow-[0_2.5px_0_rgba(148,163,184,0.18)] text-base'
+                    }`}
+                  >
+                    {isErase ? '⌫ Стер.' : keyVal}
+                  </button>
+                );
+              })}
             </div>
 
-            {/* Optional Comment Input with Document icon */}
-            <div className="space-y-1 text-left border-t border-slate-100 pt-2">
-              <label className="flex items-center gap-1.5 text-[#64748b] text-[8.5px] font-black uppercase tracking-wider">
-                <FileText size={10} className="text-[#94a3b8] shrink-0" />
-                <span>ДОБАВИТЬ КОММЕНТАРИЙ</span>
-              </label>
-              <input
-                type="text"
-                placeholder="Добавить комментарий..."
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                className="w-full px-2.5 py-1.5 bg-[#f8fafc] border border-[#f1f5f9] hover:border-[#e2e8f0] rounded-lg text-[10px] text-slate-700 placeholder-slate-400 focus:outline-hidden focus:ring-1 focus:ring-slate-300 focus:bg-white transition-all font-sans"
-              />
+            {/* Date Input with Calendar icon & Optional Comment Input with Document icon */}
+            <div className="grid grid-cols-2 gap-2 border-t border-slate-100 pt-2">
+              <div className="space-y-1 text-left">
+                <label className="flex items-center gap-1.5 text-[#64748b] text-[8.5px] font-black uppercase tracking-wider">
+                  <span className="text-[10px] shrink-0">📅</span>
+                  <span>ДАТА ОПЕРАЦИИ</span>
+                </label>
+                <input
+                  type="date"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                  className="w-full px-2.5 py-1.5 bg-[#f8fafc] border border-[#f1f5f9] hover:border-[#e2e8f0] rounded-lg text-[10px] text-slate-700 font-sans font-semibold focus:outline-hidden focus:ring-1 focus:ring-slate-300 focus:bg-white transition-all"
+                />
+              </div>
+
+              <div className="space-y-1 text-left">
+                <label className="flex items-center gap-1.5 text-[#64748b] text-[8.5px] font-black uppercase tracking-wider">
+                  <FileText size={10} className="text-[#94a3b8] shrink-0" />
+                  <span>КОММЕНТАРИЙ</span>
+                </label>
+                <input
+                  type="text"
+                  placeholder="Комментарий..."
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  className="w-full px-2.5 py-1.5 bg-[#f8fafc] border border-[#f1f5f9] hover:border-[#e2e8f0] rounded-lg text-[10px] text-slate-700 placeholder-slate-400 focus:outline-hidden focus:ring-1 focus:ring-slate-300 focus:bg-white transition-all font-sans"
+                />
+              </div>
             </div>
 
             {/* Form Bottom Actions */}
@@ -1154,36 +1180,54 @@ export function QuickDragDropBuilder({
             </div>
 
             {/* Custom Keypad dialer */}
-            <div className="grid grid-cols-3 gap-1">
-              {['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0', 'Стереть'].map((keyVal) => (
-                <button
-                  key={keyVal}
-                  type="button"
-                  onClick={() => handleDialClick(keyVal)}
-                  className={`h-9 sm:h-10 font-display font-extrabold text-sm sm:text-base border border-[#f1f5f9] hover:border-[#e2e8f0] hover:bg-[#f8fafc] rounded-xl flex items-center justify-center transition-all cursor-pointer select-none active:scale-[0.95] ${
-                    keyVal === 'Стереть' 
-                      ? 'text-[#475569] text-[10.5px] font-sans font-bold hover:bg-rose-50/20' 
-                      : 'text-[#1e293b]'
-                  }`}
-                >
-                  {keyVal}
-                </button>
-              ))}
+            <div className="grid grid-cols-3 gap-1.5 my-1">
+              {['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0', 'Стереть'].map((keyVal) => {
+                const isErase = keyVal === 'Стереть';
+                return (
+                  <button
+                    key={keyVal}
+                    type="button"
+                    onClick={() => handleDialClick(keyVal)}
+                    className={`h-10 sm:h-11 font-sans font-black text-sm sm:text-base rounded-xl flex items-center justify-center transition-all cursor-pointer select-none border-2 active:scale-95 active:translate-y-[1.5px] active:shadow-none ${
+                      isErase 
+                        ? 'bg-rose-50 border-rose-200 hover:bg-rose-100/90 hover:border-rose-300 text-rose-600 shadow-[0_2.5px_0_rgba(244,63,94,0.18)] text-[11px]' 
+                        : 'bg-white border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-800 shadow-[0_2.5px_0_rgba(148,163,184,0.18)] text-base'
+                    }`}
+                  >
+                    {isErase ? '⌫ Стер.' : keyVal}
+                  </button>
+                );
+              })}
             </div>
 
-            {/* Optional Comment Input with Document icon */}
-            <div className="space-y-1 text-left border-t border-slate-100 pt-2">
-              <label className="flex items-center gap-1.5 text-[#64748b] text-[8.5px] font-black uppercase tracking-wider">
-                <FileText size={10} className="text-[#94a3b8] shrink-0" />
-                <span>ДОБАВИТЬ КОММЕНТАРИЙ</span>
-              </label>
-              <input
-                type="text"
-                placeholder="Добавить комментарий..."
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                className="w-full px-2.5 py-1.5 bg-[#f8fafc] border border-[#f1f5f9] hover:border-[#e2e8f0] rounded-lg text-[10px] text-slate-700 placeholder-slate-400 focus:outline-hidden focus:ring-1 focus:ring-slate-300 focus:bg-white transition-all font-sans"
-              />
+            {/* Date Input with Calendar icon & Optional Comment Input with Document icon */}
+            <div className="grid grid-cols-2 gap-2 border-t border-slate-100 pt-2">
+              <div className="space-y-1 text-left">
+                <label className="flex items-center gap-1.5 text-[#64748b] text-[8.5px] font-black uppercase tracking-wider">
+                  <span className="text-[10px] shrink-0">📅</span>
+                  <span>ДАТА ПЕРЕВОДА</span>
+                </label>
+                <input
+                  type="date"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                  className="w-full px-2.5 py-1.5 bg-[#f8fafc] border border-[#f1f5f9] hover:border-[#e2e8f0] rounded-lg text-[10px] text-slate-700 font-sans font-semibold focus:outline-hidden focus:ring-1 focus:ring-slate-300 focus:bg-white transition-all"
+                />
+              </div>
+
+              <div className="space-y-1 text-left">
+                <label className="flex items-center gap-1.5 text-[#64748b] text-[8.5px] font-black uppercase tracking-wider">
+                  <FileText size={10} className="text-[#94a3b8] shrink-0" />
+                  <span>КОММЕНТАРИЙ</span>
+                </label>
+                <input
+                  type="text"
+                  placeholder="Комментарий..."
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  className="w-full px-2.5 py-1.5 bg-[#f8fafc] border border-[#f1f5f9] hover:border-[#e2e8f0] rounded-lg text-[10px] text-slate-700 placeholder-slate-400 focus:outline-hidden focus:ring-1 focus:ring-slate-300 focus:bg-white transition-all font-sans"
+                />
+              </div>
             </div>
 
             {/* Form Bottom Actions */}
