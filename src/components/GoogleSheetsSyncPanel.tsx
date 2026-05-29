@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Transaction } from '../types';
 import { syncWithGoogleSheets, SyncResult } from '../googleSheetsSyncService';
-import { Cloud, RefreshCw, FileSpreadsheet, ExternalLink, CheckCircle, AlertCircle, Trash2, LogIn, LogOut, Database, ListChecks } from 'lucide-react';
+import { Cloud, RefreshCw, FileSpreadsheet, ExternalLink, CheckCircle, AlertCircle, Trash2, LogIn, LogOut, Database, ListChecks, ChevronDown, ChevronUp, Copy, HelpCircle } from 'lucide-react';
 
 interface GoogleSheetsSyncPanelProps {
   transactions: Transaction[];
@@ -28,6 +28,35 @@ export function GoogleSheetsSyncPanel({
   const [errMessage, setErrMessage] = useState<string>('');
   const [lastResult, setLastResult] = useState<SyncResult | null>(null);
   const [lastSyncTime, setLastSyncTime] = useState<string | null>(null);
+
+  // Custom states for showing Firebase Auth / domain authorization guide
+  const [showInstructions, setShowInstructions] = useState<boolean>(true);
+  const [copiedDev, setCopiedDev] = useState<boolean>(false);
+  const [copiedPre, setCopiedPre] = useState<boolean>(false);
+  const [copiedVercel, setCopiedVercel] = useState<boolean>(false);
+
+  const devDomain = 'ais-dev-b2hxyuol4kkkk35h4otwmj-512438739284.europe-west2.run.app';
+  const preDomain = 'ais-pre-b2hxyuol4kkkk35h4otwmj-512438739284.europe-west2.run.app';
+  const vercelDomain = 'finance4-nine.vercel.app';
+
+  const handleCopy = (text: string, type: 'dev' | 'pre' | 'vercel') => {
+    try {
+      navigator.clipboard.writeText(text);
+      if (type === 'dev') {
+        setCopiedDev(true);
+        setTimeout(() => setCopiedDev(false), 2000);
+      } else if (type === 'pre') {
+        setCopiedPre(true);
+        setTimeout(() => setCopiedPre(false), 2000);
+      } else if (type === 'vercel') {
+        setCopiedVercel(true);
+        setTimeout(() => setCopiedVercel(false), 2000);
+      }
+      addToast('Домен скопирован в буфер обмена 📋', 'success');
+    } catch (e) {
+      console.error('Failed to copy', e);
+    }
+  };
 
   // Read persisted last sync status from localStorage
   useEffect(() => {
@@ -176,6 +205,120 @@ export function GoogleSheetsSyncPanel({
             </button>
           )}
         </div>
+      </div>
+
+      {/* Firebase Domain Authorization Troubleshooting Guide */}
+      <div className={`p-4 rounded-2xl border mb-6 transition-all duration-300 ${
+        showInstructions 
+          ? isDark ? 'border-amber-500/30 bg-amber-500/5 text-slate-300 shadow-md' : 'border-amber-400/55 bg-amber-50/20 text-slate-755'
+          : isDark ? 'border-white/5 bg-white/5 text-slate-400 hover:border-white/10' : 'border-slate-200/55 bg-slate-50 text-slate-500 hover:border-slate-300'
+      }`}>
+        <div 
+          onClick={() => setShowInstructions(!showInstructions)}
+          className="flex items-center justify-between cursor-pointer select-none"
+        >
+          <div className="flex items-center gap-2">
+            <HelpCircle size={16} className={`${isDark ? 'text-amber-400' : 'text-amber-600'} shrink-0`} />
+            <span className={`text-xs font-bold ${isDark ? 'text-amber-300' : 'text-amber-800'}`}>Инструкция: Ошибка «Домен не авторизован» на Vercel</span>
+          </div>
+          {showInstructions ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+        </div>
+
+        {showInstructions && (
+          <div className={`mt-3.5 space-y-4 text-xs border-t pt-3.5 leading-relaxed ${isDark ? 'border-amber-500/15' : 'border-amber-200'}`}>
+            <p className={isDark ? 'text-slate-300' : 'text-slate-650'}>
+              При размещении приложения в сторонних хостингах (например, Vercel) для работы Google-авторизации необходимо <b>вручную зарегистрировать домены в консоли Firebase Auth</b>.
+            </p>
+
+            <div className="space-y-2">
+              <div className={`text-[10px] uppercase font-bold font-mono ${isDark ? 'text-amber-400' : 'text-amber-700'}`}>Шаг 1. Перейдите в настройки Auth вашего проекта:</div>
+              <a 
+                href="https://console.firebase.google.com/project/gen-lang-client-0281180945/authentication/settings"
+                target="_blank"
+                rel="noreferrer noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-extrabold hover:brightness-105 active:scale-95 transition-all text-[11px] shadow-xs"
+              >
+                <span>Открыть настройки Firebase Auth</span>
+                <ExternalLink size={12} />
+              </a>
+            </div>
+
+            <div className="space-y-2.5 pt-1">
+              <div className={`text-[10px] uppercase font-bold font-mono ${isDark ? 'text-amber-400' : 'text-amber-700'}`}>Шаг 2. Добавьте домен в «Авторизованные домены»:</div>
+              <p className={isDark ? 'text-slate-400' : 'text-slate-500'}>
+                Перейдите во вкладку <b>«Настройки» (Settings)</b> → блок <b>«Авторизованные домены» (Authorized domains)</b> → нажмите кнопку <b>«Добавить домен»</b>.
+              </p>
+
+              <div className={`p-3 rounded-xl border space-y-2 text-amber-300 font-sans ${isDark ? 'bg-amber-950/20 border-amber-500/10' : 'bg-amber-500/5 border-amber-300/30'}`}>
+                <p className="font-bold flex items-center gap-1">
+                  <span>⚠️ Важное правило форматирования:</span>
+                </p>
+                <p className="text-[11px] text-slate-400 leading-normal">
+                  Вставлять домен необходимо <b>СТРОГО в виде чистого имени хоста</b>. <br />
+                  ❌ НЕ вставляйте протокол <span className="text-rose-400">https://</span> и косую черту в конце <span className="text-rose-450">/</span>! <br />
+                  ✅ Правильный формат для Vercel: <span className="text-teal-400 font-bold font-mono">finance4-nine.vercel.app</span>
+                </p>
+              </div>
+
+              {/* Vercel Domain Box */}
+              <div className="space-y-1">
+                <span className="text-[10px] text-slate-400 uppercase font-bold font-mono">Ваш адрес Vercel для копирования:</span>
+                <div className={`flex items-center justify-between gap-3 p-2 rounded-xl font-mono text-[10.5px] border ${
+                  isDark ? 'bg-slate-950/60 border-white/5' : 'bg-slate-100/80 border-slate-200'
+                }`}>
+                  <span className={`truncate select-all ${isDark ? 'text-teal-400' : 'text-teal-650 font-bold'}`}>{vercelDomain}</span>
+                  <button
+                    type="button"
+                    onClick={() => handleCopy(vercelDomain, 'vercel')}
+                    className={`p-1 px-2 rounded-md transition-all flex items-center gap-1 shrink-0 cursor-pointer ${
+                      isDark ? 'hover:bg-white/10 text-slate-400 hover:text-white' : 'hover:bg-slate-200 text-slate-600 hover:text-slate-905'
+                    }`}
+                  >
+                    {copiedVercel ? <CheckCircle size={12} className="text-teal-400" /> : <Copy size={12} />}
+                    <span className="text-[9px] font-bold">{copiedVercel ? 'Скопировано!' : 'Копировать'}</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Dev Domain Box */}
+              <div className="space-y-1">
+                <span className="text-[10px] text-slate-400 uppercase font-bold font-mono">Адрес среды AI Studio (Dev):</span>
+                <div className={`flex items-center justify-between gap-3 p-2 rounded-xl font-mono text-[10.5px] border ${
+                  isDark ? 'bg-slate-950/60 border-white/5' : 'bg-slate-100/80 border-slate-200'
+                }`}>
+                  <span className={`truncate select-all ${isDark ? 'text-teal-400' : 'text-teal-650 font-bold'}`}>{devDomain}</span>
+                  <button
+                    type="button"
+                    onClick={() => handleCopy(devDomain, 'dev')}
+                    className={`p-1 px-2 rounded-md transition-all flex items-center gap-1 shrink-0 cursor-pointer ${
+                      isDark ? 'hover:bg-white/10 text-slate-400 hover:text-white' : 'hover:bg-slate-200 text-slate-600 hover:text-slate-905'
+                    }`}
+                  >
+                    {copiedDev ? <CheckCircle size={12} className="text-teal-400" /> : <Copy size={12} />}
+                    <span className="text-[9px] font-bold">{copiedDev ? 'Скопировано!' : 'Копировать'}</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-1.5 space-y-2">
+              <div className={`text-[10px] uppercase font-bold font-mono ${isDark ? 'text-amber-400' : 'text-amber-700'}`}>Шаг 3. Сторонние куки (Third-party cookies) и блокировщики:</div>
+              <p className={isDark ? 'text-slate-400' : 'text-slate-500'}>
+                Поскольку авторизация открывается во всплывающем окне Google, ваш браузер должен поддерживать сторонние файлы куки (OAuth callback между окном Google и Vercel):
+              </p>
+              <ul className="list-disc list-inside space-y-1.5 text-slate-400 pl-1">
+                <li>Если вы используете браузер <b>Brave</b>, временно отключите блокировщик <b>Brave Shield</b> (лев над строкой адреса) для работы авторизации.</li>
+                <li>Если вы авторизуетесь с мобильного в <b>Telegram-браузере</b> или во встроенном UI, откройте сайт в полноценном Chrome, Safari или Яндекс.Браузере.</li>
+              </ul>
+            </div>
+
+            <p className={`p-2.5 rounded-lg border text-[11px] font-bold ${
+              isDark ? 'text-teal-400 bg-teal-500/5 border-teal-500/10' : 'text-teal-700 bg-teal-50/50 border-teal-200'
+            }`}>
+              Готово! После добавления чистого домена <span className="font-mono">finance4-nine.vercel.app</span> (без https://) в Firebase закройте вкладку и попробуйте авторизоваться снова.
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Sync Strategy Explanation Card */}
