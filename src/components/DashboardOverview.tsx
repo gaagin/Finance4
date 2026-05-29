@@ -726,6 +726,55 @@ export function DashboardOverview({
         return item.balance - base;
       });
 
+      // Transition helpers to isolate distortion strictly to the 2023-2024 crisis/minus period
+      const getKNegForDate = (dateStr: string, kVal: number) => {
+        if (dateStr < '2023-01-01') {
+          return 1.0;
+        }
+        if (dateStr >= '2023-01-01' && dateStr < '2023-05-01') {
+          const dStart = new Date('2023-01-01').getTime();
+          const dEnd = new Date('2023-05-01').getTime();
+          const dCurrent = new Date(dateStr).getTime();
+          const ratio = Math.max(0, Math.min(1, (dCurrent - dStart) / (dEnd - dStart)));
+          return 1.0 + (kVal - 1.0) * ratio;
+        }
+        if (dateStr >= '2023-05-01' && dateStr < '2024-05-01') {
+          return kVal;
+        }
+        if (dateStr >= '2024-05-01' && dateStr < '2024-11-01') {
+          const dStart = new Date('2024-05-01').getTime();
+          const dEnd = new Date('2024-11-01').getTime();
+          const dCurrent = new Date(dateStr).getTime();
+          const ratio = Math.max(0, Math.min(1, (dCurrent - dStart) / (dEnd - dStart)));
+          return kVal + (1.0 - kVal) * ratio;
+        }
+        return 1.0;
+      };
+
+      const getKPosForDate = (dateStr: string, kVal: number) => {
+        if (dateStr < '2023-01-01') {
+          return 1.0;
+        }
+        if (dateStr >= '2023-01-01' && dateStr < '2023-05-01') {
+          const dStart = new Date('2023-01-01').getTime();
+          const dEnd = new Date('2023-05-01').getTime();
+          const dCurrent = new Date(dateStr).getTime();
+          const ratio = Math.max(0, Math.min(1, (dCurrent - dStart) / (dEnd - dStart)));
+          return 1.0 + (kVal - 1.0) * ratio;
+        }
+        if (dateStr >= '2023-05-01' && dateStr < '2024-05-01') {
+          return kVal;
+        }
+        if (dateStr >= '2024-05-01' && dateStr < '2024-11-01') {
+          const dStart = new Date('2024-05-01').getTime();
+          const dEnd = new Date('2024-11-01').getTime();
+          const dCurrent = new Date(dateStr).getTime();
+          const ratio = Math.max(0, Math.min(1, (dCurrent - dStart) / (dEnd - dStart)));
+          return kVal + (1.0 - kVal) * ratio;
+        }
+        return 1.0;
+      };
+
       // Binary search for k_pos to scale positive fluctuations to reach targetMax
       let k_pos = 1.0;
       let low_pos = 0.0;
@@ -736,7 +785,8 @@ export function DashboardOverview({
         for (let idx = 0; idx < count; idx++) {
           const base = getBaseline(idx);
           const dev = deviations[idx];
-          const val = base + (dev > 0 ? dev * mid : dev);
+          const k_pos_t = getKPosForDate(shiftedBalances[idx].date, mid);
+          const val = base + (dev > 0 ? dev * k_pos_t : dev);
           if (val > currentMax) currentMax = val;
         }
         if (currentMax < targetMax) {
@@ -757,7 +807,8 @@ export function DashboardOverview({
         for (let idx = 0; idx < count; idx++) {
           const base = getBaseline(idx);
           const dev = deviations[idx];
-          const val = base + (dev < 0 ? dev * mid : dev);
+          const k_neg_t = getKNegForDate(shiftedBalances[idx].date, mid);
+          const val = base + (dev < 0 ? dev * k_neg_t : dev);
           if (val < currentMin) currentMin = val;
         }
         if (currentMin > targetMin) {
@@ -772,7 +823,9 @@ export function DashboardOverview({
       return shiftedBalances.map((item, idx) => {
         const base = getBaseline(idx);
         const dev = deviations[idx];
-        const scaledDev = dev > 0 ? dev * k_pos : dev * k_neg;
+        const k_pos_t = getKPosForDate(item.date, k_pos);
+        const k_neg_t = getKNegForDate(item.date, k_neg);
+        const scaledDev = dev > 0 ? dev * k_pos_t : dev * k_neg_t;
         return {
           ...item,
           balance: Math.round((base + scaledDev) * 100) / 100
