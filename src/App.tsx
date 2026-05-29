@@ -11,7 +11,7 @@ import { LayoutDashboard, ReceiptText, Calendar, SlidersHorizontal, Settings, Fl
 import { initAuth, logout, googleSignIn, db } from './googleAuth';
 import { User } from 'firebase/auth';
 import { doc, onSnapshot, getDoc } from 'firebase/firestore';
-import { getUserFinanceData, saveUserFinanceData, testConnection, subscribeToUserFinanceData, reinitUserFinanceData } from './firebaseService';
+import { getUserFinanceData, saveUserFinanceData, testConnection, subscribeToUserFinanceData, reinitUserFinanceData, getUserSettings, saveUserSettings } from './firebaseService';
 import { parseAndStandardizeJsonToFinanceData } from './honeyJsonConverter';
 import firebaseConfig from '../firebase-applet-config.json';
 
@@ -34,6 +34,8 @@ export default function App() {
   });
 
   const [isFirebaseLoading, setIsFirebaseLoading] = useState(false);
+  const [isSettingsLoadedFromCloud, setIsSettingsLoadedFromCloud] = useState(false);
+  const isSettingsLoadedRef = useRef(false);
   const isLoadedFromFirebase = useRef(false);
   const lastFetchedDataRef = useRef<string | null>(null);
   const isWritingToFirebaseRef = useRef(false);
@@ -84,14 +86,103 @@ export default function App() {
   const [firebaseSyncError, setFirebaseSyncError] = useState<string | null>(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
 
-  // Subscribe to Firebase Firestore user document for real-time synchronization between multiple devices (Temporarily disabled as requested)
+  // Subscribe to user personalized settings (accounts, categories, budgets, cards) in Firestore for real-time synchronization between devices
   useEffect(() => {
-    if (currentUser) {
-      isLoadedFromFirebase.current = true;
-      setIsFirebaseLoading(false);
-      setFirebaseSyncError(null);
+    if (!currentUser) {
+      setIsSettingsLoadedFromCloud(false);
+      isSettingsLoadedRef.current = false;
+      return;
     }
+
+    setIsFirebaseLoading(true);
+    setFirebaseSyncError(null);
+
+    const userDocRef = doc(db, 'users', currentUser.uid);
+
+    const unsubscribe = onSnapshot(userDocRef, (snapshot) => {
+      setIsFirebaseLoading(false);
+      if (snapshot.exists()) {
+        const cloudSettings = snapshot.data();
+
+        // Skip updating local state if changes are pending writes (ie. triggered by this current device)
+        if (snapshot.metadata.hasPendingWrites) {
+          return;
+        }
+
+        setData(prev => {
+          // Compare settings to avoid infinite updates or unnecessary re-renders
+          const hasAccountsChanged = cloudSettings.accounts && JSON.stringify(cloudSettings.accounts) !== JSON.stringify(prev.accounts);
+          const hasCategoriesChanged = cloudSettings.categories && JSON.stringify(cloudSettings.categories) !== JSON.stringify(prev.categories);
+          const hasBudgetsChanged = cloudSettings.budgets && JSON.stringify(cloudSettings.budgets) !== JSON.stringify(prev.budgets);
+          const hasCardsChanged = cloudSettings.cards && JSON.stringify(cloudSettings.cards) !== JSON.stringify(prev.cards);
+
+          if (hasAccountsChanged || hasCategoriesChanged || hasBudgetsChanged || hasCardsChanged) {
+            console.log('Real-time sync: settings changed in Firestore, merging...');
+            const updatedData = {
+              ...prev,
+              accounts: cloudSettings.accounts && cloudSettings.accounts.length > 0 ? cloudSettings.accounts : prev.accounts,
+              categories: cloudSettings.categories && cloudSettings.categories.length > 0 ? cloudSettings.categories : prev.categories,
+              budgets: cloudSettings.budgets || prev.budgets,
+              cards: cloudSettings.cards || prev.cards,
+            };
+            
+            // Only show toast if settings were already initially loaded
+            if (isSettingsLoadedRef.current) {
+              addToast('Настройки обновлены на другом устройстве! ☁️📱', 'success');
+            }
+            return updatedData;
+          }
+          return prev;
+        });
+
+        setIsSettingsLoadedFromCloud(true);
+        isSettingsLoadedRef.current = true;
+      } else {
+        // First time login or document does not exist yet! Back up current local settings to firestore
+        const email = currentUser.email || '';
+        saveUserSettings(currentUser.uid, email, {
+          accounts: dataRef.current.accounts,
+          categories: dataRef.current.categories,
+          budgets: dataRef.current.budgets,
+          cards: dataRef.current.cards || []
+        }).then(() => {
+          console.log('Seeded initial settings to Cloud Firestore in real-time hook');
+          setIsSettingsLoadedFromCloud(true);
+          isSettingsLoadedRef.current = true;
+        }).catch((err: any) => {
+          console.error('Failed to seed initial settings:', err);
+        });
+      }
+    }, (err) => {
+      console.error('Error on real-time settings snapshot:', err);
+      setFirebaseSyncError(err?.message || 'Не удалось настроить авто-синхронизацию настроек');
+      setIsFirebaseLoading(false);
+    });
+
+    return () => unsubscribe();
   }, [currentUser]);
+
+  // Auto-sync customized settings to Firestore whenever they change
+  useEffect(() => {
+    if (!currentUser || !isSettingsLoadedFromCloud) return;
+
+    const timer = setTimeout(async () => {
+      console.log('Auto-saving updated settings (accounts, categories, budgets, cards) to Firestore...');
+      try {
+        const email = currentUser.email || '';
+        await saveUserSettings(currentUser.uid, email, {
+          accounts: data.accounts,
+          categories: data.categories,
+          budgets: data.budgets,
+          cards: data.cards || []
+        });
+      } catch (err) {
+        console.error('Error auto-saving settings to Firestore:', err);
+      }
+    }, 1500); // 1.5s debounce to make sure rapid clicks/toggles are grouped
+
+    return () => clearTimeout(timer);
+  }, [data.accounts, data.categories, data.budgets, data.cards, currentUser, isSettingsLoadedFromCloud]);
 
   const isSyncingRef = useRef<boolean>(false);
   const hasUnsavedSyncChangesRef = useRef<boolean>(false);

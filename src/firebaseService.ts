@@ -324,3 +324,57 @@ export async function reinitUserFinanceData(
   }
 }
 
+/**
+ * Saves only customized setup / settings (accounts, categories, budgets, cards) to Firestore.
+ */
+export async function saveUserSettings(
+  uid: string,
+  email: string,
+  settings: {
+    accounts: any[];
+    categories: any[];
+    budgets: any[];
+    cards: any[];
+  }
+): Promise<void> {
+  const path = `users/${uid}`;
+  try {
+    const rawPayload = {
+      uid,
+      email,
+      updatedAt: new Date().toISOString(),
+      accounts: settings.accounts || [],
+      categories: settings.categories || [],
+      budgets: settings.budgets || [],
+      cards: settings.cards || [],
+    };
+    
+    // Clean up undefined values
+    const sanitizedPayload = JSON.parse(JSON.stringify(rawPayload, (_, value) => {
+      return value === undefined ? null : value;
+    }));
+
+    await setDoc(doc(db, 'users', uid), sanitizedPayload, { merge: true });
+    console.log('Saved settings successfully to Firestore for user:', uid);
+  } catch (error) {
+    handleFirestoreError(error, OperationType.WRITE, path);
+  }
+}
+
+/**
+ * Fetches only customized setup / settings (accounts, categories, budgets, cards) from Firestore user document.
+ */
+export async function getUserSettings(uid: string): Promise<{ accounts?: any[]; categories?: any[]; budgets?: any[]; cards?: any[] } | null> {
+  const path = `users/${uid}`;
+  try {
+    const docSnap = await getDoc(doc(db, 'users', uid));
+    if (docSnap.exists()) {
+      return docSnap.data() as any;
+    }
+    return null;
+  } catch (error) {
+    handleFirestoreError(error, OperationType.GET, path);
+  }
+}
+
+
