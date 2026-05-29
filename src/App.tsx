@@ -59,7 +59,7 @@ export default function App() {
   const [accountsSubTab, setAccountsSubTab] = useState<'accounts' | 'budget'>('accounts');
 
   // Calendar persistent states to align monthly scope & focuses upon returning from modals or edits
-  const [calendarCurrentDate, setCalendarCurrentDate] = useState<Date>(new Date(2026, 4, 1)); // Default to May 2026
+  const [calendarCurrentDate, setCalendarCurrentDate] = useState<Date>(new Date()); // Default dynamically to today's date (May 2026)
   const [calendarClickedDate, setCalendarClickedDate] = useState<string>(() => {
     const d = new Date();
     const year = d.getFullYear();
@@ -267,6 +267,14 @@ export default function App() {
     setActiveTab(tab);
     setPreselectedDate(null);
     setEditingTransaction(null);
+    if (tab === 'calendar') {
+      const today = new Date();
+      setCalendarCurrentDate(today);
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, '0');
+      const day = String(today.getDate()).padStart(2, '0');
+      setCalendarClickedDate(`${year}-${month}-${day}`);
+    }
   };
 
   // Triggered when clicking a day on the calendar to "add transaction on that day"

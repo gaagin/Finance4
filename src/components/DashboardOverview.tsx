@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useRef } from 'react';
 import { Transaction, Category, Account, BudgetLimit, formatCategoryDisplayName } from '../types';
 import { IconComponent } from './IconComponent';
-import { Wallet, ArrowUpRight, ArrowDownLeft, TrendingUp, AlertTriangle, Filter, Calendar, HelpCircle, FileSpreadsheet, Download, RefreshCw, LogIn, LogOut, CheckCircle, AlertCircle, ArrowUpDown, SlidersHorizontal } from 'lucide-react';
+import { Wallet, ArrowUpRight, ArrowDownLeft, TrendingUp, AlertTriangle, Filter, Calendar, HelpCircle, FileSpreadsheet, Download, RefreshCw, LogIn, LogOut, CheckCircle, AlertCircle, ArrowUpDown, SlidersHorizontal, X } from 'lucide-react';
 import { exportToGoogleSheets } from '../googleSheetsService';
 import { QuickDragDropBuilder } from './QuickDragDropBuilder';
 import { SearchableSelect } from './SearchableSelect';
@@ -78,6 +78,7 @@ export function DashboardOverview({
   const [isOrdinaryGroupExpanded, setIsOrdinaryGroupExpanded] = useState(true);
   const [isSavingsGroupExpanded, setIsSavingsGroupExpanded] = useState(true);
   const [showSubcategories, setShowSubcategories] = useState(false);
+  const [selectedCategoryTransactions, setSelectedCategoryTransactions] = useState<{ category: Category; type: 'expense' | 'income' } | null>(null);
 
   // Sorting Accounts via hold-drag-and-drop
   const [draggedAccountId, setDraggedAccountId] = useState<string | null>(null);
@@ -447,6 +448,17 @@ export function DashboardOverview({
       total: totalInc
     };
   }, [filteredAnalyticsTransactions, categories]);
+
+  const selectedCategoryTxs = useMemo(() => {
+    if (!selectedCategoryTransactions) return [];
+    return filteredAnalyticsTransactions.filter(
+      t => t.categoryId === selectedCategoryTransactions.category.id && t.type === selectedCategoryTransactions.type
+    );
+  }, [filteredAnalyticsTransactions, selectedCategoryTransactions]);
+
+  const sortedSelectedCategoryTxs = useMemo(() => {
+    return [...selectedCategoryTxs].sort((a, b) => b.date.localeCompare(a.date));
+  }, [selectedCategoryTxs]);
 
   // Compute monthly totals for the bar chart comparison (supported by localized filters)
   const monthlyBarSummary = useMemo(() => {
@@ -1015,7 +1027,12 @@ export function DashboardOverview({
                       {categoryBreakdown.list.slice(0, showSubcategories ? 15 : 6).map((item, idx) => {
                         const barWidth = item.percentage;
                         return (
-                          <div key={item.category.id} className="group min-w-0">
+                          <div 
+                            key={item.category.id} 
+                            onClick={() => setSelectedCategoryTransactions({ category: item.category, type: 'expense' })}
+                            className="group min-w-0 cursor-pointer hover:bg-white/5 p-1 -m-1 rounded-lg transition-all"
+                            title="Посмотреть транзакции за выбранный период"
+                          >
                             <div className="flex items-center justify-between text-xs mb-1 gap-3 min-w-0">
                               <span className="font-semibold text-slate-300 flex items-center gap-1.5 min-w-0">
                                 <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: item.category.color }} />
@@ -1063,7 +1080,12 @@ export function DashboardOverview({
                       {incomeCategoryBreakdown.list.slice(0, 6).map((item, idx) => {
                         const barWidth = item.percentage;
                         return (
-                          <div key={item.category.id} className="group min-w-0">
+                          <div 
+                            key={item.category.id} 
+                            onClick={() => setSelectedCategoryTransactions({ category: item.category, type: 'income' })}
+                            className="group min-w-0 cursor-pointer hover:bg-white/5 p-1 -m-1 rounded-lg transition-all"
+                            title="Посмотреть транзакции за выбранный период"
+                          >
                             <div className="flex items-center justify-between text-xs mb-1 gap-3 min-w-0">
                               <span className="font-semibold text-slate-300 flex items-center gap-1.5 min-w-0">
                                 <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: item.category.color }} />
@@ -2060,6 +2082,108 @@ export function DashboardOverview({
         </div>
 
       </div>
+
+      {/* Category transactions list modal */}
+      {selectedCategoryTransactions && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/85 backdrop-blur-xs transition-all animate-fade-in" id="category-txs-modal">
+          <div className="w-full max-w-lg bg-slate-900 border border-white/10 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh] animate-scale-up">
+            
+            {/* Modal Header */}
+            <div className="p-5 border-b border-white/10 flex items-center justify-between bg-slate-950/30">
+              <div className="flex items-center gap-3">
+                <div 
+                  className="w-10 h-10 rounded-full flex items-center justify-center border border-white/5 shadow-inner"
+                  style={{ backgroundColor: `${selectedCategoryTransactions.category.color}15`, borderColor: `${selectedCategoryTransactions.category.color}40` }}
+                >
+                  <div style={{ color: selectedCategoryTransactions.category.color }}>
+                    <IconComponent name={selectedCategoryTransactions.category.icon || 'FolderOpen'} size={20} />
+                  </div>
+                </div>
+                <div>
+                  <h3 className="text-sm sm:text-base font-black text-white flex items-center gap-2">
+                    {formatCategoryDisplayName(selectedCategoryTransactions.category.name)}
+                  </h3>
+                  <p className="text-[10px] sm:text-xs text-slate-400 font-semibold uppercase tracking-wider">
+                    {selectedCategoryTransactions.type === 'expense' ? 'Расходы за' : 'Доходы за'} {getPeriodLabel(analyticsTimeframe)}
+                  </p>
+                </div>
+              </div>
+              
+              <button 
+                onClick={() => setSelectedCategoryTransactions(null)}
+                className="p-2 text-slate-400 hover:text-white hover:bg-white/5 active:scale-95 rounded-xl transition-all cursor-pointer"
+                title="Закрыть"
+              >
+                <X size={18} className="stroke-[2.5]" />
+              </button>
+            </div>
+
+            {/* Modal Scrollable Body */}
+            <div className="p-5 overflow-y-auto flex-1 custom-scrollbar space-y-4">
+              {sortedSelectedCategoryTxs.length === 0 ? (
+                <div className="text-center py-12 space-y-2">
+                  <span className="text-2xl">🔍</span>
+                  <p className="text-xs text-slate-500 italic">Нет операций по этой категории за выбранный период</p>
+                </div>
+              ) : (
+                <div className="space-y-2.5">
+                  {sortedSelectedCategoryTxs.map((tx) => {
+                    const accName = accounts.find(a => a.id === tx.accountId)?.name || 'Неизвестный счет';
+                    const txDate = new Date(tx.date);
+                    const formattedDate = !isNaN(txDate.getTime()) 
+                      ? txDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', year: 'numeric' })
+                      : tx.date;
+                    
+                    return (
+                      <div 
+                        key={tx.id}
+                        className="flex items-center justify-between p-3.5 bg-white/5 rounded-2xl border border-white/5 hover:bg-white/10 hover:border-white/10 transition-all gap-4 text-xs group"
+                      >
+                        <div className="min-w-0 space-y-1">
+                          <div className="flex items-center gap-2">
+                            <span className="font-sans font-bold text-slate-205 truncate">
+                              {tx.description || formatCategoryDisplayName(selectedCategoryTransactions.category.name) || 'Без описания'}
+                            </span>
+                            <span className="px-2 py-0.5 rounded-md bg-white/5 border border-white/5 text-[9px] text-slate-400 font-bold shrink-0">
+                              {accName}
+                            </span>
+                          </div>
+                          <p className="text-[10px] text-slate-500 font-mono font-medium">
+                            {formattedDate}
+                          </p>
+                        </div>
+                        
+                        <div className="text-right shrink-0">
+                          <span className={`font-mono font-black text-sm ${selectedCategoryTransactions.type === 'income' ? 'text-emerald-400' : 'text-rose-450'}`}>
+                            {selectedCategoryTransactions.type === 'income' ? '+' : '-'}{Math.round(tx.amount).toLocaleString('ru-RU')} ₼
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-4 bg-slate-950/20 border-t border-white/5 flex items-center justify-between shrink-0">
+              <div className="pl-2 select-none">
+                <span className="text-[10px] text-slate-400 uppercase tracking-widest block">Всего по категории</span>
+                <span className={`font-mono text-base font-black ${selectedCategoryTransactions.type === 'income' ? 'text-emerald-400' : 'text-rose-455'}`}>
+                  {selectedCategoryTransactions.type === 'income' ? '+' : '-'}{Math.round(sortedSelectedCategoryTxs.reduce((sum, t) => sum + t.amount, 0)).toLocaleString('ru-RU')} ₼
+                </span>
+              </div>
+              <button
+                onClick={() => setSelectedCategoryTransactions(null)}
+                className="py-2.5 px-5 rounded-2xl bg-white/5 hover:bg-white/10 text-xs font-bold text-slate-300 hover:text-white transition-all cursor-pointer"
+              >
+                Закрыть
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
 
     </div>
   );

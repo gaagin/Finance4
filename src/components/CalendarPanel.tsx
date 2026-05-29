@@ -51,18 +51,39 @@ export function CalendarPanel({
   const [selectedDayData, setSelectedDayData] = useState<{ date: string; txs: Transaction[] } | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Smooth scroll to the currently focused/clicked date cell on mount to restore focus
+  // Smooth scroll to the currently focused/clicked date cell on mount to restore focus without displacing the main viewport
   React.useEffect(() => {
+    // Ensure the main viewport is never horizontally scrolled/displaced
+    window.scrollTo({ left: 0 });
+    if (document.documentElement) document.documentElement.scrollLeft = 0;
+    if (document.body) document.body.scrollLeft = 0;
+
     if (clickedDate) {
       const timer = setTimeout(() => {
-        const cellElement = document.querySelector(`[data-date="${clickedDate}"]`);
-        if (cellElement) {
-          cellElement.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        const container = document.getElementById('calendar-grid-scroll-container');
+        const cellElement = document.querySelector(`[data-date="${clickedDate}"]`) as HTMLElement;
+        if (container && cellElement) {
+          const cellLeft = cellElement.offsetLeft;
+          const cellWidth = cellElement.offsetWidth;
+          const containerWidth = container.offsetWidth;
+          // Center the active cell specifically inside its own scroll container
+          const targetScrollLeft = cellLeft - (containerWidth / 2) + (cellWidth / 2);
+          
+          container.scrollTo({
+            left: Math.max(0, targetScrollLeft),
+            behavior: 'smooth'
+          });
         }
-      }, 100);
+        
+        // Double-check body alignment to avoid horizontal shift and clipping
+        window.scrollTo({ left: 0 });
+        if (document.documentElement) document.documentElement.scrollLeft = 0;
+        if (document.body) document.body.scrollLeft = 0;
+      }, 120);
+
       return () => clearTimeout(timer);
     }
-  }, []);
+  }, [clickedDate]);
 
   // Drag and drop states for pointer/touch support
   const [draggingTxId, setDraggingTxIdState] = useState<string | null>(null);
@@ -213,7 +234,31 @@ export function CalendarPanel({
   };
 
   const handleGoToToday = () => {
-    setCurrentDate(new Date()); // Set to current local today
+    const today = new Date();
+    setCurrentDate(today);
+    
+    const yearStr = today.getFullYear();
+    const monthStr = String(today.getMonth() + 1).padStart(2, '0');
+    const dayStr = String(today.getDate()).padStart(2, '0');
+    const todayStr = `${yearStr}-${monthStr}-${dayStr}`;
+    setClickedDate(todayStr);
+
+    // Also trigger scroll after a short timeout to guarantee centering
+    setTimeout(() => {
+      const scrollContainer = document.getElementById('calendar-grid-scroll-container');
+      const cellElement = document.querySelector(`[data-date="${todayStr}"]`) as HTMLElement;
+      if (scrollContainer && cellElement) {
+        const cellLeft = cellElement.offsetLeft;
+        const cellWidth = cellElement.offsetWidth;
+        const containerWidth = scrollContainer.offsetWidth;
+        const targetScrollLeft = cellLeft - (containerWidth / 2) + (cellWidth / 2);
+        
+        scrollContainer.scrollTo({
+          left: Math.max(0, targetScrollLeft),
+          behavior: 'smooth'
+        });
+      }
+    }, 50);
   };
 
   // Calendar calculations (Monday start)
@@ -282,7 +327,7 @@ export function CalendarPanel({
             onClick={handleGoToToday}
             className="px-3 py-1.5 text-xs font-semibold bg-white/10 hover:bg-white/15 text-slate-200 border border-white/5 rounded-lg transition-colors cursor-pointer"
           >
-            Май 2026
+            Сегодня
           </button>
           
           <div className="flex items-center bg-slate-900/40 border border-white/10 rounded-xl p-1">
