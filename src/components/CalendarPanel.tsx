@@ -59,6 +59,11 @@ export function CalendarPanel({
   const dragXRef = useRef<number | null>(null);
   const dragYRef = useRef<number | null>(null);
 
+  // Long press timer refs for touch-to-drag delay support
+  const touchTimerRef = useRef<any>(null);
+  const touchStartPosRef = useRef<{ x: number; y: number } | null>(null);
+  const isTouchDraggingActiveRef = useRef<boolean>(false);
+
   React.useEffect(() => {
     if (!draggingTxId) {
       dragXRef.current = null;
@@ -139,11 +144,29 @@ export function CalendarPanel({
   }, [draggingTxId]);
 
   const handleTouchMove = (e: React.TouchEvent, txId: string) => {
+    const touch = e.touches[0];
+
+    // If dragging is not active yet, check if finger has drifted more than 10px from start
+    if (!isTouchDraggingActiveRef.current) {
+      if (touchStartPosRef.current) {
+        const dx = touch.clientX - touchStartPosRef.current.x;
+        const dy = touch.clientY - touchStartPosRef.current.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist > 10) {
+          // User is scrolling manually rather than long pressing — cancel the drag timer!
+          if (touchTimerRef.current) {
+            clearTimeout(touchTimerRef.current);
+            touchTimerRef.current = null;
+          }
+        }
+      }
+      return; // Do not call preventDefault or perform drag logic. Normal scrolling works!
+    }
+
     if (e.cancelable) {
       e.preventDefault();
     }
     dragMovedRef.current = true;
-    const touch = e.touches[0];
     dragXRef.current = touch.clientX;
     dragYRef.current = touch.clientY;
 
@@ -395,15 +418,35 @@ export function CalendarPanel({
                             setDraggedOverDate(null);
                           }}
                           onTouchStart={(e) => {
-                            setDraggingTxId(tx.id);
-                            dragMovedRef.current = false;
                             const touch = e.touches[0];
-                            dragXRef.current = touch.clientX;
-                            dragYRef.current = touch.clientY;
+                            touchStartPosRef.current = { x: touch.clientX, y: touch.clientY };
+                            isTouchDraggingActiveRef.current = false;
+                            dragMovedRef.current = false;
+
+                            if (touchTimerRef.current) {
+                              clearTimeout(touchTimerRef.current);
+                            }
+
+                            touchTimerRef.current = setTimeout(() => {
+                              isTouchDraggingActiveRef.current = true;
+                              setDraggingTxId(tx.id);
+                              dragXRef.current = touch.clientX;
+                              dragYRef.current = touch.clientY;
+                              if (typeof navigator !== 'undefined' && navigator.vibrate) {
+                                try {
+                                  navigator.vibrate(50);
+                                } catch (_) {}
+                              }
+                            }, 1000);
                           }}
                           onTouchMove={(e) => handleTouchMove(e, tx.id)}
                           onTouchEnd={() => {
-                            if (draggingTxId && draggedOverDate) {
+                            if (touchTimerRef.current) {
+                              clearTimeout(touchTimerRef.current);
+                              touchTimerRef.current = null;
+                            }
+
+                            if (isTouchDraggingActiveRef.current && draggingTxId && draggedOverDate) {
                               const txToMove = transactions.find(t => t.id === draggingTxId);
                               if (txToMove && txToMove.date !== draggedOverDate) {
                                 onUpdateTransaction({ ...txToMove, date: draggedOverDate });
@@ -413,9 +456,24 @@ export function CalendarPanel({
                             setDraggedOverDate(null);
                             dragXRef.current = null;
                             dragYRef.current = null;
+                            touchStartPosRef.current = null;
+                            isTouchDraggingActiveRef.current = false;
                             setTimeout(() => {
                               dragMovedRef.current = false;
                             }, 50);
+                          }}
+                          onTouchCancel={() => {
+                            if (touchTimerRef.current) {
+                              clearTimeout(touchTimerRef.current);
+                              touchTimerRef.current = null;
+                            }
+                            setDraggingTxId(null);
+                            setDraggedOverDate(null);
+                            dragXRef.current = null;
+                            dragYRef.current = null;
+                            touchStartPosRef.current = null;
+                            isTouchDraggingActiveRef.current = false;
+                            dragMovedRef.current = false;
                           }}
                           onClick={(e) => {
                             e.stopPropagation();
@@ -424,7 +482,10 @@ export function CalendarPanel({
                             }
                             onEditTransaction(tx);
                           }}
-                          className={`text-[10px] p-1 rounded-sm leading-tight transition-all cursor-pointer border truncate touch-none select-none ${
+                          style={{
+                            touchAction: draggingTxId === tx.id ? 'none' : 'pan-y'
+                          }}
+                          className={`text-[10px] p-1 rounded-sm leading-tight transition-all cursor-pointer border truncate select-none ${
                             draggingTxId === tx.id ? 'opacity-40 border-dashed border-teal-500 bg-teal-100/10' : ''
                           } ${
                             isIncome
