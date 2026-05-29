@@ -63,7 +63,8 @@ export async function findOrCreateSyncSpreadsheet(accessToken: string): Promise<
           { properties: { title: 'Accounts' } },
           { properties: { title: 'Categories' } },
           { properties: { title: 'Cards' } },
-          { properties: { title: 'Budgets' } }
+          { properties: { title: 'Budgets' } },
+          { properties: { title: 'Deletions' } }
         ]
       })
     });
@@ -87,7 +88,7 @@ export async function findOrCreateSyncSpreadsheet(accessToken: string): Promise<
     const metaData = await metaResponse.json();
     const existingTitles = new Set(metaData.sheets?.map((s: any) => s.properties?.title) || []);
     
-    const requiredSheets = ['Transactions', 'Accounts', 'Categories', 'Cards', 'Budgets'];
+    const requiredSheets = ['Transactions', 'Accounts', 'Categories', 'Cards', 'Budgets', 'Deletions'];
     const missingSheets = requiredSheets.filter(title => !existingTitles.has(title));
     
     if (missingSheets.length > 0) {
@@ -242,6 +243,7 @@ function mergeEntityList<T extends { updatedAt?: number }>(
   localList: T[],
   remoteList: T[],
   localDeletedIdsSet: Set<string>,
+  globalDeletedIdsSet: Set<string>,
   keyGetter: (item: T) => string,
   isContentEqual: (local: T, remote: T) => boolean
 ): {
@@ -288,8 +290,12 @@ function mergeEntityList<T extends { updatedAt?: number }>(
         }
       }
     } else {
-      // Exists locally but not in remote. Check if deleted locally
+      // Exists locally but not in remote. Check if deleted locally or globally
       if (localDeletedIdsSet.has(key)) {
+        continue;
+      }
+      if (globalDeletedIdsSet.has(key)) {
+        deletedFromLocal++;
         continue;
       }
       mergedMap.set(key, { ...localItem, updatedAt: localItem.updatedAt || Date.now() });
@@ -300,7 +306,7 @@ function mergeEntityList<T extends { updatedAt?: number }>(
   // Process remote items
   for (const remoteItem of remoteList) {
     const key = keyGetter(remoteItem);
-    if (localDeletedIdsSet.has(key)) {
+    if (localDeletedIdsSet.has(key) || globalDeletedIdsSet.has(key)) {
       deletedFromSheet++;
       continue;
     }
@@ -339,7 +345,8 @@ export async function syncWithGoogleSheets(
     'Accounts!A:G',
     'Categories!A:G',
     'Cards!A:E',
-    'Budgets!A:C'
+    'Budgets!A:C',
+    'Deletions!A:C'
   ];
   const rangesParams = ranges.map(r => `ranges=${encodeURIComponent(r)}`).join('&');
   const readUrl = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values:batchGet?${rangesParams}`;
@@ -362,12 +369,57 @@ export async function syncWithGoogleSheets(
   const catRows = valueRanges[2]?.values || [];
   const cardRows = valueRanges[3]?.values || [];
   const budgetRows = valueRanges[4]?.values || [];
+  const deletionRows = valueRanges[5]?.values || [];
 
   const remoteTransactions: Transaction[] = txRows.slice(1).map((r: any[]) => rowToTransaction(r)).filter((t: Transaction) => t.id);
   const remoteAccounts: Account[] = accRows.slice(1).map((r: any[]) => rowToAccount(r)).filter((a: Account) => a.id);
   const remoteCategories: Category[] = catRows.slice(1).map((r: any[]) => rowToCategory(r)).filter((c: Category) => c.id);
   const remoteCards: BankCard[] = cardRows.slice(1).map((r: any[]) => rowToCard(r)).filter((c: BankCard) => c.id);
   const remoteBudgets: BudgetLimit[] = budgetRows.slice(1).map((r: any[]) => rowToBudget(r)).filter((b: BudgetLimit) => b.categoryId);
+
+  const remoteDeletions = deletionRows.slice(1).map((r: any[]) => ({
+    id: String(r[0] || ''),
+    type: String(r[1] || ''),
+    deletedAt: Number(r[2] || 0)
+  })).filter(d => d.id && d.type);
+
+  // Initialize deletions tracker
+  const allDeletionsMap = new Map<string, { type: string; deletedAt: number }>();
+  
+  // 1. Populating from remote Deletions sheet
+  for (const del of remoteDeletions) {
+    allDeletionsMap.set(del.id, { type: del.type, deletedAt: del.deletedAt });
+  }
+
+  // 2. Add current device's deletions
+  const now = Date.now();
+  const mergeLocalDeletions = (ids: string[], type: string) => {
+    for (const id of ids) {
+      if (!allDeletionsMap.has(id)) {
+        allDeletionsMap.set(id, { type, deletedAt: now });
+      }
+    }
+  };
+  mergeLocalDeletions(deletedIds.transactions, 'transactions');
+  mergeLocalDeletions(deletedIds.accounts, 'accounts');
+  mergeLocalDeletions(deletedIds.categories, 'categories');
+  mergeLocalDeletions(deletedIds.cards, 'cards');
+  mergeLocalDeletions(deletedIds.budgets, 'budgets');
+
+  // 3. Partition deletions by entity type for easy set lookup
+  const globalDeletedTx = new Set<string>();
+  const globalDeletedAcc = new Set<string>();
+  const globalDeletedCat = new Set<string>();
+  const globalDeletedCard = new Set<string>();
+  const globalDeletedBudget = new Set<string>();
+
+  for (const [id, value] of allDeletionsMap.entries()) {
+    if (value.type === 'transactions') globalDeletedTx.add(id);
+    else if (value.type === 'accounts') globalDeletedAcc.add(id);
+    else if (value.type === 'categories') globalDeletedCat.add(id);
+    else if (value.type === 'cards') globalDeletedCard.add(id);
+    else if (value.type === 'budgets') globalDeletedBudget.add(id);
+  }
 
   // Initialize stats tracking
   const addedToSheet: Record<string, number> = {};
@@ -382,6 +434,7 @@ export async function syncWithGoogleSheets(
     localData.transactions || [],
     remoteTransactions,
     new Set(deletedIds.transactions),
+    globalDeletedTx,
     t => t.id,
     (l, r) => 
       l.amount === r.amount &&
@@ -410,6 +463,7 @@ export async function syncWithGoogleSheets(
     localData.accounts || [],
     remoteAccounts,
     new Set(deletedIds.accounts),
+    globalDeletedAcc,
     a => a.id,
     (l, r) => 
       l.name === r.name &&
@@ -430,6 +484,7 @@ export async function syncWithGoogleSheets(
     localData.categories || [],
     remoteCategories,
     new Set(deletedIds.categories),
+    globalDeletedCat,
     c => c.id,
     (l, r) => 
       l.name === r.name &&
@@ -450,6 +505,7 @@ export async function syncWithGoogleSheets(
     localData.cards || [],
     remoteCards,
     new Set(deletedIds.cards),
+    globalDeletedCard,
     c => c.id,
     (l, r) => 
       l.name === r.name &&
@@ -468,6 +524,7 @@ export async function syncWithGoogleSheets(
     localData.budgets || [],
     remoteBudgets,
     new Set(deletedIds.budgets),
+    globalDeletedBudget,
     b => b.categoryId,
     (l, r) => l.limitAmount === r.limitAmount
   );
@@ -477,6 +534,13 @@ export async function syncWithGoogleSheets(
   updatedOnLocal.budgets = budgetSync.updatedOnLocal;
   deletedFromSheet.budgets = budgetSync.deletedFromSheet;
   deletedFromLocal.budgets = budgetSync.deletedFromLocal;
+
+  // Keep the latest 5000 deletions to avoid growing the spreadsheet infinitely
+  const sortedDeletions = Array.from(allDeletionsMap.entries()).map(([id, d]) => ({
+    id,
+    type: d.type,
+    deletedAt: d.deletedAt
+  })).sort((a, b) => b.deletedAt - a.deletedAt).slice(0, 5000);
 
   // 4. Clear sheets via batchClear
   const clearResponse = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values:batchClear`, {
@@ -491,7 +555,8 @@ export async function syncWithGoogleSheets(
         'Accounts!A2:G10000',
         'Categories!A2:G10000',
         'Cards!A2:E10000',
-        'Budgets!A2:C10000'
+        'Budgets!A2:C10000',
+        'Deletions!A2:C10000'
       ]
     })
   });
@@ -534,6 +599,13 @@ export async function syncWithGoogleSheets(
       values: [
         ["categoryId", "limitAmount", "updatedAt"],
         ...budgetSync.merged.map(b => budgetToRow(b))
+      ]
+    },
+    {
+      range: `Deletions!A1:C${sortedDeletions.length + 1}`,
+      values: [
+        ["id", "type", "deletedAt"],
+        ...sortedDeletions.map(d => [d.id, d.type, d.deletedAt])
       ]
     }
   ];
