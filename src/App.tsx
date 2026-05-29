@@ -93,18 +93,133 @@ export default function App() {
     }
   }, [currentUser]);
 
+  const isSyncingRef = useRef<boolean>(false);
+  const hasUnsavedSyncChangesRef = useRef<boolean>(false);
+
   // Sync state to LocalStorage for offline capability and local testing
   useEffect(() => {
     localStorage.setItem('milli_finance_data_v8_realonly_clean', JSON.stringify(data));
+    
+    // Any change to data that is not from active sync triggers unsaved status
+    if (!isSyncingRef.current) {
+      hasUnsavedSyncChangesRef.current = true;
+    }
   }, [data]);
 
+  // Restore persistent Google Sheets OAuth session & onAuthStateChanged listener on mount
   useEffect(() => {
-    // Synchronization is disabled; everything is kept in local storage.
-    setCurrentUser(null);
-    setGAccessToken(null);
-    setNeedsAuth(true);
-    setIsAuthLoading(false);
+    const unsub = initAuth(
+      (user, token) => {
+        setCurrentUser(user);
+        const cachedToken = token || localStorage.getItem('milli_g_access_token');
+        if (cachedToken) {
+          setGAccessToken(cachedToken);
+          setNeedsAuth(false);
+        }
+        setIsAuthLoading(false);
+      },
+      () => {
+        setCurrentUser(null);
+        setGAccessToken(null);
+        setNeedsAuth(true);
+        setIsAuthLoading(false);
+      }
+    );
+    return () => unsub();
   }, []);
+
+  // Background Auto-sync on active updates (debounced with 5s of inactivity to prevent query thrashing)
+  useEffect(() => {
+    if (!gAccessToken) return;
+
+    const timer = setTimeout(async () => {
+      // If there are no local unsaved changes, we do not need to trigger background sync
+      if (!hasUnsavedSyncChangesRef.current) return;
+
+      console.log('Debounced background auto-sync to Google Sheets is running...');
+      isSyncingRef.current = true;
+
+      let deletedIds: string[] = [];
+      try {
+        const saved = localStorage.getItem('milli_deleted_tx_ids');
+        if (saved) deletedIds = JSON.parse(saved);
+      } catch {}
+
+      import('./googleSheetsSyncService').then(async ({ syncWithGoogleSheets }) => {
+        try {
+          const result = await syncWithGoogleSheets(gAccessToken, data.transactions, deletedIds);
+          
+          hasUnsavedSyncChangesRef.current = false;
+
+          // If there were modifications in Google Sheets that we merged back:
+          if (result.addedToLocal > 0 || result.updatedOnLocal > 0 || result.deletedFromLocal > 0) {
+            setData(prev => ({
+              ...prev,
+              transactions: result.mergedTransactions
+            }));
+          }
+          
+          localStorage.removeItem('milli_deleted_tx_ids');
+          const nowStr = new Date().toLocaleString('ru-RU');
+          localStorage.setItem('milli_last_sync_time', nowStr);
+          localStorage.setItem('milli_last_sync_result', JSON.stringify(result));
+          
+          addToast('Данные автоматически сохранены в Google Таблицу ☁️✨', 'success');
+        } catch (err) {
+          console.error('Background auto-sync failed:', err);
+        } finally {
+          isSyncingRef.current = false;
+        }
+      });
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, [data.transactions, gAccessToken]);
+
+  // Reliable Auto-sync on exiting page, losing focus, or switching tabs
+  useEffect(() => {
+    const handleExitSync = () => {
+      if (!gAccessToken || !hasUnsavedSyncChangesRef.current) return;
+
+      console.log('Page is being hidden/unloaded. Saving pending changes to Google Sheets instantly...');
+      
+      let deletedIds: string[] = [];
+      try {
+        const saved = localStorage.getItem('milli_deleted_tx_ids');
+        if (saved) deletedIds = JSON.parse(saved);
+      } catch {}
+
+      import('./googleSheetsSyncService').then(async ({ syncWithGoogleSheets }) => {
+        try {
+          isSyncingRef.current = true;
+          const result = await syncWithGoogleSheets(gAccessToken, dataRef.current.transactions, deletedIds);
+          hasUnsavedSyncChangesRef.current = false;
+          localStorage.removeItem('milli_deleted_tx_ids');
+          const nowStr = new Date().toLocaleString('ru-RU');
+          localStorage.setItem('milli_last_sync_time', nowStr);
+          localStorage.setItem('milli_last_sync_result', JSON.stringify(result));
+        } catch (err) {
+          console.error('Quiet exit auto-sync failed:', err);
+        } finally {
+          isSyncingRef.current = false;
+        }
+      });
+    };
+
+    const onVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        handleExitSync();
+      }
+    };
+
+    document.addEventListener('visibilitychange', onVisibilityChange);
+    window.addEventListener('pagehide', handleExitSync);
+
+    return () => {
+      document.removeEventListener('visibilitychange', onVisibilityChange);
+      window.removeEventListener('pagehide', handleExitSync);
+    };
+  }, [gAccessToken]);
 
   const handleGoogleLogin = async () => {
     try {
@@ -115,7 +230,8 @@ export default function App() {
         setCurrentUser(result.user);
         setGAccessToken(result.accessToken);
         setNeedsAuth(false);
-        addToast("Вход выполнен успешно! Данные сохранены в Firebase.", "success" as any);
+        localStorage.setItem('milli_g_access_token', result.accessToken);
+        addToast("Вход выполнен успешно!", "success" as any);
       }
     } catch (err: any) {
       console.error('Ошибка входа через Google:', err);
@@ -144,6 +260,8 @@ export default function App() {
     setCurrentUser(null);
     setGAccessToken(null);
     setNeedsAuth(true);
+    localStorage.removeItem('milli_g_access_token');
+    addToast("Вы вышли из аккаунта Google", "success");
   };
 
   // 4. Toast Alerts state & Budgeting Boundary Trigger
