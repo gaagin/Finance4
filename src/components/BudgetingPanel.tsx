@@ -150,7 +150,7 @@ export function BudgetingPanel({
               </button>
             </div>
           ) : (
-            <div className="space-y-6 max-h-[380px] overflow-y-auto pr-1 custom-scrollbar">
+            <div className="space-y-6 max-h-[380px] lg:max-h-[720px] overflow-y-auto pr-1 custom-scrollbar">
               {budgets.map(b => {
                 const cat = categories.find(c => c.id === b.categoryId);
                 if (!cat) return null;

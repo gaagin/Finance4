@@ -418,7 +418,7 @@ export function AccountsCategoriesPanel({
           </button>
 
           {/* Account list rendering */}
-          <div className="max-h-[360px] overflow-y-auto pr-1 custom-scrollbar">
+          <div className="max-h-[360px] lg:max-h-[620px] overflow-y-auto pr-1 custom-scrollbar">
             <div className="border border-slate-200 dark:border-white/10 rounded-2xl overflow-hidden bg-white dark:bg-slate-900/40 divide-y divide-slate-100 dark:divide-white/5 shadow-xs">
               {accounts.map(acc => {
                 const totalUsed = acc.balance;
@@ -598,7 +598,7 @@ export function AccountsCategoriesPanel({
           </button>
 
           {/* List categorized by Active selection */}
-          <div className="max-h-[320px] overflow-y-auto pr-1 custom-scrollbar">
+          <div className="max-h-[320px] lg:max-h-[580px] overflow-y-auto pr-1 custom-scrollbar">
             <div className="border border-slate-200 dark:border-white/10 rounded-2xl overflow-hidden bg-white dark:bg-slate-900/40 divide-y divide-slate-100 dark:divide-white/5 shadow-xs">
               {(() => {
                 const { topLevel, subCatsMap } = getGroupedCategories();

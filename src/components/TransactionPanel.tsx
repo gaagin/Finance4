@@ -799,7 +799,7 @@ export function TransactionPanel({
               </p>
             </div>
           ) : (
-            <div className="space-y-1 max-h-[580px] overflow-y-auto pr-1 custom-scrollbar">
+            <div className="space-y-1 max-h-[580px] lg:max-h-[780px] overflow-y-auto pr-1 custom-scrollbar">
               
               {/* Column headings for desktop */}
               <div className="hidden md:grid grid-cols-12 gap-2 px-3 py-1 text-[9px] uppercase font-bold text-slate-400 tracking-wider">

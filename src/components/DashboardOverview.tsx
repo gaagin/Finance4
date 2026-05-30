@@ -106,6 +106,7 @@ export function DashboardOverview({
   const [showSubcategories, setShowSubcategories] = useState(false);
   const [categoryGroupingMode, setCategoryGroupingMode] = useState<'parent' | 'sub'>('sub');
   const [selectedCategoryTransactions, setSelectedCategoryTransactions] = useState<{ category: Category; type: 'expense' | 'income' } | null>(null);
+  const [accountsSortMode, setAccountsSortMode] = useState<'desc' | 'custom'>('desc');
 
   // Sorting Accounts via hold-drag-and-drop
   const [draggedAccountId, setDraggedAccountId] = useState<string | null>(null);
@@ -196,6 +197,9 @@ export function DashboardOverview({
       targetIndex = Math.max(0, Math.min(listLength - 1, targetIndex));
 
       if (targetIndex !== draggedInitialIndex && listLength > 0) {
+        if (accountsSortMode !== 'custom') {
+          setAccountsSortMode('custom');
+        }
         const finalIds = [...draggingListIds];
         const [movedId] = finalIds.splice(draggedInitialIndex, 1);
         finalIds.splice(targetIndex, 0, movedId);
@@ -1241,8 +1245,8 @@ export function DashboardOverview({
                   {categoryBreakdown.list.length === 0 ? (
                     <p className="text-xs text-slate-500 italic py-4">Нет данных по расходам за период</p>
                   ) : (
-                    <div className="space-y-3 max-h-[200px] overflow-y-auto pr-1 select-none custom-scrollbar">
-                      {categoryBreakdown.list.slice(0, showSubcategories ? 15 : 6).map((item, idx) => {
+                    <div className="space-y-3 max-h-[200px] lg:max-h-[480px] overflow-y-auto pr-1 select-none custom-scrollbar">
+                      {categoryBreakdown.list.slice(0, showSubcategories ? 25 : 12).map((item, idx) => {
                         const barWidth = item.percentage;
                         return (
                           <div 
@@ -1294,8 +1298,8 @@ export function DashboardOverview({
                   {incomeCategoryBreakdown.list.length === 0 ? (
                     <p className="text-xs text-slate-500 italic py-4">Нет данных по доходам за период</p>
                   ) : (
-                    <div className="space-y-3 max-h-[200px] overflow-y-auto pr-1 select-none custom-scrollbar">
-                      {incomeCategoryBreakdown.list.slice(0, 6).map((item, idx) => {
+                    <div className="space-y-3 max-h-[200px] lg:max-h-[480px] overflow-y-auto pr-1 select-none custom-scrollbar">
+                      {incomeCategoryBreakdown.list.slice(0, 12).map((item, idx) => {
                         const barWidth = item.percentage;
                         return (
                           <div 
@@ -1340,12 +1344,26 @@ export function DashboardOverview({
                       </span>
                     </div>
 
-                    <button
-                      onClick={() => onQuickNavigate('categories')}
-                      className="text-[9px] font-bold bg-white/5 hover:bg-white/10 text-teal-300 hover:text-white px-2 py-1 rounded-lg transition-colors cursor-pointer uppercase tracking-wider"
-                    >
-                      [+] Настроить
-                    </button>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <button
+                        onClick={() => setAccountsSortMode(prev => prev === 'desc' ? 'custom' : 'desc')}
+                        className={`text-[9px] font-bold px-2 py-1 rounded-lg transition-colors cursor-pointer uppercase tracking-wider flex items-center gap-1 ${
+                          accountsSortMode === 'desc'
+                            ? 'bg-teal-400 text-slate-950 font-black'
+                            : 'bg-white/5 hover:bg-white/10 text-teal-300 hover:text-white'
+                        }`}
+                        title={accountsSortMode === 'desc' ? 'Сортировка по балансу (от большего к меньшему)' : 'Своя ручная сортировка'}
+                      >
+                        {accountsSortMode === 'desc' ? '↓ По балансу' : '⇅ Своя'}
+                      </button>
+
+                      <button
+                        onClick={() => onQuickNavigate('accounts-categories')}
+                        className="text-[9px] font-bold bg-white/5 hover:bg-white/10 text-teal-300 hover:text-white px-2 py-1 rounded-lg transition-colors cursor-pointer uppercase tracking-wider"
+                      >
+                        [+] Настроить
+                      </button>
+                    </div>
                   </div>
 
                   {/* Dynamic Sums Calculations */}
@@ -1354,13 +1372,19 @@ export function DashboardOverview({
                     const kopilkaName = 'Копилка';
                     const savingsAccountsList = ['Акции ABB', 'Digihesab Samira', 'Зарубежные акции', 'Облигации ABB', 'Digideposit Samira', 'Депозит-Подушка безопасности', 'ABB kredit kart', 'TamKart Virtual', 'Страхование жизни', 'Цифровая карта', 'YapiKrediBank kredit', 'DigiHesab 2 Ilqar'];
 
-                    const ordinaryAccs = visibleAccounts.filter(a => ordinaryAccountsList.includes(a.name) && a.name !== kopilkaName);
+                    const ordinaryAccsFiltered = visibleAccounts.filter(a => ordinaryAccountsList.includes(a.name) && a.name !== kopilkaName);
+                    const ordinaryAccs = accountsSortMode === 'desc'
+                      ? [...ordinaryAccsFiltered].sort((a, b) => b.balance - a.balance)
+                      : ordinaryAccsFiltered;
                     const ordinarySumVal = ordinaryAccs.reduce((sum, a) => sum + a.balance, 0);
 
                     const kopilkaAcc = visibleAccounts.find(a => a.name === kopilkaName);
                     const kopilkaBalVal = kopilkaAcc ? kopilkaAcc.balance : 0;
 
-                    const savingsAccs = visibleAccounts.filter(a => savingsAccountsList.includes(a.name) || (a.type === 'savings' && a.name !== kopilkaName));
+                    const savingsAccsFiltered = visibleAccounts.filter(a => savingsAccountsList.includes(a.name) || (a.type === 'savings' && a.name !== kopilkaName));
+                    const savingsAccs = accountsSortMode === 'desc'
+                      ? [...savingsAccsFiltered].sort((a, b) => b.balance - a.balance)
+                      : savingsAccsFiltered;
                     const savingsSumVal = savingsAccs.reduce((sum, a) => sum + a.balance, 0);
 
                     // Reorder lists reactively if actively sorting
@@ -1393,7 +1417,7 @@ export function DashboardOverview({
 
                           {/* List items */}
                           {isOrdinaryGroupExpanded && (
-                            <div className="mt-1 space-y-1 pl-2 animate-fade-in max-h-[220px] overflow-y-auto pr-1">
+                            <div className="mt-1 space-y-1 pl-2 animate-fade-in max-h-[220px] lg:max-h-[450px] overflow-y-auto pr-1">
                               {ordinaryAccs.map((acc, index) => {
                                 const isDraggingThis = acc.id === draggedAccountId;
                                 const isDraggingGroup = draggedAccountId && dragGroupType === 'ordinary';
@@ -1449,7 +1473,7 @@ export function DashboardOverview({
                                       <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 pr-1 shrink-0 pointer-events-auto">
                                         <button 
                                           onPointerDown={(e) => e.stopPropagation()}
-                                          onClick={() => onQuickNavigate('categories')} 
+                                          onClick={() => onQuickNavigate('accounts-categories')} 
                                           className="text-[10px] hover:text-white text-slate-500 cursor-pointer" 
                                           title="Редактировать"
                                         >
@@ -1508,7 +1532,7 @@ export function DashboardOverview({
 
                           {/* List items */}
                           {isSavingsGroupExpanded && (
-                            <div className="mt-1 space-y-1 pl-2 animate-fade-in max-h-[220px] overflow-y-auto pr-1">
+                            <div className="mt-1 space-y-1 pl-2 animate-fade-in max-h-[220px] lg:max-h-[450px] overflow-y-auto pr-1">
                               {savingsAccs.map((acc, index) => {
                                 const isDraggingThis = acc.id === draggedAccountId;
                                 const isDraggingGroup = draggedAccountId && dragGroupType === 'savings';
@@ -1564,7 +1588,7 @@ export function DashboardOverview({
                                       <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 pr-1 shrink-0 pointer-events-auto">
                                         <button 
                                           onPointerDown={(e) => e.stopPropagation()}
-                                          onClick={() => onQuickNavigate('categories')} 
+                                          onClick={() => onQuickNavigate('accounts-categories')} 
                                           className="text-[10px] hover:text-white text-slate-500 cursor-pointer" 
                                           title="Редактировать"
                                         >

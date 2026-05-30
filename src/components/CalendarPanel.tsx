@@ -3,6 +3,7 @@ import { Transaction, Category, Account } from '../types';
 import { IconComponent } from './IconComponent';
 import { ChevronLeft, ChevronRight, Plus, Calendar as CalendarIcon, Info } from 'lucide-react';
 import { AddTransactionModal } from './AddTransactionModal';
+import { SearchableSelect } from './SearchableSelect';
 
 interface CalendarPanelProps {
   transactions: Transaction[];
@@ -50,6 +51,15 @@ export function CalendarPanel({
 }: CalendarPanelProps) {
   const [selectedDayData, setSelectedDayData] = useState<{ date: string; txs: Transaction[] } | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [filterCategoryId, setFilterCategoryId] = useState<string>('all');
+
+  // Filter transactions by category if a category is selected
+  const filteredTransactions = React.useMemo(() => {
+    if (filterCategoryId === 'all') {
+      return transactions;
+    }
+    return transactions.filter(t => t.categoryId === filterCategoryId);
+  }, [transactions, filterCategoryId]);
 
   // Smooth scroll to the currently focused/clicked date cell on mount to restore focus without displacing the main viewport
   React.useEffect(() => {
@@ -303,9 +313,9 @@ export function CalendarPanel({
     });
   }
 
-  // Group transactions by date
+  // Group transactions by date using the active category filter
   const getTransactionsForDate = (dateStr: string) => {
-    return transactions.filter(t => t.date === dateStr);
+    return filteredTransactions.filter(t => t.date === dateStr);
   };
 
   return (
@@ -322,10 +332,43 @@ export function CalendarPanel({
           </div>
         </div>
 
-        <div className="flex items-center justify-between sm:justify-end gap-2">
+        <div className="flex flex-wrap items-center justify-between sm:justify-end gap-2 shrink-0">
+          {/* Category Filter */}
+          <div className="flex items-center gap-1.5 bg-slate-900/30 border border-white/5 pl-2.5 pr-1.5 py-1 rounded-xl">
+            <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Фильтр:</span>
+            <SearchableSelect
+              items={[{ id: 'all', name: 'Все категории', type: 'expense', icon: 'Tag', color: '#94a3b8' }, ...categories]}
+              value={filterCategoryId}
+              onChange={(id) => setFilterCategoryId(id)}
+              placeholder="Все категории"
+              searchPlaceholder="Поиск категории..."
+              idKey="id"
+              className="min-w-[155px] sm:min-w-[175px]"
+              compact={true}
+              theme="dark"
+              displayValue={(cat) => cat.id === 'all' ? 'Все категории' : cat.name}
+              filterValue={(cat) => cat.name}
+              renderItem={(cat) => (
+                <div className="flex items-center gap-2 text-xs w-full py-0.5">
+                  <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: cat.color }} />
+                  <span className="font-semibold text-white/90">{cat.name}</span>
+                  <span className={`text-[8px] uppercase tracking-wider ml-auto shrink-0 font-extrabold px-1.5 py-0.5 rounded-md ${
+                    cat.id === 'all'
+                      ? 'bg-slate-500/10 text-slate-400'
+                      : cat.type === 'income'
+                      ? 'bg-emerald-500/10 text-emerald-400'
+                      : 'bg-rose-500/10 text-rose-400'
+                  }`}>
+                    {cat.id === 'all' ? 'Все' : cat.type === 'income' ? 'Доход' : 'Расход'}
+                  </span>
+                </div>
+              )}
+            />
+          </div>
+
           <button
             onClick={handleGoToToday}
-            className="px-3 py-1.5 text-xs font-semibold bg-white/10 hover:bg-white/15 text-slate-200 border border-white/5 rounded-lg transition-colors cursor-pointer"
+            className="px-3 py-1.5 text-xs font-semibold bg-white/10 hover:bg-white/15 text-slate-200 border border-white/5 rounded-lg transition-colors cursor-pointer inline-flex items-center"
           >
             Сегодня
           </button>
