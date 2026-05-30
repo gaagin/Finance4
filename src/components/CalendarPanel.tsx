@@ -53,7 +53,12 @@ export function CalendarPanel({
 }: CalendarPanelProps) {
   const [selectedDayData, setSelectedDayData] = useState<{ date: string; txs: Transaction[] } | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [filterCategoryId, setFilterCategoryId] = useState<string>('all');
+  const [filterCategoryId, setFilterCategoryId] = useState<string>(() => localStorage.getItem('milli_calendar_filter_category_id') || 'all');
+
+  // Sync category filter to localStorage
+  React.useEffect(() => {
+    localStorage.setItem('milli_calendar_filter_category_id', filterCategoryId);
+  }, [filterCategoryId]);
 
   // Filter transactions by category if a category is selected
   const filteredTransactions = React.useMemo(() => {

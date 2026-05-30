@@ -252,14 +252,46 @@ export function TransactionPanel({
   };
 
   // Advanced Filters State
-  const [filterSearch, setFilterSearch] = useState('');
-  const [filterType, setFilterType] = useState<'all' | 'expense' | 'income' | 'transfer'>('all');
-  const [filterAccount, setFilterAccount] = useState('all');
-  const [filterCategory, setFilterCategory] = useState('all');
-  const [filterDateRange, setFilterDateRange] = useState<'all' | 'may' | 'april' | '2026' | '2025' | '2024' | '2023' | '2022' | 'custom'>('may');
-  const [customStartDate, setCustomStartDate] = useState('2026-05-01');
-  const [customEndDate, setCustomEndDate] = useState('2026-05-31');
-  const [isFiltersExpanded, setIsFiltersExpanded] = useState(false);
+  const [filterSearch, setFilterSearch] = useState(() => localStorage.getItem('milli_filter_search') || '');
+  const [filterType, setFilterType] = useState<'all' | 'expense' | 'income' | 'transfer'>(() => (localStorage.getItem('milli_filter_type') as any) || 'all');
+  const [filterAccount, setFilterAccount] = useState(() => localStorage.getItem('milli_filter_account') || 'all');
+  const [filterCategory, setFilterCategory] = useState(() => localStorage.getItem('milli_filter_category') || 'all');
+  const [filterDateRange, setFilterDateRange] = useState<'all' | 'may' | 'april' | '2026' | '2025' | '2024' | '2023' | '2022' | 'custom'>(() => (localStorage.getItem('milli_filter_date_range') as any) || 'may');
+  const [customStartDate, setCustomStartDate] = useState(() => localStorage.getItem('milli_filter_custom_start_date') || '2026-05-01');
+  const [customEndDate, setCustomEndDate] = useState(() => localStorage.getItem('milli_filter_custom_end_date') || '2026-05-31');
+  const [isFiltersExpanded, setIsFiltersExpanded] = useState(() => localStorage.getItem('milli_filters_expanded') === 'true');
+
+  useEffect(() => {
+    localStorage.setItem('milli_filter_search', filterSearch);
+  }, [filterSearch]);
+
+  useEffect(() => {
+    localStorage.setItem('milli_filter_type', filterType);
+  }, [filterType]);
+
+  useEffect(() => {
+    localStorage.setItem('milli_filter_account', filterAccount);
+  }, [filterAccount]);
+
+  useEffect(() => {
+    localStorage.setItem('milli_filter_category', filterCategory);
+  }, [filterCategory]);
+
+  useEffect(() => {
+    localStorage.setItem('milli_filter_date_range', filterDateRange);
+  }, [filterDateRange]);
+
+  useEffect(() => {
+    localStorage.setItem('milli_filter_custom_start_date', customStartDate);
+  }, [customStartDate]);
+
+  useEffect(() => {
+    localStorage.setItem('milli_filter_custom_end_date', customEndDate);
+  }, [customEndDate]);
+
+  useEffect(() => {
+    localStorage.setItem('milli_filters_expanded', String(isFiltersExpanded));
+  }, [isFiltersExpanded]);
 
   // Count active filters (ignoring search text)
   const activeFiltersCount = useMemo(() => {
@@ -272,8 +304,16 @@ export function TransactionPanel({
   }, [filterType, filterAccount, filterCategory, filterDateRange]);
 
   // Sorting
-  const [sortField, setSortField] = useState<'date' | 'amount'>('date');
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+  const [sortField, setSortField] = useState<'date' | 'amount'>(() => (localStorage.getItem('milli_filter_sort_field') as any) || 'date');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>(() => (localStorage.getItem('milli_filter_sort_order') as any) || 'desc');
+
+  useEffect(() => {
+    localStorage.setItem('milli_filter_sort_field', sortField);
+  }, [sortField]);
+
+  useEffect(() => {
+    localStorage.setItem('milli_filter_sort_order', sortOrder);
+  }, [sortOrder]);
 
   const toggleSort = (field: 'date' | 'amount') => {
     if (sortField === field) {
