@@ -377,7 +377,23 @@ export function GoogleSheetsSyncPanel({
           {lastResult.spreadsheetUrl && (
             <div className="pt-2 flex justify-start border-t border-slate-800/30">
               <a
-                href={lastResult.spreadsheetUrl}
+                href={(() => {
+                  let href = lastResult.spreadsheetUrl;
+                  if (currentUser?.email) {
+                    try {
+                      const urlObj = new URL(href);
+                      urlObj.searchParams.set('authuser', currentUser.email);
+                      href = urlObj.toString();
+                    } catch (e) {
+                      if (href.includes('?')) {
+                        href += `&authuser=${encodeURIComponent(currentUser.email)}`;
+                      } else {
+                        href += `?authuser=${encodeURIComponent(currentUser.email)}`;
+                      }
+                    }
+                  }
+                  return href;
+                })()}
                 target="_blank"
                 rel="no-referrer noreferrer"
                 className="text-[11px] font-black text-teal-400 hover:text-teal-300 hover:underline flex items-center gap-1.5 transition-colors font-sans hover:scale-[1.01]"
