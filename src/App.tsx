@@ -81,6 +81,11 @@ export default function App() {
   const [firebaseSyncError, setFirebaseSyncError] = useState<string | null>(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
 
+  // Connection and syncing progress indicators
+  const [isGoogleSyncing, setIsGoogleSyncing] = useState(false);
+  const [isInitialSyncing, setIsInitialSyncing] = useState(false);
+  const doneInitialSyncRef = useRef(false);
+
   // Subscribe to Firebase Firestore user document for real-time synchronization between multiple devices (Temporarily disabled as requested)
   useEffect(() => {
     if (currentUser) {
@@ -109,6 +114,85 @@ export default function App() {
     const expiryTime = parseInt(expiryStr, 10);
     return Date.now() > expiryTime;
   };
+
+  // 2. Initial bidirectional sync on app startup or when Google connection gets established
+  useEffect(() => {
+    if (!gAccessToken) {
+      doneInitialSyncRef.current = false;
+      return;
+    }
+    if (isGoogleTokenExpired()) return;
+    if (doneInitialSyncRef.current) return;
+
+    doneInitialSyncRef.current = true;
+    setIsInitialSyncing(true);
+
+    const runInitialPull = async () => {
+      console.log('Running startup/auth-change Google Sheets synchronization...');
+      
+      const deletedIds = {
+        transactions: [] as string[],
+        accounts: [] as string[],
+        categories: [] as string[],
+        cards: [] as string[],
+        budgets: [] as string[]
+      };
+
+      try {
+        const txSaved = localStorage.getItem('milli_deleted_tx_ids');
+        if (txSaved) deletedIds.transactions = JSON.parse(txSaved);
+
+        const accSaved = localStorage.getItem('milli_deleted_account_ids');
+        if (accSaved) deletedIds.accounts = JSON.parse(accSaved);
+
+        const catSaved = localStorage.getItem('milli_deleted_category_ids');
+        if (catSaved) deletedIds.categories = JSON.parse(catSaved);
+
+        const cardSaved = localStorage.getItem('milli_deleted_card_ids');
+        if (cardSaved) deletedIds.cards = JSON.parse(cardSaved);
+
+        const bSaved = localStorage.getItem('milli_deleted_budget_ids');
+        if (bSaved) deletedIds.budgets = JSON.parse(bSaved);
+      } catch {}
+
+      try {
+        const { syncWithGoogleSheets } = await import('./googleSheetsSyncService');
+        const result = await syncWithGoogleSheets(gAccessToken, dataRef.current, deletedIds);
+        
+        // Push merged remote data to local react state
+        setData(result.mergedData);
+        hasUnsavedSyncChangesRef.current = false;
+        
+        localStorage.removeItem('milli_deleted_tx_ids');
+        localStorage.removeItem('milli_deleted_account_ids');
+        localStorage.removeItem('milli_deleted_category_ids');
+        localStorage.removeItem('milli_deleted_card_ids');
+        localStorage.removeItem('milli_deleted_budget_ids');
+
+        const nowStr = new Date().toLocaleString('ru-RU');
+        localStorage.setItem('milli_last_sync_time', nowStr);
+        localStorage.setItem('milli_last_sync_result', JSON.stringify(result));
+        
+        addToast('Данные успешно синхронизированы с Google Таблицей! ☁️🔄', 'success');
+      } catch (err: any) {
+        console.error('Initial auto-sync failed:', err);
+        const errMsg = err?.message || '';
+        const isAuthErr = err.isAuthError || 
+          errMsg.includes('401') || 
+          errMsg.includes('invalid authentication credentials') || 
+          errMsg.toLowerCase().includes('credential') || 
+          errMsg.toLowerCase().includes('auth') || 
+          errMsg.toLowerCase().includes('token');
+        if (isAuthErr) {
+          handleGoogleSessionExpired(true);
+        }
+      } finally {
+        setIsInitialSyncing(false);
+      }
+    };
+
+    runInitialPull();
+  }, [gAccessToken]);
 
   // Restore persistent Google Sheets OAuth session & onAuthStateChanged listener on mount
   useEffect(() => {
@@ -160,6 +244,7 @@ export default function App() {
 
       console.log('Debounced background auto-sync to Google Sheets is running...');
       isSyncingRef.current = true;
+      setIsGoogleSyncing(true);
 
       const deletedIds = {
         transactions: [] as string[],
@@ -228,6 +313,7 @@ export default function App() {
           }
         } finally {
           isSyncingRef.current = false;
+          setIsGoogleSyncing(false);
         }
       });
     }, 5000);
@@ -1098,6 +1184,43 @@ export default function App() {
                 }`} title="Все ваши данные хранятся конфиденциально и безопасно на вашем устройстве">
                   🔒 Локально
                 </span>
+                {gAccessToken && !isGoogleTokenExpired() ? (
+                  isGoogleSyncing || isInitialSyncing ? (
+                    <span 
+                      className={`flex items-center gap-1 px-1 py-0.2 rounded text-[7px] font-bold border animate-pulse ${
+                        theme === 'dark'
+                          ? 'bg-amber-500/15 text-amber-300 border-amber-500/10'
+                          : 'bg-amber-50 text-amber-700 border-amber-200'
+                      }`}
+                      title="Выполняется фоновое сохранение или загрузка данных из Google Sheets"
+                    >
+                      <RefreshCw size={7} className="animate-spin" />
+                      Синхронизация...
+                    </span>
+                  ) : (
+                    <span 
+                      className={`flex items-center gap-1 px-1 py-0.2 rounded text-[7px] font-bold border ${
+                        theme === 'dark'
+                          ? 'bg-teal-500/15 text-teal-300 border-teal-500/5'
+                          : 'bg-teal-50 text-teal-700 border-teal-200'
+                      }`}
+                      title="Ваша сессия Google Sheets активна, изменения сохраняются автоматически"
+                    >
+                      ☁️ Синхронизировано
+                    </span>
+                  )
+                ) : (
+                  <span 
+                    className={`flex items-center gap-1 px-1 py-0.2 rounded text-[7px] font-bold border ${
+                      theme === 'dark'
+                        ? 'bg-slate-500/15 text-slate-400 border-white/5'
+                        : 'bg-slate-100 text-slate-500 border-slate-200'
+                    }`}
+                    title="Вы не авторизованы в Google Sheets. Изменения сохраняются на этом телефоне"
+                  >
+                    ☁️ Без облака
+                  </span>
+                )}
               </div>
             </div>
             <p className={`text-[9px] sm:text-[10px] mt-0.5 truncate leading-none ${
