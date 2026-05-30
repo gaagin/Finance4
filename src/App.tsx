@@ -21,6 +21,23 @@ export default function App() {
       try {
         const parsed = JSON.parse(saved);
         if (parsed && Array.isArray(parsed.transactions) && parsed.transactions.length > 0) {
+          // Safeguard: make sure no NaN or null amounts exist in loaded state
+          parsed.transactions = parsed.transactions.map((t: any) => ({
+            ...t,
+            amount: typeof t.amount === 'number' && !isNaN(t.amount) ? t.amount : (parseFloat(t.amount) || 0)
+          }));
+          if (Array.isArray(parsed.accounts)) {
+            parsed.accounts = parsed.accounts.map((a: any) => ({
+              ...a,
+              balance: typeof a.balance === 'number' && !isNaN(a.balance) ? a.balance : (parseFloat(a.balance) || 0)
+            }));
+          }
+          if (Array.isArray(parsed.budgets)) {
+            parsed.budgets = parsed.budgets.map((b: any) => ({
+              ...b,
+              limitAmount: typeof b.limitAmount === 'number' && !isNaN(b.limitAmount) ? b.limitAmount : (parseFloat(b.limitAmount) || 0)
+            }));
+          }
           return parsed;
         }
       } catch (e) {

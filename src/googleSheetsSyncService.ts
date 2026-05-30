@@ -137,11 +137,25 @@ export function transactionToRow(tx: Transaction): any[] {
   ];
 }
 
+function parseSafeNumber(val: any, fallback: number): number;
+function parseSafeNumber(val: any, fallback: undefined): number | undefined;
+function parseSafeNumber(val: any, fallback: any = 0): any {
+  if (val === undefined || val === null || val === '') return fallback;
+  if (typeof val === 'number') {
+    return isNaN(val) ? fallback : val;
+  }
+  const cleaned = String(val)
+    .replace(/\s/g, '') // remove whitespace/thousands separators
+    .replace(/,/g, '.'); // replace localized decimals comma with a dot
+  const parsed = parseFloat(cleaned);
+  return isNaN(parsed) ? fallback : parsed;
+}
+
 export function rowToTransaction(row: any[]): Transaction {
   return {
     id: String(row[0] || ''),
     date: String(row[1] || ''),
-    amount: Number(row[2] || 0),
+    amount: parseSafeNumber(row[2], 0),
     type: String(row[3] || 'expense') as any,
     categoryId: String(row[4] || ''),
     accountId: String(row[5] || ''),
@@ -149,7 +163,7 @@ export function rowToTransaction(row: any[]): Transaction {
     cardId: row[7] ? String(row[7]) : undefined,
     transferAccountId: row[8] ? String(row[8]) : undefined,
     transferType: row[9] ? String(row[9]) as any : undefined,
-    updatedAt: row[10] ? Number(row[10]) : undefined
+    updatedAt: parseSafeNumber(row[10], undefined)
   };
 }
 
@@ -171,10 +185,10 @@ export function rowToAccount(row: any[]): Account {
     id: String(row[0] || ''),
     name: String(row[1] || ''),
     type: String(row[2] || ''),
-    balance: Number(row[3] || 0),
+    balance: parseSafeNumber(row[3], 0),
     color: String(row[4] || ''),
     quickEntry: String(row[5]).toUpperCase() === 'TRUE',
-    updatedAt: row[6] ? Number(row[6]) : undefined
+    updatedAt: parseSafeNumber(row[6], undefined)
   };
 }
 
@@ -199,7 +213,7 @@ export function rowToCategory(row: any[]): Category {
     color: String(row[3] || ''),
     type: String(row[4] || 'expense') as any,
     quickEntry: String(row[5]).toUpperCase() === 'TRUE',
-    updatedAt: row[6] ? Number(row[6]) : undefined
+    updatedAt: parseSafeNumber(row[6], undefined)
   };
 }
 
@@ -220,7 +234,7 @@ export function rowToCard(row: any[]): BankCard {
     name: String(row[1] || ''),
     bank: String(row[2] || ''),
     lastFour: String(row[3] || ''),
-    updatedAt: row[4] ? Number(row[4]) : undefined
+    updatedAt: parseSafeNumber(row[4], undefined)
   };
 }
 
@@ -236,8 +250,8 @@ export function budgetToRow(b: BudgetLimit): any[] {
 export function rowToBudget(row: any[]): BudgetLimit {
   return {
     categoryId: String(row[0] || ''),
-    limitAmount: Number(row[1] || 0),
-    updatedAt: row[2] ? Number(row[2]) : undefined
+    limitAmount: parseSafeNumber(row[1], 0),
+    updatedAt: parseSafeNumber(row[2], undefined)
   };
 }
 
@@ -277,6 +291,30 @@ function mergeEntityList<T extends { updatedAt?: number }>(
     const remoteItem = remoteMap.get(key);
 
     if (remoteItem) {
+      // Check if either local or remote is empty/corrupted in core numbers (NaN, null, undefined, or 0 in transaction amount)
+      const isLocalCorrupted = 
+        ('amount' in localItem && (isNaN((localItem as any).amount) || (localItem as any).amount === null || (localItem as any).amount === undefined || (localItem as any).amount === 0)) ||
+        ('balance' in localItem && (isNaN((localItem as any).balance) || (localItem as any).balance === null || (localItem as any).balance === undefined)) ||
+        ('limitAmount' in localItem && (isNaN((localItem as any).limitAmount) || (localItem as any).limitAmount === null || (localItem as any).limitAmount === undefined));
+
+      const isRemoteCorrupted = 
+        ('amount' in remoteItem && (isNaN((remoteItem as any).amount) || (remoteItem as any).amount === null || (remoteItem as any).amount === undefined || (remoteItem as any).amount === 0)) ||
+        ('balance' in remoteItem && (isNaN((remoteItem as any).balance) || (remoteItem as any).balance === null || (remoteItem as any).balance === undefined)) ||
+        ('limitAmount' in remoteItem && (isNaN((remoteItem as any).limitAmount) || (remoteItem as any).limitAmount === null || (remoteItem as any).limitAmount === undefined));
+
+      if (isLocalCorrupted && !isRemoteCorrupted) {
+        // Local is invalid/corrupted, remote is fine. Remote wins!
+        mergedMap.set(key, remoteItem);
+        updatedOnLocal++;
+        continue;
+      }
+      if (isRemoteCorrupted && !isLocalCorrupted) {
+        // Remote is invalid/corrupted, local is fine. Local wins!
+        mergedMap.set(key, { ...localItem, updatedAt: localItem.updatedAt || Date.now() });
+        updatedOnSheet++;
+        continue;
+      }
+
       const localTime = localItem.updatedAt || 0;
       const remoteTime = remoteItem.updatedAt || 0;
 
@@ -354,7 +392,7 @@ export async function syncWithGoogleSheets(
     'Deletions!A:C'
   ];
   const rangesParams = ranges.map(r => `ranges=${encodeURIComponent(r)}`).join('&');
-  const readUrl = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values:batchGet?${rangesParams}`;
+  const readUrl = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values:batchGet?${rangesParams}&valueRenderOption=UNFORMATTED_VALUE`;
   
   const readResponse = await fetch(readUrl, {
     headers: { 'Authorization': `Bearer ${accessToken}` }
