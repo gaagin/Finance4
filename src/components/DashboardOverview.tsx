@@ -83,30 +83,133 @@ export function DashboardOverview({
   const [errorMessage, setErrorMessage] = useState<string>('');
 
   // Dynamic Charts Filtering
-  const [analyticsTimeframe, setAnalyticsTimeframe] = useState<'may' | 'april' | '2026' | '2025' | '2024' | '2023' | '2022' | 'all'>('all');
-  const [analyticsAccount, setAnalyticsAccount] = useState<string>('all');
+  const [analyticsTimeframe, setAnalyticsTimeframe] = useState<'may' | 'april' | '2026' | '2025' | '2024' | '2023' | '2022' | 'all'>(
+    () => (localStorage.getItem('milli_analytics_timeframe') as any) || 'all'
+  );
+  const [analyticsAccount, setAnalyticsAccount] = useState<string>(
+    () => localStorage.getItem('milli_analytics_account') || 'all'
+  );
 
   // Local discrete filters for each individual chart card
-  const [lineTimeframe, setLineTimeframe] = useState<'may' | 'april' | '2026' | '2025' | '2024' | '2023' | '2022' | 'all'>('all');
-  const [lineAccount, setLineAccount] = useState<string>('all');
-  const [lineType, setLineType] = useState<'all' | 'expense' | 'income'>('all');
+  const [lineTimeframe, setLineTimeframe] = useState<'may' | 'april' | '2026' | '2025' | '2024' | '2023' | '2022' | 'all'>(
+    () => (localStorage.getItem('milli_line_timeframe') as any) || 'all'
+  );
+  const [lineAccount, setLineAccount] = useState<string>(
+    () => localStorage.getItem('milli_line_account') || 'all'
+  );
+  const [lineType, setLineType] = useState<'all' | 'expense' | 'income'>(
+    () => (localStorage.getItem('milli_line_type') as any) || 'all'
+  );
 
-  const [barAccount, setBarAccount] = useState<string>('all');
-  const [barCategory, setBarCategory] = useState<string>('all');
-  const [barYear, setBarYear] = useState<'all' | '2026' | '2025' | '2024' | '2023' | '2022'>('all');
+  const [barAccount, setBarAccount] = useState<string>(
+    () => localStorage.getItem('milli_bar_account') || 'all'
+  );
+  const [barCategory, setBarCategory] = useState<string>(
+    () => localStorage.getItem('milli_bar_category') || 'all'
+  );
+  const [barYear, setBarYear] = useState<'all' | '2026' | '2025' | '2024' | '2023' | '2022'>(
+    () => (localStorage.getItem('milli_bar_year') as any) || 'all'
+  );
 
-  const [donutAccount, setDonutAccount] = useState<string>('all');
-  const [donutTimeframe, setDonutTimeframe] = useState<'may' | 'april' | '2026' | '2025' | '2024' | '2023' | '2022' | 'all'>('all');
-  const [donutType, setDonutType] = useState<'expense' | 'income'>('expense');
+  const [donutAccount, setDonutAccount] = useState<string>(
+    () => localStorage.getItem('milli_donut_account') || 'all'
+  );
+  const [donutTimeframe, setDonutTimeframe] = useState<'may' | 'april' | '2026' | '2025' | '2024' | '2023' | '2022' | 'all'>(
+    () => (localStorage.getItem('milli_donut_timeframe') as any) || 'all'
+  );
+  const [donutType, setDonutType] = useState<'expense' | 'income'>(
+    () => (localStorage.getItem('milli_donut_type') as any) || 'expense'
+  );
 
   // Interactive UI states mirroring HoneyMoney Web Dashboard
-  const [activeDashboardTab, setActiveDashboardTab] = useState<'fact' | 'plan'>('fact');
-  const [isOrdinaryGroupExpanded, setIsOrdinaryGroupExpanded] = useState(true);
-  const [isSavingsGroupExpanded, setIsSavingsGroupExpanded] = useState(true);
-  const [showSubcategories, setShowSubcategories] = useState(false);
-  const [categoryGroupingMode, setCategoryGroupingMode] = useState<'parent' | 'sub'>('sub');
+  const [activeDashboardTab, setActiveDashboardTab] = useState<'fact' | 'plan'>(
+    () => (localStorage.getItem('milli_active_dashboard_tab') as any) || 'fact'
+  );
+  const [isOrdinaryGroupExpanded, setIsOrdinaryGroupExpanded] = useState<boolean>(
+    () => localStorage.getItem('milli_is_ordinary_group_expanded') !== 'false'
+  );
+  const [isSavingsGroupExpanded, setIsSavingsGroupExpanded] = useState<boolean>(
+    () => localStorage.getItem('milli_is_savings_group_expanded') !== 'false'
+  );
+  const [showSubcategories, setShowSubcategories] = useState<boolean>(
+    () => localStorage.getItem('milli_show_subcategories') === 'true'
+  );
+  const [categoryGroupingMode, setCategoryGroupingMode] = useState<'parent' | 'sub'>(
+    () => (localStorage.getItem('milli_category_grouping_mode') as any) || 'sub'
+  );
   const [selectedCategoryTransactions, setSelectedCategoryTransactions] = useState<{ category: Category; type: 'expense' | 'income' } | null>(null);
-  const [accountsSortMode, setAccountsSortMode] = useState<'desc' | 'custom'>('desc');
+  const [accountsSortMode, setAccountsSortMode] = useState<'desc' | 'custom'>(
+    () => (localStorage.getItem('milli_accounts_sort_mode') as any) || 'desc'
+  );
+
+  // Synced state persistence to localStorage via React.useEffect hooks
+  React.useEffect(() => {
+    localStorage.setItem('milli_analytics_timeframe', analyticsTimeframe);
+  }, [analyticsTimeframe]);
+
+  React.useEffect(() => {
+    localStorage.setItem('milli_analytics_account', analyticsAccount);
+  }, [analyticsAccount]);
+
+  React.useEffect(() => {
+    localStorage.setItem('milli_line_timeframe', lineTimeframe);
+  }, [lineTimeframe]);
+
+  React.useEffect(() => {
+    localStorage.setItem('milli_line_account', lineAccount);
+  }, [lineAccount]);
+
+  React.useEffect(() => {
+    localStorage.setItem('milli_line_type', lineType);
+  }, [lineType]);
+
+  React.useEffect(() => {
+    localStorage.setItem('milli_bar_account', barAccount);
+  }, [barAccount]);
+
+  React.useEffect(() => {
+    localStorage.setItem('milli_bar_category', barCategory);
+  }, [barCategory]);
+
+  React.useEffect(() => {
+    localStorage.setItem('milli_bar_year', barYear);
+  }, [barYear]);
+
+  React.useEffect(() => {
+    localStorage.setItem('milli_donut_account', donutAccount);
+  }, [donutAccount]);
+
+  React.useEffect(() => {
+    localStorage.setItem('milli_donut_timeframe', donutTimeframe);
+  }, [donutTimeframe]);
+
+  React.useEffect(() => {
+    localStorage.setItem('milli_donut_type', donutType);
+  }, [donutType]);
+
+  React.useEffect(() => {
+    localStorage.setItem('milli_active_dashboard_tab', activeDashboardTab);
+  }, [activeDashboardTab]);
+
+  React.useEffect(() => {
+    localStorage.setItem('milli_is_ordinary_group_expanded', String(isOrdinaryGroupExpanded));
+  }, [isOrdinaryGroupExpanded]);
+
+  React.useEffect(() => {
+    localStorage.setItem('milli_is_savings_group_expanded', String(isSavingsGroupExpanded));
+  }, [isSavingsGroupExpanded]);
+
+  React.useEffect(() => {
+    localStorage.setItem('milli_show_subcategories', String(showSubcategories));
+  }, [showSubcategories]);
+
+  React.useEffect(() => {
+    localStorage.setItem('milli_category_grouping_mode', categoryGroupingMode);
+  }, [categoryGroupingMode]);
+
+  React.useEffect(() => {
+    localStorage.setItem('milli_accounts_sort_mode', accountsSortMode);
+  }, [accountsSortMode]);
 
   // Sorting Accounts via hold-drag-and-drop
   const [draggedAccountId, setDraggedAccountId] = useState<string | null>(null);
