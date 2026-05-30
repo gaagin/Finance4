@@ -665,22 +665,22 @@ export function QuickDragDropBuilder({
   return (
     <div 
       ref={containerRef}
-      className="bg-white/5 backdrop-blur-md rounded-2xl p-2.5 sm:p-3.5 border border-white/10 shadow-lg relative overflow-hidden" 
+      className="bg-white/5 backdrop-blur-md rounded-2xl p-2.5 sm:p-4 lg:p-6 border border-white/10 shadow-lg relative overflow-hidden xl:min-h-[calc(100vh-210px)] flex flex-col justify-between" 
       id="quick-drag-action-panel"
     >
       {/* Decorative gradient corner */}
       <div className="absolute top-0 right-0 w-32 h-32 bg-teal-500/10 rounded-full blur-2xl pointer-events-none" />
 
       {/* Main interactive area */}
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-4 sm:gap-6 lg:gap-8 justify-between h-full flex-1">
         {/* ROW 1: Source Accounts */}
         <div>
-          <span className="block text-[8.5px] font-bold text-slate-400 uppercase tracking-widest mb-0.5 select-none text-left flex items-center justify-between gap-1.5">
+          <span className="block text-[8.5px] sm:text-[10px] md:text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1.5 select-none text-left flex items-center justify-between gap-1.5">
             <span>{isSortingMode ? "⚙️ Сортировка" : "Счета"}</span>
             <button
               type="button"
               onClick={() => setIsSortingMode(!isSortingMode)}
-              className={`flex items-center gap-1 px-1.5 py-0.5 rounded border text-[8px] font-extrabold cursor-pointer transition-all shrink-0 ${
+              className={`flex items-center gap-1 px-1.5 py-0.5 rounded border text-[8px] sm:text-[9.5px] font-extrabold cursor-pointer transition-all shrink-0 ${
                 isSortingMode
                   ? 'border-emerald-500 bg-emerald-500/20 text-emerald-300 shadow-xs ring-1 ring-emerald-500/20'
                   : 'border-white/10 bg-white/5 text-slate-300 hover:bg-white/10 hover:border-white/20 active:scale-95'
@@ -690,7 +690,7 @@ export function QuickDragDropBuilder({
               {isSortingMode ? 'Готово' : 'Порядок'}
             </button>
           </span>
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-1.5">
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 2xl:grid-cols-10 gap-2 sm:gap-3">
             {sortedAccountsDisplay.map(acc => {
               const bgClass = acc.type === 'card' ? 'bg-indigo-500/10 text-indigo-300 border-indigo-500/20 hover:border-indigo-400/50' : 'bg-emerald-500/10 text-emerald-300 border-emerald-500/20 hover:border-emerald-400/50';
               const isActive = activeDragAccount?.id === acc.id;
@@ -714,7 +714,7 @@ export function QuickDragDropBuilder({
                   }}
                   onTouchMove={handleTouchMove}
                   onTouchEnd={handleTouchEnd}
-                  className={`relative p-1.5 sm:p-2 rounded-xl border flex flex-col items-center justify-center text-center gap-1 transition-all select-none ${
+                  className={`relative p-2 sm:p-3 md:p-3.5 rounded-xl border flex flex-col items-center justify-center text-center gap-1.5 transition-all select-none ${
                     isSeqSelected
                       ? 'border-yellow-400 bg-yellow-500/20 scale-[1.04] ring-2 ring-yellow-400/50 shadow-md shadow-yellow-500/10 animate-pulse'
                       : isOverAcc 
@@ -726,11 +726,11 @@ export function QuickDragDropBuilder({
                     isSortingMode ? 'cursor-default' : 'cursor-grab active:cursor-grabbing touch-none'
                   }`}
                   id={`drag-acc-${acc.id}`}
-                  style={{ minHeight: '45px' }}
+                  style={{ minHeight: '58px' }}
                 >
                   <div className="text-center w-full min-w-0 pointer-events-none">
-                    <span className="block font-extrabold text-[11px] sm:text-[13px] leading-tight text-white px-0.5 truncate">{acc.name}</span>
-                    <span className={`block text-[11px] sm:text-[13px] font-mono font-black leading-none mt-1 select-none drop-shadow-xs ${
+                    <span className="block font-extrabold text-[11px] sm:text-[13px] md:text-[14px] leading-tight text-white px-0.5 truncate">{acc.name}</span>
+                    <span className={`block text-[11px] sm:text-[13px] md:text-[14px] font-mono font-black leading-none mt-1 select-none drop-shadow-xs ${
                       acc.type === 'card' ? 'text-indigo-300' : 'text-emerald-300'
                     }`}>{Math.round(acc.balance).toLocaleString('ru-RU')} ₼</span>
                   </div>
@@ -771,13 +771,13 @@ export function QuickDragDropBuilder({
         </div>
 
         {/* ROW 2: Destination Categories Grid */}
-        <div className="space-y-1.5 mt-1">
+        <div className="space-y-3 sm:space-y-4 flex-1 flex flex-col justify-around">
           {/* Expense Categories */}
           <div>
-            <span className="block text-[8.5px] font-bold text-slate-400 uppercase tracking-widest mb-0.5 select-none text-left flex flex-wrap items-center justify-between gap-1.5">
+            <span className="block text-[8.5px] sm:text-[10px] md:text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1.5 select-none text-left flex flex-wrap items-center justify-between gap-1.5">
               <span>Расходы</span>
             </span>
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-1.5">
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 2xl:grid-cols-12 gap-2 sm:gap-3">
               {expenseCategories.map(cat => {
                 const isOver = dragOverCategoryId === cat.id;
                 return (
@@ -788,7 +788,7 @@ export function QuickDragDropBuilder({
                     onDragLeave={() => setDragOverCategoryId(null)}
                     onDrop={(e) => handleDropOnCategory(e, cat)}
                     onClick={() => !isSortingMode && handleCategoryClick(cat)}
-                    className={`relative p-1.5 sm:p-2 rounded-xl border flex flex-col items-center justify-center text-center gap-1 transition-all select-none ${
+                    className={`relative p-2 sm:p-2.5 md:p-3 rounded-xl border flex flex-col items-center justify-center text-center gap-1.5 transition-all select-none ${
                       isOver 
                         ? 'border-rose-400 bg-rose-500/25 scale-[1.03] shadow-md shadow-rose-500/10 ring-1 ring-rose-400' 
                         : 'border-rose-500/15 bg-rose-500/10 hover:bg-rose-500/20 hover:border-rose-500/30'
@@ -796,9 +796,9 @@ export function QuickDragDropBuilder({
                       isSortingMode ? 'cursor-default' : 'cursor-pointer hover:scale-[1.04] active:scale-95'
                     }`}
                     id={`drop-cat-${cat.id}`}
-                    style={{ minHeight: '48px' }}
+                    style={{ minHeight: '64px' }}
                   >
-                    <span className="text-[11px] sm:text-[12.5px] font-black font-sans tracking-tight leading-normal text-white max-w-full px-0.5 pointer-events-none text-center uppercase break-words">
+                    <span className="text-[11px] sm:text-[12.5px] md:text-[13px] font-black font-sans tracking-tight leading-normal text-white max-w-full px-0.5 pointer-events-none text-center uppercase break-words">
                       {formatCategoryDisplayName(cat.name)}
                     </span>
 
@@ -839,11 +839,11 @@ export function QuickDragDropBuilder({
 
           {/* Income Categories */}
           {incomeCategories.length > 0 && (
-            <div className="pt-1.5 border-t border-white/5">
-              <span className="block text-[8.5px] font-bold text-slate-400 uppercase tracking-widest mb-0.5 select-none text-left flex flex-wrap items-center justify-between gap-1.5">
+            <div className="pt-3 sm:pt-4 border-t border-white/5">
+              <span className="block text-[8.5px] sm:text-[10px] md:text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1.5 select-none text-left flex flex-wrap items-center justify-between gap-1.5">
                 <span>Доходы</span>
               </span>
-              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-1.5">
+              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 2xl:grid-cols-12 gap-2 sm:gap-3">
                 {incomeCategories.map(cat => {
                   const isOver = dragOverCategoryId === cat.id;
                   return (
@@ -854,7 +854,7 @@ export function QuickDragDropBuilder({
                       onDragLeave={() => setDragOverCategoryId(null)}
                       onDrop={(e) => handleDropOnCategory(e, cat)}
                       onClick={() => !isSortingMode && handleCategoryClick(cat)}
-                      className={`relative p-1.5 sm:p-2 rounded-xl border flex flex-col items-center justify-center text-center gap-1 transition-all select-none ${
+                      className={`relative p-2 sm:p-2.5 md:p-3 rounded-xl border flex flex-col items-center justify-center text-center gap-1.5 transition-all select-none ${
                         isOver 
                           ? 'border-emerald-400 bg-emerald-500/25 scale-[1.03] shadow-md shadow-emerald-500/10 ring-1 ring-emerald-400' 
                           : 'border-emerald-500/15 bg-emerald-500/10 hover:bg-emerald-500/20 hover:border-emerald-500/30'
@@ -862,9 +862,9 @@ export function QuickDragDropBuilder({
                         isSortingMode ? 'cursor-default' : 'cursor-pointer hover:scale-[1.04] active:scale-95'
                       }`}
                       id={`drop-cat-${cat.id}`}
-                      style={{ minHeight: '48px' }}
+                      style={{ minHeight: '64px' }}
                     >
-                      <span className="text-[11px] sm:text-[12.5px] font-black font-sans tracking-tight leading-normal text-white max-w-full px-0.5 pointer-events-none text-center uppercase break-words">
+                      <span className="text-[11px] sm:text-[12.5px] md:text-[13px] font-black font-sans tracking-tight leading-normal text-white max-w-full px-0.5 pointer-events-none text-center uppercase break-words">
                         {formatCategoryDisplayName(cat.name)}
                       </span>
 

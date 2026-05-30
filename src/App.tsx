@@ -426,6 +426,9 @@ export default function App() {
       const day = String(today.getDate()).padStart(2, '0');
       setCalendarClickedDate(`${year}-${month}-${day}`);
     }
+    if (tab === 'accounts-categories') {
+      setAccountsSubTab('accounts');
+    }
   };
 
   // Triggered when clicking a day on the calendar to "add transaction on that day"
