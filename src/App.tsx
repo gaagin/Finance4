@@ -12,6 +12,135 @@ import { initAuth, logout, googleSignIn } from './googleAuth';
 import { User } from 'firebase/auth';
 import { parseAndStandardizeJsonToFinanceData } from './honeyJsonConverter';
 
+function parseAnyDateToISO(val: any): string {
+  if (val === undefined || val === null || val === '') return '';
+  let str = String(val).trim().toLowerCase();
+  if (!str) return '';
+
+  str = str.replace(/\s*г\.?$/, ''); // clean russian year suffix
+
+  // Excel serial number
+  if (/^\d{5}$/.test(str)) {
+    const serial = parseInt(str, 10);
+    const date = new Date(1899, 11, 30);
+    date.setDate(date.getDate() + serial);
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  }
+
+  // ISO Format (YYYY-MM-DD)
+  const isoMatch = str.match(/^(\d{4})[-/. ](\d{1,2})[-/. ](\d{1,2})$/);
+  if (isoMatch) {
+    const [_, y, m, d] = isoMatch;
+    return `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
+  }
+
+  // European/Russian format (DD.MM.YYYY)
+  const eurMatch = str.match(/^(\d{1,2})[-/. ](\d{1,2})[-/. ](\d{4})$/);
+  if (eurMatch) {
+    const [_, d, m, y] = eurMatch;
+    return `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
+  }
+
+  // European short year format (DD.MM.YY)
+  const eurShortMatch = str.match(/^(\d{1,2})[-/. ](\d{1,2})[-/. ](\d{2})$/);
+  if (eurShortMatch) {
+    const [_, d, m, yStr] = eurShortMatch;
+    const yr = parseInt(yStr, 10);
+    const fullYear = yr < 50 ? 2000 + yr : 1900 + yr;
+    return `${fullYear}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
+  }
+
+  // Russian/English Textual layout
+  const cleanTokens = str
+    .replace(/[,\.]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .split(' ');
+
+  if (cleanTokens.length >= 3) {
+    let day = 0;
+    let month = 0;
+    let year = 0;
+
+    const monthsMap: Record<string, number> = {
+      'янв': 1, 'январь': 1, 'января': 1,
+      'фев': 2, 'февраль': 2, 'февраля': 2,
+      'мар': 3, 'март': 3, 'марта': 3,
+      'апр': 4, 'апрель': 4, 'апреля': 4,
+      'май': 5, 'мая': 5,
+      'июн': 6, 'июнь': 6, 'июня': 6,
+      'июл': 7, 'июль': 7, 'июля': 7,
+      'авг': 8, 'август': 8, 'августа': 8,
+      'сен': 9, 'сентябрь': 9, 'сентября': 9,
+      'окт': 10, 'октябрь': 10, 'октября': 10,
+      'ноя': 11, 'ноябрь': 11, 'ноября': 11,
+      'дек': 12, 'декабрь': 12, 'декабря': 12,
+      'jan': 1, 'january': 1, 'feb': 2, 'february': 2,
+      'mar': 3, 'march': 3, 'apr': 4, 'april': 4,
+      'may': 5, 'jun': 6, 'june': 6, 'jul': 7, 'july': 7,
+      'aug': 8, 'august': 8, 'sep': 9, 'september': 9,
+      'oct': 10, 'october': 10, 'nov': 11, 'november': 11,
+      'dec': 12, 'december': 12
+    };
+
+    for (const t of cleanTokens) {
+      if (/^[a-zа-яё]+$/.test(t)) {
+        const prefix = t.slice(0, 3);
+        if (monthsMap[t]) {
+          month = monthsMap[t];
+        } else if (monthsMap[prefix]) {
+          month = monthsMap[prefix];
+        }
+      } else if (/^\d{4}$/.test(t)) {
+        year = parseInt(t, 10);
+      } else if (/^\d{1,2}$/.test(t)) {
+        const valNum = parseInt(t, 10);
+        if (valNum > 0 && valNum <= 31) {
+          if (day === 0) {
+            day = valNum;
+          } else if (month === 0) {
+            month = valNum;
+          } else if (year === 0) {
+            year = valNum < 50 ? 2000 + valNum : 1900 + valNum;
+          }
+        }
+      }
+    }
+
+    if (day && month && year) {
+      return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    }
+  }
+
+  // Native JS parse fallback
+  const parsedTimestamp = Date.parse(str);
+  if (!isNaN(parsedTimestamp)) {
+    const dObj = new Date(parsedTimestamp);
+    const y = dObj.getFullYear();
+    const m = String(dObj.getMonth() + 1).padStart(2, '0');
+    const d = String(dObj.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  }
+
+  return str;
+}
+
+function parseLocalTimestamp(val: any): number {
+  if (val === undefined || val === null || val === '') return Date.now();
+  if (typeof val === 'number') {
+    return isNaN(val) ? Date.now() : val;
+  }
+  let str = String(val).trim().replace(/[\s\u00a0\u2002\u2003\u2009]+/g, '');
+  if (str.includes(',')) {
+    str = str.replace(/,/g, '.');
+  }
+  const parsed = parseFloat(str);
+  return isNaN(parsed) ? Date.now() : Math.round(parsed);
+}
+
 export default function App() {
   
   // 1. Initial State starts with parsed local storage or fallback to HoneyMoney JSON data (6572 transactions)
@@ -23,35 +152,38 @@ export default function App() {
         if (parsed && Array.isArray(parsed.transactions) && parsed.transactions.length > 0) {
           // Safeguard: make sure no NaN/null values exist and automatically heal serial or badly-formatted dates
           parsed.transactions = parsed.transactions.map((t: any) => {
-            let cleanDate = t.date;
-            if (/^\d{5}$/.test(String(cleanDate))) {
-              const serial = parseInt(String(cleanDate), 10);
-              const dateObj = new Date(1899, 11, 30);
-              dateObj.setDate(dateObj.getDate() + serial);
-              const y = dateObj.getFullYear();
-              const m = String(dateObj.getMonth() + 1).padStart(2, '0');
-              const d = String(dateObj.getDate()).padStart(2, '0');
-              cleanDate = `${y}-${m}-${d}`;
-            } else if (/^\d{2}\.\d{2}\.\d{4}$/.test(String(cleanDate))) {
-              const parts = String(cleanDate).split('.');
-              cleanDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
-            }
             return {
               ...t,
-              date: cleanDate,
-              amount: typeof t.amount === 'number' && !isNaN(t.amount) ? t.amount : (parseFloat(String(t.amount)) || 0)
+              date: parseAnyDateToISO(t.date),
+              amount: typeof t.amount === 'number' && !isNaN(t.amount) ? t.amount : (parseFloat(String(t.amount)) || 0),
+              updatedAt: parseLocalTimestamp(t.updatedAt)
             };
-          });
+          }).filter((t: any) => t.date !== ''); // skip any rows that lack a valid date completely
+          
           if (Array.isArray(parsed.accounts)) {
             parsed.accounts = parsed.accounts.map((a: any) => ({
               ...a,
-              balance: typeof a.balance === 'number' && !isNaN(a.balance) ? a.balance : (parseFloat(String(a.balance)) || 0)
+              balance: typeof a.balance === 'number' && !isNaN(a.balance) ? a.balance : (parseFloat(String(a.balance)) || 0),
+              updatedAt: parseLocalTimestamp(a.updatedAt)
             }));
           }
           if (Array.isArray(parsed.budgets)) {
             parsed.budgets = parsed.budgets.map((b: any) => ({
               ...b,
-              limitAmount: typeof b.limitAmount === 'number' && !isNaN(b.limitAmount) ? b.limitAmount : (parseFloat(String(b.limitAmount)) || 0)
+              limitAmount: typeof b.limitAmount === 'number' && !isNaN(b.limitAmount) ? b.limitAmount : (parseFloat(String(b.limitAmount)) || 0),
+              updatedAt: parseLocalTimestamp(b.updatedAt)
+            }));
+          }
+          if (Array.isArray(parsed.categories)) {
+            parsed.categories = parsed.categories.map((c: any) => ({
+              ...c,
+              updatedAt: parseLocalTimestamp(c.updatedAt)
+            }));
+          }
+          if (Array.isArray(parsed.cards)) {
+            parsed.cards = parsed.cards.map((card: any) => ({
+              ...card,
+              updatedAt: parseLocalTimestamp(card.updatedAt)
             }));
           }
           return parsed;

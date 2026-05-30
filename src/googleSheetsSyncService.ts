@@ -139,32 +139,120 @@ export function transactionToRow(tx: Transaction): any[] {
 
 function parseSafeDate(val: any): string {
   if (val === undefined || val === null || val === '') return '';
-  const str = String(val).trim();
   
-  // If it's a numeric Excel/Sheets serial day count (typically e.g. "46172")
+  // Clean string
+  let str = String(val).trim().toLowerCase();
+  if (!str) return '';
+
+  // 1. Remove trailing Russian date letters " г." or " г"
+  str = str.replace(/\s*г\.?$/, '');
+
+  // 2. Excel/Google Sheets serial day count
   if (/^\d{5}$/.test(str)) {
     const serial = parseInt(str, 10);
-    // Excel base date is Dec 30, 1899
     const date = new Date(1899, 11, 30);
     date.setDate(date.getDate() + serial);
-    
     const y = date.getFullYear();
     const m = String(date.getMonth() + 1).padStart(2, '0');
     const d = String(date.getDate()).padStart(2, '0');
     return `${y}-${m}-${d}`;
   }
-  
-  // If formatted as "DD.MM.YYYY" (common in European list representations of sheets), convert to "YYYY-MM-DD"
-  if (/^\d{2}\.\d{2}\.\d{4}$/.test(str)) {
-    const parts = str.split('.');
-    return `${parts[2]}-${parts[1]}-${parts[0]}`;
+
+  // 3. Match Standard ISO (YYYY-MM-DD or YYYY/MM/DD)
+  const isoMatch = str.match(/^(\d{4})[-/. ](\d{1,2})[-/. ](\d{1,2})$/);
+  if (isoMatch) {
+    const [_, y, m, d] = isoMatch;
+    return `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
   }
 
-  // If in format "YYYY-MM-DD"
-  if (/^\d{4}-\d{2}-\d{2}$/.test(str)) {
-    return str;
+  // 4. Match European/Russian (DD.MM.YYYY or DD/MM/YYYY)
+  const eurMatch = str.match(/^(\d{1,2})[-/. ](\d{1,2})[-/. ](\d{4})$/);
+  if (eurMatch) {
+    const [_, d, m, y] = eurMatch;
+    return `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
   }
-  
+
+  // 5. Match Short Year European (DD.MM.YY or DD/MM/YY)
+  const eurShortMatch = str.match(/^(\d{1,2})[-/. ](\d{1,2})[-/. ](\d{2})$/);
+  if (eurShortMatch) {
+    const [_, d, m, yStr] = eurShortMatch;
+    const yr = parseInt(yStr, 10);
+    const fullYear = yr < 50 ? 2000 + yr : 1900 + yr;
+    return `${fullYear}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
+  }
+
+  // 6. Match Russian or English Textual Dates (e.g. "30 мая 2026", "May 30, 2026", "30 May 2026")
+  const cleanTokens = str
+    .replace(/[,\.]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .split(' ');
+
+  if (cleanTokens.length >= 3) {
+    let day = 0;
+    let month = 0;
+    let year = 0;
+
+    const monthsMap: Record<string, number> = {
+      'янв': 1, 'январь': 1, 'января': 1,
+      'фев': 2, 'февраль': 2, 'февраля': 2,
+      'мар': 3, 'март': 3, 'марта': 3,
+      'апр': 4, 'апрель': 4, 'апреля': 4,
+      'май': 5, 'мая': 5,
+      'июн': 6, 'июнь': 6, 'июня': 6,
+      'июл': 7, 'июль': 7, 'июля': 7,
+      'авг': 8, 'август': 8, 'августа': 8,
+      'сен': 9, 'сентябрь': 9, 'сентября': 9,
+      'окт': 10, 'октябрь': 10, 'октября': 10,
+      'ноя': 11, 'ноябрь': 11, 'ноября': 11,
+      'дек': 12, 'декабрь': 12, 'декабря': 12,
+      'jan': 1, 'january': 1, 'feb': 2, 'february': 2,
+      'mar': 3, 'march': 3, 'apr': 4, 'april': 4,
+      'may': 5, 'jun': 6, 'june': 6, 'jul': 7, 'july': 7,
+      'aug': 8, 'august': 8, 'sep': 9, 'september': 9,
+      'oct': 10, 'october': 10, 'nov': 11, 'november': 11,
+      'dec': 12, 'december': 12
+    };
+
+    for (const t of cleanTokens) {
+      if (/^[a-zа-яё]+$/.test(t)) {
+        const prefix = t.slice(0, 3);
+        if (monthsMap[t]) {
+          month = monthsMap[t];
+        } else if (monthsMap[prefix]) {
+          month = monthsMap[prefix];
+        }
+      } else if (/^\d{4}$/.test(t)) {
+        year = parseInt(t, 10);
+      } else if (/^\d{1,2}$/.test(t)) {
+        const valNum = parseInt(t, 10);
+        if (valNum > 0 && valNum <= 31) {
+          if (day === 0) {
+            day = valNum;
+          } else if (month === 0) {
+            month = valNum;
+          } else if (year === 0) {
+            year = valNum < 50 ? 2000 + valNum : 1900 + valNum;
+          }
+        }
+      }
+    }
+
+    if (day && month && year) {
+      return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    }
+  }
+
+  // 7. Fallback to native JS parser
+  const parsedTimestamp = Date.parse(str);
+  if (!isNaN(parsedTimestamp)) {
+    const dObj = new Date(parsedTimestamp);
+    const y = dObj.getFullYear();
+    const m = String(dObj.getMonth() + 1).padStart(2, '0');
+    const d = String(dObj.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  }
+
   return str;
 }
 
@@ -176,13 +264,9 @@ function parseSafeNumber(val: any, fallback: any = 0): any {
     return isNaN(val) ? fallback : val;
   }
   let str = String(val).trim();
-  // Remove currency signs, words like AZN, руб, etc.
-  str = str.replace(/[₼$€₽£¥]/g, '');
-  str = str.replace(/[a-zA-Zа-яА-ЯёЁ]/g, '');
-  // Remove all spaces (thousands separators)
-  str = str.replace(/[\s\u00a0\u2002\u2003\u2009]+/g, '');
+  // Strip letters except E, e (for scientific notation support). Strip also spaces, currency symbols.
+  str = str.replace(/[^0-9eE+\-.,]/g, '');
   
-  // If there are both commas and dots, e.g. 1,234.56
   if (str.includes(',') && str.includes('.')) {
     str = str.replace(/,/g, '');
   } else if (str.includes(',') && !str.includes('.')) {
@@ -191,6 +275,25 @@ function parseSafeNumber(val: any, fallback: any = 0): any {
   }
   const parsed = parseFloat(str);
   return isNaN(parsed) ? fallback : parsed;
+}
+
+function parseSafeTimestamp(val: any, fallback: number): number;
+function parseSafeTimestamp(val: any, fallback: undefined): number | undefined;
+function parseSafeTimestamp(val: any, fallback: any = 0): any {
+  if (val === undefined || val === null || val === '') return fallback;
+  if (typeof val === 'number') {
+    return isNaN(val) ? fallback : val;
+  }
+  let str = String(val).trim();
+  
+  // Remove all white spaces and non-timestamp chars except coordinates for exponent
+  str = str.replace(/[\s\u00a0\u2002\u2003\u2009]+/g, '');
+  if (str.includes(',')) {
+    str = str.replace(/,/g, '.');
+  }
+  
+  const parsed = parseFloat(str);
+  return isNaN(parsed) ? fallback : Math.round(parsed);
 }
 
 export function rowToTransaction(row: any[]): Transaction {
@@ -205,7 +308,7 @@ export function rowToTransaction(row: any[]): Transaction {
     cardId: row[7] ? String(row[7]) : undefined,
     transferAccountId: row[8] ? String(row[8]) : undefined,
     transferType: row[9] ? String(row[9]) as any : undefined,
-    updatedAt: parseSafeNumber(row[10], undefined)
+    updatedAt: parseSafeTimestamp(row[10], undefined)
   };
 }
 
@@ -230,7 +333,7 @@ export function rowToAccount(row: any[]): Account {
     balance: parseSafeNumber(row[3], 0),
     color: String(row[4] || ''),
     quickEntry: String(row[5]).toUpperCase() === 'TRUE',
-    updatedAt: parseSafeNumber(row[6], undefined)
+    updatedAt: parseSafeTimestamp(row[6], undefined)
   };
 }
 
@@ -255,7 +358,7 @@ export function rowToCategory(row: any[]): Category {
     color: String(row[3] || ''),
     type: String(row[4] || 'expense') as any,
     quickEntry: String(row[5]).toUpperCase() === 'TRUE',
-    updatedAt: parseSafeNumber(row[6], undefined)
+    updatedAt: parseSafeTimestamp(row[6], undefined)
   };
 }
 
@@ -276,7 +379,7 @@ export function rowToCard(row: any[]): BankCard {
     name: String(row[1] || ''),
     bank: String(row[2] || ''),
     lastFour: String(row[3] || ''),
-    updatedAt: parseSafeNumber(row[4], undefined)
+    updatedAt: parseSafeTimestamp(row[4], undefined)
   };
 }
 
@@ -293,7 +396,7 @@ export function rowToBudget(row: any[]): BudgetLimit {
   return {
     categoryId: String(row[0] || ''),
     limitAmount: parseSafeNumber(row[1], 0),
-    updatedAt: parseSafeNumber(row[2], undefined)
+    updatedAt: parseSafeTimestamp(row[2], undefined)
   };
 }
 
