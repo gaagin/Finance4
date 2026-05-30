@@ -1260,8 +1260,9 @@ export function DashboardOverview({
                                 <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: item.category.color }} />
                                 <span className="truncate">{formatCategoryDisplayName(item.category.name)}</span>
                               </span>
-                              <span className="font-mono font-bold text-rose-350 select-all shrink-0 whitespace-nowrap pl-1">
-                                -{Math.round(item.amount).toLocaleString('ru-RU')} ₼
+                              <span className="font-mono font-bold text-rose-350 select-all shrink-0 whitespace-nowrap pl-1 flex items-center gap-1.5">
+                                <span className="text-[10.5px] text-slate-400 font-semibold bg-white/5 px-1 py-0.5 rounded-sm">{(item.percentage || 0).toFixed(1)}%</span>
+                                <span>-{Math.round(item.amount).toLocaleString('ru-RU')} ₼</span>
                               </span>
                             </div>
                             <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
@@ -1313,8 +1314,9 @@ export function DashboardOverview({
                                 <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: item.category.color }} />
                                 <span className="truncate">{formatCategoryDisplayName(item.category.name)}</span>
                               </span>
-                              <span className="font-mono font-bold text-emerald-450 select-all shrink-0 whitespace-nowrap pl-1">
-                                +{Math.round(item.amount).toLocaleString('ru-RU')} ₼
+                              <span className="font-mono font-bold text-emerald-450 select-all shrink-0 whitespace-nowrap pl-1 flex items-center gap-1.5">
+                                <span className="text-[10.5px] text-slate-400 font-semibold bg-white/5 px-1 py-0.5 rounded-sm">{(item.percentage || 0).toFixed(1)}%</span>
+                                <span>+{Math.round(item.amount).toLocaleString('ru-RU')} ₼</span>
                               </span>
                             </div>
                             <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">

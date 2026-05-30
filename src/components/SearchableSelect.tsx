@@ -87,7 +87,7 @@ export function SearchableSelect<T>({
 
       {/* Dropdown Menu (Overlay Takeover starting from top on mobile, normal absolute relative on desktop) */}
       {isOpen && (
-        <div className={`fixed inset-0 z-[9999] h-full w-full rounded-none flex flex-col md:absolute md:inset-auto md:z-50 md:left-0 md:right-0 md:mt-1.5 md:border md:rounded-2xl md:shadow-2xl md:overflow-hidden md:max-h-72 ${
+        <div className={`fixed inset-0 z-[9999] h-full w-full rounded-none flex flex-col md:absolute md:inset-auto md:top-full md:left-0 md:right-0 md:h-auto md:z-50 md:mt-1.5 md:border md:rounded-2xl md:shadow-2xl md:overflow-hidden md:max-h-72 ${
           theme === 'dark'
             ? 'bg-slate-950 text-white md:bg-slate-900 md:border-white/10'
             : 'bg-white text-slate-800 md:border-slate-200'
