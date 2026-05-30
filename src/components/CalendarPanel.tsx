@@ -21,10 +21,11 @@ interface CalendarPanelProps {
   }) => void;
   onUpdateTransaction: (transaction: Transaction) => void;
   onDeleteTransaction: (id: string) => void;
-  currentDate: Date;
+   currentDate: Date;
   setCurrentDate: (date: Date) => void;
   clickedDate: string;
   setClickedDate: (date: string) => void;
+  theme?: 'light' | 'dark';
 }
 
 const MONTHS_RU = [
@@ -47,7 +48,8 @@ export function CalendarPanel({
   currentDate,
   setCurrentDate,
   clickedDate,
-  setClickedDate
+  setClickedDate,
+  theme = 'light'
 }: CalendarPanelProps) {
   const [selectedDayData, setSelectedDayData] = useState<{ date: string; txs: Transaction[] } | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -345,13 +347,13 @@ export function CalendarPanel({
               idKey="id"
               className="min-w-[155px] sm:min-w-[175px]"
               compact={true}
-              theme="dark"
+              theme={theme}
               displayValue={(cat) => cat.id === 'all' ? 'Все категории' : cat.name}
               filterValue={(cat) => cat.name}
               renderItem={(cat) => (
                 <div className="flex items-center gap-2 text-xs w-full py-0.5">
                   <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: cat.color }} />
-                  <span className="font-semibold text-white/90">{cat.name}</span>
+                  <span className="font-semibold">{cat.name}</span>
                   <span className={`text-[8px] uppercase tracking-wider ml-auto shrink-0 font-extrabold px-1.5 py-0.5 rounded-md ${
                     cat.id === 'all'
                       ? 'bg-slate-500/10 text-slate-400'

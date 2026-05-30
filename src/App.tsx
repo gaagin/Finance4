@@ -1221,6 +1221,7 @@ export default function App() {
               setCurrentDate={setCalendarCurrentDate}
               clickedDate={calendarClickedDate}
               setClickedDate={setCalendarClickedDate}
+              theme={theme}
             />
           )}
 
