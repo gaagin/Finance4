@@ -137,6 +137,37 @@ export function transactionToRow(tx: Transaction): any[] {
   ];
 }
 
+function parseSafeDate(val: any): string {
+  if (val === undefined || val === null || val === '') return '';
+  const str = String(val).trim();
+  
+  // If it's a numeric Excel/Sheets serial day count (typically e.g. "46172")
+  if (/^\d{5}$/.test(str)) {
+    const serial = parseInt(str, 10);
+    // Excel base date is Dec 30, 1899
+    const date = new Date(1899, 11, 30);
+    date.setDate(date.getDate() + serial);
+    
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  }
+  
+  // If formatted as "DD.MM.YYYY" (common in European list representations of sheets), convert to "YYYY-MM-DD"
+  if (/^\d{2}\.\d{2}\.\d{4}$/.test(str)) {
+    const parts = str.split('.');
+    return `${parts[2]}-${parts[1]}-${parts[0]}`;
+  }
+
+  // If in format "YYYY-MM-DD"
+  if (/^\d{4}-\d{2}-\d{2}$/.test(str)) {
+    return str;
+  }
+  
+  return str;
+}
+
 function parseSafeNumber(val: any, fallback: number): number;
 function parseSafeNumber(val: any, fallback: undefined): number | undefined;
 function parseSafeNumber(val: any, fallback: any = 0): any {
@@ -144,17 +175,28 @@ function parseSafeNumber(val: any, fallback: any = 0): any {
   if (typeof val === 'number') {
     return isNaN(val) ? fallback : val;
   }
-  const cleaned = String(val)
-    .replace(/\s/g, '') // remove whitespace/thousands separators
-    .replace(/,/g, '.'); // replace localized decimals comma with a dot
-  const parsed = parseFloat(cleaned);
+  let str = String(val).trim();
+  // Remove currency signs, words like AZN, руб, etc.
+  str = str.replace(/[₼$€₽£¥]/g, '');
+  str = str.replace(/[a-zA-Zа-яА-ЯёЁ]/g, '');
+  // Remove all spaces (thousands separators)
+  str = str.replace(/[\s\u00a0\u2002\u2003\u2009]+/g, '');
+  
+  // If there are both commas and dots, e.g. 1,234.56
+  if (str.includes(',') && str.includes('.')) {
+    str = str.replace(/,/g, '');
+  } else if (str.includes(',') && !str.includes('.')) {
+    // Russian format: 1234,56
+    str = str.replace(/,/g, '.');
+  }
+  const parsed = parseFloat(str);
   return isNaN(parsed) ? fallback : parsed;
 }
 
 export function rowToTransaction(row: any[]): Transaction {
   return {
     id: String(row[0] || ''),
-    date: String(row[1] || ''),
+    date: parseSafeDate(row[1]),
     amount: parseSafeNumber(row[2], 0),
     type: String(row[3] || 'expense') as any,
     categoryId: String(row[4] || ''),
@@ -392,7 +434,7 @@ export async function syncWithGoogleSheets(
     'Deletions!A:C'
   ];
   const rangesParams = ranges.map(r => `ranges=${encodeURIComponent(r)}`).join('&');
-  const readUrl = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values:batchGet?${rangesParams}&valueRenderOption=UNFORMATTED_VALUE`;
+  const readUrl = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values:batchGet?${rangesParams}`;
   
   const readResponse = await fetch(readUrl, {
     headers: { 'Authorization': `Bearer ${accessToken}` }

@@ -21,21 +21,37 @@ export default function App() {
       try {
         const parsed = JSON.parse(saved);
         if (parsed && Array.isArray(parsed.transactions) && parsed.transactions.length > 0) {
-          // Safeguard: make sure no NaN or null amounts exist in loaded state
-          parsed.transactions = parsed.transactions.map((t: any) => ({
-            ...t,
-            amount: typeof t.amount === 'number' && !isNaN(t.amount) ? t.amount : (parseFloat(t.amount) || 0)
-          }));
+          // Safeguard: make sure no NaN/null values exist and automatically heal serial or badly-formatted dates
+          parsed.transactions = parsed.transactions.map((t: any) => {
+            let cleanDate = t.date;
+            if (/^\d{5}$/.test(String(cleanDate))) {
+              const serial = parseInt(String(cleanDate), 10);
+              const dateObj = new Date(1899, 11, 30);
+              dateObj.setDate(dateObj.getDate() + serial);
+              const y = dateObj.getFullYear();
+              const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+              const d = String(dateObj.getDate()).padStart(2, '0');
+              cleanDate = `${y}-${m}-${d}`;
+            } else if (/^\d{2}\.\d{2}\.\d{4}$/.test(String(cleanDate))) {
+              const parts = String(cleanDate).split('.');
+              cleanDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
+            }
+            return {
+              ...t,
+              date: cleanDate,
+              amount: typeof t.amount === 'number' && !isNaN(t.amount) ? t.amount : (parseFloat(String(t.amount)) || 0)
+            };
+          });
           if (Array.isArray(parsed.accounts)) {
             parsed.accounts = parsed.accounts.map((a: any) => ({
               ...a,
-              balance: typeof a.balance === 'number' && !isNaN(a.balance) ? a.balance : (parseFloat(a.balance) || 0)
+              balance: typeof a.balance === 'number' && !isNaN(a.balance) ? a.balance : (parseFloat(String(a.balance)) || 0)
             }));
           }
           if (Array.isArray(parsed.budgets)) {
             parsed.budgets = parsed.budgets.map((b: any) => ({
               ...b,
-              limitAmount: typeof b.limitAmount === 'number' && !isNaN(b.limitAmount) ? b.limitAmount : (parseFloat(b.limitAmount) || 0)
+              limitAmount: typeof b.limitAmount === 'number' && !isNaN(b.limitAmount) ? b.limitAmount : (parseFloat(String(b.limitAmount)) || 0)
             }));
           }
           return parsed;
