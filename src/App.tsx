@@ -133,9 +133,14 @@ function parseLocalTimestamp(val: any): number {
   if (typeof val === 'number') {
     return isNaN(val) ? Date.now() : val;
   }
-  let str = String(val).trim().replace(/[\s\u00a0\u2002\u2003\u2009]+/g, '');
-  if (str.includes(',')) {
-    str = str.replace(/,/g, '.');
+  let str = String(val).trim();
+  if (!str) return Date.now();
+
+  const hasExponent = /[eE]/.test(str);
+  if (hasExponent) {
+    str = str.replace(/,/g, '.').replace(/\s+/g, '');
+  } else {
+    str = str.replace(/[^0-9\-]/g, '');
   }
   const parsed = parseFloat(str);
   return isNaN(parsed) ? Date.now() : Math.round(parsed);
@@ -261,14 +266,17 @@ export default function App() {
   }, [currentUser]);
 
   const isSyncingRef = useRef<boolean>(false);
+  const isApplyingSyncDataRef = useRef<boolean>(false);
   const hasUnsavedSyncChangesRef = useRef<boolean>(false);
 
   // Sync state to LocalStorage for offline capability and local testing
   useEffect(() => {
     localStorage.setItem('milli_finance_data_v8_realonly_clean', JSON.stringify(data));
     
-    // Any change to data that is not from active sync triggers unsaved status
-    if (!isSyncingRef.current) {
+    // Detect if this change came from active sync merge or direct user action
+    if (isApplyingSyncDataRef.current) {
+      isApplyingSyncDataRef.current = false;
+    } else {
       hasUnsavedSyncChangesRef.current = true;
     }
   }, [data]);
@@ -325,6 +333,7 @@ export default function App() {
         const result = await syncWithGoogleSheets(gAccessToken, dataRef.current, deletedIds);
         
         // Push merged remote data to local react state
+        isApplyingSyncDataRef.current = true;
         setData(result.mergedData);
         hasUnsavedSyncChangesRef.current = false;
         
@@ -411,6 +420,8 @@ export default function App() {
       isSyncingRef.current = true;
       setIsGoogleSyncing(true);
 
+      const syncedData = data; // Freeze local snapshot at point of sync start
+
       const deletedIds = {
         transactions: [] as string[],
         accounts: [] as string[],
@@ -438,9 +449,12 @@ export default function App() {
 
       import('./googleSheetsSyncService').then(async ({ syncWithGoogleSheets }) => {
         try {
-          const result = await syncWithGoogleSheets(gAccessToken, data, deletedIds);
+          const result = await syncWithGoogleSheets(gAccessToken, syncedData, deletedIds);
           
-          hasUnsavedSyncChangesRef.current = false;
+          // Clear unsaved changes tracker ONLY if no concurrent edits were made by the user
+          if (dataRef.current === syncedData) {
+            hasUnsavedSyncChangesRef.current = false;
+          }
 
           // If there were modifications in Google Sheets that we merged back:
           const hasLocalChanges = 
@@ -449,6 +463,7 @@ export default function App() {
             Object.values(result.deletedFromLocal).reduce((a: number, b: any) => a + (Number(b) || 0), 0);
 
           if (hasLocalChanges > 0) {
+            isApplyingSyncDataRef.current = true;
             setData(result.mergedData);
           }
           
@@ -475,6 +490,9 @@ export default function App() {
           if (isAuthErr) {
             console.warn('Google Access token has expired during auto-sync. Resetting Google connection.');
             handleGoogleSessionExpired(true);
+          } else {
+            // Show toast for unexpected syncing failures so the user can easily observe the cause
+            addToast(`Ошибка автоматического сохранения: ${errMsg || 'Сеть занята'}`, 'warning');
           }
         } finally {
           isSyncingRef.current = false;

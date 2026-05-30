@@ -285,13 +285,22 @@ function parseSafeTimestamp(val: any, fallback: any = 0): any {
     return isNaN(val) ? fallback : val;
   }
   let str = String(val).trim();
-  
-  // Remove all white spaces and non-timestamp chars except coordinates for exponent
-  str = str.replace(/[\s\u00a0\u2002\u2003\u2009]+/g, '');
-  if (str.includes(',')) {
-    str = str.replace(/,/g, '.');
+  if (!str) return fallback;
+
+  // Check if this is an ISO Date string in the sheets column instead of numeric millisecond
+  if (str.includes('-') && str.length >= 10 && isNaN(Number(str.replace(/[^0-9]/g, '')))) {
+    const parsed = Date.parse(str);
+    if (!isNaN(parsed)) return parsed;
   }
-  
+
+  // Robustly handle exponents vs thousand separator dots/commas/spaces
+  const hasExponent = /[eE]/.test(str);
+  if (hasExponent) {
+    str = str.replace(/,/g, '.').replace(/\s+/g, '');
+  } else {
+    str = str.replace(/[^0-9\-]/g, '');
+  }
+
   const parsed = parseFloat(str);
   return isNaN(parsed) ? fallback : Math.round(parsed);
 }
