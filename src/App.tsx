@@ -103,6 +103,13 @@ export default function App() {
     }
   }, [data]);
 
+  const isGoogleTokenExpired = (): boolean => {
+    const expiryStr = localStorage.getItem('milli_g_access_token_expiry');
+    if (!expiryStr) return false;
+    const expiryTime = parseInt(expiryStr, 10);
+    return Date.now() > expiryTime;
+  };
+
   // Restore persistent Google Sheets OAuth session & onAuthStateChanged listener on mount
   useEffect(() => {
     const unsub = initAuth(
@@ -110,8 +117,19 @@ export default function App() {
         setCurrentUser(user);
         const cachedToken = token || localStorage.getItem('milli_g_access_token');
         if (cachedToken) {
-          setGAccessToken(cachedToken);
-          setNeedsAuth(false);
+          const expiryStr = localStorage.getItem('milli_g_access_token_expiry');
+          const expiryTime = expiryStr ? parseInt(expiryStr, 10) : 0;
+          const isExpired = Date.now() > expiryTime;
+          
+          if (!isExpired) {
+            setGAccessToken(cachedToken);
+            setNeedsAuth(false);
+          } else {
+            // Keep Firebase session intact, only mark Google token as needing refresh
+            setGAccessToken(null);
+            setNeedsAuth(true);
+            console.log("Cached Google Access Token is expired, background auto-sync was paused.");
+          }
         }
         setIsAuthLoading(false);
       },
@@ -128,6 +146,13 @@ export default function App() {
   // Background Auto-sync on active updates (debounced with 5s of inactivity to prevent query thrashing)
   useEffect(() => {
     if (!gAccessToken) return;
+
+    // Fast check: if the token is already expired, safely pause auto-sync without kicking user out
+    if (isGoogleTokenExpired()) {
+      console.warn('Google Access token has expired. Suspending background auto-sync.');
+      handleGoogleSessionExpired(true);
+      return;
+    }
 
     const timer = setTimeout(async () => {
       // If there are no local unsaved changes, we do not need to trigger background sync
@@ -199,7 +224,7 @@ export default function App() {
             errMsg.toLowerCase().includes('token');
           if (isAuthErr) {
             console.warn('Google Access token has expired during auto-sync. Resetting Google connection.');
-            handleGoogleSessionExpired();
+            handleGoogleSessionExpired(true);
           }
         } finally {
           isSyncingRef.current = false;
@@ -213,7 +238,7 @@ export default function App() {
   // Reliable Auto-sync on exiting page, losing focus, or switching tabs
   useEffect(() => {
     const handleExitSync = () => {
-      if (!gAccessToken || !hasUnsavedSyncChangesRef.current) return;
+      if (!gAccessToken || isGoogleTokenExpired() || !hasUnsavedSyncChangesRef.current) return;
 
       console.log('Page is being hidden/unloaded. Saving pending changes to Google Sheets instantly...');
       
@@ -290,6 +315,11 @@ export default function App() {
         setGAccessToken(result.accessToken);
         setNeedsAuth(false);
         localStorage.setItem('milli_g_access_token', result.accessToken);
+        
+        // Save token expiry timestamp (expires in 1 hour minus 50 seconds safety margin)
+        const expiryTime = Date.now() + 3550 * 1000;
+        localStorage.setItem('milli_g_access_token_expiry', expiryTime.toString());
+        
         addToast("Вход выполнен успешно!", "success" as any);
       }
     } catch (err: any) {
@@ -320,16 +350,21 @@ export default function App() {
     setGAccessToken(null);
     setNeedsAuth(true);
     localStorage.removeItem('milli_g_access_token');
+    localStorage.removeItem('milli_g_access_token_expiry');
     addToast("Вы вышли из аккаунта Google", "success");
   };
 
-  const handleGoogleSessionExpired = async () => {
-    await logout();
-    setCurrentUser(null);
+  const handleGoogleSessionExpired = async (isBackground = false) => {
     setGAccessToken(null);
     setNeedsAuth(true);
     localStorage.removeItem('milli_g_access_token');
-    addToast("Сессия Google истекла. Пожалуйста, выполните повторный вход.", "critical");
+    localStorage.removeItem('milli_g_access_token_expiry');
+    
+    if (isBackground) {
+      console.log("Background Google session expired. Auto-sync has been safely paused.");
+    } else {
+      addToast("Сессия Google истекла. Пожалуйста, авторизуйтесь заново для синхронизации.", "warning");
+    }
   };
 
   // 4. Toast Alerts state & Budgeting Boundary Trigger
