@@ -188,8 +188,19 @@ export default function App() {
           localStorage.setItem('milli_last_sync_result', JSON.stringify(result));
           
           addToast('Данные автоматически сохранены в Google Таблицу ☁️✨', 'success');
-        } catch (err) {
+        } catch (err: any) {
           console.error('Background auto-sync failed:', err);
+          const errMsg = err?.message || '';
+          const isAuthErr = err.isAuthError || 
+            errMsg.includes('401') || 
+            errMsg.includes('invalid authentication credentials') || 
+            errMsg.toLowerCase().includes('credential') || 
+            errMsg.toLowerCase().includes('auth') || 
+            errMsg.toLowerCase().includes('token');
+          if (isAuthErr) {
+            console.warn('Google Access token has expired during auto-sync. Resetting Google connection.');
+            handleGoogleSessionExpired();
+          }
         } finally {
           isSyncingRef.current = false;
         }
@@ -310,6 +321,15 @@ export default function App() {
     setNeedsAuth(true);
     localStorage.removeItem('milli_g_access_token');
     addToast("Вы вышли из аккаунта Google", "success");
+  };
+
+  const handleGoogleSessionExpired = async () => {
+    await logout();
+    setCurrentUser(null);
+    setGAccessToken(null);
+    setNeedsAuth(true);
+    localStorage.removeItem('milli_g_access_token');
+    addToast("Сессия Google истекла. Пожалуйста, выполните повторный вход.", "critical");
   };
 
   // 4. Toast Alerts state & Budgeting Boundary Trigger
@@ -1286,6 +1306,7 @@ export default function App() {
                   gAccessToken={gAccessToken}
                   onGoogleLogin={handleGoogleLogin}
                   onGoogleLogout={handleGoogleLogout}
+                  onGoogleSessionExpired={handleGoogleSessionExpired}
                   onSyncSuccess={(mergedData) => {
                     setData(mergedData);
                     saveToFirebaseDirectly(mergedData);

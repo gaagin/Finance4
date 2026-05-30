@@ -34,6 +34,11 @@ export async function findOrCreateSyncSpreadsheet(accessToken: string): Promise<
   });
   
   if (!searchResponse.ok) {
+    if (searchResponse.status === 401) {
+      const authError = new Error('Истек срок действия сессии Google (401). Пожалуйста, войдите заново.');
+      (authError as any).isAuthError = true;
+      throw authError;
+    }
     const err = await searchResponse.json();
     throw new Error(err.error?.message || 'Ошибка поиска файла на Google Диске.');
   }
@@ -356,6 +361,11 @@ export async function syncWithGoogleSheets(
   });
   
   if (!readResponse.ok) {
+    if (readResponse.status === 401) {
+      const authError = new Error('Истек срок действия сессии Google (401). Пожалуйста, войдите заново.');
+      (authError as any).isAuthError = true;
+      throw authError;
+    }
     const err = await readResponse.json();
     throw new Error(err.error?.message || 'Не удалось прочитать данные из Google Таблицы.');
   }

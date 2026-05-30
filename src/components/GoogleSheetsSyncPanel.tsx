@@ -9,6 +9,7 @@ interface GoogleSheetsSyncPanelProps {
   gAccessToken: string | null;
   onGoogleLogin: () => void;
   onGoogleLogout: () => void;
+  onGoogleSessionExpired?: () => void;
   onSyncSuccess: (mergedData: FinanceData) => void;
   theme: 'light' | 'dark';
   addToast: (msg: string, type: 'success' | 'warning' | 'critical') => void;
@@ -20,6 +21,7 @@ export function GoogleSheetsSyncPanel({
   gAccessToken,
   onGoogleLogin,
   onGoogleLogout,
+  onGoogleSessionExpired,
   onSyncSuccess,
   theme,
   addToast
@@ -134,8 +136,26 @@ export function GoogleSheetsSyncPanel({
       addToast('Двусторонняя дельта-синхронизация успешно завершена! 🚀', 'success');
     } catch (err: any) {
       console.error(err);
-      setErrMessage(err.message || 'Произошла непредвиденная ошибка при синхронизации.');
-      addToast('Ошибка синхронизации Google Sheets', 'critical');
+      const errMsg = err.message || '';
+      const isAuthErr = err.isAuthError || 
+        errMsg.includes('401') || 
+        errMsg.includes('invalid authentication credentials') || 
+        errMsg.toLowerCase().includes('credential') || 
+        errMsg.toLowerCase().includes('auth') || 
+        errMsg.toLowerCase().includes('token');
+
+      if (isAuthErr) {
+        setErrMessage('Истек срок действия сессии Google (401). Пожалуйста, выполните повторный вход для возобновления синхронизации.');
+        addToast('Сессия Google истекла. Пожалуйста, войдите снова.', 'critical');
+        if (onGoogleSessionExpired) {
+          onGoogleSessionExpired();
+        } else {
+          onGoogleLogout();
+        }
+      } else {
+        setErrMessage(errMsg || 'Произошла непредвиденная ошибка при синхронизации.');
+        addToast('Ошибка синхронизации Google Sheets', 'critical');
+      }
     } finally {
       setSyncing(false);
     }

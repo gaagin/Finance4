@@ -30,6 +30,32 @@ interface DashboardOverviewProps {
   onReorderAccounts?: (newAccounts: Account[]) => void;
 }
 
+const getParentCategory = (cat: Category, allCategories: Category[]): Category => {
+  const separators = ['/', '—', '–', '-', '−'];
+  for (const sep of separators) {
+    if (cat.name.includes(sep)) {
+      const parts = cat.name.split(sep);
+      const parentName = parts[0].trim();
+      const parentCat = allCategories.find(
+        c => c.name.trim().toLowerCase() === parentName.toLowerCase() && c.type === cat.type
+      );
+      if (parentCat) {
+        return parentCat;
+      } else {
+        return {
+          id: `virtual-parent-${parentName.toLowerCase().replace(/\s+/g, '-')}`,
+          name: parentName,
+          icon: cat.icon,
+          color: cat.color,
+          type: cat.type,
+          quickEntry: cat.quickEntry
+        };
+      }
+    }
+  }
+  return cat;
+};
+
 export function DashboardOverview({
   transactions,
   categories,
@@ -78,6 +104,7 @@ export function DashboardOverview({
   const [isOrdinaryGroupExpanded, setIsOrdinaryGroupExpanded] = useState(true);
   const [isSavingsGroupExpanded, setIsSavingsGroupExpanded] = useState(true);
   const [showSubcategories, setShowSubcategories] = useState(false);
+  const [categoryGroupingMode, setCategoryGroupingMode] = useState<'parent' | 'sub'>('sub');
   const [selectedCategoryTransactions, setSelectedCategoryTransactions] = useState<{ category: Category; type: 'expense' | 'income' } | null>(null);
 
   // Sorting Accounts via hold-drag-and-drop
@@ -389,17 +416,23 @@ export function DashboardOverview({
     const breakdownMap: { [key: string]: { category: Category; amount: number; percentage: number } } = {};
 
     expenses.forEach(tx => {
-      const cat = categories.find(c => c.id === tx.categoryId);
+      let cat = categories.find(c => c.id === tx.categoryId);
       if (!cat) return;
 
-      if (!breakdownMap[tx.categoryId]) {
-        breakdownMap[tx.categoryId] = {
+      if (categoryGroupingMode === 'parent') {
+        cat = getParentCategory(cat, categories);
+      }
+
+      const key = cat.id;
+
+      if (!breakdownMap[key]) {
+        breakdownMap[key] = {
           category: cat,
           amount: 0,
           percentage: 0
         };
       }
-      breakdownMap[tx.categoryId].amount += tx.amount;
+      breakdownMap[key].amount += tx.amount;
     });
 
     const list = Object.values(breakdownMap);
@@ -413,7 +446,7 @@ export function DashboardOverview({
       list,
       total: totalExp
     };
-  }, [filteredAnalyticsTransactions, categories]);
+  }, [filteredAnalyticsTransactions, categories, categoryGroupingMode]);
 
   // Compute income category breakdown for the Treemap/List
   const incomeCategoryBreakdown = useMemo(() => {
@@ -423,17 +456,23 @@ export function DashboardOverview({
     const breakdownMap: { [key: string]: { category: Category; amount: number; percentage: number } } = {};
 
     incomes.forEach(tx => {
-      const cat = categories.find(c => c.id === tx.categoryId);
+      let cat = categories.find(c => c.id === tx.categoryId);
       if (!cat) return;
 
-      if (!breakdownMap[tx.categoryId]) {
-        breakdownMap[tx.categoryId] = {
+      if (categoryGroupingMode === 'parent') {
+        cat = getParentCategory(cat, categories);
+      }
+
+      const key = cat.id;
+
+      if (!breakdownMap[key]) {
+        breakdownMap[key] = {
           category: cat,
           amount: 0,
           percentage: 0
         };
       }
-      breakdownMap[tx.categoryId].amount += tx.amount;
+      breakdownMap[key].amount += tx.amount;
     });
 
     const list = Object.values(breakdownMap);
@@ -447,14 +486,24 @@ export function DashboardOverview({
       list,
       total: totalInc
     };
-  }, [filteredAnalyticsTransactions, categories]);
+  }, [filteredAnalyticsTransactions, categories, categoryGroupingMode]);
 
   const selectedCategoryTxs = useMemo(() => {
     if (!selectedCategoryTransactions) return [];
-    return filteredAnalyticsTransactions.filter(
-      t => t.categoryId === selectedCategoryTransactions.category.id && t.type === selectedCategoryTransactions.type
-    );
-  }, [filteredAnalyticsTransactions, selectedCategoryTransactions]);
+    
+    return filteredAnalyticsTransactions.filter(t => {
+      if (t.type !== selectedCategoryTransactions.type) return false;
+      const cat = categories.find(c => c.id === t.categoryId);
+      if (!cat) return false;
+      
+      if (categoryGroupingMode === 'parent') {
+        const parent = getParentCategory(cat, categories);
+        return parent.id === selectedCategoryTransactions.category.id;
+      }
+      
+      return t.categoryId === selectedCategoryTransactions.category.id;
+    });
+  }, [filteredAnalyticsTransactions, selectedCategoryTransactions, categories, categoryGroupingMode]);
 
   const sortedSelectedCategoryTxs = useMemo(() => {
     return [...selectedCategoryTxs].sort((a, b) => b.date.localeCompare(a.date));
@@ -540,17 +589,23 @@ export function DashboardOverview({
     const breakdownMap: { [key: string]: { category: Category; amount: number; percentage: number } } = {};
 
     typedTxs.forEach(tx => {
-      const cat = categories.find(c => c.id === tx.categoryId);
+      let cat = categories.find(c => c.id === tx.categoryId);
       if (!cat) return;
 
-      if (!breakdownMap[tx.categoryId]) {
-        breakdownMap[tx.categoryId] = {
+      if (categoryGroupingMode === 'parent') {
+        cat = getParentCategory(cat, categories);
+      }
+
+      const key = cat.id;
+
+      if (!breakdownMap[key]) {
+        breakdownMap[key] = {
           category: cat,
           amount: 0,
           percentage: 0
         };
       }
-      breakdownMap[tx.categoryId].amount += tx.amount;
+      breakdownMap[key].amount += tx.amount;
     });
 
     const list = Object.values(breakdownMap);
@@ -563,7 +618,7 @@ export function DashboardOverview({
       list,
       total: totalVal
     };
-  }, [transactions, categories, donutTimeframe, donutAccount, donutType]);
+  }, [transactions, categories, donutTimeframe, donutAccount, donutType, categoryGroupingMode]);
 
   // Determine budget warnings for active month May 2026
   const budgetWarnings = useMemo(() => {
@@ -1130,6 +1185,29 @@ export function DashboardOverview({
                 </div>
               )}
             />
+
+            <div className="flex bg-slate-900/90 p-0.5 rounded-xl border border-white/10 text-[11px] font-bold">
+              <button
+                onClick={() => setCategoryGroupingMode('parent')}
+                className={`px-3 py-1 rounded-lg transition-all cursor-pointer select-none whitespace-nowrap ${
+                  categoryGroupingMode === 'parent' 
+                    ? 'bg-teal-400 text-slate-950 font-black shadow-md' 
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                Вся категория
+              </button>
+              <button
+                onClick={() => setCategoryGroupingMode('sub')}
+                className={`px-3 py-1 rounded-lg transition-all cursor-pointer select-none whitespace-nowrap ${
+                  categoryGroupingMode === 'sub' 
+                    ? 'bg-teal-400 text-slate-950 font-black shadow-md' 
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                С подкатегориями
+              </button>
+            </div>
           </div>
         </div>
 
