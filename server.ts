@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const DEBUG_FILE = "/tmp/milli_request_debug.log";
+const DEBUG_FILE = path.join(process.cwd(), "tmp", "milli_request_debug.log");
 
 function logDebug(msg: string) {
   try {
@@ -18,6 +18,7 @@ function logDebug(msg: string) {
 }
 
 async function startServer() {
+  logDebug("startServer() function invoked in server.ts");
   const app = express();
   const PORT = 3000;
 

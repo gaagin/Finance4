@@ -11,7 +11,7 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const DEBUG_FILE = "/tmp/milli_request_debug.log";
+const DEBUG_FILE = path.join(process.cwd(), "tmp", "milli_request_debug.log");
 
 function logDebug(msg: string) {
   try {
@@ -23,6 +23,7 @@ function logDebug(msg: string) {
 }
 
 export default defineConfig(() => {
+  logDebug("vite.config.ts defineConfig function invoked");
   return {
     base: './',
     plugins: [
@@ -31,6 +32,7 @@ export default defineConfig(() => {
       {
         name: 'milli-api-assistant-dev',
         configureServer(server) {
+          logDebug("configureServer hook invoked in vite.config.ts");
           server.middlewares.use(async (req, res, next) => {
             if (req.url && req.url.includes('/api')) {
               logDebug(`Vite Middleware received request: ${req.method} ${req.url}`);
