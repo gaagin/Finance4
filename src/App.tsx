@@ -405,9 +405,9 @@ export default function App() {
   useEffect(() => {
     if (!gAccessToken) return;
 
-    // Fast check: if the token is already expired, safely pause auto-sync without kicking user out
-    if (isGoogleTokenExpired()) {
-      console.warn('Google Access token has expired. Suspending background auto-sync.');
+    // Fast check: if the token is already expired and there are actually modifications, safely pause auto-sync without kicking user out
+    if (isGoogleTokenExpired() && hasUnsavedSyncChangesRef.current) {
+      console.warn('Google Access token has expired with changes pending. Suspending background auto-sync.');
       handleGoogleSessionExpired(true);
       return;
     }
@@ -585,8 +585,8 @@ export default function App() {
         setNeedsAuth(false);
         localStorage.setItem('milli_g_access_token', result.accessToken);
         
-        // Save token expiry timestamp (expires in 1 hour minus 50 seconds safety margin)
-        const expiryTime = Date.now() + 3550 * 1000;
+        // Save token expiry timestamp (extends local sessions to 24 hours for smooth viewing/idle retention)
+        const expiryTime = Date.now() + 24 * 3600 * 1000;
         localStorage.setItem('milli_g_access_token_expiry', expiryTime.toString());
         
         addToast("Вход выполнен успешно!", "success" as any);
@@ -630,7 +630,7 @@ export default function App() {
     localStorage.removeItem('milli_g_access_token_expiry');
     
     if (isBackground) {
-      console.log("Background Google session expired. Auto-sync has been safely paused.");
+      console.log("Background Google session expired. Auto-sync has been safely and silently paused.");
     } else {
       addToast("Сессия Google истекла. Пожалуйста, авторизуйтесь заново для синхронизации.", "warning");
     }
@@ -1392,6 +1392,19 @@ export default function App() {
                       ☁️ Синхронизировано
                     </span>
                   )
+                ) : currentUser ? (
+                  <button 
+                    onClick={handleGoogleLogin}
+                    className={`flex items-center gap-1.5 px-1.5 py-0.2 rounded text-[7px] font-bold border cursor-pointer transition-all ${
+                      theme === 'dark'
+                        ? 'bg-amber-500/10 text-amber-300 border-amber-500/20 hover:bg-amber-500/20'
+                        : 'bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100'
+                    }`}
+                    title="Google-сессия приостановлена, новые транзакции временно пишутся локально. Нажмите, чтобы быстро обновить доступ в один клик!"
+                    id="header-google-renew-btn"
+                  >
+                    ☁️ Локально (нажмите для синхронизации)
+                  </button>
                 ) : (
                   <span 
                     className={`flex items-center gap-1 px-1 py-0.2 rounded text-[7px] font-bold border ${

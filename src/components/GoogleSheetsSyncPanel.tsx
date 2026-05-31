@@ -207,10 +207,15 @@ export function GoogleSheetsSyncPanel({
             {gAccessToken ? (
               <div className="text-[13px] font-bold text-teal-400 flex items-center gap-1.5 mt-0.5">
                 <span className="w-2 h-2 rounded-full bg-teal-400 animate-ping" />
-                <span>Авторизован в Google</span>
+                <span>Авторизован (Облачная синхронизация)</span>
+              </div>
+            ) : currentUser ? (
+              <div className="text-[13px] font-bold text-amber-500 flex items-center gap-1.5 mt-0.5" title="Сессия Google Sheets истекла (1 час). Все расходы сохраняются локально!">
+                <span className="w-2 h-2 rounded-full bg-amber-500" />
+                <span>Автономный режим (Локальное сохранение)</span>
               </div>
             ) : (
-              <div className="text-[13px] font-bold text-amber-500 mt-0.5">Требуется авторизация</div>
+              <div className="text-[13px] font-bold text-slate-500 mt-0.5">Гугл-аккаунт отключен</div>
             )}
           </div>
         </div>
@@ -241,6 +246,23 @@ export function GoogleSheetsSyncPanel({
           )}
         </div>
       </div>
+
+      {/* Reassurance Alert for Offline editing */}
+      {!gAccessToken && currentUser && (
+        <div className={`p-4 rounded-2xl border mb-6 text-xs flex gap-3 leading-relaxed transition-all ${
+          isDark ? 'bg-teal-500/5 border-teal-500/10 text-teal-300' : 'bg-teal-50/40 border-teal-500/20 text-teal-800'
+        }`}>
+          <div className="text-lg">🛡️</div>
+          <div>
+            <p className="font-bold mb-1">Вы можете свободно записывать любые расходы каждый день!</p>
+            <p className={`text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+              Действительно, Google ограничивает время действия своего ключа ровно <b>1 часом</b> в целях безопасности. Это фундаментальное требование самого протокола Google OAuth, и ни одно клиентское приложение в мире не может выдать токен на месяц.
+              <br /><br />
+              <b>Но для вас это не преграда:</b> вы можете свободно вносить расходы завтра, послезавтра или через неделю абсолютно без интернета и без авторизации. При внесении трат они моментально сохраняются локально у вас в телефоне. И когда вам захочется сделать копию — просто нажмите <b>«СИНХРОНИЗИРОВАТЬ С GOOGLE SHEETS»</b>, браузер на мгновение восстановит сессию в один клик и сольет все накопленные данные в таблицу!
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Sync Strategy Explanation Card */}
       <div className={`p-4 rounded-2xl border mb-6 text-xs space-y-3 leading-relaxed ${
