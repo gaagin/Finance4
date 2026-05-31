@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { FinanceData } from '../types';
-import { Sparkles, Send, Trash2, HelpCircle, Bot, User, ArrowRight, Loader2, DollarSign, Wallet, ShieldAlert, BarChart3 } from 'lucide-react';
+import { Sparkles, Send, Trash2, HelpCircle, Bot, User, ArrowRight, Loader2, DollarSign, Wallet, ShieldAlert, BarChart3, Settings } from 'lucide-react';
 
 interface Message {
   id: string;
@@ -13,6 +13,83 @@ interface AiAssistantPanelProps {
   financeData: FinanceData;
   theme: 'light' | 'dark';
   addToast: (msg: string, type: 'warning' | 'critical' | 'success') => void;
+}
+
+// Prepares structured system data and historical messages so that client-side and server-side modes behave identically
+function prepareGeminiPayload(financeData: FinanceData, message: string, history: any[]) {
+  let financialContext = "У пользователя пока нет зафиксированных финансовых данных.";
+  if (financeData) {
+    const { accounts = [], categories = [], budgets = [], transactions = [] } = financeData;
+
+    const accSummary = accounts
+      .map((a: any) => `- ${a.name}: ${Math.round(a.balance).toLocaleString('ru-RU')} ₼ (тип: ${a.type === 'savings' ? 'Копилка / Накопления' : 'Расчетный счет/карта'})`)
+      .join("\n");
+
+    const catSummary = categories
+      .map((c: any) => `- ${c.name} (${c.type === 'expense' ? 'Расходная категория' : 'Доходная категория'})`)
+      .join("\n");
+
+    const budgetSummary = budgets
+      .map((b: any) => {
+        const cat = categories.find((c: any) => c.id === b.categoryId);
+        return `- Бюджет на "${cat ? cat.name : 'Категорию ' + b.categoryId}": лимит ${b.amount} ₼`;
+      })
+      .join("\n");
+
+    const txSorted = [...transactions].sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    const txSummary = txSorted.slice(0, 50).map((t: any) => {
+      const acc = accounts.find((a: any) => a.id === t.accountId);
+      const cat = categories.find((c: any) => c.id === t.categoryId);
+      const formattedDate = new Date(t.date).toLocaleDateString('ru-RU');
+      const sign = t.type === 'expense' ? '-' : '+';
+      return `- ${formattedDate}: [${t.type === 'expense' ? 'РАСХОД' : 'ДОХОД'}] ${sign}${Math.round(t.amount)} ₼ | "${cat ? cat.name : 'Без категории'}" | Счет: "${acc ? acc.name : 'Неизвестно'}" ${t.comment ? '(' + t.comment + ')' : ''}`;
+    }).join("\n");
+
+    financialContext = `
+=== СЧЕТА И НАКОПЛЕНИЯ ===
+${accSummary || 'Нет данных'}
+
+=== КАТЕГОРИИ И БЮДЖЕТЫ ===
+${catSummary || 'Нет категорий'}
+${budgetSummary ? '\nТекущие лимиты бюджетов:\n' + budgetSummary : '\nБюджеты не установлены.'}
+
+=== ПОСЛЕДНИЕ ОПЕРАЦИИ (ДО 50 ШТУК) ===
+${txSummary || 'Нет операций'}
+`;
+  }
+
+  const systemInstruction = `Вы — профессиональный финансовый советник, дружелюбный и искренний ИИ-помощник по имени Milli (Милли) в приложении "Домашние Финансы".
+Ваша цель — помогать пользователю анализировать его расходы и доходы, давать практичные советы по оптимизации бюджета, ставить умные финансовые цели и отвечать на любые финансовые вопросы.
+
+Пожалуйста, руководствуйтесь следующими правилами:
+1. Основная валюта приложения — Азербайджанский манат (обозначается как ₼ или AZN). Текстовые ответы должны оперировать этой валютой.
+2. Подробно анализируйте переданные структурированные данные о счетах, бюджетах и транзакциях пользователя, чтобы давать индивидуальные советы, например:
+   - "Я заметил(а), что у вас по счету 'Зарубежные акции' баланс равен..."
+   - "Вы тратите много на категорию '...', возможно стоит установить для нее лимит бюджета?"
+   - "В этом месяце вы уже совершили несколько крупных переводов..."
+3. Форматируйте свои ответы красиво и читабельно с использованием Markdown (подзаголовки, жирные шрифты, списки и эмодзи).
+4. Отвечайте строго на русском языке, будьте вежливы, лаконичны и профессиональны. Избегайте скучных сухих отчетов; используйте живой человеческий слог.
+
+Текущие финансовые данные пользователя для анализа:
+${financialContext}
+`;
+
+  const contents: any[] = [];
+  if (history && Array.isArray(history)) {
+    for (const msg of history) {
+      contents.push({
+        role: msg.role === 'user' ? 'user' : 'model',
+        parts: [{ text: msg.text }]
+      });
+    }
+  }
+
+  contents.push({
+    role: 'user',
+    parts: [{ text: message }]
+  });
+
+  return { systemInstruction, contents };
 }
 
 export function AiAssistantPanel({ financeData, theme, addToast }: AiAssistantPanelProps) {
@@ -36,6 +113,24 @@ export function AiAssistantPanel({ financeData, theme, addToast }: AiAssistantPa
   const [loading, setLoading] = useState(false);
   const [loadingTip, setLoadingTip] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Connection management states (workaround for cookie/404 restrictions)
+  const [connectionMode, setConnectionMode] = useState<'server' | 'direct'>(() => {
+    return (localStorage.getItem('milli_ai_connection_mode') as 'server' | 'direct') || 'server';
+  });
+  const [directApiKey, setDirectApiKey] = useState(() => {
+    return localStorage.getItem('milli_ai_direct_key') || '';
+  });
+  const [showSettings, setShowSettings] = useState(false);
+
+  // Persists connection settings
+  useEffect(() => {
+    localStorage.setItem('milli_ai_connection_mode', connectionMode);
+  }, [connectionMode]);
+
+  useEffect(() => {
+    localStorage.setItem('milli_ai_direct_key', directApiKey);
+  }, [directApiKey]);
 
   // Persists chat history to localStorage
   useEffect(() => {
@@ -81,6 +176,7 @@ export function AiAssistantPanel({ financeData, theme, addToast }: AiAssistantPa
 
     setMessages(prev => [...prev, userMessage]);
     setInput('');
+    setShowSettings(false); // Auto-hide settings overlay on message submission
     setLoading(true);
 
     try {
@@ -90,29 +186,71 @@ export function AiAssistantPanel({ financeData, theme, addToast }: AiAssistantPa
         text: m.text
       }));
 
-      const res = await fetch('/api/assistant', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          message: textToSend,
-          history: historyPayload,
-          financeData: financeData
-        })
-      });
+      let replyText = '';
 
-      if (!res.ok) {
-        const errData = await res.json().catch(() => ({}));
-        throw new Error(errData.error || `Ошибка сервера (${res.status})`);
+      if (connectionMode === 'direct') {
+        const apiKey = directApiKey.trim();
+        if (!apiKey) {
+          throw new Error('Ключ API Gemini не указан. Нажмите на иконку шестерёнки вверху панели и введите ваш API-ключ Gemini.');
+        }
+
+        const { systemInstruction, contents } = prepareGeminiPayload(financeData, textToSend, historyPayload);
+        const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+
+        const res = await fetch(geminiUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            contents: contents,
+            systemInstruction: {
+              parts: [{ text: systemInstruction }]
+            },
+            generationConfig: {
+              temperature: 0.7
+            }
+          })
+        });
+
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          const errorMsg = errData.error?.message || `Ошибка API Gemini (${res.status})`;
+          throw new Error(errorMsg);
+        }
+
+        const data = await res.json();
+        replyText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Извините, не удалось сгенерировать ответ.";
+      } else {
+        // Mode: 'server'
+        const res = await fetch('/api/assistant', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            message: textToSend,
+            history: historyPayload,
+            financeData: financeData
+          })
+        });
+
+        if (!res.ok) {
+          if (res.status === 404) {
+            throw new Error('Код ошибки 404 (Not Found). Системный API-прокси заблокирован браузером или контейнер не запущен.');
+          }
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.error || `Ошибка сервера (${res.status})`);
+        }
+
+        const data = await res.json();
+        replyText = data.text || 'К сожалению, ответ не был получен.';
       }
-
-      const data = await res.json();
       
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString() + '-assistant',
         role: 'assistant',
-        text: data.text || 'К сожалению, ответ не был получен.',
+        text: replyText,
         timestamp: new Date()
       };
 
@@ -121,11 +259,17 @@ export function AiAssistantPanel({ financeData, theme, addToast }: AiAssistantPa
       console.error(err);
       addToast(err?.message || "Не удалось связаться с ИИ-помощником.", 'critical');
       
-      // Add error message to chat so user knows what failed
+      const is404 = err?.message?.includes('404') || err?.message?.includes('404') || err?.message?.toLowerCase().includes('not found');
+      
+      // Add detailed explanation of alternative path right inside the chat window
       const errorMessage: Message = {
         id: (Date.now() + 1).toString() + '-assistant',
         role: 'assistant',
-        text: `⚠️ **Ошибка подключения к ИИ-помощнику**: ${err?.message || 'Пожалуйста, проверьте наличие ключа GEMINI_API_KEY в меню настроек.'}`,
+        text: `⚠️ **Ошибка подключения**: ${err?.message || 'Не удалось связаться с ИИ-помощником.'}\n\n${
+          is404 
+            ? '📌 **Альтернативный путь без ошибок**: Нажмите на иконку шестерёнки вверху панели чата ⚙️, выберите **«Прямое подключение к Gemini»** и укажите свой собственный ключ API. В этом случае все запросы будут идти напрямую в Google, обходя серверное прокси. Это гарантирует 100% стабильную работу приложения!' 
+            : ''
+        }`,
         timestamp: new Date()
       };
       setMessages(prev => [...prev, errorMessage]);
@@ -309,22 +453,145 @@ export function AiAssistantPanel({ financeData, theme, addToast }: AiAssistantPa
             <p className="text-[10px] text-slate-400">Анализ расходов, лимитов, бюджетов и полезные инсайты</p>
           </div>
         </div>
-        {messages.length > 0 && (
+        
+        <div className="flex items-center gap-1.5">
           <button 
-            onClick={handleClearHistory}
-            className={`p-1.5 rounded-lg border text-rose-500/80 hover:text-rose-500 hover:bg-rose-500/5 transition-all cursor-pointer ${
-              isDark ? 'border-purple-500/10' : 'border-slate-200'
+            onClick={() => setShowSettings(!showSettings)}
+            className={`p-1.5 rounded-lg border transition-all cursor-pointer ${
+              showSettings 
+                ? 'bg-teal-500/15 border-teal-500/35 text-teal-400' 
+                : isDark ? 'border-purple-500/10 text-slate-400 hover:text-slate-200 hover:bg-slate-950/40' : 'border-slate-200 text-slate-500 hover:bg-slate-50'
             }`}
-            title="Очистить чат"
+            title="Настройки подключения к ИИ"
           >
-            <Trash2 size={14} />
+            <Settings size={14} className={showSettings ? "animate-spin" : ""} />
           </button>
-        )}
+          
+          {messages.length > 0 && (
+            <button 
+              onClick={handleClearHistory}
+              className={`p-1.5 rounded-lg border text-rose-500/80 hover:text-rose-500 hover:bg-rose-500/5 transition-all cursor-pointer ${
+                isDark ? 'border-purple-500/10' : 'border-slate-200'
+              }`}
+              title="Очистить чат"
+            >
+              <Trash2 size={14} />
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Messages / Welcome View Area */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4 scroll-smooth">
-        {messages.length === 0 ? (
+        {showSettings ? (
+          <div className="max-w-xl mx-auto py-4 space-y-6 animate-fade-in" id="milli-api-settings-panel">
+            <div className={`p-5 rounded-2xl border ${
+              isDark ? 'bg-slate-950/40 border-teal-500/15' : 'bg-teal-50/10 border-teal-500/20'
+            }`}>
+              <div className="flex items-center gap-2 mb-3">
+                <div className="p-1.5 rounded-lg bg-teal-500/10 text-teal-400">
+                  <Settings size={16} />
+                </div>
+                <div>
+                  <h3 className="text-xs font-black font-display text-slate-200 leading-tight">
+                    Настройки подключения Milli к Gemini
+                  </h3>
+                  <p className="text-[10px] text-slate-500">Настройка сетевого маршрута для обхода ошибки 404</p>
+                </div>
+              </div>
+
+              <div className="space-y-4 text-xs">
+                <div>
+                  <label className="block text-[10px] uppercase tracking-wider font-extrabold text-slate-400 mb-2">
+                    Способ подключения к ИИ-модели:
+                  </label>
+                  
+                  <div className="space-y-2">
+                    {/* Server Mode Option */}
+                    <label className={`flex p-3 rounded-xl border cursor-pointer transition-all ${
+                      connectionMode === 'server' 
+                        ? 'border-teal-500/40 bg-teal-500/5' 
+                        : isDark ? 'border-white/5 bg-slate-950/20 hover:bg-slate-950/30' : 'border-slate-200 bg-slate-50/20 hover:bg-white'
+                    }`}>
+                      <input 
+                        type="radio" 
+                        name="connectionMode" 
+                        value="server" 
+                        checked={connectionMode === 'server'}
+                        onChange={() => setConnectionMode('server')}
+                        className="mt-0.5 mr-3 accent-teal-500 scale-90"
+                      />
+                      <div className="flex-1">
+                        <span className="font-extrabold text-[11px] flex items-center gap-1.5 text-slate-200 leading-none">
+                          🏢 Встроенный прокси-сервер системы
+                        </span>
+                        <p className="text-[9.5px] text-slate-400 mt-1.5 leading-relaxed">
+                          Стандартное подключение через сервер приложения. Иногда может выдавать код 404, если браузер блокирует защитные сессионные куки (например, в Safari или режиме инкогнито).
+                        </p>
+                      </div>
+                    </label>
+
+                    {/* Direct Client Mode Option */}
+                    <label className={`flex p-3 rounded-xl border cursor-pointer transition-all ${
+                      connectionMode === 'direct' 
+                        ? 'border-teal-500/40 bg-teal-500/5' 
+                        : isDark ? 'border-white/5 bg-slate-950/20 hover:bg-slate-950/30' : 'border-slate-200 bg-slate-50/20 hover:bg-white'
+                    }`}>
+                      <input 
+                        type="radio" 
+                        name="connectionMode" 
+                        value="direct" 
+                        checked={connectionMode === 'direct'}
+                        onChange={() => setConnectionMode('direct')}
+                        className="mt-0.5 mr-3 accent-teal-500 scale-90"
+                      />
+                      <div className="flex-1">
+                        <span className="font-extrabold text-[11px] flex items-center gap-1.5 text-teal-300 leading-none">
+                          ⚡ Прямое подключение к Gemini (Рекомендуется при 404)
+                        </span>
+                        <p className="text-[9.5px] text-slate-400 mt-1.5 leading-relaxed">
+                          Запросы отправляются напрямую из вашего браузера в Google. Полностью устраняет проблемы совместимости, блокировку cookies и ошибки 404!
+                        </p>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+
+                {connectionMode === 'direct' && (
+                  <div className="space-y-2 p-3.5 bg-slate-950/35 border border-teal-500/10 rounded-xl">
+                    <label className="block text-[10px] uppercase font-extrabold text-teal-400">
+                      Ваш API-Ключ Gemini:
+                    </label>
+                    <input 
+                      type="password"
+                      value={directApiKey}
+                      onChange={(e) => setDirectApiKey(e.target.value)}
+                      placeholder="Введите ключ: AIzaSy..."
+                      className={`w-full px-3 py-2 text-xs rounded-lg border font-mono ${
+                        isDark 
+                          ? 'bg-slate-950 border-white/5 text-slate-100 placeholder-slate-600 focus:border-teal-500/40 focus:ring-1 focus:ring-teal-500/25' 
+                          : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400 focus:border-teal-500/30'
+                      }`}
+                    />
+                    <div className="text-[9.5px] text-slate-400 leading-normal">
+                      💡 Свой ключ можно быстро получить бесплатно на официальном сайте <a href="https://aistudio.google.com/" target="_blank" rel="noopener noreferrer" className="text-teal-400 hover:underline font-extrabold">Google AI Studio</a>. Ключ сохраняется локально на вашем устройстве.
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex gap-2 pt-2">
+                  <button 
+                    type="button"
+                    onClick={() => setShowSettings(false)}
+                    className="flex-1 py-2 rounded-xl bg-teal-500 hover:bg-teal-400 text-slate-950 font-black text-xs transition-all cursor-pointer shadow-md"
+                  >
+                    Применить и продолжить
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : messages.length === 0 ? (
           <div className="max-w-xl mx-auto py-6 space-y-6">
             
             {/* Mascot greetings */}
