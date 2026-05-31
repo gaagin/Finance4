@@ -1,0 +1,137 @@
+var __create = Object.create;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
+
+// server.ts
+var import_express = __toESM(require("express"), 1);
+var import_path = __toESM(require("path"), 1);
+var import_vite = require("vite");
+var import_genai = require("@google/genai");
+var import_dotenv = __toESM(require("dotenv"), 1);
+import_dotenv.default.config();
+async function startServer() {
+  const app = (0, import_express.default)();
+  const PORT = 3e3;
+  app.use(import_express.default.json());
+  const apiKey = process.env.GEMINI_API_KEY;
+  const ai = new import_genai.GoogleGenAI({
+    apiKey: apiKey || "MOCK_KEY_IF_UNDEFINED",
+    httpOptions: {
+      headers: {
+        "User-Agent": "aistudio-build"
+      }
+    }
+  });
+  app.post("/api/assistant", async (req, res) => {
+    try {
+      const { message, history, financeData } = req.body;
+      if (!apiKey) {
+        res.status(500).json({ error: "\u041A\u043B\u044E\u0447 API Gemini (GEMINI_API_KEY) \u043D\u0435 \u0443\u0441\u0442\u0430\u043D\u043E\u0432\u043B\u0435\u043D. \u041D\u0430\u0441\u0442\u0440\u043E\u0439\u0442\u0435 \u0435\u0433\u043E \u0432 Settings -> Secrets." });
+        return;
+      }
+      let financialContext = "\u0423 \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044F \u043F\u043E\u043A\u0430 \u043D\u0435\u0442 \u0437\u0430\u0444\u0438\u043A\u0441\u0438\u0440\u043E\u0432\u0430\u043D\u043D\u044B\u0445 \u0444\u0438\u043D\u0430\u043D\u0441\u043E\u0432\u044B\u0445 \u0434\u0430\u043D\u043D\u044B\u0445.";
+      if (financeData) {
+        const { accounts = [], categories = [], budgets = [], transactions = [] } = financeData;
+        const accSummary = accounts.map((a) => `- ${a.name}: ${Math.round(a.balance).toLocaleString("ru-RU")} \u20BC (\u0442\u0438\u043F: ${a.type === "savings" ? "\u041A\u043E\u043F\u0438\u043B\u043A\u0430 / \u041D\u0430\u043A\u043E\u043F\u043B\u0435\u043D\u0438\u044F" : "\u0420\u0430\u0441\u0447\u0435\u0442\u043D\u044B\u0439 \u0441\u0447\u0435\u0442/\u043A\u0430\u0440\u0442\u0430"})`).join("\n");
+        const catSummary = categories.map((c) => `- ${c.name} (${c.type === "expense" ? "\u0420\u0430\u0441\u0445\u043E\u0434\u043D\u0430\u044F \u043A\u0430\u0442\u0435\u0433\u043E\u0440\u0438\u044F" : "\u0414\u043E\u0445\u043E\u0434\u043D\u0430\u044F \u043A\u0430\u0442\u0435\u0433\u043E\u0440\u0438\u044F"})`).join("\n");
+        const budgetSummary = budgets.map((b) => {
+          const cat = categories.find((c) => c.id === b.categoryId);
+          return `- \u0411\u044E\u0434\u0436\u0435\u0442 \u043D\u0430 "${cat ? cat.name : "\u041A\u0430\u0442\u0435\u0433\u043E\u0440\u0438\u044E " + b.categoryId}": \u043B\u0438\u043C\u0438\u0442 ${b.amount} \u20BC`;
+        }).join("\n");
+        const txSorted = [...transactions].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        const txSummary = txSorted.slice(0, 50).map((t) => {
+          const acc = accounts.find((a) => a.id === t.accountId);
+          const cat = categories.find((c) => c.id === t.categoryId);
+          const formattedDate = new Date(t.date).toLocaleDateString("ru-RU");
+          const sign = t.type === "expense" ? "-" : "+";
+          return `- ${formattedDate}: [${t.type === "expense" ? "\u0420\u0410\u0421\u0425\u041E\u0414" : "\u0414\u041E\u0425\u041E\u0414"}] ${sign}${Math.round(t.amount)} \u20BC | "${cat ? cat.name : "\u0411\u0435\u0437 \u043A\u0430\u0442\u0435\u0433\u043E\u0440\u0438\u0438"}" | \u0421\u0447\u0435\u0442: "${acc ? acc.name : "\u041D\u0435\u0438\u0437\u0432\u0435\u0441\u0442\u043D\u043E"}" ${t.comment ? "(" + t.comment + ")" : ""}`;
+        }).join("\n");
+        financialContext = `
+=== \u0421\u0427\u0415\u0422\u0410 \u0418 \u041D\u0410\u041A\u041E\u041F\u041B\u0415\u041D\u0418\u042F ===
+${accSummary || "\u041D\u0435\u0442 \u0434\u0430\u043D\u043D\u044B\u0445"}
+
+=== \u041A\u0410\u0422\u0415\u0413\u041E\u0420\u0418\u0418 \u0418 \u0411\u042E\u0414\u0416\u0415\u0422\u042B ===
+${catSummary || "\u041D\u0435\u0442 \u043A\u0430\u0442\u0435\u0433\u043E\u0440\u0438\u0439"}
+${budgetSummary ? "\n\u0422\u0435\u043A\u0443\u0449\u0438\u0435 \u043B\u0438\u043C\u0438\u0442\u044B \u0431\u044E\u0434\u0436\u0435\u0442\u043E\u0432:\n" + budgetSummary : "\n\u0411\u044E\u0434\u0436\u0435\u0442\u044B \u043D\u0435 \u0443\u0441\u0442\u0430\u043D\u043E\u0432\u043B\u0435\u043D\u044B."}
+
+=== \u041F\u041E\u0421\u041B\u0415\u0414\u041D\u0418\u0415 \u041E\u041F\u0415\u0420\u0410\u0426\u0418\u0418 (\u0414\u041E 50 \u0428\u0422\u0423\u041A) ===
+${txSummary || "\u041D\u0435\u0442 \u043E\u043F\u0435\u0440\u0430\u0446\u0438\u0439"}
+`;
+      }
+      const systemInstruction = `\u0412\u044B \u2014 \u043F\u0440\u043E\u0444\u0435\u0441\u0441\u0438\u043E\u043D\u0430\u043B\u044C\u043D\u044B\u0439 \u0444\u0438\u043D\u0430\u043D\u0441\u043E\u0432\u044B\u0439 \u0441\u043E\u0432\u0435\u0442\u043D\u0438\u043A, \u0434\u0440\u0443\u0436\u0435\u043B\u044E\u0431\u043D\u044B\u0439 \u0438 \u0438\u0441\u043A\u0440\u0435\u043D\u043D\u0438\u0439 \u0418\u0418-\u043F\u043E\u043C\u043E\u0449\u043D\u0438\u043A \u043F\u043E \u0438\u043C\u0435\u043D\u0438 Milli (\u041C\u0438\u043B\u043B\u0438) \u0432 \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0438 "\u0414\u043E\u043C\u0430\u0448\u043D\u0438\u0435 \u0424\u0438\u043D\u0430\u043D\u0441\u044B".
+\u0412\u0430\u0448\u0430 \u0446\u0435\u043B\u044C \u2014 \u043F\u043E\u043C\u043E\u0433\u0430\u0442\u044C \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044E \u0430\u043D\u0430\u043B\u0438\u0437\u0438\u0440\u043E\u0432\u0430\u0442\u044C \u0435\u0433\u043E \u0440\u0430\u0441\u0445\u043E\u0434\u044B \u0438 \u0434\u043E\u0445\u043E\u0434\u044B, \u0434\u0430\u0432\u0430\u0442\u044C \u043F\u0440\u0430\u043A\u0442\u0438\u0447\u043D\u044B\u0435 \u0441\u043E\u0432\u0435\u0442\u044B \u043F\u043E \u043E\u043F\u0442\u0438\u043C\u0438\u0437\u0430\u0446\u0438\u0438 \u0431\u044E\u0434\u0436\u0435\u0442\u0430, \u0441\u0442\u0430\u0432\u0438\u0442\u044C \u0443\u043C\u043D\u044B\u0435 \u0444\u0438\u043D\u0430\u043D\u0441\u043E\u0432\u044B\u0435 \u0446\u0435\u043B\u0438 \u0438 \u043E\u0442\u0432\u0435\u0447\u0430\u0442\u044C \u043D\u0430 \u043B\u044E\u0431\u044B\u0435 \u0444\u0438\u043D\u0430\u043D\u0441\u043E\u0432\u044B\u0435 \u0432\u043E\u043F\u0440\u043E\u0441\u044B.
+
+\u041F\u043E\u0436\u0430\u043B\u0443\u0439\u0441\u0442\u0430, \u0440\u0443\u043A\u043E\u0432\u043E\u0434\u0441\u0442\u0432\u0443\u0439\u0442\u0435\u0441\u044C \u0441\u043B\u0435\u0434\u0443\u044E\u0449\u0438\u043C\u0438 \u043F\u0440\u0430\u0432\u0438\u043B\u0430\u043C\u0438:
+1. \u041E\u0441\u043D\u043E\u0432\u043D\u0430\u044F \u0432\u0430\u043B\u044E\u0442\u0430 \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u044F \u2014 \u0410\u0437\u0435\u0440\u0431\u0430\u0439\u0434\u0436\u0430\u043D\u0441\u043A\u0438\u0439 \u043C\u0430\u043D\u0430\u0442 (\u043E\u0431\u043E\u0437\u043D\u0430\u0447\u0430\u0435\u0442\u0441\u044F \u043A\u0430\u043A \u20BC \u0438\u043B\u0438 AZN). \u0422\u0435\u043A\u0441\u0442\u043E\u0432\u044B\u0435 \u043E\u0442\u0432\u0435\u0442\u044B \u0434\u043E\u043B\u0436\u043D\u044B \u043E\u043F\u0435\u0440\u0438\u0440\u043E\u0432\u0430\u0442\u044C \u044D\u0442\u043E\u0439 \u0432\u0430\u043B\u044E\u0442\u043E\u0439.
+2. \u041F\u043E\u0434\u0440\u043E\u0431\u043D\u043E \u0430\u043D\u0430\u043B\u0438\u0437\u0438\u0440\u0443\u0439\u0442\u0435 \u043F\u0435\u0440\u0435\u0434\u0430\u043D\u043D\u044B\u0435 \u0441\u0442\u0440\u0443\u043A\u0442\u0443\u0440\u0438\u0440\u043E\u0432\u0430\u043D\u043D\u044B\u0435 \u0434\u0430\u043D\u043D\u044B\u0435 \u043E \u0441\u0447\u0435\u0442\u0430\u0445, \u0431\u044E\u0434\u0436\u0435\u0442\u0430\u0445 \u0438 \u0442\u0440\u0430\u043D\u0437\u0430\u043A\u0446\u0438\u044F\u0445 \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044F, \u0447\u0442\u043E\u0431\u044B \u0434\u0430\u0432\u0430\u0442\u044C \u0438\u043D\u0434\u0438\u0432\u0438\u0434\u0443\u0430\u043B\u044C\u043D\u044B\u0435 \u0441\u043E\u0432\u0435\u0442\u044B, \u043D\u0430\u043F\u0440\u0438\u043C\u0435\u0440:
+   - "\u042F \u0437\u0430\u043C\u0435\u0442\u0438\u043B(\u0430), \u0447\u0442\u043E \u0443 \u0432\u0430\u0441 \u043F\u043E \u0441\u0447\u0435\u0442\u0443 '\u0417\u0430\u0440\u0443\u0431\u0435\u0436\u043D\u044B\u0435 \u0430\u043A\u0446\u0438\u0438' \u0431\u0430\u043B\u0430\u043D\u0441 \u0440\u0430\u0432\u0435\u043D..."
+   - "\u0412\u044B \u0442\u0440\u0430\u0442\u0438\u0442\u0435 \u043C\u043D\u043E\u0433\u043E \u043D\u0430 \u043A\u0430\u0442\u0435\u0433\u043E\u0440\u0438\u044E '...', \u0432\u043E\u0437\u043C\u043E\u0436\u043D\u043E \u0441\u0442\u043E\u0438\u0442 \u0443\u0441\u0442\u0430\u043D\u043E\u0432\u0438\u0442\u044C \u0434\u043B\u044F \u043D\u0435\u0435 \u043B\u0438\u043C\u0438\u0442 \u0431\u044E\u0434\u0436\u0435\u0442\u0430?"
+   - "\u0412 \u044D\u0442\u043E\u043C \u043C\u0435\u0441\u044F\u0446\u0435 \u0432\u044B \u0443\u0436\u0435 \u0441\u043E\u0432\u0435\u0440\u0448\u0438\u043B\u0438 \u043D\u0435\u0441\u043A\u043E\u043B\u044C\u043A\u043E \u043A\u0440\u0443\u043F\u043D\u044B\u0445 \u043F\u0435\u0440\u0435\u0432\u043E\u0434\u043E\u0432..."
+3. \u0424\u043E\u0440\u043C\u0430\u0442\u0438\u0440\u0443\u0439\u0442\u0435 \u0441\u0432\u043E\u0438 \u043E\u0442\u0432\u0435\u0442\u044B \u043A\u0440\u0430\u0441\u0438\u0432\u043E \u0438 \u0447\u0438\u0442\u0430\u0431\u0435\u043B\u044C\u043D\u043E \u0441 \u0438\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u043D\u0438\u0435\u043C Markdown (\u043F\u043E\u0434\u0437\u0430\u0433\u043E\u043B\u043E\u0432\u043A\u0438, \u0436\u0438\u0440\u043D\u044B\u0435 \u0448\u0440\u0438\u0444\u0442\u044B, \u0441\u043F\u0438\u0441\u043A\u0438 \u0438 \u044D\u043C\u043E\u0434\u0437\u0438).
+4. \u041E\u0442\u0432\u0435\u0447\u0430\u0439\u0442\u0435 \u0441\u0442\u0440\u043E\u0433\u043E \u043D\u0430 \u0440\u0443\u0441\u0441\u043A\u043E\u043C \u044F\u0437\u044B\u043A\u0435, \u0431\u0443\u0434\u044C\u0442\u0435 \u0432\u0435\u0436\u043B\u0438\u0432\u044B, \u043B\u0430\u043A\u043E\u043D\u0438\u0447\u043D\u044B \u0438 \u043F\u0440\u043E\u0444\u0435\u0441\u0441\u0438\u043E\u043D\u0430\u043B\u044C\u043D\u044B. \u0418\u0437\u0431\u0435\u0433\u0430\u0439\u0442\u0435 \u0441\u043A\u0443\u0447\u043D\u044B\u0445 \u0441\u0443\u0445\u0438\u0445 \u043E\u0442\u0447\u0435\u0442\u043E\u0432; \u0438\u0441\u043F\u043E\u043B\u044C\u0437\u0443\u0439\u0442\u0435 \u0436\u0438\u0432\u043E\u0439 \u0447\u0435\u043B\u043E\u0432\u0435\u0447\u0435\u0441\u043A\u0438\u0439 \u0441\u043B\u043E\u0433.
+`;
+      const contents = [];
+      if (history && Array.isArray(history)) {
+        for (const msg of history) {
+          contents.push({
+            role: msg.role === "user" ? "user" : "model",
+            parts: [{ text: msg.text }]
+          });
+        }
+      }
+      contents.push({
+        role: "user",
+        parts: [{ text: message }]
+      });
+      const response = await ai.models.generateContent({
+        model: "gemini-3.5-flash",
+        contents,
+        config: {
+          systemInstruction,
+          temperature: 0.7
+        }
+      });
+      res.json({ text: response.text });
+    } catch (err) {
+      console.error("AI Assistant Error:", err);
+      res.status(500).json({ error: err?.message || "\u041F\u0440\u043E\u0438\u0437\u043E\u0448\u043B\u0430 \u043D\u0435\u0438\u0437\u0432\u0435\u0441\u0442\u043D\u0430\u044F \u043E\u0448\u0438\u0431\u043A\u0430 \u043F\u0440\u0438 \u0430\u043D\u0430\u043B\u0438\u0437\u0435 \u0434\u0430\u043D\u043D\u044B\u0445." });
+    }
+  });
+  if (process.env.NODE_ENV !== "production") {
+    const vite = await (0, import_vite.createServer)({
+      server: { middlewareMode: true },
+      appType: "spa"
+    });
+    app.use(vite.middlewares);
+  } else {
+    const distPath = import_path.default.join(process.cwd(), "dist");
+    app.use(import_express.default.static(distPath));
+    app.get("*", (req, res) => {
+      res.sendFile(import_path.default.join(distPath, "index.html"));
+    });
+  }
+  app.listen(PORT, "0.0.0.0", () => {
+    console.log(`Server started on http://localhost:${PORT}`);
+  });
+}
+startServer();
+//# sourceMappingURL=server.cjs.map
