@@ -1,7 +1,6 @@
 import express from "express";
 import path from "path";
 import { createServer as createViteServer } from "vite";
-import { GoogleGenAI } from "@google/genai";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -12,21 +11,11 @@ async function startServer() {
 
   app.use(express.json());
 
-  // Initialize Gemini safely
-  const apiKey = process.env.GEMINI_API_KEY;
-  const ai = new GoogleGenAI({
-    apiKey: apiKey || "MOCK_KEY_IF_UNDEFINED",
-    httpOptions: {
-      headers: {
-        'User-Agent': 'aistudio-build',
-      }
-    }
-  });
-
-  // API endpoint for financial AI assistant analysis & QA
+  // API endpoint for financial AI assistant analysis & QA using standard fetch API
   app.post("/api/assistant", async (req: express.Request, res: express.Response): Promise<void> => {
     try {
       const { message, history, financeData } = req.body;
+      const apiKey = process.env.GEMINI_API_KEY;
 
       if (!apiKey) {
         res.status(500).json({ error: "Ключ API Gemini (GEMINI_API_KEY) не установлен. Настройте его в Settings -> Secrets." });
@@ -103,30 +92,46 @@ ${financialContext}
         }
       }
 
-      // Add final query
+      // Add final user query
       contents.push({
         role: 'user',
         parts: [{ text: message }]
       });
 
-      // Make the API call to Gemini-3.5-flash
-      const response = await ai.models.generateContent({
-        model: "gemini-3.5-flash",
-        contents: contents,
-        config: {
-          systemInstruction: systemInstruction,
-          temperature: 0.7,
-        }
+      // Direct HTTP fetch to Gemini API
+      const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+      const response = await fetch(geminiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          contents: contents,
+          systemInstruction: {
+            parts: [{ text: systemInstruction }]
+          },
+          generationConfig: {
+            temperature: 0.7
+          }
+        })
       });
 
-      res.json({ text: response.text });
+      if (!response.ok) {
+        const errText = await response.text();
+        throw new Error(errText || `Ошибка API Gemini (${response.status})`);
+      }
+
+      const responseData = await response.json();
+      const replyText = responseData.candidates?.[0]?.content?.parts?.[0]?.text || "Извините, не удалось сгенерировать ответ.";
+
+      res.json({ text: replyText });
     } catch (err: any) {
       console.error("AI Assistant Error:", err);
       res.status(500).json({ error: err?.message || "Произошла неизвестная ошибка при анализе данных." });
     }
   });
 
-  // Vite frontend serving middleware setup
+  // Vite frontend serving middleware setup in dev mode or production
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({
       server: { middlewareMode: true },

@@ -1,11 +1,14 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
-import {defineConfig} from 'vite';
-import { GoogleGenAI } from "@google/genai";
-import dotenv from "dotenv";
+import { fileURLToPath } from 'url';
+import { defineConfig } from 'vite';
+import dotenv from 'dotenv';
 
 dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export default defineConfig(() => {
   return {
@@ -36,16 +39,7 @@ export default defineConfig(() => {
                       return;
                     }
 
-                    const ai = new GoogleGenAI({
-                      apiKey: apiKey,
-                      httpOptions: {
-                        headers: {
-                          'User-Agent': 'aistudio-build',
-                        }
-                      }
-                    });
-
-                    // Prepare detailed context
+                    // Prepare detailed context of accounts, categories, budgets, and transactions
                     let financialContext = "У пользователя пока нет зафиксированных финансовых данных.";
                     if (financeData) {
                       const { accounts = [], categories = [], budgets = [], transactions = [] } = financeData;
@@ -118,18 +112,35 @@ ${financialContext}
                       parts: [{ text: message }]
                     });
 
-                    const response = await ai.models.generateContent({
-                      model: "gemini-3.5-flash",
-                      contents: contents,
-                      config: {
-                        systemInstruction: systemInstruction,
-                        temperature: 0.7,
-                      }
+                    // Direct standard fetch call to Gemini API
+                    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+                    const geminiRes = await fetch(geminiUrl, {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify({
+                        contents: contents,
+                        systemInstruction: {
+                          parts: [{ text: systemInstruction }]
+                        },
+                        generationConfig: {
+                          temperature: 0.7
+                        }
+                      })
                     });
+
+                    if (!geminiRes.ok) {
+                      const errText = await geminiRes.text();
+                      throw new Error(errText || `Ошибка API Gemini (${geminiRes.status})`);
+                    }
+
+                    const geminiData = await geminiRes.json();
+                    const replyText = geminiData.candidates?.[0]?.content?.parts?.[0]?.text || "Извините, я не смогла сформировать ответ.";
 
                     res.statusCode = 200;
                     res.setHeader('Content-Type', 'application/json');
-                    res.end(JSON.stringify({ text: response.text }));
+                    res.end(JSON.stringify({ text: replyText }));
                   } catch (err: any) {
                     console.error("Vite API Middleware error:", err);
                     res.statusCode = 500;
@@ -155,9 +166,7 @@ ${financialContext}
     },
     server: {
       // HMR is disabled in AI Studio via DISABLE_HMR env var.
-      // Do not modify—file watching is disabled to prevent flickering during agent edits.
       hmr: process.env.DISABLE_HMR !== 'true',
-      // Disable file watching when DISABLE_HMR is true to save CPU during agent edits.
       watch: process.env.DISABLE_HMR === 'true' ? null : {},
     },
   };
