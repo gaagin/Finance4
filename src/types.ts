@@ -70,3 +70,111 @@ export function formatCategoryDisplayName(name: string): string {
   }
   return name;
 }
+
+export interface TimeframeOption {
+  value: string; // e.g., '2026-05', 'may'
+  label: string; // e.g., 'Май 2026'
+  type: 'all' | 'month' | 'year' | 'custom';
+}
+
+const RussianMonthNames: { [key: string]: string } = {
+  '01': 'Январь',
+  '02': 'Февраль',
+  '03': 'Март',
+  '04': 'Апрель',
+  '05': 'Май',
+  '06': 'Июнь',
+  '07': 'Июль',
+  '08': 'Август',
+  '09': 'Сентябрь',
+  '10': 'Октябрь',
+  '11': 'Ноябрь',
+  '12': 'Декабрь'
+};
+
+export function formatTimeframeLabel(value: string): string {
+  if (value === 'may') return 'Май 2026';
+  if (value === 'april') return 'Апрель 2026';
+  if (value === 'all') return 'Всё время (С 2022)';
+  if (value === 'custom') return 'Указать вручную';
+  
+  if (/^\d{4}-\d{2}$/.test(value)) {
+    const [year, month] = value.split('-');
+    const mName = RussianMonthNames[month] || month;
+    return `${mName} ${year}`;
+  }
+  
+  if (/^\d{4}$/.test(value)) {
+    return `${value} год`;
+  }
+  
+  return value;
+}
+
+export function getDynamicTimeframeOptions(transactions: Transaction[]): TimeframeOption[] {
+  const options: TimeframeOption[] = [];
+  
+  // Track unique months
+  const monthSet = new Set<string>();
+  
+  // 1. Gather dynamic months from transactions
+  transactions.forEach(t => {
+    if (t.date && t.date.length >= 7) {
+      const yyyymm = t.date.substring(0, 7);
+      if (/^\d{4}-\d{2}$/.test(yyyymm)) {
+        monthSet.add(yyyymm);
+      }
+    }
+  });
+  
+  // 2. Add current month to ensure it is always present
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const currentMonthNum = String(now.getMonth() + 1).padStart(2, '0');
+  const currentYyyymm = `${currentYear}-${currentMonthNum}`;
+  monthSet.add(currentYyyymm);
+  
+  // Guarantee seed months exist
+  monthSet.add('2026-05');
+  monthSet.add('2026-04');
+  
+  // Sort months chronologically descending (newest first)
+  const sortedMonths = Array.from(monthSet).sort((a, b) => b.localeCompare(a));
+  
+  // 3. Gather years based on months + seed years
+  const yearSet = new Set<string>();
+  monthSet.forEach(m => {
+    yearSet.add(m.split('-')[0]);
+  });
+  ['2026', '2025', '2024', '2023', '2022'].forEach(y => yearSet.add(y));
+  const sortedYears = Array.from(yearSet).sort((a, b) => b.localeCompare(a));
+  
+  // Assemble
+  options.push({ value: 'all', label: 'Всё время (С 2022)', type: 'all' });
+  
+  const currentYearStr = String(currentYear);
+  sortedMonths.forEach(m => {
+    const monthYear = m.split('-')[0];
+    if (monthYear === currentYearStr) {
+      options.push({ value: m, label: formatTimeframeLabel(m), type: 'month' });
+    }
+  });
+  
+  sortedYears.forEach(y => {
+    options.push({ value: y, label: `${y} год`, type: 'year' });
+  });
+  
+  return options;
+}
+
+export function filterTransactionByTimeframe(tx: Transaction, timeframe: string): boolean {
+  if (timeframe === 'all' || !timeframe) return true;
+  if (timeframe === 'may') {
+    return tx.date.startsWith('2026-05');
+  }
+  if (timeframe === 'april') {
+    return tx.date.startsWith('2026-04');
+  }
+  return tx.date.startsWith(timeframe);
+}
+

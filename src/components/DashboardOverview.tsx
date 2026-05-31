@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useRef } from 'react';
-import { Transaction, Category, Account, BudgetLimit, formatCategoryDisplayName } from '../types';
+import { Transaction, Category, Account, BudgetLimit, formatCategoryDisplayName, getDynamicTimeframeOptions, formatTimeframeLabel, filterTransactionByTimeframe } from '../types';
 import { IconComponent } from './IconComponent';
 import { Wallet, ArrowUpRight, ArrowDownLeft, TrendingUp, AlertTriangle, Filter, Calendar, HelpCircle, FileSpreadsheet, Download, RefreshCw, LogIn, LogOut, CheckCircle, AlertCircle, ArrowUpDown, SlidersHorizontal, X, Edit2 } from 'lucide-react';
 import { exportToGoogleSheets } from '../googleSheetsService';
@@ -77,8 +77,20 @@ export function DashboardOverview({
   onEditTransaction
 }: DashboardOverviewProps) {
   
+  const getSavedTimeframe = (key: string, defaultValue: string): string => {
+    const saved = localStorage.getItem(key);
+    if (!saved) return defaultValue;
+    if (saved === 'may') return '2026-05';
+    if (saved === 'april') return '2026-04';
+    return saved;
+  };
+
   const visibleAccounts = useMemo(() => accounts.filter(a => a.quickEntry !== false), [accounts]);
   const visibleCategories = useMemo(() => categories.filter(c => c.quickEntry !== false), [categories]);
+
+  const timeframeOptions = useMemo(() => {
+    return getDynamicTimeframeOptions(transactions);
+  }, [transactions]);
 
   // Custom states for export status
   const [exportStatus, setExportStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
@@ -86,16 +98,16 @@ export function DashboardOverview({
   const [errorMessage, setErrorMessage] = useState<string>('');
 
   // Dynamic Charts Filtering
-  const [analyticsTimeframe, setAnalyticsTimeframe] = useState<'may' | 'april' | '2026' | '2025' | '2024' | '2023' | '2022' | 'all'>(
-    () => (localStorage.getItem('milli_analytics_timeframe') as any) || 'may'
+  const [analyticsTimeframe, setAnalyticsTimeframe] = useState<string>(
+    () => getSavedTimeframe('milli_analytics_timeframe', '2026-05')
   );
   const [analyticsAccount, setAnalyticsAccount] = useState<string>(
     () => localStorage.getItem('milli_analytics_account') || 'all'
   );
 
   // Local discrete filters for each individual chart card
-  const [lineTimeframe, setLineTimeframe] = useState<'may' | 'april' | '2026' | '2025' | '2024' | '2023' | '2022' | 'all'>(
-    () => (localStorage.getItem('milli_line_timeframe') as any) || 'may'
+  const [lineTimeframe, setLineTimeframe] = useState<string>(
+    () => getSavedTimeframe('milli_line_timeframe', '2026-05')
   );
   const [lineAccount, setLineAccount] = useState<string>(
     () => localStorage.getItem('milli_line_account') || 'all'
@@ -110,15 +122,15 @@ export function DashboardOverview({
   const [barCategory, setBarCategory] = useState<string>(
     () => localStorage.getItem('milli_bar_category') || 'all'
   );
-  const [barYear, setBarYear] = useState<'all' | '2026' | '2025' | '2024' | '2023' | '2022'>(
-    () => (localStorage.getItem('milli_bar_year') as any) || '2026'
+  const [barYear, setBarYear] = useState<string>(
+    () => localStorage.getItem('milli_bar_year') || '2026'
   );
 
   const [donutAccount, setDonutAccount] = useState<string>(
     () => localStorage.getItem('milli_donut_account') || 'all'
   );
-  const [donutTimeframe, setDonutTimeframe] = useState<'may' | 'april' | '2026' | '2025' | '2024' | '2023' | '2022' | 'all'>(
-    () => (localStorage.getItem('milli_donut_timeframe') as any) || 'may'
+  const [donutTimeframe, setDonutTimeframe] = useState<string>(
+    () => getSavedTimeframe('milli_donut_timeframe', '2026-05')
   );
   const [donutType, setDonutType] = useState<'expense' | 'income'>(
     () => (localStorage.getItem('milli_donut_type') as any) || 'expense'
@@ -509,16 +521,7 @@ export function DashboardOverview({
   };
 
   const getPeriodLabel = (tf: string) => {
-    switch (tf) {
-      case 'may': return 'Май 2026';
-      case 'april': return 'Апрель 2026';
-      case '2026': return '2026 год';
-      case '2025': return '2025 год';
-      case '2024': return '2024 год';
-      case '2023': return '2023 год';
-      case '2022': return '2022 год';
-      default: return 'Всё время (С 2022)';
-    }
+    return formatTimeframeLabel(tf);
   };
 
   const handleExportCSV = () => {
@@ -576,7 +579,7 @@ export function DashboardOverview({
     setExportStatus('loading');
     setErrorMessage('');
     try {
-      const sheetPeriodLabel = analyticsTimeframe === 'may' ? 'Май 2026' : analyticsTimeframe === 'april' ? 'Апрель 2026' : 'Все время';
+      const sheetPeriodLabel = formatTimeframeLabel(analyticsTimeframe);
       const spreadsheetUrl = await exportToGoogleSheets(
         gAccessToken,
         sheetPeriodLabel,
@@ -602,13 +605,7 @@ export function DashboardOverview({
     let result = [...transactions];
 
     // Filter by timeframe
-    if (analyticsTimeframe === 'may') {
-      result = result.filter(t => t.date.startsWith('2026-05'));
-    } else if (analyticsTimeframe === 'april') {
-      result = result.filter(t => t.date.startsWith('2026-04'));
-    } else if (['2026', '2025', '2024', '2023', '2022'].includes(analyticsTimeframe)) {
-      result = result.filter(t => t.date.startsWith(analyticsTimeframe));
-    }
+    result = result.filter(t => filterTransactionByTimeframe(t, analyticsTimeframe));
 
     // Filter by bank account
     if (analyticsAccount !== 'all') {
@@ -947,13 +944,7 @@ export function DashboardOverview({
     let result = [...transactions];
 
     // Filter by timeframe
-    if (donutTimeframe === 'may') {
-      result = result.filter(t => t.date.startsWith('2026-05'));
-    } else if (donutTimeframe === 'april') {
-      result = result.filter(t => t.date.startsWith('2026-04'));
-    } else if (['2026', '2025', '2024', '2023', '2022'].includes(donutTimeframe)) {
-      result = result.filter(t => t.date.startsWith(donutTimeframe));
-    }
+    result = result.filter(t => filterTransactionByTimeframe(t, donutTimeframe));
 
     // Filter by bank account
     if (donutAccount !== 'all') {
@@ -1274,12 +1265,16 @@ export function DashboardOverview({
       return allTimeBalancesLine;
     }
 
-    if (['2022', '2023', '2024', '2025', '2026'].includes(lineTimeframe)) {
+    if (/^\d{4}$/.test(lineTimeframe)) {
+      return allTimeBalancesLine.filter(item => item.date.startsWith(lineTimeframe));
+    }
+
+    if (/^\d{4}-\d{2}$/.test(lineTimeframe)) {
       return allTimeBalancesLine.filter(item => item.date.startsWith(lineTimeframe));
     }
 
     let startCompare = '2026-05-01';
-    let endCompare = '2026-05-24';
+    let endCompare = '2026-05-31';
     if (lineTimeframe === 'april') {
       startCompare = '2026-04-01';
       endCompare = '2026-04-30';
@@ -1386,8 +1381,8 @@ export function DashboardOverview({
         .sort((a, b) => a.key.localeCompare(b.key));
     }
 
-    // Case 2: Individual Month selected (e.g. 'may', 'april', etc.) -> show DAYS (e.g. 1st, 5th, 10th, 15th, 20th, 25th)
-    if (lineTimeframe === 'may' || lineTimeframe === 'april') {
+    // Case 2: Individual Month selected (e.g. 'may', 'april', dynamic YYYY-MM) -> show DAYS (e.g. 1st, 5th, 10th, 15th, 20th, 25th)
+    if (lineTimeframe === 'may' || lineTimeframe === 'april' || /^\d{4}-\d{2}$/.test(lineTimeframe)) {
       const dayIntervals = [1, 5, 10, 15, 20, 25, 31];
       const daysMap: { [day: number]: { label: string; x: number } } = {};
 
@@ -1527,17 +1522,14 @@ export function DashboardOverview({
           <div className="flex flex-wrap gap-2">
             <select
               value={analyticsTimeframe}
-              onChange={(e) => setAnalyticsTimeframe(e.target.value as any)}
+              onChange={(e) => setAnalyticsTimeframe(e.target.value)}
               className="px-3 py-1 bg-slate-900 border border-white/10 rounded-xl text-xs text-white focus:outline-hidden focus:ring-1 focus:ring-teal-400 cursor-pointer font-semibold"
             >
-              <option value="all">За всё время (С 2022)</option>
-              <option value="may">Май 2026 (Текущий)</option>
-              <option value="april">Апрель 2026</option>
-              <option value="2026">Весь 2026 год</option>
-              <option value="2025">2025 год</option>
-              <option value="2024">2024 год</option>
-              <option value="2023">2023 год</option>
-              <option value="2022">2022 год</option>
+              {timeframeOptions.map(opt => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
             </select>
 
             <SearchableSelect
@@ -2003,7 +1995,7 @@ export function DashboardOverview({
                                       <span className="font-mono font-bold text-slate-200 select-all whitespace-nowrap">
                                         {Math.round(acc.balance).toLocaleString('ru-RU')} ₼
                                       </span>
-                                      <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1.5 pr-1 shrink-0 pointer-events-auto">
+                                      <div className="opacity-65 md:opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1.5 pr-1 shrink-0 pointer-events-auto">
                                         <button 
                                           onPointerDown={(e) => e.stopPropagation()}
                                           onClick={() => onQuickNavigate('accounts-categories')} 
@@ -2185,7 +2177,7 @@ export function DashboardOverview({
                                       <span className="font-mono font-bold text-slate-200 select-all whitespace-nowrap">
                                         {Math.round(acc.balance).toLocaleString('ru-RU')} ₼
                                       </span>
-                                      <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1.5 pr-1 shrink-0 pointer-events-auto">
+                                      <div className="opacity-65 md:opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1.5 pr-1 shrink-0 pointer-events-auto">
                                         <button 
                                           onPointerDown={(e) => e.stopPropagation()}
                                           onClick={() => onQuickNavigate('accounts-categories')} 
@@ -2355,7 +2347,7 @@ export function DashboardOverview({
                                       <span className="font-mono font-bold text-slate-200 select-all whitespace-nowrap">
                                         {Math.round(acc.balance).toLocaleString('ru-RU')} ₼
                                       </span>
-                                      <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1.5 pr-1 shrink-0 pointer-events-auto">
+                                      <div className="opacity-65 md:opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1.5 pr-1 shrink-0 pointer-events-auto">
                                         <button 
                                           onPointerDown={(e) => e.stopPropagation()}
                                           onClick={() => onQuickNavigate('accounts-categories')} 
@@ -2525,7 +2517,7 @@ export function DashboardOverview({
                                       <span className="font-mono font-bold text-slate-300 select-all whitespace-nowrap">
                                         {Math.round(acc.balance).toLocaleString('ru-RU')} ₼
                                       </span>
-                                      <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1.5 pr-1 shrink-0 pointer-events-auto">
+                                      <div className="opacity-65 md:opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1.5 pr-1 shrink-0 pointer-events-auto">
                                         <button 
                                           onPointerDown={(e) => e.stopPropagation()}
                                           onClick={() => onQuickNavigate('accounts-categories')} 
@@ -2897,17 +2889,14 @@ export function DashboardOverview({
 
                 <select
                   value={donutTimeframe}
-                  onChange={(e) => setDonutTimeframe(e.target.value as any)}
+                  onChange={(e) => setDonutTimeframe(e.target.value)}
                   className="px-1.5 py-0.5 bg-slate-900 border border-white/10 rounded-md text-[9.5px] text-white focus:outline-hidden cursor-pointer"
                 >
-                  <option value="all">Все время</option>
-                  <option value="may">Май 2026</option>
-                  <option value="april">Апрель 2026</option>
-                  <option value="2026">2026 год</option>
-                  <option value="2025">2025 год</option>
-                  <option value="2024">2024 год</option>
-                  <option value="2023">2023 год</option>
-                  <option value="2022">2022 год</option>
+                  {timeframeOptions.map(opt => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.type === 'all' ? 'Все время' : opt.label}
+                    </option>
+                  ))}
                 </select>
 
                 <SearchableSelect
@@ -3061,21 +3050,18 @@ export function DashboardOverview({
               <div className="flex flex-wrap items-center gap-1.5 mt-2 sm:mt-0">
                 <select
                   value={lineTimeframe}
-                  onChange={(e) => setLineTimeframe(e.target.value as any)}
+                  onChange={(e) => setLineTimeframe(e.target.value)}
                   className={`px-2 py-1 border rounded-lg text-[10px] focus:outline-hidden cursor-pointer font-bold uppercase tracking-wider transition-colors duration-200 ${
                     theme === 'dark'
                       ? 'bg-slate-900 border-white/10 text-white'
                       : 'bg-slate-50 border-slate-200 text-slate-800'
                   }`}
                 >
-                  <option value="all">Период: Все время</option>
-                  <option value="may">Май 2026</option>
-                  <option value="april">Апрель 2026</option>
-                  <option value="2026">2026 год</option>
-                  <option value="2025">2025 год</option>
-                  <option value="2024">2024 год</option>
-                  <option value="2023">2023 год</option>
-                  <option value="2022">2022 год</option>
+                  {timeframeOptions.map(opt => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.type === 'all' ? 'Период: Все время' : opt.label}
+                    </option>
+                  ))}
                 </select>
 
                 <SearchableSelect

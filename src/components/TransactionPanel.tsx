@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Transaction, Category, Account, TransactionType, BankCard, formatCategoryDisplayName } from '../types';
+import { Transaction, Category, Account, TransactionType, BankCard, formatCategoryDisplayName, getDynamicTimeframeOptions, formatTimeframeLabel, filterTransactionByTimeframe } from '../types';
 import { IconComponent } from './IconComponent';
 import { PlusCircle, Edit2, Trash2, Search, Filter, Calendar, CreditCard, Tag, ArrowUpRight, ArrowDownLeft, X, ArrowUpDown, Info, ChevronDown, ChevronUp } from 'lucide-react';
 import { SearchableSelect } from './SearchableSelect';
@@ -252,11 +252,19 @@ export function TransactionPanel({
   };
 
   // Advanced Filters State
+  const getSavedTimeframe = (key: string, defaultValue: string): string => {
+    const saved = localStorage.getItem(key);
+    if (!saved) return defaultValue;
+    if (saved === 'may') return '2026-05';
+    if (saved === 'april') return '2026-04';
+    return saved;
+  };
+
   const [filterSearch, setFilterSearch] = useState(() => localStorage.getItem('milli_filter_search') || '');
   const [filterType, setFilterType] = useState<'all' | 'expense' | 'income' | 'transfer'>(() => (localStorage.getItem('milli_filter_type') as any) || 'all');
   const [filterAccount, setFilterAccount] = useState(() => localStorage.getItem('milli_filter_account') || 'all');
   const [filterCategory, setFilterCategory] = useState(() => localStorage.getItem('milli_filter_category') || 'all');
-  const [filterDateRange, setFilterDateRange] = useState<'all' | 'may' | 'april' | '2026' | '2025' | '2024' | '2023' | '2022' | 'custom'>(() => (localStorage.getItem('milli_filter_date_range') as any) || 'may');
+  const [filterDateRange, setFilterDateRange] = useState<string>(() => getSavedTimeframe('milli_filter_date_range', '2026-05'));
   const [customStartDate, setCustomStartDate] = useState(() => localStorage.getItem('milli_filter_custom_start_date') || '2026-05-01');
   const [customEndDate, setCustomEndDate] = useState(() => localStorage.getItem('milli_filter_custom_end_date') || '2026-05-31');
   const [isFiltersExpanded, setIsFiltersExpanded] = useState(() => localStorage.getItem('milli_filters_expanded') === 'true');
@@ -293,13 +301,17 @@ export function TransactionPanel({
     localStorage.setItem('milli_filters_expanded', String(isFiltersExpanded));
   }, [isFiltersExpanded]);
 
+  const timeframeOptions = useMemo(() => {
+    return getDynamicTimeframeOptions(transactions);
+  }, [transactions]);
+
   // Count active filters (ignoring search text)
   const activeFiltersCount = useMemo(() => {
     let count = 0;
     if (filterType !== 'all') count++;
     if (filterAccount !== 'all') count++;
     if (filterCategory !== 'all') count++;
-    if (filterDateRange !== 'may') count++;
+    if (filterDateRange !== 'may' && filterDateRange !== '2026-05') count++;
     return count;
   }, [filterType, filterAccount, filterCategory, filterDateRange]);
 
@@ -358,14 +370,10 @@ export function TransactionPanel({
     }
 
     // 5. Date filter
-    if (filterDateRange === 'may') {
-      result = result.filter(tx => tx.date.startsWith('2026-05'));
-    } else if (filterDateRange === 'april') {
-      result = result.filter(tx => tx.date.startsWith('2026-04'));
-    } else if (['2026', '2025', '2024', '2023', '2022'].includes(filterDateRange)) {
-      result = result.filter(tx => tx.date.startsWith(filterDateRange));
-    } else if (filterDateRange === 'custom') {
+    if (filterDateRange === 'custom') {
       result = result.filter(tx => tx.date >= customStartDate && tx.date <= customEndDate);
+    } else {
+      result = result.filter(tx => filterTransactionByTimeframe(tx, filterDateRange));
     }
 
     // 6. Sort
@@ -774,17 +782,14 @@ export function TransactionPanel({
                     <label className="block text-[10px] font-bold text-slate-400 mb-1">ПЕРИОД ВРЕМЕНИ</label>
                     <select
                       value={filterDateRange}
-                      onChange={(e) => setFilterDateRange(e.target.value as any)}
+                      onChange={(e) => setFilterDateRange(e.target.value)}
                       className="w-full p-2 bg-slate-950 border border-white/10 rounded-lg text-xs text-slate-200 cursor-pointer"
                     >
-                      <option value="all" className="bg-slate-950 text-slate-300">За всё время</option>
-                      <option value="may" className="bg-slate-950 text-slate-300">Май 2026</option>
-                      <option value="april" className="bg-slate-950 text-slate-300">Апрель 2026</option>
-                      <option value="2026" className="bg-slate-950 text-slate-300">2026 год</option>
-                      <option value="2025" className="bg-slate-950 text-slate-300">2025 год</option>
-                      <option value="2024" className="bg-slate-950 text-slate-300">2024 год</option>
-                      <option value="2023" className="bg-slate-950 text-slate-300">2023 год</option>
-                      <option value="2022" className="bg-slate-950 text-slate-300">2022 год</option>
+                      {timeframeOptions.map(opt => (
+                        <option key={opt.value} value={opt.value} className="bg-slate-950 text-slate-300">
+                          {opt.type === 'all' ? 'За всё время' : opt.label}
+                        </option>
+                      ))}
                       <option value="custom" className="bg-slate-950 text-slate-300">Указать вручную</option>
                     </select>
                   </div>
