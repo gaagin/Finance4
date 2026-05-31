@@ -341,7 +341,7 @@ export function rowToAccount(row: any[]): Account {
     type: String(row[2] || ''),
     balance: parseSafeNumber(row[3], 0),
     color: String(row[4] || ''),
-    quickEntry: String(row[5]).toUpperCase() === 'TRUE',
+    quickEntry: row[5] === undefined || String(row[5]).trim() === '' ? true : String(row[5]).toUpperCase() === 'TRUE',
     updatedAt: parseSafeTimestamp(row[6], undefined)
   };
 }
@@ -366,7 +366,7 @@ export function rowToCategory(row: any[]): Category {
     icon: String(row[2] || ''),
     color: String(row[3] || ''),
     type: String(row[4] || 'expense') as any,
-    quickEntry: String(row[5]).toUpperCase() === 'TRUE',
+    quickEntry: row[5] === undefined || String(row[5]).trim() === '' ? true : String(row[5]).toUpperCase() === 'TRUE',
     updatedAt: parseSafeTimestamp(row[6], undefined)
   };
 }
