@@ -1,15 +1,39 @@
 import express from "express";
 import path from "path";
 import { createServer as createViteServer } from "vite";
+import fs from "fs";
 import dotenv from "dotenv";
 
 dotenv.config();
+
+const DEBUG_FILE = "/tmp/milli_request_debug.log";
+
+function logDebug(msg: string) {
+  try {
+    const timestamp = new Date().toISOString();
+    fs.appendFileSync(DEBUG_FILE, `[${timestamp}] ${msg}\n`);
+  } catch (err) {
+    console.error("Error writing debug:", err);
+  }
+}
 
 async function startServer() {
   const app = express();
   const PORT = 3000;
 
   app.use(express.json());
+
+  // Log all api requests
+  app.use("/api", (req, res, next) => {
+    logDebug(`Express API request received: ${req.method} ${req.originalUrl}`);
+    next();
+  });
+
+  // GET API healthcheck endpoint
+  app.get("/api/assistant", (req, res) => {
+    logDebug("Express GET /api/assistant hit");
+    res.json({ status: "milli_ready", server: "express_backend" });
+  });
 
   // API endpoint for financial AI assistant analysis & QA using standard fetch API
   app.post("/api/assistant", async (req: express.Request, res: express.Response): Promise<void> => {

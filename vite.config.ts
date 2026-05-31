@@ -3,12 +3,24 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { defineConfig } from 'vite';
+import fs from 'fs';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+const DEBUG_FILE = "/tmp/milli_request_debug.log";
+
+function logDebug(msg: string) {
+  try {
+    const timestamp = new Date().toISOString();
+    fs.appendFileSync(DEBUG_FILE, `[${timestamp}] ${msg}\n`);
+  } catch (err) {
+    console.error("Error writing debug:", err);
+  }
+}
 
 export default defineConfig(() => {
   return {
@@ -20,8 +32,21 @@ export default defineConfig(() => {
         name: 'milli-api-assistant-dev',
         configureServer(server) {
           server.middlewares.use(async (req, res, next) => {
-            if (req.url && req.url.startsWith('/api/assistant') && req.method === 'POST') {
-              try {
+            if (req.url && req.url.includes('/api')) {
+              logDebug(`Vite Middleware received request: ${req.method} ${req.url}`);
+            }
+
+            if (req.url && req.url.includes('/api/assistant')) {
+              if (req.method === 'GET') {
+                logDebug(`Vite Middleware healthcheck GET hit`);
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.end(JSON.stringify({ status: "milli_ready", server: "vite_dev_middleware" }));
+                return;
+              }
+
+              if (req.method === 'POST') {
+                try {
                 let body = '';
                 req.on('data', chunk => {
                   body += chunk;
@@ -151,6 +176,7 @@ ${financialContext}
               } catch (err: any) {
                 res.statusCode = 400;
                 res.end("Bad Request");
+              }
               }
               return;
             }
