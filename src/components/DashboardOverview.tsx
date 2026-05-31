@@ -5,6 +5,7 @@ import { Wallet, ArrowUpRight, ArrowDownLeft, TrendingUp, AlertTriangle, Filter,
 import { exportToGoogleSheets } from '../googleSheetsService';
 import { QuickDragDropBuilder } from './QuickDragDropBuilder';
 import { SearchableSelect } from './SearchableSelect';
+import { TreemapChart } from './TreemapChart';
 
 interface DashboardOverviewProps {
   transactions: Transaction[];
@@ -140,6 +141,12 @@ export function DashboardOverview({
   const [showSubcategories, setShowSubcategories] = useState<boolean>(
     () => localStorage.getItem('milli_show_subcategories') === 'true'
   );
+  const [expensesView, setExpensesView] = useState<'list' | 'treemap'>(
+    () => (localStorage.getItem('milli_expenses_view') as any) || 'treemap'
+  );
+  const [incomesView, setIncomesView] = useState<'list' | 'treemap'>(
+    () => (localStorage.getItem('milli_incomes_view') as any) || 'treemap'
+  );
   const [categoryGroupingMode, setCategoryGroupingMode] = useState<'parent' | 'sub'>(
     () => (localStorage.getItem('milli_category_grouping_mode') as any) || 'sub'
   );
@@ -231,6 +238,14 @@ export function DashboardOverview({
   React.useEffect(() => {
     localStorage.setItem('milli_show_subcategories', String(showSubcategories));
   }, [showSubcategories]);
+
+  React.useEffect(() => {
+    localStorage.setItem('milli_expenses_view', expensesView);
+  }, [expensesView]);
+
+  React.useEffect(() => {
+    localStorage.setItem('milli_incomes_view', incomesView);
+  }, [incomesView]);
 
   React.useEffect(() => {
     localStorage.setItem('milli_category_grouping_mode', categoryGroupingMode);
@@ -1422,14 +1437,10 @@ export function DashboardOverview({
           </div>
         </div>
 
-
-
         {/* --- HIGH-FIDELITY RUSSIAN HONEYMONEY DASHBOARD --- */}
         <div className="w-full mb-8" id="honeymoney-panels-container">
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
-              
-              {/* PANEL 1: EXPENSES (РАСХОДЫ) */}
               <div className="bg-slate-950/40 rounded-2xl p-3 sm:p-4 border border-white/5 flex flex-col justify-between" id="honey-expenses-panel">
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/5 pb-2 mb-3.5">
@@ -1440,17 +1451,58 @@ export function DashboardOverview({
                       </span>
                     </div>
                     
-                    <button
-                      onClick={() => setShowSubcategories(!showSubcategories)}
-                      className="text-[9px] font-bold bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white px-2 py-1 rounded-lg transition-colors cursor-pointer uppercase tracking-wider whitespace-nowrap"
-                    >
-                      {showSubcategories ? '[-] Свернуть' : '[+] Подкатегории'}
-                    </button>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <button
+                        onClick={() => setShowSubcategories(!showSubcategories)}
+                        className="text-[9px] font-bold bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white px-2 py-1 rounded-lg transition-colors cursor-pointer uppercase tracking-wider whitespace-nowrap"
+                        title={showSubcategories ? "Свеуть подкатегории" : "Развернуть подкатегории"}
+                      >
+                        {showSubcategories ? '[-] Свернуть' : '[+] Подкатегории'}
+                      </button>
+
+                      <div className="flex items-center bg-white/5 rounded-lg p-0.5 border border-white/5">
+                        <button
+                          onClick={() => setExpensesView('treemap')}
+                          className={`p-1 rounded-md transition-colors cursor-pointer ${
+                            expensesView === 'treemap'
+                              ? 'bg-rose-500 text-white'
+                              : 'text-slate-400 hover:text-slate-200'
+                          }`}
+                          title="Отобразить в виде плиток (Treemap)"
+                        >
+                          <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                          </svg>
+                        </button>
+                        <button
+                          onClick={() => setExpensesView('list')}
+                          className={`p-1 rounded-md transition-colors cursor-pointer ${
+                            expensesView === 'list'
+                              ? 'bg-rose-500 text-white'
+                              : 'text-slate-400 hover:text-slate-200'
+                          }`}
+                          title="Отобразить в виде списка"
+                        >
+                          <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
                   </div>
 
-                  {/* List of top categories with progress bars */}
                   {categoryBreakdown.list.length === 0 ? (
                     <p className="text-xs text-slate-500 italic py-4">Нет данных по расходам за период</p>
+                  ) : expensesView === 'treemap' ? (
+                    <TreemapChart
+                      items={categoryBreakdown.list}
+                      type="expense"
+                      total={categoryBreakdown.total}
+                      onCategoryClick={(cat) => setSelectedCategoryTransactions({ category: cat, type: 'expense' })}
+                      showSubcategories={showSubcategories}
+                      onToggleSubcategories={() => setShowSubcategories(!showSubcategories)}
+                      theme={theme}
+                    />
                   ) : (
                     <div className="space-y-3 max-h-[350px] lg:max-h-[600px] overflow-y-auto pr-1 select-none custom-scrollbar">
                       {categoryBreakdown.list.slice(0, showSubcategories ? 25 : 12).map((item, idx) => {
@@ -1484,12 +1536,10 @@ export function DashboardOverview({
                     </div>
                   )}
                 </div>
-
-
               </div>
 
               {/* PANEL 2: INCOMES (ДОХОДЫ) */}
-              <div className="bg-slate-950/40 rounded-2xl p-3 sm:p-4 border border-white/5 flex flex-col justify-between" id="honey-incomes-panel">
+              <div className="bg-slate-950/40 rounded-2xl p-3 sm:p-4 border border-white/5 flex flex-col justify-between animate-fade-in" id="honey-incomes-panel">
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/5 pb-2 mb-3.5">
                     <div className="flex flex-wrap items-baseline gap-1.5 min-w-0">
@@ -1499,15 +1549,61 @@ export function DashboardOverview({
                       </span>
                     </div>
                     
-                    <span className="text-[9px] uppercase font-bold text-slate-500 whitespace-nowrap">Поступления</span>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <button
+                        onClick={() => setShowSubcategories(!showSubcategories)}
+                        className="text-[9px] font-bold bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white px-2 py-1 rounded-lg transition-colors cursor-pointer uppercase tracking-wider whitespace-nowrap"
+                        title={showSubcategories ? "Свернуть подкатегории" : "Развернуть подкатегории"}
+                      >
+                        {showSubcategories ? '[-] Свернуть' : '[+] Подкатегории'}
+                      </button>
+
+                      <div className="flex items-center bg-white/5 rounded-lg p-0.5 border border-white/5">
+                        <button
+                          onClick={() => setIncomesView('treemap')}
+                          className={`p-1 rounded-md transition-colors cursor-pointer ${
+                            incomesView === 'treemap'
+                              ? 'bg-emerald-500 text-white'
+                              : 'text-slate-400 hover:text-slate-200'
+                          }`}
+                          title="Отобразить в виде плиток (Treemap)"
+                        >
+                          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                          </svg>
+                        </button>
+                        <button
+                          onClick={() => setIncomesView('list')}
+                          className={`p-1 rounded-md transition-colors cursor-pointer ${
+                            incomesView === 'list'
+                              ? 'bg-emerald-500 text-white'
+                              : 'text-slate-400 hover:text-slate-200'
+                          }`}
+                          title="Отобразить в виде списка"
+                        >
+                          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
                   </div>
 
-                  {/* List of top incomes with progress bars */}
                   {incomeCategoryBreakdown.list.length === 0 ? (
                     <p className="text-xs text-slate-500 italic py-4">Нет данных по доходам за период</p>
+                  ) : incomesView === 'treemap' ? (
+                    <TreemapChart
+                      items={incomeCategoryBreakdown.list}
+                      type="income"
+                      total={incomeCategoryBreakdown.total}
+                      onCategoryClick={(cat) => setSelectedCategoryTransactions({ category: cat, type: 'income' })}
+                      showSubcategories={showSubcategories}
+                      onToggleSubcategories={() => setShowSubcategories(!showSubcategories)}
+                      theme={theme}
+                    />
                   ) : (
                     <div className="space-y-3 max-h-[350px] lg:max-h-[600px] overflow-y-auto pr-1 select-none custom-scrollbar">
-                      {incomeCategoryBreakdown.list.slice(0, 12).map((item, idx) => {
+                      {incomeCategoryBreakdown.list.slice(0, showSubcategories ? 25 : 12).map((item, idx) => {
                         const barWidth = item.percentage;
                         return (
                           <div 
