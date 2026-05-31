@@ -1995,11 +1995,14 @@ export function DashboardOverview({
                                       <span className="font-mono font-bold text-slate-200 select-all whitespace-nowrap">
                                         {Math.round(acc.balance).toLocaleString('ru-RU')} ₼
                                       </span>
-                                      <div className="opacity-65 md:opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1.5 pr-1 shrink-0 pointer-events-auto">
+                                      <div 
+                                        onPointerDown={(e) => e.stopPropagation()}
+                                        className="opacity-75 md:opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 sm:gap-1.5 pr-1 shrink-0 pointer-events-auto"
+                                      >
                                         <button 
                                           onPointerDown={(e) => e.stopPropagation()}
                                           onClick={() => onQuickNavigate('accounts-categories')} 
-                                          className="text-[10px] hover:text-white text-slate-500 cursor-pointer" 
+                                          className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-white/10 active:scale-90 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer text-[11px]" 
                                           title="Редактировать"
                                         >
                                           ✏️
@@ -2007,75 +2010,22 @@ export function DashboardOverview({
                                         <button 
                                           onPointerDown={(e) => e.stopPropagation()}
                                           onClick={() => onQuickNavigate('transactions')} 
-                                          className="text-[10px] hover:text-white text-slate-500 cursor-pointer" 
+                                          className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-white/10 active:scale-90 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer text-[11px]" 
                                           title="Журнал"
                                         >
                                           📋
                                         </button>
-
-                                        <div className="relative inline-block leading-none">
-                                          <button 
-                                            onPointerDown={(e) => e.stopPropagation()}
-                                            onClick={(e) => {
-                                              e.stopPropagation();
-                                              setActiveGroupMenuId(activeGroupMenuId === acc.id ? null : acc.id);
-                                            }} 
-                                            className="text-[10px] hover:text-white text-slate-500 cursor-pointer" 
-                                            title="Перенести в группу..."
-                                          >
-                                            📁
-                                          </button>
-                                          {activeGroupMenuId === acc.id && (
-                                            <div 
-                                              onPointerDown={(e) => e.stopPropagation()}
-                                              className="absolute right-0 mt-2 z-50 bg-slate-900 border border-white/10 rounded-xl p-1 shadow-2xl min-w-[130px] text-[11px]"
-                                            >
-                                              <div className="px-2 py-1 text-[9px] font-bold text-slate-500 uppercase tracking-wider border-b border-white/5 mb-1 select-none text-left">
-                                                Переместить в:
-                                              </div>
-                                              <button
-                                                onClick={() => {
-                                                  handleMoveAccountToGroup(acc.id, 'ordinary');
-                                                  setActiveGroupMenuId(null);
-                                                }}
-                                                className="w-full text-left px-2 py-1 hover:bg-white/10 text-slate-300 hover:text-white rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer font-medium"
-                                              >
-                                                <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-                                                Обычные
-                                              </button>
-                                              <button
-                                                onClick={() => {
-                                                  handleMoveAccountToGroup(acc.id, 'savings');
-                                                  setActiveGroupMenuId(null);
-                                                }}
-                                                className="w-full text-left px-2 py-1 hover:bg-white/10 text-slate-300 hover:text-white rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer font-medium"
-                                              >
-                                                <span className="w-1.5 h-1.5 rounded-full bg-lime-450" />
-                                                Накопления
-                                              </button>
-                                              <button
-                                                onClick={() => {
-                                                  handleMoveAccountToGroup(acc.id, 'debt');
-                                                  setActiveGroupMenuId(null);
-                                                }}
-                                                className="w-full text-left px-2 py-1 hover:bg-white/10 text-slate-300 hover:text-white rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer font-medium"
-                                              >
-                                                <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />
-                                                Долги
-                                              </button>
-                                              <button
-                                                onClick={() => {
-                                                  handleMoveAccountToGroup(acc.id, 'hidden');
-                                                  setActiveGroupMenuId(null);
-                                                }}
-                                                className="w-full text-left px-2 py-1 hover:bg-white/10 text-slate-300 hover:text-white rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer font-medium"
-                                              >
-                                                <span className="w-1.5 h-1.5 rounded-full bg-slate-500" />
-                                                Скрытые
-                                              </button>
-                                            </div>
-                                          )}
-                                        </div>
+                                        <button 
+                                          onPointerDown={(e) => e.stopPropagation()}
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            setActiveGroupMenuId(acc.id);
+                                          }} 
+                                          className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-white/10 active:scale-90 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer text-[11px]" 
+                                          title="Перенести в группу..."
+                                        >
+                                          📁
+                                        </button>
                                       </div>
                                     </div>
                                   </div>
@@ -2177,11 +2127,14 @@ export function DashboardOverview({
                                       <span className="font-mono font-bold text-slate-200 select-all whitespace-nowrap">
                                         {Math.round(acc.balance).toLocaleString('ru-RU')} ₼
                                       </span>
-                                      <div className="opacity-65 md:opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1.5 pr-1 shrink-0 pointer-events-auto">
+                                      <div 
+                                        onPointerDown={(e) => e.stopPropagation()}
+                                        className="opacity-75 md:opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 sm:gap-1.5 pr-1 shrink-0 pointer-events-auto"
+                                      >
                                         <button 
                                           onPointerDown={(e) => e.stopPropagation()}
                                           onClick={() => onQuickNavigate('accounts-categories')} 
-                                          className="text-[10px] hover:text-white text-slate-500 cursor-pointer" 
+                                          className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-white/10 active:scale-90 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer text-[11px]" 
                                           title="Редактировать"
                                         >
                                           ✏️
@@ -2189,75 +2142,22 @@ export function DashboardOverview({
                                         <button 
                                           onPointerDown={(e) => e.stopPropagation()}
                                           onClick={() => onQuickNavigate('transactions')} 
-                                          className="text-[10px] hover:text-white text-slate-500 cursor-pointer" 
+                                          className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-white/10 active:scale-90 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer text-[11px]" 
                                           title="Журнал"
                                         >
                                           📋
                                         </button>
-
-                                        <div className="relative inline-block leading-none">
-                                          <button 
-                                            onPointerDown={(e) => e.stopPropagation()}
-                                            onClick={(e) => {
-                                              e.stopPropagation();
-                                              setActiveGroupMenuId(activeGroupMenuId === acc.id ? null : acc.id);
-                                            }} 
-                                            className="text-[10px] hover:text-white text-slate-500 cursor-pointer" 
-                                            title="Перенести в группу..."
-                                          >
-                                            📁
-                                          </button>
-                                          {activeGroupMenuId === acc.id && (
-                                            <div 
-                                              onPointerDown={(e) => e.stopPropagation()}
-                                              className="absolute right-0 mt-2 z-50 bg-slate-900 border border-white/10 rounded-xl p-1 shadow-2xl min-w-[130px] text-[11px]"
-                                            >
-                                              <div className="px-2 py-1 text-[9px] font-bold text-slate-500 uppercase tracking-wider border-b border-white/5 mb-1 select-none text-left">
-                                                Переместить в:
-                                              </div>
-                                              <button
-                                                onClick={() => {
-                                                  handleMoveAccountToGroup(acc.id, 'ordinary');
-                                                  setActiveGroupMenuId(null);
-                                                }}
-                                                className="w-full text-left px-2 py-1 hover:bg-white/10 text-slate-300 hover:text-white rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer font-medium"
-                                              >
-                                                <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-                                                Обычные
-                                              </button>
-                                              <button
-                                                onClick={() => {
-                                                  handleMoveAccountToGroup(acc.id, 'savings');
-                                                  setActiveGroupMenuId(null);
-                                                }}
-                                                className="w-full text-left px-2 py-1 hover:bg-white/10 text-slate-300 hover:text-white rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer font-medium"
-                                              >
-                                                <span className="w-1.5 h-1.5 rounded-full bg-lime-450" />
-                                                Накопления
-                                              </button>
-                                              <button
-                                                onClick={() => {
-                                                  handleMoveAccountToGroup(acc.id, 'debt');
-                                                  setActiveGroupMenuId(null);
-                                                }}
-                                                className="w-full text-left px-2 py-1 hover:bg-white/10 text-slate-300 hover:text-white rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer font-medium"
-                                              >
-                                                <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />
-                                                Долги
-                                              </button>
-                                              <button
-                                                onClick={() => {
-                                                  handleMoveAccountToGroup(acc.id, 'hidden');
-                                                  setActiveGroupMenuId(null);
-                                                }}
-                                                className="w-full text-left px-2 py-1 hover:bg-white/10 text-slate-300 hover:text-white rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer font-medium"
-                                              >
-                                                <span className="w-1.5 h-1.5 rounded-full bg-slate-500" />
-                                                Скрытые
-                                              </button>
-                                            </div>
-                                          )}
-                                        </div>
+                                        <button 
+                                          onPointerDown={(e) => e.stopPropagation()}
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            setActiveGroupMenuId(acc.id);
+                                          }} 
+                                          className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-white/10 active:scale-90 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer text-[11px]" 
+                                          title="Перенести в группу..."
+                                        >
+                                          📁
+                                        </button>
                                       </div>
                                     </div>
                                   </div>
@@ -2347,11 +2247,14 @@ export function DashboardOverview({
                                       <span className="font-mono font-bold text-slate-200 select-all whitespace-nowrap">
                                         {Math.round(acc.balance).toLocaleString('ru-RU')} ₼
                                       </span>
-                                      <div className="opacity-65 md:opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1.5 pr-1 shrink-0 pointer-events-auto">
+                                      <div 
+                                        onPointerDown={(e) => e.stopPropagation()}
+                                        className="opacity-75 md:opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 sm:gap-1.5 pr-1 shrink-0 pointer-events-auto"
+                                      >
                                         <button 
                                           onPointerDown={(e) => e.stopPropagation()}
                                           onClick={() => onQuickNavigate('accounts-categories')} 
-                                          className="text-[10px] hover:text-white text-slate-500 cursor-pointer" 
+                                          className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-white/10 active:scale-90 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer text-[11px]" 
                                           title="Редактировать"
                                         >
                                           ✏️
@@ -2359,75 +2262,22 @@ export function DashboardOverview({
                                         <button 
                                           onPointerDown={(e) => e.stopPropagation()}
                                           onClick={() => onQuickNavigate('transactions')} 
-                                          className="text-[10px] hover:text-white text-slate-500 cursor-pointer" 
+                                          className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-white/10 active:scale-90 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer text-[11px]" 
                                           title="Журнал"
                                         >
                                           📋
                                         </button>
-
-                                        <div className="relative inline-block leading-none">
-                                          <button 
-                                            onPointerDown={(e) => e.stopPropagation()}
-                                            onClick={(e) => {
-                                              e.stopPropagation();
-                                              setActiveGroupMenuId(activeGroupMenuId === acc.id ? null : acc.id);
-                                            }} 
-                                            className="text-[10px] hover:text-white text-slate-500 cursor-pointer" 
-                                            title="Перенести в группу..."
-                                          >
-                                            📁
-                                          </button>
-                                          {activeGroupMenuId === acc.id && (
-                                            <div 
-                                              onPointerDown={(e) => e.stopPropagation()}
-                                              className="absolute right-0 mt-2 z-50 bg-slate-900 border border-white/10 rounded-xl p-1 shadow-2xl min-w-[130px] text-[11px]"
-                                            >
-                                              <div className="px-2 py-1 text-[9px] font-bold text-slate-500 uppercase tracking-wider border-b border-white/5 mb-1 select-none text-left">
-                                                Переместить в:
-                                              </div>
-                                              <button
-                                                onClick={() => {
-                                                  handleMoveAccountToGroup(acc.id, 'ordinary');
-                                                  setActiveGroupMenuId(null);
-                                                }}
-                                                className="w-full text-left px-2 py-1 hover:bg-white/10 text-slate-300 hover:text-white rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer font-medium"
-                                              >
-                                                <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-                                                Обычные
-                                              </button>
-                                              <button
-                                                onClick={() => {
-                                                  handleMoveAccountToGroup(acc.id, 'savings');
-                                                  setActiveGroupMenuId(null);
-                                                }}
-                                                className="w-full text-left px-2 py-1 hover:bg-white/10 text-slate-300 hover:text-white rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer font-medium"
-                                              >
-                                                <span className="w-1.5 h-1.5 rounded-full bg-lime-450" />
-                                                Накопления
-                                              </button>
-                                              <button
-                                                onClick={() => {
-                                                  handleMoveAccountToGroup(acc.id, 'debt');
-                                                  setActiveGroupMenuId(null);
-                                                }}
-                                                className="w-full text-left px-2 py-1 hover:bg-white/10 text-slate-300 hover:text-white rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer font-medium"
-                                              >
-                                                <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />
-                                                Долги
-                                              </button>
-                                              <button
-                                                onClick={() => {
-                                                  handleMoveAccountToGroup(acc.id, 'hidden');
-                                                  setActiveGroupMenuId(null);
-                                                }}
-                                                className="w-full text-left px-2 py-1 hover:bg-white/10 text-slate-300 hover:text-white rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer font-medium"
-                                              >
-                                                <span className="w-1.5 h-1.5 rounded-full bg-slate-500" />
-                                                Скрытые
-                                              </button>
-                                            </div>
-                                          )}
-                                        </div>
+                                        <button 
+                                          onPointerDown={(e) => e.stopPropagation()}
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            setActiveGroupMenuId(acc.id);
+                                          }} 
+                                          className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-white/10 active:scale-90 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer text-[11px]" 
+                                          title="Перенести в группу..."
+                                        >
+                                          📁
+                                        </button>
                                       </div>
                                     </div>
                                   </div>
@@ -2517,11 +2367,14 @@ export function DashboardOverview({
                                       <span className="font-mono font-bold text-slate-300 select-all whitespace-nowrap">
                                         {Math.round(acc.balance).toLocaleString('ru-RU')} ₼
                                       </span>
-                                      <div className="opacity-65 md:opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1.5 pr-1 shrink-0 pointer-events-auto">
+                                      <div 
+                                        onPointerDown={(e) => e.stopPropagation()}
+                                        className="opacity-75 md:opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 sm:gap-1.5 pr-1 shrink-0 pointer-events-auto"
+                                      >
                                         <button 
                                           onPointerDown={(e) => e.stopPropagation()}
                                           onClick={() => onQuickNavigate('accounts-categories')} 
-                                          className="text-[10px] hover:text-white text-slate-500 cursor-pointer" 
+                                          className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-white/10 active:scale-90 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer text-[11px]" 
                                           title="Редактировать"
                                         >
                                           ✏️
@@ -2529,75 +2382,22 @@ export function DashboardOverview({
                                         <button 
                                           onPointerDown={(e) => e.stopPropagation()}
                                           onClick={() => onQuickNavigate('transactions')} 
-                                          className="text-[10px] hover:text-white text-slate-500 cursor-pointer" 
+                                          className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-white/10 active:scale-90 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer text-[11px]" 
                                           title="Журнал"
                                         >
                                           📋
                                         </button>
-
-                                        <div className="relative inline-block leading-none">
-                                          <button 
-                                            onPointerDown={(e) => e.stopPropagation()}
-                                            onClick={(e) => {
-                                              e.stopPropagation();
-                                              setActiveGroupMenuId(activeGroupMenuId === acc.id ? null : acc.id);
-                                            }} 
-                                            className="text-[10px] hover:text-white text-slate-500 cursor-pointer" 
-                                            title="Перенести в группу..."
-                                          >
-                                            📁
-                                          </button>
-                                          {activeGroupMenuId === acc.id && (
-                                            <div 
-                                              onPointerDown={(e) => e.stopPropagation()}
-                                              className="absolute right-0 mt-2 z-50 bg-slate-900 border border-white/10 rounded-xl p-1 shadow-2xl min-w-[130px] text-[11px]"
-                                            >
-                                              <div className="px-2 py-1 text-[9px] font-bold text-slate-500 uppercase tracking-wider border-b border-white/5 mb-1 select-none text-left">
-                                                Переместить в:
-                                              </div>
-                                              <button
-                                                onClick={() => {
-                                                  handleMoveAccountToGroup(acc.id, 'ordinary');
-                                                  setActiveGroupMenuId(null);
-                                                }}
-                                                className="w-full text-left px-2 py-1 hover:bg-white/10 text-slate-300 hover:text-white rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer font-medium"
-                                              >
-                                                <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-                                                Обычные
-                                              </button>
-                                              <button
-                                                onClick={() => {
-                                                  handleMoveAccountToGroup(acc.id, 'savings');
-                                                  setActiveGroupMenuId(null);
-                                                }}
-                                                className="w-full text-left px-2 py-1 hover:bg-white/10 text-slate-300 hover:text-white rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer font-medium"
-                                              >
-                                                <span className="w-1.5 h-1.5 rounded-full bg-lime-450" />
-                                                Накопления
-                                              </button>
-                                              <button
-                                                onClick={() => {
-                                                  handleMoveAccountToGroup(acc.id, 'debt');
-                                                  setActiveGroupMenuId(null);
-                                                }}
-                                                className="w-full text-left px-2 py-1 hover:bg-white/10 text-slate-300 hover:text-white rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer font-medium"
-                                              >
-                                                <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />
-                                                Долги
-                                              </button>
-                                              <button
-                                                onClick={() => {
-                                                  handleMoveAccountToGroup(acc.id, 'hidden');
-                                                  setActiveGroupMenuId(null);
-                                                }}
-                                                className="w-full text-left px-2 py-1 hover:bg-white/10 text-slate-300 hover:text-white rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer font-medium"
-                                              >
-                                                <span className="w-1.5 h-1.5 rounded-full bg-slate-500" />
-                                                Скрытые
-                                              </button>
-                                            </div>
-                                          )}
-                                        </div>
+                                        <button 
+                                          onPointerDown={(e) => e.stopPropagation()}
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            setActiveGroupMenuId(acc.id);
+                                          }} 
+                                          className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-white/10 active:scale-90 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer text-[11px]" 
+                                          title="Перенести в группу..."
+                                        >
+                                          📁
+                                        </button>
                                       </div>
                                     </div>
                                   </div>
@@ -3430,6 +3230,133 @@ export function DashboardOverview({
           </div>
         </div>
       )}
+
+      {/* Group Selection Modal */}
+      {(() => {
+        const activeGroupAccount = accounts.find(a => a.id === activeGroupMenuId);
+        if (!activeGroupAccount) return null;
+
+        const groups = [
+          {
+            id: 'ordinary' as const,
+            name: 'Обычные счета',
+            desc: 'Карты, наличные, регулярные кошельки',
+            color: 'bg-amber-400',
+            icon: '💳',
+          },
+          {
+            id: 'savings' as const,
+            name: 'Накопления',
+            desc: 'Вклады, инвест-копилки, сейфы',
+            color: 'bg-lime-500',
+            icon: '📈',
+          },
+          {
+            id: 'debt' as const,
+            name: 'Долги',
+            desc: 'Кредиты, ипотека, займы',
+            color: 'bg-rose-500',
+            icon: '💸',
+          },
+          {
+            id: 'hidden' as const,
+            name: 'Скрытые',
+            desc: 'Скрыты из общего списка и быстрого ввода',
+            color: 'bg-slate-500',
+            icon: '👁️',
+          },
+        ];
+
+        return (
+          <div 
+            className="fixed inset-0 z-55 flex items-center justify-center p-3 sm:p-4 bg-slate-950/85 backdrop-blur-xs transition-all animate-fade-in"
+            onClick={() => setActiveGroupMenuId(null)}
+          >
+            <div 
+              className="w-full max-w-sm bg-slate-900 border border-white/10 rounded-3xl shadow-2xl overflow-hidden flex flex-col animate-scale-up"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header */}
+              <div className="p-5 border-b border-white/10 flex items-center justify-between bg-slate-950/30">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-teal-500/10 border border-teal-500/25 flex items-center justify-center text-lg shadow-inner select-none bg-radial">
+                    📁
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="text-sm sm:text-base font-black text-white flex items-center gap-2">
+                      Перенести в группу
+                    </h3>
+                    <p className="text-[10px] sm:text-xs text-slate-400 font-semibold uppercase tracking-wider truncate">
+                      {activeGroupAccount.name}
+                    </p>
+                  </div>
+                </div>
+                <button 
+                  onClick={() => setActiveGroupMenuId(null)}
+                  className="p-2 text-slate-400 hover:text-white hover:bg-white/5 active:scale-95 rounded-xl transition-all cursor-pointer"
+                  title="Закрыть"
+                >
+                  <X size={18} className="stroke-[2.5]" />
+                </button>
+              </div>
+
+              {/* Options */}
+              <div className="p-4 space-y-2">
+                {groups.map((g) => {
+                  const isCurrent = (g.id === 'ordinary' && activeGroupAccount.type === 'card' && activeGroupAccount.quickEntry) ||
+                                    (g.id === 'savings' && activeGroupAccount.type === 'savings') ||
+                                    (g.id === 'debt' && activeGroupAccount.type === 'debt') ||
+                                    (g.id === 'hidden' && !activeGroupAccount.quickEntry && activeGroupAccount.type !== 'debt' && activeGroupAccount.type !== 'savings');
+
+                  return (
+                    <button
+                      key={g.id}
+                      onClick={() => {
+                        handleMoveAccountToGroup(activeGroupAccount.id, g.id);
+                        setActiveGroupMenuId(null);
+                      }}
+                      className={`w-full text-left p-3 rounded-2xl border transition-all flex items-start gap-3 cursor-pointer hover:bg-white/5 ${
+                        isCurrent 
+                          ? 'border-teal-500 bg-teal-500/5' 
+                          : 'border-white/5 hover:border-white/10 animate-fade-in'
+                      }`}
+                    >
+                      <div className="text-2xl pt-0.5 shrink-0 select-none">
+                        {g.icon}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-bold text-sm text-white">{g.name}</span>
+                          <span className={`w-1.5 h-1.5 rounded-full ${g.color}`} />
+                          {isCurrent && (
+                            <span className="text-[9px] bg-teal-500/20 text-teal-400 px-1.5 py-0.5 rounded-md font-bold uppercase tracking-wider ml-auto shrink-0">
+                              Текущая
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-[11px] text-slate-400 leading-normal mt-0.5 font-medium">
+                          {g.desc}
+                        </p>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Footer */}
+              <div className="p-4 bg-slate-950/20 border-t border-white/5 flex items-center justify-end">
+                <button
+                  onClick={() => setActiveGroupMenuId(null)}
+                  className="py-2.5 px-5 rounded-2xl bg-white/5 hover:bg-white/15 text-xs font-bold text-slate-300 hover:text-white transition-all cursor-pointer"
+                >
+                  Отмена
+                </button>
+              </div>
+
+            </div>
+          </div>
+        );
+      })()}
 
     </div>
   );
