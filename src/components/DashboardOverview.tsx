@@ -1578,10 +1578,10 @@ export function DashboardOverview({
                   {/* Dynamic Sums Calculations */}
                   {(() => {
                     const KopilkaName = 'Копилка';
-                    const savingsAccountsList = ['Акции ABB', 'Digihesab Samira', 'Зарубежные акции', 'Облигации ABB', 'Digideposit Samira', 'Депозит-Подушка безопасности', 'TamKart Virtual', 'Страхование жизни', 'Цифровая карта', 'DigiHesab 2 Ilqar'];
+                    const savingsAccountsList = ['Копилка', 'Акции ABB', 'Digihesab Samira', 'Зарубежные акции', 'Облигации ABB', 'Digideposit Samira', 'Депозит-Подушка безопасности', 'TamKart Virtual', 'Страхование жизни', 'Цифровая карта', 'DigiHesab 2 Ilqar'];
 
                     const kopilkaAcc = accounts.find(a => a.name === KopilkaName);
-                    const kopilkaBalVal = kopilkaAcc ? kopilkaAcc.balance : 0;
+                    const kopilkaBalVal = 0; // Set to 0 since we display Kopilka inline as active normally now
 
                     // 1. HIDDEN GROUP (СКРЫТЫЕ)
                     const hiddenAccsRaw = accounts.filter(a => a.quickEntry === false || a.type === 'hidden');
@@ -1590,8 +1590,8 @@ export function DashboardOverview({
                       : hiddenAccsRaw;
                     const hiddenSumVal = hiddenAccs.reduce((sum, a) => sum + a.balance, 0);
 
-                    // Accounts that are active (non-hidden and non-kopilka):
-                    const activeAccounts = accounts.filter(a => a.name !== KopilkaName && a.quickEntry !== false && a.type !== 'hidden');
+                    // Accounts that are active (non-hidden):
+                    const activeAccounts = accounts.filter(a => a.quickEntry !== false && a.type !== 'hidden');
 
                     // 2. DEBTS GROUP (ДОЛГИ)
                     const debtKeywords = ['kredit', 'credit', 'долг', 'debt', 'кредит'];
@@ -1807,24 +1807,6 @@ export function DashboardOverview({
                                   </div>
                                 );
                               })}
-
-                              {/* Warning Account - Kopilka shown in line */}
-                              {kopilkaAcc && (
-                                <div 
-                                  className="group flex items-center justify-between p-1.5 rounded-lg bg-orange-500/5 hover:bg-orange-500/10 border border-orange-500/20 transition-all text-xs gap-3 min-w-0"
-                                >
-                                  <span className="font-bold text-orange-200 flex items-center gap-1.5 min-w-0">
-                                    <span className="font-sans shrink-0">⚠️</span>
-                                    <span className="truncate">{kopilkaAcc.name}</span>
-                                  </span>
-                                  <div className="flex items-center gap-2 shrink-0">
-                                    <span className="font-mono font-bold text-orange-300 whitespace-nowrap">
-                                      {Math.round(kopilkaAcc.balance).toLocaleString('ru-RU')} ₼
-                                    </span>
-                                    <span className="text-[9px] text-slate-500 hidden sm:inline-block font-semibold">В Копилке</span>
-                                  </div>
-                                </div>
-                              )}
                             </div>
                           )}
                         </div>
