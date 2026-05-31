@@ -484,7 +484,7 @@ export function AiAssistantPanel({ financeData, theme, addToast }: AiAssistantPa
       {/* Messages / Welcome View Area */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4 scroll-smooth">
         {showSettings ? (
-          <div className="max-w-xl mx-auto py-4 space-y-6 animate-fade-in" id="milli-api-settings-panel">
+          <div className="max-w-3xl mx-auto py-4 space-y-6 animate-fade-in" id="milli-api-settings-panel">
             <div className={`p-5 rounded-2xl border ${
               isDark ? 'bg-slate-950/40 border-teal-500/15' : 'bg-teal-50/10 border-teal-500/20'
             }`}>
@@ -592,7 +592,7 @@ export function AiAssistantPanel({ financeData, theme, addToast }: AiAssistantPa
             </div>
           </div>
         ) : messages.length === 0 ? (
-          <div className="max-w-xl mx-auto py-6 space-y-6">
+          <div className="max-w-3xl mx-auto py-6 space-y-6">
             
             {/* Mascot greetings */}
             <div className={`p-6 rounded-2xl border text-center relative overflow-hidden ${
@@ -607,7 +607,7 @@ export function AiAssistantPanel({ financeData, theme, addToast }: AiAssistantPa
               <h3 className="text-sm font-extrabold font-display mb-1 text-slate-100">
                 Привет! Я Milli — ваш персональный финансовый советник
               </h3>
-              <p className="text-xs text-slate-400 leading-relaxed max-w-md mx-auto">
+              <p className="text-xs text-slate-400 leading-relaxed max-w-xl mx-auto">
                 Я имею защищенный доступ к вашим локальным операциям, счетам накоплений и бюджетам в AZN. 
                 Вы можете задать мне любой вопрос о ваших деньгах или запустить быстрый аудит!
               </p>
@@ -623,7 +623,7 @@ export function AiAssistantPanel({ financeData, theme, addToast }: AiAssistantPa
                   const Icon = q.icon;
                   return (
                     <button
-                      key={pIdx}
+                       key={pIdx}
                       onClick={() => handleSendMessage(q.text)}
                       className={`p-3.5 rounded-xl border text-left transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer hover:shadow-lg flex flex-col gap-2 ${
                         isDark 
@@ -654,13 +654,13 @@ export function AiAssistantPanel({ financeData, theme, addToast }: AiAssistantPa
             </div>
           </div>
         ) : (
-          <div className="max-w-2xl mx-auto space-y-4 pb-6">
+          <div className="max-w-5xl mx-auto space-y-4 pb-6 px-1 md:px-4">
             {messages.map((m) => {
               const isUser = m.role === 'user';
               return (
                 <div 
                   key={m.id} 
-                  className={`flex gap-3 max-w-[85%] ${isUser ? 'ml-auto flex-row-reverse' : ''}`}
+                  className={`flex gap-3 max-w-[94%] ${isUser ? 'ml-auto flex-row-reverse' : ''}`}
                 >
                   {/* Avatar */}
                   <div className={`w-8 h-8 rounded-xl shrink-0 flex items-center justify-center border text-xs font-bold leading-none ${
@@ -672,7 +672,7 @@ export function AiAssistantPanel({ financeData, theme, addToast }: AiAssistantPa
                   </div>
 
                   {/* Bubble content */}
-                  <div className={`p-4 rounded-2xl text-[13px] border ${
+                  <div className={`p-4 rounded-2xl text-[13px] border flex-1 ${
                     isUser 
                       ? (isDark ? 'bg-teal-950/30 border-teal-500/10 text-slate-200' : 'bg-teal-50 border-teal-500/10 text-teal-950')
                       : (isDark ? 'bg-slate-950/40 border-slate-800 text-slate-100' : 'bg-slate-50 border-slate-200 text-slate-800')
@@ -690,11 +690,11 @@ export function AiAssistantPanel({ financeData, theme, addToast }: AiAssistantPa
 
             {/* Thinking / Loading state */}
             {loading && (
-              <div className="flex gap-3 max-w-[80%]">
+              <div className="flex gap-3 max-w-[90%]">
                 <div className="w-8 h-8 rounded-xl shrink-0 flex items-center justify-center bg-slate-950 text-emerald-400 border border-slate-800 text-xs font-bold animate-pulse">
                   <Loader2 size={13} className="animate-spin" />
                 </div>
-                <div className={`p-4 rounded-2xl text-xs border flex flex-col gap-1.5 justify-center ${
+                <div className={`p-4 rounded-2xl text-xs border flex flex-col gap-1.5 justify-center flex-1 ${
                   isDark ? 'bg-slate-950/30 border-slate-900 text-slate-350' : 'bg-slate-50 border-slate-200 text-slate-600'
                 }`}>
                   <div className="flex items-center gap-2">
@@ -720,7 +720,7 @@ export function AiAssistantPanel({ financeData, theme, addToast }: AiAssistantPa
             e.preventDefault();
             handleSendMessage(input);
           }}
-          className="max-w-2xl mx-auto flex gap-2"
+          className="max-w-5xl mx-auto flex gap-2"
         >
           <input 
             type="text"
