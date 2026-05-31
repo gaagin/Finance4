@@ -1517,6 +1517,7 @@ export default function App() {
               showMode="quick-records"
               theme={theme}
               onReorderAccounts={handleReorderAccounts}
+              onEditTransaction={handleEditTransactionStart}
             />
           )}
 
@@ -1537,6 +1538,7 @@ export default function App() {
               showMode="analytics"
               theme={theme}
               onReorderAccounts={handleReorderAccounts}
+              onEditTransaction={handleEditTransactionStart}
             />
           )}
 

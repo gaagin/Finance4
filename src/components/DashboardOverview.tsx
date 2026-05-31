@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useRef } from 'react';
 import { Transaction, Category, Account, BudgetLimit, formatCategoryDisplayName } from '../types';
 import { IconComponent } from './IconComponent';
-import { Wallet, ArrowUpRight, ArrowDownLeft, TrendingUp, AlertTriangle, Filter, Calendar, HelpCircle, FileSpreadsheet, Download, RefreshCw, LogIn, LogOut, CheckCircle, AlertCircle, ArrowUpDown, SlidersHorizontal, X } from 'lucide-react';
+import { Wallet, ArrowUpRight, ArrowDownLeft, TrendingUp, AlertTriangle, Filter, Calendar, HelpCircle, FileSpreadsheet, Download, RefreshCw, LogIn, LogOut, CheckCircle, AlertCircle, ArrowUpDown, SlidersHorizontal, X, Edit2 } from 'lucide-react';
 import { exportToGoogleSheets } from '../googleSheetsService';
 import { QuickDragDropBuilder } from './QuickDragDropBuilder';
 import { SearchableSelect } from './SearchableSelect';
@@ -29,6 +29,7 @@ interface DashboardOverviewProps {
   showMode?: 'quick-records' | 'analytics' | 'all';
   theme?: 'light' | 'dark';
   onReorderAccounts?: (newAccounts: Account[]) => void;
+  onEditTransaction?: (tx: Transaction) => void;
 }
 
 const getParentCategory = (cat: Category, allCategories: Category[]): Category => {
@@ -72,7 +73,8 @@ export function DashboardOverview({
   addToast,
   showMode = 'all',
   theme = 'light',
-  onReorderAccounts
+  onReorderAccounts,
+  onEditTransaction
 }: DashboardOverviewProps) {
   
   const visibleAccounts = useMemo(() => accounts.filter(a => a.quickEntry !== false), [accounts]);
@@ -3381,9 +3383,18 @@ export function DashboardOverview({
                     return (
                       <div 
                         key={tx.id}
-                        className="flex items-center justify-between p-3.5 bg-white/5 rounded-2xl border border-white/5 hover:bg-white/10 hover:border-white/10 transition-all gap-4 text-xs group"
+                        onClick={() => {
+                          if (onEditTransaction) {
+                            onEditTransaction(tx);
+                            setSelectedCategoryTransactions(null);
+                          }
+                        }}
+                        className={`flex items-center justify-between p-3.5 bg-white/5 rounded-2xl border border-white/5 hover:bg-white/10 hover:border-teal-500/30 transition-all gap-4 text-xs group ${
+                          onEditTransaction ? 'cursor-pointer active:scale-[0.995]' : ''
+                        }`}
+                        title={onEditTransaction ? "Нажмите для редактирования операции" : undefined}
                       >
-                        <div className="min-w-0 space-y-1">
+                        <div className="min-w-0 space-y-1 flex-1">
                           <div className="flex items-center gap-2">
                             <span className="font-sans font-bold text-slate-205 truncate">
                               {tx.description || formatCategoryDisplayName(selectedCategoryTransactions.category.name) || 'Без описания'}
@@ -3397,10 +3408,15 @@ export function DashboardOverview({
                           </p>
                         </div>
                         
-                        <div className="text-right shrink-0">
+                        <div className="flex items-center gap-2.5 shrink-0 text-right">
                           <span className={`font-mono font-black text-sm ${selectedCategoryTransactions.type === 'income' ? 'text-emerald-400' : 'text-rose-450'}`}>
                             {selectedCategoryTransactions.type === 'income' ? '+' : '-'}{Math.round(tx.amount).toLocaleString('ru-RU')} ₼
                           </span>
+                          {onEditTransaction && (
+                            <div className="w-6 h-6 rounded-lg bg-teal-500/10 text-teal-400 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center pointer-events-none shrink-0">
+                              <Edit2 size={11} className="stroke-[2.5]" />
+                            </div>
+                          )}
                         </div>
                       </div>
                     );
