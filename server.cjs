@@ -25,12 +25,31 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 var import_express = __toESM(require("express"), 1);
 var import_path = __toESM(require("path"), 1);
 var import_vite = require("vite");
+var import_fs = __toESM(require("fs"), 1);
 var import_dotenv = __toESM(require("dotenv"), 1);
 import_dotenv.default.config();
+var DEBUG_FILE = "/tmp/milli_request_debug.log";
+function logDebug(msg) {
+  try {
+    const timestamp = (/* @__PURE__ */ new Date()).toISOString();
+    import_fs.default.appendFileSync(DEBUG_FILE, `[${timestamp}] ${msg}
+`);
+  } catch (err) {
+    console.error("Error writing debug:", err);
+  }
+}
 async function startServer() {
   const app = (0, import_express.default)();
   const PORT = 3e3;
   app.use(import_express.default.json());
+  app.use("/api", (req, res, next) => {
+    logDebug(`Express API request received: ${req.method} ${req.originalUrl}`);
+    next();
+  });
+  app.get("/api/assistant", (req, res) => {
+    logDebug("Express GET /api/assistant hit");
+    res.json({ status: "milli_ready", server: "express_backend" });
+  });
   app.post("/api/assistant", async (req, res) => {
     try {
       const { message, history, financeData } = req.body;
