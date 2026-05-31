@@ -148,6 +148,21 @@ export function DashboardOverview({
     () => (localStorage.getItem('milli_accounts_sort_mode') as any) || 'desc'
   );
 
+  const [hoveredGroupType, setHoveredGroupType] = useState<'ordinary' | 'savings' | 'debt' | 'hidden' | null>(null);
+  const [activeGroupMenuId, setActiveGroupMenuId] = useState<string | null>(null);
+
+  // Close group menu if clicked outside
+  React.useEffect(() => {
+    if (!activeGroupMenuId) return;
+    const handleOutsideClick = () => {
+      setActiveGroupMenuId(null);
+    };
+    document.addEventListener('click', handleOutsideClick);
+    return () => {
+      document.removeEventListener('click', handleOutsideClick);
+    };
+  }, [activeGroupMenuId]);
+
   // Synced state persistence to localStorage via React.useEffect hooks
   React.useEffect(() => {
     localStorage.setItem('milli_analytics_timeframe', analyticsTimeframe);
@@ -235,6 +250,50 @@ export function DashboardOverview({
   const holdTimerRef = useRef<any>(null);
   const pointerIdRef = useRef<number | null>(null);
 
+  const handleMoveAccountToGroup = (accountId: string, targetGroup: 'ordinary' | 'savings' | 'debt' | 'hidden') => {
+    const updatedAccounts = accounts.map(a => {
+      if (a.id === accountId) {
+        let updatedType = a.type;
+        let updatedQuickEntry = a.quickEntry;
+
+        if (targetGroup === 'ordinary') {
+          updatedType = 'card';
+          updatedQuickEntry = true;
+        } else if (targetGroup === 'savings') {
+          updatedType = 'savings';
+          updatedQuickEntry = true;
+        } else if (targetGroup === 'debt') {
+          updatedType = 'debt';
+          updatedQuickEntry = true;
+        } else if (targetGroup === 'hidden') {
+          updatedType = 'hidden';
+          updatedQuickEntry = false;
+        }
+
+        return {
+          ...a,
+          type: updatedType,
+          quickEntry: updatedQuickEntry,
+          updatedAt: Date.now()
+        };
+      }
+      return a;
+    });
+
+    if (onReorderAccounts) {
+      onReorderAccounts(updatedAccounts);
+    }
+
+    if (addToast) {
+      const accountName = accounts.find(a => a.id === accountId)?.name || 'Счет';
+      let groupLabel = 'Обычные';
+      if (targetGroup === 'savings') groupLabel = 'Накопления';
+      if (targetGroup === 'debt') groupLabel = 'Долги';
+      if (targetGroup === 'hidden') groupLabel = 'Скрытые';
+      addToast(`Счет "${accountName}" перемещен в "${groupLabel}"`, 'success');
+    }
+  };
+
   const handleAccountPointerDown = (
     e: React.PointerEvent<HTMLDivElement>, 
     accountId: string, 
@@ -277,6 +336,7 @@ export function DashboardOverview({
 
   const handleAccountPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     const clientY = e.clientY;
+    const clientX = e.clientX;
     
     if (!draggedAccountId) {
       // If long press is pending, check if they moved too far vertically (which implies scrolling, not drag)
@@ -289,6 +349,29 @@ export function DashboardOverview({
     
     e.preventDefault();
     setCurrentY(clientY);
+
+    // Compute which group is hovered
+    let foundGroup: 'ordinary' | 'savings' | 'debt' | 'hidden' | null = null;
+    const groups = [
+      { type: 'ordinary', el: document.getElementById('acc-group-ordinary') },
+      { type: 'savings', el: document.getElementById('acc-group-savings') },
+      { type: 'debt', el: document.getElementById('acc-group-debt') },
+      { type: 'hidden', el: document.getElementById('acc-group-hidden') }
+    ];
+
+    for (const group of groups) {
+      if (group.el) {
+        const rect = group.el.getBoundingClientRect();
+        if (
+          clientY >= rect.top - 20 && clientY <= rect.bottom + 20 &&
+          clientX >= rect.left - 40 && clientX <= rect.right + 40
+        ) {
+          foundGroup = group.type as any;
+          break;
+        }
+      }
+    }
+    setHoveredGroupType(foundGroup);
   };
 
   const handleAccountPointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
@@ -305,41 +388,47 @@ export function DashboardOverview({
     }
 
     if (draggedAccountId && dragGroupType) {
-      const ITEM_HEIGHT = 35;
-      const diffY = currentY - startY;
-      const offset = Math.round(diffY / ITEM_HEIGHT);
-      let targetIndex = draggedInitialIndex + offset;
-      
-      const listLength = draggingListIds.length;
-      targetIndex = Math.max(0, Math.min(listLength - 1, targetIndex));
+      // If dropped over a DIFFERENT group, move it directly!
+      if (hoveredGroupType && hoveredGroupType !== dragGroupType) {
+        handleMoveAccountToGroup(draggedAccountId, hoveredGroupType);
+      } else {
+        // Otherwise, perform reordering in the same group
+        const ITEM_HEIGHT = 35;
+        const diffY = currentY - startY;
+        const offset = Math.round(diffY / ITEM_HEIGHT);
+        let targetIndex = draggedInitialIndex + offset;
+        
+        const listLength = draggingListIds.length;
+        targetIndex = Math.max(0, Math.min(listLength - 1, targetIndex));
 
-      if (targetIndex !== draggedInitialIndex && listLength > 0) {
-        if (accountsSortMode !== 'custom') {
-          setAccountsSortMode('custom');
-        }
-        const finalIds = [...draggingListIds];
-        const [movedId] = finalIds.splice(draggedInitialIndex, 1);
-        finalIds.splice(targetIndex, 0, movedId);
-        
-        const groupAccountsMap = new Map<string, Account>();
-        accounts.forEach(a => {
-          if (finalIds.includes(a.id)) {
-            groupAccountsMap.set(a.id, a);
+        if (targetIndex !== draggedInitialIndex && listLength > 0) {
+          if (accountsSortMode !== 'custom') {
+            setAccountsSortMode('custom');
           }
-        });
-        
-        const reorderedGroup = finalIds.map(id => groupAccountsMap.get(id)!).filter(Boolean);
-        
-        let groupIndex = 0;
-        const reorderedGlobalAccounts = accounts.map(a => {
-          if (finalIds.includes(a.id)) {
-            return reorderedGroup[groupIndex++];
+          const finalIds = [...draggingListIds];
+          const [movedId] = finalIds.splice(draggedInitialIndex, 1);
+          finalIds.splice(targetIndex, 0, movedId);
+          
+          const groupAccountsMap = new Map<string, Account>();
+          accounts.forEach(a => {
+            if (finalIds.includes(a.id)) {
+              groupAccountsMap.set(a.id, a);
+            }
+          });
+          
+          const reorderedGroup = finalIds.map(id => groupAccountsMap.get(id)!).filter(Boolean);
+          
+          let groupIndex = 0;
+          const reorderedGlobalAccounts = accounts.map(a => {
+            if (finalIds.includes(a.id)) {
+              return reorderedGroup[groupIndex++];
+            }
+            return a;
+          });
+          
+          if (onReorderAccounts) {
+            onReorderAccounts(reorderedGlobalAccounts);
           }
-          return a;
-        });
-        
-        if (onReorderAccounts) {
-          onReorderAccounts(reorderedGlobalAccounts);
         }
       }
     }
@@ -347,6 +436,7 @@ export function DashboardOverview({
     setDraggedAccountId(null);
     setDragGroupType(null);
     setDraggingListIds([]);
+    setHoveredGroupType(null);
   };
 
   // Render a beautifully styled representation of the distribution weight (formerly grid Treemap)
@@ -1507,6 +1597,7 @@ export function DashboardOverview({
                     const debtKeywords = ['kredit', 'credit', 'долг', 'debt', 'кредит'];
                     const isDebtAccount = (a: Account) => {
                       if (a.type === 'debt') return true;
+                      if (a.type === 'card' || a.type === 'cash' || a.type === 'savings' || a.type === 'hidden') return false;
                       const nameLower = a.name.toLowerCase();
                       return debtKeywords.some(kw => nameLower.includes(kw));
                     };
@@ -1522,6 +1613,7 @@ export function DashboardOverview({
                     // 3. SAVINGS GROUP (НАКОПЛЕНИЯ)
                     const isSavingsAccount = (a: Account) => {
                       if (a.type === 'savings') return true;
+                      if (a.type === 'card' || a.type === 'cash' || a.type === 'debt' || a.type === 'hidden') return false;
                       return savingsAccountsList.includes(a.name);
                     };
                     const savingsAccsRaw = nonDebtActiveAccounts.filter(isSavingsAccount);
@@ -1547,7 +1639,14 @@ export function DashboardOverview({
                       <div className="space-y-4">
                         
                         {/* GROUP A: ORDINARY (ОБЫЧНЫЕ) */}
-                        <div className="min-w-0">
+                        <div 
+                          id="acc-group-ordinary" 
+                          className={`min-w-0 p-1 rounded-xl transition-all duration-200 border ${
+                            hoveredGroupType === 'ordinary'
+                              ? 'border-yellow-500/50 bg-yellow-500/5 shadow-[0_0_15px_rgba(234,179,8,0.15)] scale-[1.01]'
+                              : 'border-transparent'
+                          }`}
+                        >
                           {/* Group Header */}
                           <div 
                             onClick={() => setIsOrdinaryGroupExpanded(!isOrdinaryGroupExpanded)}
@@ -1610,7 +1709,7 @@ export function DashboardOverview({
                                     }}
                                     className={`group flex items-center justify-between p-1.5 rounded-lg text-xs gap-3 min-w-0 select-none cursor-grab active:cursor-grabbing ${
                                       isDraggingThis 
-                                        ? 'bg-teal-500/10 border border-teal-500/35 shadow-xl shadow-teal-500/10 relative z-50 scale-[1.03] transition-none!' 
+                                        ? 'bg-teal-500/10 border border-teal-500/35 shadow-xl shadow-teal-500/10 relative z-50 scale-[1.033] transition-none!' 
                                         : 'hover:bg-white/5 border border-transparent'
                                     }`}
                                   >
@@ -1622,7 +1721,7 @@ export function DashboardOverview({
                                       <span className="font-mono font-bold text-slate-200 select-all whitespace-nowrap">
                                         {Math.round(acc.balance).toLocaleString('ru-RU')} ₼
                                       </span>
-                                      <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 pr-1 shrink-0 pointer-events-auto">
+                                      <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1.5 pr-1 shrink-0 pointer-events-auto">
                                         <button 
                                           onPointerDown={(e) => e.stopPropagation()}
                                           onClick={() => onQuickNavigate('accounts-categories')} 
@@ -1639,6 +1738,70 @@ export function DashboardOverview({
                                         >
                                           📋
                                         </button>
+
+                                        <div className="relative inline-block leading-none">
+                                          <button 
+                                            onPointerDown={(e) => e.stopPropagation()}
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              setActiveGroupMenuId(activeGroupMenuId === acc.id ? null : acc.id);
+                                            }} 
+                                            className="text-[10px] hover:text-white text-slate-500 cursor-pointer" 
+                                            title="Перенести в группу..."
+                                          >
+                                            📁
+                                          </button>
+                                          {activeGroupMenuId === acc.id && (
+                                            <div 
+                                              onPointerDown={(e) => e.stopPropagation()}
+                                              className="absolute right-0 mt-2 z-50 bg-slate-900 border border-white/10 rounded-xl p-1 shadow-2xl min-w-[130px] text-[11px]"
+                                            >
+                                              <div className="px-2 py-1 text-[9px] font-bold text-slate-500 uppercase tracking-wider border-b border-white/5 mb-1 select-none text-left">
+                                                Переместить в:
+                                              </div>
+                                              <button
+                                                onClick={() => {
+                                                  handleMoveAccountToGroup(acc.id, 'ordinary');
+                                                  setActiveGroupMenuId(null);
+                                                }}
+                                                className="w-full text-left px-2 py-1 hover:bg-white/10 text-slate-300 hover:text-white rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer font-medium"
+                                              >
+                                                <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                                                Обычные
+                                              </button>
+                                              <button
+                                                onClick={() => {
+                                                  handleMoveAccountToGroup(acc.id, 'savings');
+                                                  setActiveGroupMenuId(null);
+                                                }}
+                                                className="w-full text-left px-2 py-1 hover:bg-white/10 text-slate-300 hover:text-white rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer font-medium"
+                                              >
+                                                <span className="w-1.5 h-1.5 rounded-full bg-lime-450" />
+                                                Накопления
+                                              </button>
+                                              <button
+                                                onClick={() => {
+                                                  handleMoveAccountToGroup(acc.id, 'debt');
+                                                  setActiveGroupMenuId(null);
+                                                }}
+                                                className="w-full text-left px-2 py-1 hover:bg-white/10 text-slate-300 hover:text-white rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer font-medium"
+                                              >
+                                                <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />
+                                                Долги
+                                              </button>
+                                              <button
+                                                onClick={() => {
+                                                  handleMoveAccountToGroup(acc.id, 'hidden');
+                                                  setActiveGroupMenuId(null);
+                                                }}
+                                                className="w-full text-left px-2 py-1 hover:bg-white/10 text-slate-300 hover:text-white rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer font-medium"
+                                              >
+                                                <span className="w-1.5 h-1.5 rounded-full bg-slate-500" />
+                                                Скрытые
+                                              </button>
+                                            </div>
+                                          )}
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
@@ -1667,7 +1830,14 @@ export function DashboardOverview({
                         </div>
 
                         {/* GROUP B: ACCUMULATIONS (НАКОПЛЕНИЯ) */}
-                        <div className="min-w-0">
+                        <div 
+                          id="acc-group-savings" 
+                          className={`min-w-0 p-1 rounded-xl transition-all duration-200 border ${
+                            hoveredGroupType === 'savings'
+                              ? 'border-lime-500/50 bg-lime-500/5 shadow-[0_0_15px_rgba(132,204,22,0.15)] scale-[1.01]'
+                              : 'border-transparent'
+                          }`}
+                        >
                           {/* Group Header */}
                           <div 
                             onClick={() => setIsSavingsGroupExpanded(!isSavingsGroupExpanded)}
@@ -1727,7 +1897,7 @@ export function DashboardOverview({
                                     }}
                                     className={`group flex items-center justify-between p-1.5 rounded-lg text-xs gap-3 min-w-0 select-none cursor-grab active:cursor-grabbing ${
                                       isDraggingThis 
-                                        ? 'bg-teal-500/10 border border-teal-500/35 shadow-xl shadow-teal-500/10 relative z-50 scale-[1.03] transition-none!' 
+                                        ? 'bg-teal-500/10 border border-teal-500/35 shadow-xl shadow-teal-500/10 relative z-50 scale-[1.033] transition-none!' 
                                         : 'hover:bg-white/5 border border-transparent'
                                     }`}
                                   >
@@ -1751,7 +1921,7 @@ export function DashboardOverview({
                                       <span className="font-mono font-bold text-slate-200 select-all whitespace-nowrap">
                                         {Math.round(acc.balance).toLocaleString('ru-RU')} ₼
                                       </span>
-                                      <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 pr-1 shrink-0 pointer-events-auto">
+                                      <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1.5 pr-1 shrink-0 pointer-events-auto">
                                         <button 
                                           onPointerDown={(e) => e.stopPropagation()}
                                           onClick={() => onQuickNavigate('accounts-categories')} 
@@ -1768,6 +1938,70 @@ export function DashboardOverview({
                                         >
                                           📋
                                         </button>
+
+                                        <div className="relative inline-block leading-none">
+                                          <button 
+                                            onPointerDown={(e) => e.stopPropagation()}
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              setActiveGroupMenuId(activeGroupMenuId === acc.id ? null : acc.id);
+                                            }} 
+                                            className="text-[10px] hover:text-white text-slate-500 cursor-pointer" 
+                                            title="Перенести в группу..."
+                                          >
+                                            📁
+                                          </button>
+                                          {activeGroupMenuId === acc.id && (
+                                            <div 
+                                              onPointerDown={(e) => e.stopPropagation()}
+                                              className="absolute right-0 mt-2 z-50 bg-slate-900 border border-white/10 rounded-xl p-1 shadow-2xl min-w-[130px] text-[11px]"
+                                            >
+                                              <div className="px-2 py-1 text-[9px] font-bold text-slate-500 uppercase tracking-wider border-b border-white/5 mb-1 select-none text-left">
+                                                Переместить в:
+                                              </div>
+                                              <button
+                                                onClick={() => {
+                                                  handleMoveAccountToGroup(acc.id, 'ordinary');
+                                                  setActiveGroupMenuId(null);
+                                                }}
+                                                className="w-full text-left px-2 py-1 hover:bg-white/10 text-slate-300 hover:text-white rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer font-medium"
+                                              >
+                                                <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                                                Обычные
+                                              </button>
+                                              <button
+                                                onClick={() => {
+                                                  handleMoveAccountToGroup(acc.id, 'savings');
+                                                  setActiveGroupMenuId(null);
+                                                }}
+                                                className="w-full text-left px-2 py-1 hover:bg-white/10 text-slate-300 hover:text-white rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer font-medium"
+                                              >
+                                                <span className="w-1.5 h-1.5 rounded-full bg-lime-450" />
+                                                Накопления
+                                              </button>
+                                              <button
+                                                onClick={() => {
+                                                  handleMoveAccountToGroup(acc.id, 'debt');
+                                                  setActiveGroupMenuId(null);
+                                                }}
+                                                className="w-full text-left px-2 py-1 hover:bg-white/10 text-slate-300 hover:text-white rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer font-medium"
+                                              >
+                                                <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />
+                                                Долги
+                                              </button>
+                                              <button
+                                                onClick={() => {
+                                                  handleMoveAccountToGroup(acc.id, 'hidden');
+                                                  setActiveGroupMenuId(null);
+                                                }}
+                                                className="w-full text-left px-2 py-1 hover:bg-white/10 text-slate-300 hover:text-white rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer font-medium"
+                                              >
+                                                <span className="w-1.5 h-1.5 rounded-full bg-slate-500" />
+                                                Скрытые
+                                              </button>
+                                            </div>
+                                          )}
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
@@ -1778,7 +2012,14 @@ export function DashboardOverview({
                         </div>
 
                         {/* GROUP C: DEBTS (ДОЛГИ) */}
-                        <div className="min-w-0">
+                        <div 
+                          id="acc-group-debt" 
+                          className={`min-w-0 p-1 rounded-xl transition-all duration-200 border ${
+                            hoveredGroupType === 'debt'
+                              ? 'border-rose-500/50 bg-rose-500/5 shadow-[0_0_15px_rgba(244,63,94,0.15)] scale-[1.01]'
+                              : 'border-transparent'
+                          }`}
+                        >
                           {/* Group Header */}
                           <div 
                             onClick={() => setIsDebtGroupExpanded(!isDebtGroupExpanded)}
@@ -1838,7 +2079,7 @@ export function DashboardOverview({
                                     }}
                                     className={`group flex items-center justify-between p-1.5 rounded-lg text-xs gap-3 min-w-0 select-none cursor-grab active:cursor-grabbing ${
                                       isDraggingThis 
-                                        ? 'bg-rose-500/10 border border-rose-500/35 shadow-xl shadow-rose-500/10 relative z-50 scale-[1.03] transition-none!' 
+                                        ? 'bg-rose-500/10 border border-rose-500/35 shadow-xl shadow-rose-500/10 relative z-50 scale-[1.033] transition-none!' 
                                         : 'hover:bg-white/5 border border-transparent'
                                     }`}
                                   >
@@ -1850,7 +2091,7 @@ export function DashboardOverview({
                                       <span className="font-mono font-bold text-slate-200 select-all whitespace-nowrap">
                                         {Math.round(acc.balance).toLocaleString('ru-RU')} ₼
                                       </span>
-                                      <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 pr-1 shrink-0 pointer-events-auto">
+                                      <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1.5 pr-1 shrink-0 pointer-events-auto">
                                         <button 
                                           onPointerDown={(e) => e.stopPropagation()}
                                           onClick={() => onQuickNavigate('accounts-categories')} 
@@ -1867,6 +2108,70 @@ export function DashboardOverview({
                                         >
                                           📋
                                         </button>
+
+                                        <div className="relative inline-block leading-none">
+                                          <button 
+                                            onPointerDown={(e) => e.stopPropagation()}
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              setActiveGroupMenuId(activeGroupMenuId === acc.id ? null : acc.id);
+                                            }} 
+                                            className="text-[10px] hover:text-white text-slate-500 cursor-pointer" 
+                                            title="Перенести в группу..."
+                                          >
+                                            📁
+                                          </button>
+                                          {activeGroupMenuId === acc.id && (
+                                            <div 
+                                              onPointerDown={(e) => e.stopPropagation()}
+                                              className="absolute right-0 mt-2 z-50 bg-slate-900 border border-white/10 rounded-xl p-1 shadow-2xl min-w-[130px] text-[11px]"
+                                            >
+                                              <div className="px-2 py-1 text-[9px] font-bold text-slate-500 uppercase tracking-wider border-b border-white/5 mb-1 select-none text-left">
+                                                Переместить в:
+                                              </div>
+                                              <button
+                                                onClick={() => {
+                                                  handleMoveAccountToGroup(acc.id, 'ordinary');
+                                                  setActiveGroupMenuId(null);
+                                                }}
+                                                className="w-full text-left px-2 py-1 hover:bg-white/10 text-slate-300 hover:text-white rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer font-medium"
+                                              >
+                                                <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                                                Обычные
+                                              </button>
+                                              <button
+                                                onClick={() => {
+                                                  handleMoveAccountToGroup(acc.id, 'savings');
+                                                  setActiveGroupMenuId(null);
+                                                }}
+                                                className="w-full text-left px-2 py-1 hover:bg-white/10 text-slate-300 hover:text-white rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer font-medium"
+                                              >
+                                                <span className="w-1.5 h-1.5 rounded-full bg-lime-450" />
+                                                Накопления
+                                              </button>
+                                              <button
+                                                onClick={() => {
+                                                  handleMoveAccountToGroup(acc.id, 'debt');
+                                                  setActiveGroupMenuId(null);
+                                                }}
+                                                className="w-full text-left px-2 py-1 hover:bg-white/10 text-slate-300 hover:text-white rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer font-medium"
+                                              >
+                                                <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />
+                                                Долги
+                                              </button>
+                                              <button
+                                                onClick={() => {
+                                                  handleMoveAccountToGroup(acc.id, 'hidden');
+                                                  setActiveGroupMenuId(null);
+                                                }}
+                                                className="w-full text-left px-2 py-1 hover:bg-white/10 text-slate-300 hover:text-white rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer font-medium"
+                                              >
+                                                <span className="w-1.5 h-1.5 rounded-full bg-slate-500" />
+                                                Скрытые
+                                              </button>
+                                            </div>
+                                          )}
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
@@ -1877,7 +2182,14 @@ export function DashboardOverview({
                         </div>
 
                         {/* GROUP D: HIDDEN (СКРЫТЫЕ) */}
-                        <div className="min-w-0">
+                        <div 
+                          id="acc-group-hidden" 
+                          className={`min-w-0 p-1 rounded-xl transition-all duration-200 border ${
+                            hoveredGroupType === 'hidden'
+                              ? 'border-slate-500/50 bg-slate-500/5 shadow-[0_0_15px_rgba(100,116,139,0.15)] scale-[1.01]'
+                              : 'border-transparent'
+                          }`}
+                        >
                           {/* Group Header */}
                           <div 
                             onClick={() => setIsHiddenGroupExpanded(!isHiddenGroupExpanded)}
@@ -1937,7 +2249,7 @@ export function DashboardOverview({
                                     }}
                                     className={`group flex items-center justify-between p-1.5 rounded-lg text-xs gap-3 min-w-0 select-none cursor-grab active:cursor-grabbing opacity-70 hover:opacity-100 transition-opacity ${
                                       isDraggingThis 
-                                        ? 'bg-slate-500/10 border border-slate-500/35 shadow-xl shadow-slate-500/10 relative z-50 scale-[1.03] transition-none!' 
+                                        ? 'bg-slate-500/10 border border-slate-500/35 shadow-xl shadow-slate-500/10 relative z-50 scale-[1.033] transition-none!' 
                                         : 'hover:bg-white/5 border border-transparent'
                                     }`}
                                   >
@@ -1949,7 +2261,7 @@ export function DashboardOverview({
                                       <span className="font-mono font-bold text-slate-300 select-all whitespace-nowrap">
                                         {Math.round(acc.balance).toLocaleString('ru-RU')} ₼
                                       </span>
-                                      <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 pr-1 shrink-0 pointer-events-auto">
+                                      <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1.5 pr-1 shrink-0 pointer-events-auto">
                                         <button 
                                           onPointerDown={(e) => e.stopPropagation()}
                                           onClick={() => onQuickNavigate('accounts-categories')} 
@@ -1966,6 +2278,70 @@ export function DashboardOverview({
                                         >
                                           📋
                                         </button>
+
+                                        <div className="relative inline-block leading-none">
+                                          <button 
+                                            onPointerDown={(e) => e.stopPropagation()}
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              setActiveGroupMenuId(activeGroupMenuId === acc.id ? null : acc.id);
+                                            }} 
+                                            className="text-[10px] hover:text-white text-slate-500 cursor-pointer" 
+                                            title="Перенести в группу..."
+                                          >
+                                            📁
+                                          </button>
+                                          {activeGroupMenuId === acc.id && (
+                                            <div 
+                                              onPointerDown={(e) => e.stopPropagation()}
+                                              className="absolute right-0 mt-2 z-50 bg-slate-900 border border-white/10 rounded-xl p-1 shadow-2xl min-w-[130px] text-[11px]"
+                                            >
+                                              <div className="px-2 py-1 text-[9px] font-bold text-slate-500 uppercase tracking-wider border-b border-white/5 mb-1 select-none text-left">
+                                                Переместить в:
+                                              </div>
+                                              <button
+                                                onClick={() => {
+                                                  handleMoveAccountToGroup(acc.id, 'ordinary');
+                                                  setActiveGroupMenuId(null);
+                                                }}
+                                                className="w-full text-left px-2 py-1 hover:bg-white/10 text-slate-300 hover:text-white rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer font-medium"
+                                              >
+                                                <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                                                Обычные
+                                              </button>
+                                              <button
+                                                onClick={() => {
+                                                  handleMoveAccountToGroup(acc.id, 'savings');
+                                                  setActiveGroupMenuId(null);
+                                                }}
+                                                className="w-full text-left px-2 py-1 hover:bg-white/10 text-slate-300 hover:text-white rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer font-medium"
+                                              >
+                                                <span className="w-1.5 h-1.5 rounded-full bg-lime-450" />
+                                                Накопления
+                                              </button>
+                                              <button
+                                                onClick={() => {
+                                                  handleMoveAccountToGroup(acc.id, 'debt');
+                                                  setActiveGroupMenuId(null);
+                                                }}
+                                                className="w-full text-left px-2 py-1 hover:bg-white/10 text-slate-300 hover:text-white rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer font-medium"
+                                              >
+                                                <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />
+                                                Долги
+                                              </button>
+                                              <button
+                                                onClick={() => {
+                                                  handleMoveAccountToGroup(acc.id, 'hidden');
+                                                  setActiveGroupMenuId(null);
+                                                }}
+                                                className="w-full text-left px-2 py-1 hover:bg-white/10 text-slate-300 hover:text-white rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer font-medium"
+                                              >
+                                                <span className="w-1.5 h-1.5 rounded-full bg-slate-500" />
+                                                Скрытые
+                                              </button>
+                                            </div>
+                                          )}
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
