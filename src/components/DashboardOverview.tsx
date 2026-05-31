@@ -1348,7 +1348,7 @@ export function DashboardOverview({
                   {categoryBreakdown.list.length === 0 ? (
                     <p className="text-xs text-slate-500 italic py-4">Нет данных по расходам за период</p>
                   ) : (
-                    <div className="space-y-3 max-h-[200px] lg:max-h-[480px] overflow-y-auto pr-1 select-none custom-scrollbar">
+                    <div className="space-y-3 max-h-[350px] lg:max-h-[600px] overflow-y-auto pr-1 select-none custom-scrollbar">
                       {categoryBreakdown.list.slice(0, showSubcategories ? 25 : 12).map((item, idx) => {
                         const barWidth = item.percentage;
                         return (
@@ -1402,7 +1402,7 @@ export function DashboardOverview({
                   {incomeCategoryBreakdown.list.length === 0 ? (
                     <p className="text-xs text-slate-500 italic py-4">Нет данных по доходам за период</p>
                   ) : (
-                    <div className="space-y-3 max-h-[200px] lg:max-h-[480px] overflow-y-auto pr-1 select-none custom-scrollbar">
+                    <div className="space-y-3 max-h-[350px] lg:max-h-[600px] overflow-y-auto pr-1 select-none custom-scrollbar">
                       {incomeCategoryBreakdown.list.slice(0, 12).map((item, idx) => {
                         const barWidth = item.percentage;
                         return (
@@ -1522,7 +1522,7 @@ export function DashboardOverview({
 
                           {/* List items */}
                           {isOrdinaryGroupExpanded && (
-                            <div className="mt-1 space-y-1 pl-2 animate-fade-in max-h-[220px] lg:max-h-[450px] overflow-y-auto pr-1">
+                            <div className="mt-1 space-y-1 pl-2 animate-fade-in max-h-[380px] lg:max-h-[600px] overflow-y-auto pr-1">
                               {ordinaryAccs.map((acc, index) => {
                                 const isDraggingThis = acc.id === draggedAccountId;
                                 const isDraggingGroup = draggedAccountId && dragGroupType === 'ordinary';
@@ -1559,7 +1559,7 @@ export function DashboardOverview({
                                     style={{
                                       transform: translationY ? `translateY(${translationY}px)` : undefined,
                                       transition: transitionStyle,
-                                      touchAction: 'none',
+                                      touchAction: draggedAccountId === acc.id ? 'none' : 'pan-y',
                                     }}
                                     className={`group flex items-center justify-between p-1.5 rounded-lg text-xs gap-3 min-w-0 select-none cursor-grab active:cursor-grabbing ${
                                       isDraggingThis 
@@ -1637,7 +1637,7 @@ export function DashboardOverview({
 
                           {/* List items */}
                           {isSavingsGroupExpanded && (
-                            <div className="mt-1 space-y-1 pl-2 animate-fade-in max-h-[220px] lg:max-h-[450px] overflow-y-auto pr-1">
+                            <div className="mt-1 space-y-1 pl-2 animate-fade-in max-h-[380px] lg:max-h-[600px] overflow-y-auto pr-1">
                               {savingsAccs.map((acc, index) => {
                                 const isDraggingThis = acc.id === draggedAccountId;
                                 const isDraggingGroup = draggedAccountId && dragGroupType === 'savings';
@@ -1674,7 +1674,7 @@ export function DashboardOverview({
                                     style={{
                                       transform: translationY ? `translateY(${translationY}px)` : undefined,
                                       transition: transitionStyle,
-                                      touchAction: 'none',
+                                      touchAction: draggedAccountId === acc.id ? 'none' : 'pan-y',
                                     }}
                                     className={`group flex items-center justify-between p-1.5 rounded-lg text-xs gap-3 min-w-0 select-none cursor-grab active:cursor-grabbing ${
                                       isDraggingThis 
