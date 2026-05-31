@@ -28,7 +28,7 @@ var import_vite = require("vite");
 var import_fs = __toESM(require("fs"), 1);
 var import_dotenv = __toESM(require("dotenv"), 1);
 import_dotenv.default.config();
-var DEBUG_FILE = "/tmp/milli_request_debug.log";
+var DEBUG_FILE = import_path.default.join(process.cwd(), "tmp", "milli_request_debug.log");
 function logDebug(msg) {
   try {
     const timestamp = (/* @__PURE__ */ new Date()).toISOString();
@@ -39,6 +39,7 @@ function logDebug(msg) {
   }
 }
 async function startServer() {
+  logDebug("startServer() function invoked in server.ts");
   const app = (0, import_express.default)();
   const PORT = 3e3;
   app.use(import_express.default.json());
