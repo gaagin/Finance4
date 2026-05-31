@@ -84,7 +84,7 @@ export function DashboardOverview({
 
   // Dynamic Charts Filtering
   const [analyticsTimeframe, setAnalyticsTimeframe] = useState<'may' | 'april' | '2026' | '2025' | '2024' | '2023' | '2022' | 'all'>(
-    () => (localStorage.getItem('milli_analytics_timeframe') as any) || 'all'
+    () => (localStorage.getItem('milli_analytics_timeframe') as any) || 'may'
   );
   const [analyticsAccount, setAnalyticsAccount] = useState<string>(
     () => localStorage.getItem('milli_analytics_account') || 'all'
@@ -92,7 +92,7 @@ export function DashboardOverview({
 
   // Local discrete filters for each individual chart card
   const [lineTimeframe, setLineTimeframe] = useState<'may' | 'april' | '2026' | '2025' | '2024' | '2023' | '2022' | 'all'>(
-    () => (localStorage.getItem('milli_line_timeframe') as any) || 'all'
+    () => (localStorage.getItem('milli_line_timeframe') as any) || 'may'
   );
   const [lineAccount, setLineAccount] = useState<string>(
     () => localStorage.getItem('milli_line_account') || 'all'
@@ -108,14 +108,14 @@ export function DashboardOverview({
     () => localStorage.getItem('milli_bar_category') || 'all'
   );
   const [barYear, setBarYear] = useState<'all' | '2026' | '2025' | '2024' | '2023' | '2022'>(
-    () => (localStorage.getItem('milli_bar_year') as any) || 'all'
+    () => (localStorage.getItem('milli_bar_year') as any) || '2026'
   );
 
   const [donutAccount, setDonutAccount] = useState<string>(
     () => localStorage.getItem('milli_donut_account') || 'all'
   );
   const [donutTimeframe, setDonutTimeframe] = useState<'may' | 'april' | '2026' | '2025' | '2024' | '2023' | '2022' | 'all'>(
-    () => (localStorage.getItem('milli_donut_timeframe') as any) || 'all'
+    () => (localStorage.getItem('milli_donut_timeframe') as any) || 'may'
   );
   const [donutType, setDonutType] = useState<'expense' | 'income'>(
     () => (localStorage.getItem('milli_donut_type') as any) || 'expense'
