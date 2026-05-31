@@ -7,7 +7,8 @@ import { AccountsCategoriesPanel } from './components/AccountsCategoriesPanel';
 import { BudgetingPanel } from './components/BudgetingPanel';
 import { CalendarPanel } from './components/CalendarPanel';
 import { GoogleSheetsSyncPanel } from './components/GoogleSheetsSyncPanel';
-import { LayoutDashboard, ReceiptText, Calendar, SlidersHorizontal, Settings, Flame, Bell, AlertTriangle, XCircle, CheckCircle, Info, LogIn, LogOut, ShieldAlert, X, RefreshCw, FolderOpen, TrendingUp, Sun, Moon } from 'lucide-react';
+import { AiAssistantPanel } from './components/AiAssistantPanel';
+import { LayoutDashboard, ReceiptText, Calendar, SlidersHorizontal, Settings, Flame, Bell, AlertTriangle, XCircle, CheckCircle, Info, LogIn, LogOut, ShieldAlert, X, RefreshCw, FolderOpen, TrendingUp, Sun, Moon, Sparkles } from 'lucide-react';
 import { initAuth, logout, googleSignIn } from './googleAuth';
 import { User } from 'firebase/auth';
 import { parseAndStandardizeJsonToFinanceData } from './honeyJsonConverter';
@@ -1675,6 +1676,14 @@ export default function App() {
               )}
             </div>
           )}
+
+          {activeTab === 'ai-assistant' && (
+            <AiAssistantPanel
+              financeData={data}
+              theme={theme}
+              addToast={addToast}
+            />
+          )}
         </div>
 
       </main>
@@ -1756,6 +1765,22 @@ export default function App() {
         >
           <TrendingUp size={16} className="transition-transform group-active:scale-90" />
           <span className="text-[9px] sm:text-[10.5px] font-bold tracking-normal mt-0.5 truncate">Аналитика</span>
+        </button>
+
+        <button
+          onClick={() => handleQuickNavigate('ai-assistant')}
+          className={`flex flex-col items-center justify-center py-0.5 px-0.5 rounded-lg transition-all flex-1 min-w-0 select-none cursor-pointer group ${
+            activeTab === 'ai-assistant'
+              ? theme === 'dark'
+                ? 'bg-teal-500/15 text-teal-300 border border-teal-500/20 shadow-inner font-bold'
+                : 'bg-teal-500/10 text-teal-600 border border-teal-500/20 shadow-sm font-bold'
+              : theme === 'dark'
+                ? 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
+                : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100 border border-transparent'
+          }`}
+        >
+          <Sparkles size={16} className={`transition-transform group-active:scale-90 ${activeTab === 'ai-assistant' ? 'text-teal-400' : 'text-teal-400/85 animate-pulse'}`} />
+          <span className="text-[9px] sm:text-[10.5px] font-bold tracking-normal mt-0.5 truncate">ИИ Помощник</span>
         </button>
 
         <button

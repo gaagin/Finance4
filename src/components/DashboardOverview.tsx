@@ -1473,9 +1473,9 @@ export function DashboardOverview({
 
                   {/* Dynamic Sums Calculations */}
                   {(() => {
-                    const ordinaryAccountsList = ['ASB kart', 'Кошелёк', 'Albali kart', 'ABB kart Samira', 'DigiHesab Ilqar', 'TamKart Fiziki 5338', 'Кошелек Самира', 'Albali кредитная карта'];
+                    const ordinaryAccountsList = ['ASB kart', 'Кошелёк', 'Albali kart', 'ABB kart Samira', 'DigiHesab Ilqar', 'TamKart Fiziki 5338', 'Кошелек Самира', 'Albali кредитная карта', 'ABB kredit kart', 'YapiKrediBank kredit'];
                     const kopilkaName = 'Копилка';
-                    const savingsAccountsList = ['Акции ABB', 'Digihesab Samira', 'Зарубежные акции', 'Облигации ABB', 'Digideposit Samira', 'Депозит-Подушка безопасности', 'ABB kredit kart', 'TamKart Virtual', 'Страхование жизни', 'Цифровая карта', 'YapiKrediBank kredit', 'DigiHesab 2 Ilqar'];
+                    const savingsAccountsList = ['Акции ABB', 'Digihesab Samira', 'Зарубежные акции', 'Облигации ABB', 'Digideposit Samira', 'Депозит-Подушка безопасности', 'TamKart Virtual', 'Страхование жизни', 'Цифровая карта', 'DigiHesab 2 Ilqar'];
 
                     const ordinaryAccsFiltered = visibleAccounts.filter(a => ordinaryAccountsList.includes(a.name) && a.name !== kopilkaName);
                     const ordinaryAccs = accountsSortMode === 'desc'
@@ -1687,6 +1687,18 @@ export function DashboardOverview({
                                       <span className="truncate">{acc.name}</span>
                                     </span>
                                     <div className="flex items-center gap-2 shrink-0 pointer-events-none">
+                                      {savingsSumVal > 0 && (
+                                        <span 
+                                          className={`font-mono text-[9px] font-bold px-1.5 py-0.5 rounded-sm select-all ${
+                                            theme === 'dark' 
+                                              ? 'bg-slate-500/15 text-slate-400' 
+                                              : 'bg-slate-100 text-slate-600'
+                                          }`}
+                                          title="Процентная доля от общей суммы накоплений"
+                                        >
+                                          {((acc.balance / savingsSumVal) * 100).toFixed(1)}%
+                                        </span>
+                                      )}
                                       <span className="font-mono font-bold text-slate-200 select-all whitespace-nowrap">
                                         {Math.round(acc.balance).toLocaleString('ru-RU')} ₼
                                       </span>
