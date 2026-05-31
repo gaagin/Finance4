@@ -282,12 +282,12 @@ export const TreemapChart: React.FC<TreemapChartProps> = ({
               {/* Internal contents structured vertically */}
               <div className="flex flex-col h-full w-full justify-between items-start pointer-events-none">
                 {node.width > 35 && node.height > 20 && (
-                  <span className={`${nameSize} font-display font-bold ${textNameColor} uppercase tracking-tight truncate w-full filter drop-shadow-[0_1.5px_2px_rgba(0,0,0,0.85)]`}>
+                  <span className={`${nameSize} font-display font-extrabold ${textNameColor} uppercase tracking-tight truncate w-full`}>
                     {formatCategoryDisplayName(node.name)}
                   </span>
                 )}
                 {node.width > 55 && node.height > 38 && (
-                  <span className={`${amountSize} font-mono font-bold leading-none ${textAmountColor} whitespace-nowrap mt-auto filter drop-shadow-[0_1.2px_1.5px_rgba(0,0,0,0.8)]`}>
+                  <span className={`${amountSize} font-mono font-extrabold leading-none ${textAmountColor} whitespace-nowrap mt-auto`}>
                     {type === 'expense' ? '-' : '+'}{Math.round(node.amount).toLocaleString('ru-RU')} ₼
                   </span>
                 )}
