@@ -25,25 +25,16 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 var import_express = __toESM(require("express"), 1);
 var import_path = __toESM(require("path"), 1);
 var import_vite = require("vite");
-var import_genai = require("@google/genai");
 var import_dotenv = __toESM(require("dotenv"), 1);
 import_dotenv.default.config();
 async function startServer() {
   const app = (0, import_express.default)();
   const PORT = 3e3;
   app.use(import_express.default.json());
-  const apiKey = process.env.GEMINI_API_KEY;
-  const ai = new import_genai.GoogleGenAI({
-    apiKey: apiKey || "MOCK_KEY_IF_UNDEFINED",
-    httpOptions: {
-      headers: {
-        "User-Agent": "aistudio-build"
-      }
-    }
-  });
   app.post("/api/assistant", async (req, res) => {
     try {
       const { message, history, financeData } = req.body;
+      const apiKey = process.env.GEMINI_API_KEY;
       if (!apiKey) {
         res.status(500).json({ error: "\u041A\u043B\u044E\u0447 API Gemini (GEMINI_API_KEY) \u043D\u0435 \u0443\u0441\u0442\u0430\u043D\u043E\u0432\u043B\u0435\u043D. \u041D\u0430\u0441\u0442\u0440\u043E\u0439\u0442\u0435 \u0435\u0433\u043E \u0432 Settings -> Secrets." });
         return;
@@ -105,15 +96,29 @@ ${financialContext}
         role: "user",
         parts: [{ text: message }]
       });
-      const response = await ai.models.generateContent({
-        model: "gemini-3.5-flash",
-        contents,
-        config: {
-          systemInstruction,
-          temperature: 0.7
-        }
+      const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+      const response = await fetch(geminiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          contents,
+          systemInstruction: {
+            parts: [{ text: systemInstruction }]
+          },
+          generationConfig: {
+            temperature: 0.7
+          }
+        })
       });
-      res.json({ text: response.text });
+      if (!response.ok) {
+        const errText = await response.text();
+        throw new Error(errText || `\u041E\u0448\u0438\u0431\u043A\u0430 API Gemini (${response.status})`);
+      }
+      const responseData = await response.json();
+      const replyText = responseData.candidates?.[0]?.content?.parts?.[0]?.text || "\u0418\u0437\u0432\u0438\u043D\u0438\u0442\u0435, \u043D\u0435 \u0443\u0434\u0430\u043B\u043E\u0441\u044C \u0441\u0433\u0435\u043D\u0435\u0440\u0438\u0440\u043E\u0432\u0430\u0442\u044C \u043E\u0442\u0432\u0435\u0442.";
+      res.json({ text: replyText });
     } catch (err) {
       console.error("AI Assistant Error:", err);
       res.status(500).json({ error: err?.message || "\u041F\u0440\u043E\u0438\u0437\u043E\u0448\u043B\u0430 \u043D\u0435\u0438\u0437\u0432\u0435\u0441\u0442\u043D\u0430\u044F \u043E\u0448\u0438\u0431\u043A\u0430 \u043F\u0440\u0438 \u0430\u043D\u0430\u043B\u0438\u0437\u0435 \u0434\u0430\u043D\u043D\u044B\u0445." });
