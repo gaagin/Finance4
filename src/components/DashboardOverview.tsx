@@ -131,6 +131,12 @@ export function DashboardOverview({
   const [isSavingsGroupExpanded, setIsSavingsGroupExpanded] = useState<boolean>(
     () => localStorage.getItem('milli_is_savings_group_expanded') !== 'false'
   );
+  const [isDebtGroupExpanded, setIsDebtGroupExpanded] = useState<boolean>(
+    () => localStorage.getItem('milli_is_debt_group_expanded') !== 'false'
+  );
+  const [isHiddenGroupExpanded, setIsHiddenGroupExpanded] = useState<boolean>(
+    () => localStorage.getItem('milli_is_hidden_group_expanded') !== 'false'
+  );
   const [showSubcategories, setShowSubcategories] = useState<boolean>(
     () => localStorage.getItem('milli_show_subcategories') === 'true'
   );
@@ -200,6 +206,14 @@ export function DashboardOverview({
   }, [isSavingsGroupExpanded]);
 
   React.useEffect(() => {
+    localStorage.setItem('milli_is_debt_group_expanded', String(isDebtGroupExpanded));
+  }, [isDebtGroupExpanded]);
+
+  React.useEffect(() => {
+    localStorage.setItem('milli_is_hidden_group_expanded', String(isHiddenGroupExpanded));
+  }, [isHiddenGroupExpanded]);
+
+  React.useEffect(() => {
     localStorage.setItem('milli_show_subcategories', String(showSubcategories));
   }, [showSubcategories]);
 
@@ -213,7 +227,7 @@ export function DashboardOverview({
 
   // Sorting Accounts via hold-drag-and-drop
   const [draggedAccountId, setDraggedAccountId] = useState<string | null>(null);
-  const [dragGroupType, setDragGroupType] = useState<'ordinary' | 'savings' | null>(null);
+  const [dragGroupType, setDragGroupType] = useState<'ordinary' | 'savings' | 'debt' | 'hidden' | null>(null);
   const [startY, setStartY] = useState<number>(0);
   const [currentY, setCurrentY] = useState<number>(0);
   const [draggedInitialIndex, setDraggedInitialIndex] = useState<number>(0);
@@ -225,7 +239,7 @@ export function DashboardOverview({
     e: React.PointerEvent<HTMLDivElement>, 
     accountId: string, 
     index: number, 
-    groupType: 'ordinary' | 'savings',
+    groupType: 'ordinary' | 'savings' | 'debt' | 'hidden',
     currentGroupIds: string[]
   ) => {
     if (e.button !== 0) return; // Only primary button clicks / touch presses
@@ -1473,28 +1487,61 @@ export function DashboardOverview({
 
                   {/* Dynamic Sums Calculations */}
                   {(() => {
-                    const ordinaryAccountsList = ['ASB kart', 'Кошелёк', 'Albali kart', 'ABB kart Samira', 'DigiHesab Ilqar', 'TamKart Fiziki 5338', 'Кошелек Самира', 'Albali кредитная карта', 'ABB kredit kart', 'YapiKrediBank kredit'];
-                    const kopilkaName = 'Копилка';
+                    const KopilkaName = 'Копилка';
                     const savingsAccountsList = ['Акции ABB', 'Digihesab Samira', 'Зарубежные акции', 'Облигации ABB', 'Digideposit Samira', 'Депозит-Подушка безопасности', 'TamKart Virtual', 'Страхование жизни', 'Цифровая карта', 'DigiHesab 2 Ilqar'];
 
-                    const ordinaryAccsFiltered = visibleAccounts.filter(a => ordinaryAccountsList.includes(a.name) && a.name !== kopilkaName);
-                    const ordinaryAccs = accountsSortMode === 'desc'
-                      ? [...ordinaryAccsFiltered].sort((a, b) => b.balance - a.balance)
-                      : ordinaryAccsFiltered;
-                    const ordinarySumVal = ordinaryAccs.reduce((sum, a) => sum + a.balance, 0);
-
-                    const kopilkaAcc = visibleAccounts.find(a => a.name === kopilkaName);
+                    const kopilkaAcc = accounts.find(a => a.name === KopilkaName);
                     const kopilkaBalVal = kopilkaAcc ? kopilkaAcc.balance : 0;
 
-                    const savingsAccsFiltered = visibleAccounts.filter(a => savingsAccountsList.includes(a.name) || (a.type === 'savings' && a.name !== kopilkaName));
+                    // 1. HIDDEN GROUP (СКРЫТЫЕ)
+                    const hiddenAccsRaw = accounts.filter(a => a.quickEntry === false || a.type === 'hidden');
+                    const hiddenAccs = accountsSortMode === 'desc'
+                      ? [...hiddenAccsRaw].sort((a, b) => b.balance - a.balance)
+                      : hiddenAccsRaw;
+                    const hiddenSumVal = hiddenAccs.reduce((sum, a) => sum + a.balance, 0);
+
+                    // Accounts that are active (non-hidden and non-kopilka):
+                    const activeAccounts = accounts.filter(a => a.name !== KopilkaName && a.quickEntry !== false && a.type !== 'hidden');
+
+                    // 2. DEBTS GROUP (ДОЛГИ)
+                    const debtKeywords = ['kredit', 'credit', 'долг', 'debt', 'кредит'];
+                    const isDebtAccount = (a: Account) => {
+                      if (a.type === 'debt') return true;
+                      const nameLower = a.name.toLowerCase();
+                      return debtKeywords.some(kw => nameLower.includes(kw));
+                    };
+                    const debtAccsRaw = activeAccounts.filter(isDebtAccount);
+                    const debtAccs = accountsSortMode === 'desc'
+                      ? [...debtAccsRaw].sort((a, b) => b.balance - a.balance)
+                      : debtAccsRaw;
+                    const debtSumVal = debtAccs.reduce((sum, a) => sum + a.balance, 0);
+
+                    // Active Accounts that are not Debts:
+                    const nonDebtActiveAccounts = activeAccounts.filter(a => !isDebtAccount(a));
+
+                    // 3. SAVINGS GROUP (НАКОПЛЕНИЯ)
+                    const isSavingsAccount = (a: Account) => {
+                      if (a.type === 'savings') return true;
+                      return savingsAccountsList.includes(a.name);
+                    };
+                    const savingsAccsRaw = nonDebtActiveAccounts.filter(isSavingsAccount);
                     const savingsAccs = accountsSortMode === 'desc'
-                      ? [...savingsAccsFiltered].sort((a, b) => b.balance - a.balance)
-                      : savingsAccsFiltered;
+                      ? [...savingsAccsRaw].sort((a, b) => b.balance - a.balance)
+                      : savingsAccsRaw;
                     const savingsSumVal = savingsAccs.reduce((sum, a) => sum + a.balance, 0);
+
+                    // 4. ORDINARY GROUP (ОБЫЧНЫЕ)
+                    const ordinaryAccsRaw = nonDebtActiveAccounts.filter(a => !isSavingsAccount(a));
+                    const ordinaryAccs = accountsSortMode === 'desc'
+                      ? [...ordinaryAccsRaw].sort((a, b) => b.balance - a.balance)
+                      : ordinaryAccsRaw;
+                    const ordinarySumVal = ordinaryAccs.reduce((sum, a) => sum + a.balance, 0);
 
                     // Reorder lists reactively if actively sorting
                     const ordinaryAccsIds = ordinaryAccs.map(a => a.id);
                     const savingsAccsIds = savingsAccs.map(a => a.id);
+                    const debtAccsIds = debtAccs.map(a => a.id);
+                    const hiddenAccsIds = hiddenAccs.map(a => a.id);
 
                     return (
                       <div className="space-y-4">
@@ -1508,7 +1555,7 @@ export function DashboardOverview({
                           >
                             <div className="flex items-center gap-1.5 min-w-0">
                               <span>{isOrdinaryGroupExpanded ? '▼' : '►'}</span>
-                              <span className="text-slate-300 truncate">Обычные</span>
+                              <span className="text-slate-300 truncate font-semibold">Обычные</span>
                             </div>
                             <div className="font-mono text-[10px] sm:text-[11px] font-extrabold flex items-center gap-1 text-slate-355 leading-none shrink-0 whitespace-nowrap pl-1">
                               <span>{Math.round(ordinarySumVal).toLocaleString('ru-RU')} ₼</span>
@@ -1628,7 +1675,7 @@ export function DashboardOverview({
                           >
                             <div className="flex items-center gap-1.5 min-w-0">
                               <span>{isSavingsGroupExpanded ? '▼' : '►'}</span>
-                              <span className="text-slate-300 truncate">Накопления</span>
+                              <span className="text-slate-300 truncate font-semibold">Накопления</span>
                             </div>
                             <span className="font-mono text-[10px] sm:text-[11px] font-extrabold text-slate-305 shrink-0 pl-1">
                               {Math.round(savingsSumVal).toLocaleString('ru-RU')} ₼
@@ -1638,7 +1685,9 @@ export function DashboardOverview({
                           {/* List items */}
                           {isSavingsGroupExpanded && (
                             <div className="mt-1 space-y-1 pl-2 animate-fade-in max-h-[380px] lg:max-h-[600px] overflow-y-auto pr-1">
-                              {savingsAccs.map((acc, index) => {
+                              {savingsAccs.length === 0 ? (
+                                <p className="text-[10px] text-slate-500 italic p-1.5">Нет счетов в этой группе</p>
+                              ) : savingsAccs.map((acc, index) => {
                                 const isDraggingThis = acc.id === draggedAccountId;
                                 const isDraggingGroup = draggedAccountId && dragGroupType === 'savings';
                                 let translationY = 0;
@@ -1700,6 +1749,204 @@ export function DashboardOverview({
                                         </span>
                                       )}
                                       <span className="font-mono font-bold text-slate-200 select-all whitespace-nowrap">
+                                        {Math.round(acc.balance).toLocaleString('ru-RU')} ₼
+                                      </span>
+                                      <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 pr-1 shrink-0 pointer-events-auto">
+                                        <button 
+                                          onPointerDown={(e) => e.stopPropagation()}
+                                          onClick={() => onQuickNavigate('accounts-categories')} 
+                                          className="text-[10px] hover:text-white text-slate-500 cursor-pointer" 
+                                          title="Редактировать"
+                                        >
+                                          ✏️
+                                        </button>
+                                        <button 
+                                          onPointerDown={(e) => e.stopPropagation()}
+                                          onClick={() => onQuickNavigate('transactions')} 
+                                          className="text-[10px] hover:text-white text-slate-500 cursor-pointer" 
+                                          title="Журнал"
+                                        >
+                                          📋
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </div>
+
+                        {/* GROUP C: DEBTS (ДОЛГИ) */}
+                        <div className="min-w-0">
+                          {/* Group Header */}
+                          <div 
+                            onClick={() => setIsDebtGroupExpanded(!isDebtGroupExpanded)}
+                            className="flex items-center justify-between py-1 px-1.5 hover:bg-white/5 rounded-lg cursor-pointer transition-colors text-xs font-bold font-display tracking-wide uppercase select-none text-slate-400 gap-2 min-w-0"
+                          >
+                            <div className="flex items-center gap-1.5 min-w-0">
+                              <span>{isDebtGroupExpanded ? '▼' : '►'}</span>
+                              <span className="text-slate-300 truncate font-semibold">Долги</span>
+                            </div>
+                            <span className="font-mono text-[10px] sm:text-[11px] font-extrabold text-rose-400 shrink-0 pl-1">
+                              {Math.round(debtSumVal).toLocaleString('ru-RU')} ₼
+                            </span>
+                          </div>
+
+                          {/* List items */}
+                          {isDebtGroupExpanded && (
+                            <div className="mt-1 space-y-1 pl-2 animate-fade-in max-h-[380px] lg:max-h-[600px] overflow-y-auto pr-1">
+                              {debtAccs.length === 0 ? (
+                                <p className="text-[10px] text-slate-500 italic p-1.5">Нет долгов или кредитов</p>
+                              ) : debtAccs.map((acc, index) => {
+                                const isDraggingThis = acc.id === draggedAccountId;
+                                const isDraggingGroup = draggedAccountId && dragGroupType === 'debt';
+                                let translationY = 0;
+                                let transitionStyle = 'transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1)';
+                                
+                                if (isDraggingThis) {
+                                  translationY = currentY - startY;
+                                  transitionStyle = 'none';
+                                } else if (isDraggingGroup) {
+                                  const ITEM_HEIGHT = 35;
+                                  const diffY = currentY - startY;
+                                  const offset = Math.round(diffY / ITEM_HEIGHT);
+                                  let targetIndex = draggedInitialIndex + offset;
+                                  targetIndex = Math.max(0, Math.min(debtAccs.length - 1, targetIndex));
+                                  
+                                  if (targetIndex > draggedInitialIndex) {
+                                    if (index > draggedInitialIndex && index <= targetIndex) {
+                                      translationY = -ITEM_HEIGHT;
+                                    }
+                                  } else if (targetIndex < draggedInitialIndex) {
+                                    if (index < draggedInitialIndex && index >= targetIndex) {
+                                      translationY = ITEM_HEIGHT;
+                                    }
+                                  }
+                                }
+
+                                return (
+                                  <div 
+                                    key={acc.id}
+                                    onPointerDown={(e) => handleAccountPointerDown(e, acc.id, index, 'debt', debtAccsIds)}
+                                    onPointerMove={handleAccountPointerMove}
+                                    onPointerUp={handleAccountPointerUp}
+                                    style={{
+                                      transform: translationY ? `translateY(${translationY}px)` : undefined,
+                                      transition: transitionStyle,
+                                      touchAction: draggedAccountId === acc.id ? 'none' : 'pan-y',
+                                    }}
+                                    className={`group flex items-center justify-between p-1.5 rounded-lg text-xs gap-3 min-w-0 select-none cursor-grab active:cursor-grabbing ${
+                                      isDraggingThis 
+                                        ? 'bg-rose-500/10 border border-rose-500/35 shadow-xl shadow-rose-500/10 relative z-50 scale-[1.03] transition-none!' 
+                                        : 'hover:bg-white/5 border border-transparent'
+                                    }`}
+                                  >
+                                    <span className="font-semibold text-slate-400 group-hover:text-white flex items-center gap-1.5 min-w-0 pointer-events-none">
+                                      <span className="w-1 h-3 bg-rose-500 rounded-xs shrink-0" />
+                                      <span className="truncate">{acc.name}</span>
+                                    </span>
+                                    <div className="flex items-center gap-2 shrink-0 pointer-events-none">
+                                      <span className="font-mono font-bold text-slate-200 select-all whitespace-nowrap">
+                                        {Math.round(acc.balance).toLocaleString('ru-RU')} ₼
+                                      </span>
+                                      <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 pr-1 shrink-0 pointer-events-auto">
+                                        <button 
+                                          onPointerDown={(e) => e.stopPropagation()}
+                                          onClick={() => onQuickNavigate('accounts-categories')} 
+                                          className="text-[10px] hover:text-white text-slate-500 cursor-pointer" 
+                                          title="Редактировать"
+                                        >
+                                          ✏️
+                                        </button>
+                                        <button 
+                                          onPointerDown={(e) => e.stopPropagation()}
+                                          onClick={() => onQuickNavigate('transactions')} 
+                                          className="text-[10px] hover:text-white text-slate-500 cursor-pointer" 
+                                          title="Журнал"
+                                        >
+                                          📋
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </div>
+
+                        {/* GROUP D: HIDDEN (СКРЫТЫЕ) */}
+                        <div className="min-w-0">
+                          {/* Group Header */}
+                          <div 
+                            onClick={() => setIsHiddenGroupExpanded(!isHiddenGroupExpanded)}
+                            className="flex items-center justify-between py-1 px-1.5 hover:bg-white/5 rounded-lg cursor-pointer transition-colors text-xs font-bold font-display tracking-wide uppercase select-none text-slate-400 gap-2 min-w-0"
+                          >
+                            <div className="flex items-center gap-1.5 min-w-0">
+                              <span>{isHiddenGroupExpanded ? '▼' : '►'}</span>
+                              <span className="text-slate-300 truncate font-semibold">Скрытые</span>
+                            </div>
+                            <span className="font-mono text-[10px] sm:text-[11px] font-extrabold text-slate-500 shrink-0 pl-1">
+                              {Math.round(hiddenSumVal).toLocaleString('ru-RU')} ₼
+                            </span>
+                          </div>
+
+                          {/* List items */}
+                          {isHiddenGroupExpanded && (
+                            <div className="mt-1 space-y-1 pl-2 animate-fade-in max-h-[380px] lg:max-h-[600px] overflow-y-auto pr-1">
+                              {hiddenAccs.length === 0 ? (
+                                <p className="text-[10px] text-slate-500 italic p-1.5">Нет скрытых счетов</p>
+                              ) : hiddenAccs.map((acc, index) => {
+                                const isDraggingThis = acc.id === draggedAccountId;
+                                const isDraggingGroup = draggedAccountId && dragGroupType === 'hidden';
+                                let translationY = 0;
+                                let transitionStyle = 'transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1)';
+                                
+                                if (isDraggingThis) {
+                                  translationY = currentY - startY;
+                                  transitionStyle = 'none';
+                                } else if (isDraggingGroup) {
+                                  const ITEM_HEIGHT = 35;
+                                  const diffY = currentY - startY;
+                                  const offset = Math.round(diffY / ITEM_HEIGHT);
+                                  let targetIndex = draggedInitialIndex + offset;
+                                  targetIndex = Math.max(0, Math.min(hiddenAccs.length - 1, targetIndex));
+                                  
+                                  if (targetIndex > draggedInitialIndex) {
+                                    if (index > draggedInitialIndex && index <= targetIndex) {
+                                      translationY = -ITEM_HEIGHT;
+                                    }
+                                  } else if (targetIndex < draggedInitialIndex) {
+                                    if (index < draggedInitialIndex && index >= targetIndex) {
+                                      translationY = ITEM_HEIGHT;
+                                    }
+                                  }
+                                }
+
+                                return (
+                                  <div 
+                                    key={acc.id}
+                                    onPointerDown={(e) => handleAccountPointerDown(e, acc.id, index, 'hidden', hiddenAccsIds)}
+                                    onPointerMove={handleAccountPointerMove}
+                                    onPointerUp={handleAccountPointerUp}
+                                    style={{
+                                      transform: translationY ? `translateY(${translationY}px)` : undefined,
+                                      transition: transitionStyle,
+                                      touchAction: draggedAccountId === acc.id ? 'none' : 'pan-y',
+                                    }}
+                                    className={`group flex items-center justify-between p-1.5 rounded-lg text-xs gap-3 min-w-0 select-none cursor-grab active:cursor-grabbing opacity-70 hover:opacity-100 transition-opacity ${
+                                      isDraggingThis 
+                                        ? 'bg-slate-500/10 border border-slate-500/35 shadow-xl shadow-slate-500/10 relative z-50 scale-[1.03] transition-none!' 
+                                        : 'hover:bg-white/5 border border-transparent'
+                                    }`}
+                                  >
+                                    <span className="font-semibold text-slate-400 group-hover:text-white flex items-center gap-1.5 min-w-0 pointer-events-none">
+                                      <span className="w-1 h-3 bg-slate-500 rounded-xs shrink-0" />
+                                      <span className="truncate">{acc.name}</span>
+                                    </span>
+                                    <div className="flex items-center gap-2 shrink-0 pointer-events-none">
+                                      <span className="font-mono font-bold text-slate-300 select-all whitespace-nowrap">
                                         {Math.round(acc.balance).toLocaleString('ru-RU')} ₼
                                       </span>
                                       <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 pr-1 shrink-0 pointer-events-auto">

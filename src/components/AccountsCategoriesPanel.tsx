@@ -425,6 +425,8 @@ export function AccountsCategoriesPanel({
                 let typeLabel = 'Счет';
                 if (acc.type === 'cash') typeLabel = 'Наличные';
                 if (acc.type === 'savings') typeLabel = 'Копилка';
+                if (acc.type === 'debt') typeLabel = 'Долг / Кредит';
+                if (acc.type === 'hidden') typeLabel = 'Скрытый';
 
                 return (
                   <div
@@ -1227,6 +1229,8 @@ export function AccountsCategoriesPanel({
                     <option value="card" className="bg-slate-950 text-slate-300">Банковский счет (Безналичный)</option>
                     <option value="cash" className="bg-slate-950 text-slate-300">Наличные (Манаты)</option>
                     <option value="savings" className="bg-slate-950 text-slate-300">Копилка / Депозит</option>
+                    <option value="debt" className="bg-slate-950 text-slate-300">Долг / Кредит</option>
+                    <option value="hidden" className="bg-slate-950 text-slate-300">Скрытый счет</option>
                     <option value="other" className="bg-slate-950 text-slate-300">Другое</option>
                   </select>
                 </div>
