@@ -150,6 +150,9 @@ export function DashboardOverview({
   const [categoryGroupingMode, setCategoryGroupingMode] = useState<'parent' | 'sub'>(
     () => (localStorage.getItem('milli_category_grouping_mode') as any) || 'sub'
   );
+  const [expensesGrouping, setExpensesGrouping] = useState<'parent' | 'sub'>(
+    () => (localStorage.getItem('milli_expenses_grouping') as any) || 'parent'
+  );
   const [selectedCategoryTransactions, setSelectedCategoryTransactions] = useState<{ category: Category; type: 'expense' | 'income' } | null>(null);
   const [accountsSortMode, setAccountsSortMode] = useState<'desc' | 'custom'>(
     () => (localStorage.getItem('milli_accounts_sort_mode') as any) || 'desc'
@@ -250,6 +253,10 @@ export function DashboardOverview({
   React.useEffect(() => {
     localStorage.setItem('milli_category_grouping_mode', categoryGroupingMode);
   }, [categoryGroupingMode]);
+
+  React.useEffect(() => {
+    localStorage.setItem('milli_expenses_grouping', expensesGrouping);
+  }, [expensesGrouping]);
 
   React.useEffect(() => {
     localStorage.setItem('milli_accounts_sort_mode', accountsSortMode);
@@ -713,6 +720,148 @@ export function DashboardOverview({
       total: totalInc
     };
   }, [filteredAnalyticsTransactions, categories, categoryGroupingMode]);
+
+  // Compute aggregated parent-level category breakdown for expenses (Chart 1)
+  const expensesParentBreakdown = useMemo(() => {
+    const expenses = filteredAnalyticsTransactions.filter(t => t.type === 'expense');
+    const totalExp = expenses.reduce((sum, t) => sum + t.amount, 0);
+
+    const breakdownMap: { [key: string]: { category: Category; amount: number; percentage: number } } = {};
+
+    expenses.forEach(tx => {
+      let cat = categories.find(c => c.id === tx.categoryId);
+      if (!cat) return;
+
+      cat = getParentCategory(cat, categories);
+      const key = cat.id;
+
+      if (!breakdownMap[key]) {
+        breakdownMap[key] = {
+          category: cat,
+          amount: 0,
+          percentage: 0
+        };
+      }
+      breakdownMap[key].amount += tx.amount;
+    });
+
+    const list = Object.values(breakdownMap);
+    list.forEach(item => {
+      item.percentage = totalExp > 0 ? (item.amount / totalExp) * 100 : 0;
+    });
+
+    list.sort((a, b) => b.amount - a.amount);
+    return {
+      list,
+      total: totalExp
+    };
+  }, [filteredAnalyticsTransactions, categories]);
+
+  // Compute detailed subcategory breakdown for expenses (Chart 2)
+  const expensesSubBreakdown = useMemo(() => {
+    const expenses = filteredAnalyticsTransactions.filter(t => t.type === 'expense');
+    const totalExp = expenses.reduce((sum, t) => sum + t.amount, 0);
+
+    const breakdownMap: { [key: string]: { category: Category; amount: number; percentage: number } } = {};
+
+    expenses.forEach(tx => {
+      let cat = categories.find(c => c.id === tx.categoryId);
+      if (!cat) return;
+
+      const key = cat.id;
+
+      if (!breakdownMap[key]) {
+        breakdownMap[key] = {
+          category: cat,
+          amount: 0,
+          percentage: 0
+        };
+      }
+      breakdownMap[key].amount += tx.amount;
+    });
+
+    const list = Object.values(breakdownMap);
+    list.forEach(item => {
+      item.percentage = totalExp > 0 ? (item.amount / totalExp) * 100 : 0;
+    });
+
+    list.sort((a, b) => b.amount - a.amount);
+    return {
+      list,
+      total: totalExp
+    };
+  }, [filteredAnalyticsTransactions, categories]);
+
+  // Compute aggregated parent-level category breakdown for incomes (Chart 1)
+  const incomesParentBreakdown = useMemo(() => {
+    const incomes = filteredAnalyticsTransactions.filter(t => t.type === 'income');
+    const totalInc = incomes.reduce((sum, t) => sum + t.amount, 0);
+
+    const breakdownMap: { [key: string]: { category: Category; amount: number; percentage: number } } = {};
+
+    incomes.forEach(tx => {
+      let cat = categories.find(c => c.id === tx.categoryId);
+      if (!cat) return;
+
+      cat = getParentCategory(cat, categories);
+      const key = cat.id;
+
+      if (!breakdownMap[key]) {
+        breakdownMap[key] = {
+          category: cat,
+          amount: 0,
+          percentage: 0
+        };
+      }
+      breakdownMap[key].amount += tx.amount;
+    });
+
+    const list = Object.values(breakdownMap);
+    list.forEach(item => {
+      item.percentage = totalInc > 0 ? (item.amount / totalInc) * 100 : 0;
+    });
+
+    list.sort((a, b) => b.amount - a.amount);
+    return {
+      list,
+      total: totalInc
+    };
+  }, [filteredAnalyticsTransactions, categories]);
+
+  // Compute detailed subcategory breakdown for incomes (Chart 2)
+  const incomesSubBreakdown = useMemo(() => {
+    const incomes = filteredAnalyticsTransactions.filter(t => t.type === 'income');
+    const totalInc = incomes.reduce((sum, t) => sum + t.amount, 0);
+
+    const breakdownMap: { [key: string]: { category: Category; amount: number; percentage: number } } = {};
+
+    incomes.forEach(tx => {
+      let cat = categories.find(c => c.id === tx.categoryId);
+      if (!cat) return;
+
+      const key = cat.id;
+
+      if (!breakdownMap[key]) {
+        breakdownMap[key] = {
+          category: cat,
+          amount: 0,
+          percentage: 0
+        };
+      }
+      breakdownMap[key].amount += tx.amount;
+    });
+
+    const list = Object.values(breakdownMap);
+    list.forEach(item => {
+      item.percentage = totalInc > 0 ? (item.amount / totalInc) * 100 : 0;
+    });
+
+    list.sort((a, b) => b.amount - a.amount);
+    return {
+      list,
+      total: totalInc
+    };
+  }, [filteredAnalyticsTransactions, categories]);
 
   const selectedCategoryTxs = useMemo(() => {
     if (!selectedCategoryTransactions) return [];
@@ -1447,19 +1596,38 @@ export function DashboardOverview({
                     <div className="flex flex-wrap items-baseline gap-1.5 min-w-0">
                       <h4 className="font-display font-black text-xs text-slate-350 uppercase tracking-wider">Расходы</h4>
                       <span className="font-mono text-xs sm:text-sm font-black text-rose-450 select-all whitespace-nowrap">
-                        -{Math.round(categoryBreakdown.total).toLocaleString('ru-RU')} ₼
+                        -{Math.round(expensesParentBreakdown.total).toLocaleString('ru-RU')} ₼
                       </span>
                     </div>
                     
                     <div className="flex items-center gap-1.5 shrink-0">
-                      <button
-                        onClick={() => setShowSubcategories(!showSubcategories)}
-                        className="text-[9px] font-bold bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white px-2 py-1 rounded-lg transition-colors cursor-pointer uppercase tracking-wider whitespace-nowrap"
-                        title={showSubcategories ? "Свеуть подкатегории" : "Развернуть подкатегории"}
-                      >
-                        {showSubcategories ? '[-] Свернуть' : '[+] Подкатегории'}
-                      </button>
+                      {/* Категории vs Подкатегории Switcher */}
+                      <div className="flex bg-white/5 rounded-lg p-0.5 border border-white/5 shrink-0">
+                        <button
+                          onClick={() => setExpensesGrouping('parent')}
+                          className={`text-[9.5px] font-black px-2 py-1 rounded-md transition-all cursor-pointer whitespace-nowrap ${
+                            expensesGrouping === 'parent'
+                              ? 'bg-rose-500 text-white'
+                              : 'text-slate-400 hover:text-white'
+                          }`}
+                          title="Показать основные родительские категории"
+                        >
+                          Категории
+                        </button>
+                        <button
+                          onClick={() => setExpensesGrouping('sub')}
+                          className={`text-[9.5px] font-black px-2 py-1 rounded-md transition-all cursor-pointer whitespace-nowrap ${
+                            expensesGrouping === 'sub'
+                              ? 'bg-rose-500 text-white'
+                              : 'text-slate-400 hover:text-white'
+                          }`}
+                          title="Показать детальные подкатегории"
+                        >
+                          Подкатегории
+                        </button>
+                      </div>
 
+                      {/* Treemap vs List Switcher */}
                       <div className="flex items-center bg-white/5 rounded-lg p-0.5 border border-white/5">
                         <button
                           onClick={() => setExpensesView('treemap')}
@@ -1470,7 +1638,7 @@ export function DashboardOverview({
                           }`}
                           title="Отобразить в виде плиток (Treemap)"
                         >
-                          <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                           </svg>
                         </button>
@@ -1483,7 +1651,7 @@ export function DashboardOverview({
                           }`}
                           title="Отобразить в виде списка"
                         >
-                          <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                           </svg>
                         </button>
@@ -1491,48 +1659,62 @@ export function DashboardOverview({
                     </div>
                   </div>
 
-                  {categoryBreakdown.list.length === 0 ? (
+                  {expensesParentBreakdown.list.length === 0 ? (
                     <p className="text-xs text-slate-500 italic py-4">Нет данных по расходам за период</p>
-                  ) : expensesView === 'treemap' ? (
-                    <TreemapChart
-                      items={categoryBreakdown.list}
-                      type="expense"
-                      total={categoryBreakdown.total}
-                      onCategoryClick={(cat) => setSelectedCategoryTransactions({ category: cat, type: 'expense' })}
-                      showSubcategories={showSubcategories}
-                      onToggleSubcategories={() => setShowSubcategories(!showSubcategories)}
-                      theme={theme}
-                    />
                   ) : (
-                    <div className="space-y-3 max-h-[350px] lg:max-h-[600px] overflow-y-auto pr-1 select-none custom-scrollbar">
-                      {categoryBreakdown.list.slice(0, showSubcategories ? 25 : 12).map((item, idx) => {
-                        const barWidth = item.percentage;
-                        return (
-                          <div 
-                            key={item.category.id} 
-                            onClick={() => setSelectedCategoryTransactions({ category: item.category, type: 'expense' })}
-                            className="group min-w-0 cursor-pointer hover:bg-white/5 p-1 -m-1 rounded-lg transition-all"
-                            title="Посмотреть транзакции за выбранный период"
-                          >
-                            <div className="flex items-center justify-between text-xs mb-1 gap-3 min-w-0">
-                              <span className="font-semibold text-slate-300 flex items-center gap-1.5 min-w-0">
-                                <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: item.category.color }} />
-                                <span className="truncate">{formatCategoryDisplayName(item.category.name)}</span>
-                              </span>
-                              <span className="font-mono font-bold text-rose-350 select-all shrink-0 whitespace-nowrap pl-1 flex items-center gap-1.5">
-                                <span className="text-[10.5px] text-slate-400 font-semibold bg-white/5 px-1 py-0.5 rounded-sm">{(item.percentage || 0).toFixed(1)}%</span>
-                                <span>-{Math.round(item.amount).toLocaleString('ru-RU')} ₼</span>
-                              </span>
-                            </div>
-                            <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
-                              <div
-                                style={{ width: `${barWidth}%` }}
-                                className="h-full bg-rose-500 rounded-full transition-all duration-500 group-hover:bg-rose-450"
-                              />
-                            </div>
-                          </div>
-                        );
-                      })}
+                    <div>
+                      <div className="flex justify-between items-center mb-3 px-1">
+                        <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-450">
+                          {expensesGrouping === 'parent' ? 'Категории (Основные)' : 'Подкатегории (Детализация)'}
+                        </span>
+                        <span className="font-mono text-[10px] text-rose-350 font-bold bg-rose-500/10 px-1.5 py-0.5 rounded">
+                          {(expensesGrouping === 'parent' ? expensesParentBreakdown : expensesSubBreakdown).list.length} классов
+                        </span>
+                      </div>
+                      
+                      {expensesView === 'treemap' ? (
+                        <TreemapChart
+                          items={(expensesGrouping === 'parent' ? expensesParentBreakdown : expensesSubBreakdown).list}
+                          type="expense"
+                          total={(expensesGrouping === 'parent' ? expensesParentBreakdown : expensesSubBreakdown).total}
+                          onCategoryClick={(cat) => setSelectedCategoryTransactions({ category: cat, type: 'expense' })}
+                          showSubcategories={showSubcategories}
+                          onToggleSubcategories={() => setShowSubcategories(!showSubcategories)}
+                          theme={theme}
+                          height={315}
+                        />
+                      ) : (
+                        <div className="space-y-2.5 max-h-[315px] overflow-y-auto pr-1 select-none custom-scrollbar">
+                          {(expensesGrouping === 'parent' ? expensesParentBreakdown : expensesSubBreakdown).list.map((item) => {
+                            const barWidth = item.percentage;
+                            return (
+                              <div 
+                                key={item.category.id} 
+                                onClick={() => setSelectedCategoryTransactions({ category: item.category, type: 'expense' })}
+                                className="group min-w-0 cursor-pointer hover:bg-white/5 p-1 -m-1 rounded-lg transition-all"
+                                title="Посмотреть транзакции"
+                              >
+                                <div className="flex items-center justify-between text-[11px] mb-0.5 gap-3 min-w-0">
+                                  <span className="font-bold text-slate-200 flex items-center gap-1.5 min-w-0">
+                                    <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: item.category.color }} />
+                                    <span className="truncate">{formatCategoryDisplayName(item.category.name)}</span>
+                                  </span>
+                                  <span className="font-mono font-bold text-rose-350 select-all shrink-0 whitespace-nowrap pl-1 flex items-center gap-1.5">
+                                    <span className="text-[9px] text-slate-450 font-black bg-white/5 px-1 py-0.5 rounded-sm">{(item.percentage || 0).toFixed(1)}%</span>
+                                    <span>-{Math.round(item.amount).toLocaleString('ru-RU')} ₼</span>
+                                  </span>
+                                </div>
+                                <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
+                                  <div
+                                    style={{ width: `${barWidth}%` }}
+                                    className="h-full bg-rose-500 rounded-full transition-all duration-500 group-hover:bg-rose-450"
+                                  />
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
@@ -1545,19 +1727,11 @@ export function DashboardOverview({
                     <div className="flex flex-wrap items-baseline gap-1.5 min-w-0">
                       <h4 className="font-display font-black text-xs text-slate-330 uppercase tracking-wider">Доходы</h4>
                       <span className="font-mono text-xs sm:text-sm font-black text-emerald-400 select-all whitespace-nowrap">
-                        +{Math.round(incomeCategoryBreakdown.total).toLocaleString('ru-RU')} ₼
+                        +{Math.round(incomesParentBreakdown.total).toLocaleString('ru-RU')} ₼
                       </span>
                     </div>
                     
                     <div className="flex items-center gap-1.5 shrink-0">
-                      <button
-                        onClick={() => setShowSubcategories(!showSubcategories)}
-                        className="text-[9px] font-bold bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white px-2 py-1 rounded-lg transition-colors cursor-pointer uppercase tracking-wider whitespace-nowrap"
-                        title={showSubcategories ? "Свернуть подкатегории" : "Развернуть подкатегории"}
-                      >
-                        {showSubcategories ? '[-] Свернуть' : '[+] Подкатегории'}
-                      </button>
-
                       <div className="flex items-center bg-white/5 rounded-lg p-0.5 border border-white/5">
                         <button
                           onClick={() => setIncomesView('treemap')}
@@ -1589,53 +1763,63 @@ export function DashboardOverview({
                     </div>
                   </div>
 
-                  {incomeCategoryBreakdown.list.length === 0 ? (
+                  {incomesParentBreakdown.list.length === 0 ? (
                     <p className="text-xs text-slate-500 italic py-4">Нет данных по доходам за период</p>
-                  ) : incomesView === 'treemap' ? (
-                    <TreemapChart
-                      items={incomeCategoryBreakdown.list}
-                      type="income"
-                      total={incomeCategoryBreakdown.total}
-                      onCategoryClick={(cat) => setSelectedCategoryTransactions({ category: cat, type: 'income' })}
-                      showSubcategories={showSubcategories}
-                      onToggleSubcategories={() => setShowSubcategories(!showSubcategories)}
-                      theme={theme}
-                    />
                   ) : (
-                    <div className="space-y-3 max-h-[350px] lg:max-h-[600px] overflow-y-auto pr-1 select-none custom-scrollbar">
-                      {incomeCategoryBreakdown.list.slice(0, showSubcategories ? 25 : 12).map((item, idx) => {
-                        const barWidth = item.percentage;
-                        return (
-                          <div 
-                            key={item.category.id} 
-                            onClick={() => setSelectedCategoryTransactions({ category: item.category, type: 'income' })}
-                            className="group min-w-0 cursor-pointer hover:bg-white/5 p-1 -m-1 rounded-lg transition-all"
-                            title="Посмотреть транзакции за выбранный период"
-                          >
-                            <div className="flex items-center justify-between text-xs mb-1 gap-3 min-w-0">
-                              <span className="font-semibold text-slate-300 flex items-center gap-1.5 min-w-0">
-                                <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: item.category.color }} />
-                                <span className="truncate">{formatCategoryDisplayName(item.category.name)}</span>
-                              </span>
-                              <span className="font-mono font-bold text-emerald-450 select-all shrink-0 whitespace-nowrap pl-1 flex items-center gap-1.5">
-                                <span className="text-[10.5px] text-slate-400 font-semibold bg-white/5 px-1 py-0.5 rounded-sm">{(item.percentage || 0).toFixed(1)}%</span>
-                                <span>+{Math.round(item.amount).toLocaleString('ru-RU')} ₼</span>
-                              </span>
-                            </div>
-                            <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
-                              <div
-                                style={{ width: `${barWidth}%` }}
-                                className="h-full bg-emerald-500 rounded-full transition-all duration-500 group-hover:bg-emerald-450"
-                              />
-                            </div>
-                          </div>
-                        );
-                      })}
+                    <div>
+                      <div className="flex justify-between items-center mb-3 px-1">
+                        <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-450">Категории (Основные)</span>
+                        <span className="font-mono text-[10px] text-emerald-350 font-bold bg-emerald-500/10 px-1.5 py-0.5 rounded">
+                          {incomesParentBreakdown.list.length} классов
+                        </span>
+                      </div>
+                      
+                      {incomesView === 'treemap' ? (
+                        <TreemapChart
+                          items={incomesParentBreakdown.list}
+                          type="income"
+                          total={incomesParentBreakdown.total}
+                          onCategoryClick={(cat) => setSelectedCategoryTransactions({ category: cat, type: 'income' })}
+                          showSubcategories={showSubcategories}
+                          onToggleSubcategories={() => setShowSubcategories(!showSubcategories)}
+                          theme={theme}
+                          height={315}
+                        />
+                      ) : (
+                        <div className="space-y-2.5 max-h-[315px] overflow-y-auto pr-1 select-none custom-scrollbar">
+                          {incomesParentBreakdown.list.map((item) => {
+                            const barWidth = item.percentage;
+                            return (
+                              <div 
+                                key={item.category.id} 
+                                onClick={() => setSelectedCategoryTransactions({ category: item.category, type: 'income' })}
+                                className="group min-w-0 cursor-pointer hover:bg-white/5 p-1 -m-1 rounded-lg transition-all"
+                                title="Посмотреть транзакции"
+                              >
+                                <div className="flex items-center justify-between text-[11px] mb-0.5 gap-3 min-w-0">
+                                  <span className="font-bold text-slate-200 flex items-center gap-1.5 min-w-0">
+                                    <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: item.category.color }} />
+                                    <span className="truncate">{formatCategoryDisplayName(item.category.name)}</span>
+                                  </span>
+                                  <span className="font-mono font-bold text-emerald-450 select-all shrink-0 whitespace-nowrap pl-1 flex items-center gap-1.5">
+                                    <span className="text-[9px] text-slate-450 font-black bg-white/5 px-1 py-0.5 rounded-sm">{(item.percentage || 0).toFixed(1)}%</span>
+                                    <span>+{Math.round(item.amount).toLocaleString('ru-RU')} ₼</span>
+                                  </span>
+                                </div>
+                                <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
+                                  <div
+                                    style={{ width: `${barWidth}%` }}
+                                    className="h-full bg-emerald-500 rounded-full transition-all duration-500 group-hover:bg-emerald-450"
+                                  />
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
-
-
               </div>
 
               {/* PANEL 3: ACCOUNTS (СЧЕТА) */}

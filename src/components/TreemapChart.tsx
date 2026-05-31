@@ -15,6 +15,7 @@ interface TreemapChartProps {
   showSubcategories: boolean;
   onToggleSubcategories: () => void;
   theme: 'dark' | 'light';
+  height?: number;
 }
 
 interface TreemapNode {
@@ -148,9 +149,10 @@ export const TreemapChart: React.FC<TreemapChartProps> = ({
   showSubcategories,
   onToggleSubcategories,
   theme,
+  height,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [dimensions, setDimensions] = useState({ width: 0, height: 320 });
+  const [dimensions, setDimensions] = useState({ width: 0, height: height || 320 });
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   useEffect(() => {
@@ -162,7 +164,7 @@ export const TreemapChart: React.FC<TreemapChartProps> = ({
         if (rect.width > 0) {
           setDimensions({
             width: rect.width,
-            height: rect.width < 500 ? 250 : 320, // adaptive height for small mobile views
+            height: height || (rect.width < 500 ? 250 : 320), // adaptive height for small mobile views
           });
         }
       }
@@ -178,7 +180,7 @@ export const TreemapChart: React.FC<TreemapChartProps> = ({
     return () => {
       observer.disconnect();
     };
-  }, []);
+  }, [height]);
 
   const nodes = useMemo(() => {
     // Show top 15 categories for clean visuals
