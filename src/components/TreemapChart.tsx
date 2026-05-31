@@ -214,29 +214,43 @@ export const TreemapChart: React.FC<TreemapChartProps> = ({
           const area = node.width * node.height;
           
           // Determine font sizes based on cell width and height
-          let nameSize = 'text-xs';
-          let amountSize = 'text-[10px]';
-          if (node.width < 90 || node.height < 55) {
-            nameSize = 'text-[9.5px]';
-            amountSize = 'text-[8.5px]';
+          let nameSize = 'text-[11px] sm:text-xs';
+          let amountSize = 'text-[10px] sm:text-xs';
+          if (node.width < 110 || node.height < 60) {
+            nameSize = 'text-[10px]';
+            amountSize = 'text-[9px]';
           }
-          if (node.width < 60 || node.height < 35) {
-            nameSize = 'text-[8.5px]';
-            amountSize = 'text-[7.5px]';
+          if (node.width < 80 || node.height < 45) {
+            nameSize = 'text-[9px]';
+            amountSize = 'text-[8px]';
+          }
+          if (node.width < 50 || node.height < 30) {
+            nameSize = 'text-[8px]';
+            amountSize = 'text-[7px]';
           }
 
           const catColor = node.color || '#64748b';
           
-          // Compute thematic backgrounds (semi-transparent for dark mode, subtle pastels for light mode)
+          // Compute thematic backgrounds with much higher opacity (vibrant color-wash)
           const baseBgColor = theme === 'dark'
-            ? `${catColor}15`
-            : `${catColor}1a`; // slightly stronger for better light theme contrast
+            ? `${catColor}3b` // ~23% opacity for rich glowing blocks in dark mode
+            : `${catColor}4d`; // ~30% opacity for clear pastel blocks in light mode
 
+          // Draw strong, distinct border frames similar to HoneyMoney
           const baseBorderColor = theme === 'dark'
-            ? `${catColor}44`
-            : `${catColor}33`;
+            ? `${catColor}aa` // high contrast border
+            : `${catColor}bb`; // strong bordered grids
 
           const isHovered = hoveredIndex === idx;
+
+          // Highly visible text styling per theme
+          const textNameColor = theme === 'dark'
+            ? 'text-white'
+            : 'text-slate-950';
+
+          const textAmountColor = theme === 'dark'
+            ? (type === 'expense' ? 'text-rose-200' : 'text-emerald-250')
+            : (type === 'expense' ? 'text-rose-900' : 'text-emerald-900');
 
           return (
             <div
@@ -252,15 +266,15 @@ export const TreemapChart: React.FC<TreemapChartProps> = ({
                 height: `${node.height}px`,
                 boxSizing: 'border-box',
                 backgroundColor: isHovered 
-                  ? (theme === 'dark' ? `${catColor}30` : `${catColor}2c`)
+                  ? (theme === 'dark' ? `${catColor}66` : `${catColor}77`) // much brighter on hover
                   : baseBgColor,
                 borderColor: isHovered 
-                  ? (type === 'expense' ? 'rgba(239, 68, 68, 0.7)' : 'rgba(16, 185, 129, 0.7)') 
+                  ? (type === 'expense' ? 'rgba(239, 68, 68, 0.9)' : 'rgba(16, 185, 129, 0.9)') 
                   : baseBorderColor,
                 transform: isHovered ? 'scale(1.002)' : 'none',
                 zIndex: isHovered ? 20 : 10,
                 boxShadow: isHovered 
-                  ? (type === 'expense' ? '0 0 10px rgba(239,68,68,0.15)' : '0 0 10px rgba(16,185,129,0.15)')
+                  ? (type === 'expense' ? '0 0 12px rgba(239, 68, 68, 0.25)' : '0 0 12px rgba(16, 185, 129, 0.25)')
                   : 'none',
               }}
               title={`${formatCategoryDisplayName(node.name)}: ${Math.round(node.amount).toLocaleString('ru-RU')} ₼ (${(node.percentage || 0).toFixed(1)}%)`}
@@ -268,12 +282,12 @@ export const TreemapChart: React.FC<TreemapChartProps> = ({
               {/* Internal contents structured vertically */}
               <div className="flex flex-col h-full w-full justify-between items-start pointer-events-none">
                 {node.width > 35 && node.height > 20 && (
-                  <span className={`${nameSize} font-display font-medium text-slate-200 uppercase tracking-wider truncate w-full`}>
+                  <span className={`${nameSize} font-display font-bold ${textNameColor} uppercase tracking-tight truncate w-full filter drop-shadow-[0_1.5px_2px_rgba(0,0,0,0.85)]`}>
                     {formatCategoryDisplayName(node.name)}
                   </span>
                 )}
                 {node.width > 55 && node.height > 38 && (
-                  <span className={`${amountSize} font-mono font-bold leading-none ${type === 'expense' ? 'text-rose-400' : 'text-emerald-450'} whitespace-nowrap mt-auto`}>
+                  <span className={`${amountSize} font-mono font-bold leading-none ${textAmountColor} whitespace-nowrap mt-auto filter drop-shadow-[0_1.2px_1.5px_rgba(0,0,0,0.8)]`}>
                     {type === 'expense' ? '-' : '+'}{Math.round(node.amount).toLocaleString('ru-RU')} ₼
                   </span>
                 )}
