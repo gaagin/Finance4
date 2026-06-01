@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
-import { Category, formatCategoryDisplayName } from '../types';
+import { Category, formatCategoryDisplayName, BudgetLimit } from '../types';
 
 interface TreemapItem {
   category: Category;
@@ -16,6 +16,8 @@ interface TreemapChartProps {
   onToggleSubcategories: () => void;
   theme: 'dark' | 'light';
   height?: number;
+  budgets?: BudgetLimit[];
+  timeframe?: string;
 }
 
 interface TreemapNode {
@@ -150,6 +152,8 @@ export const TreemapChart: React.FC<TreemapChartProps> = ({
   onToggleSubcategories,
   theme,
   height,
+  budgets = [],
+  timeframe = '',
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: height || 320 });
@@ -215,6 +219,27 @@ export const TreemapChart: React.FC<TreemapChartProps> = ({
         {nodes.map((node, idx) => {
           const area = node.width * node.height;
           
+          // Determine budget limit for category
+          const targetMonth = (timeframe && timeframe.length === 7) ? timeframe : '2026-05';
+          let baseVal = 0;
+          let adjVal = 0;
+          budgets.forEach(b => {
+            if (b.categoryId === node.category.id) {
+              const isBase = !b.month || b.month === 'base' || b.month === '';
+              if (isBase) {
+                baseVal = b.limitAmount;
+              } else if (b.month === targetMonth) {
+                adjVal = b.limitAmount;
+              }
+            }
+          });
+          const totalLimit = baseVal + adjVal;
+          const hasBudget = totalLimit > 0;
+          const spent = node.amount;
+
+          const percent = hasBudget ? (spent / totalLimit) * 100 : 0;
+          const boundedPercent = Math.min(100, Math.max(0, percent));
+
           // Determine font sizes based on cell width and height
           let nameSize = 'text-[11px] sm:text-xs';
           let amountSize = 'text-[10px] sm:text-xs';
@@ -279,18 +304,43 @@ export const TreemapChart: React.FC<TreemapChartProps> = ({
                   ? (type === 'expense' ? '0 0 12px rgba(239, 68, 68, 0.25)' : '0 0 12px rgba(16, 185, 129, 0.25)')
                   : 'none',
               }}
-              title={`${formatCategoryDisplayName(node.name)}: ${Math.round(node.amount).toLocaleString('ru-RU')} ₼ (${(node.percentage || 0).toFixed(1)}%)`}
+              title={`${formatCategoryDisplayName(node.name)}: ${Math.round(node.amount).toLocaleString('ru-RU')} ₼ (${(node.percentage || 0).toFixed(1)}%)${
+                hasBudget ? ` [Бюджет: ${Math.round(spent)} из ${Math.round(totalLimit)} ₼, ${percent.toFixed(0)}%]` : ''
+              }`}
             >
+              {/* Liquid Rise Progress Level */}
+              {type === 'expense' && hasBudget && spent > 0 && (
+                <div
+                  className={`absolute bottom-0 left-0 right-0 w-full transition-all duration-700 ease-out pointer-events-none ${
+                    percent >= 100
+                      ? 'bg-rose-500/40 border-t border-rose-500/60'
+                      : percent >= 80
+                        ? 'bg-amber-500/25 border-t border-amber-500/35'
+                        : 'bg-emerald-500/20 border-t border-emerald-500/35'
+                  }`}
+                  style={{ height: `${boundedPercent}%`, zIndex: 1 }}
+                />
+              )}
+
               {/* Internal contents structured vertically */}
-              <div className="flex flex-col h-full w-full justify-between items-start pointer-events-none">
+              <div className="relative z-10 flex flex-col h-full w-full justify-between items-start pointer-events-none">
                 {node.width > 35 && node.height > 20 && (
                   <span className={`${nameSize} font-display font-extrabold ${textNameColor} uppercase tracking-tight truncate w-full`}>
                     {formatCategoryDisplayName(node.name)}
                   </span>
                 )}
                 {node.width > 55 && node.height > 38 && (
-                  <span className={`${amountSize} font-mono font-extrabold leading-none ${textAmountColor} whitespace-nowrap mt-auto`}>
-                    {type === 'expense' ? '-' : '+'}{Math.round(node.amount).toLocaleString('ru-RU')} ₼
+                  <span className={`${amountSize} font-mono font-extrabold leading-none ${textAmountColor} whitespace-nowrap mt-auto flex flex-col gap-0.5`}>
+                    <span>
+                      {type === 'expense' ? '-' : '+'}{Math.round(node.amount).toLocaleString('ru-RU')} ₼
+                    </span>
+                    {type === 'expense' && hasBudget && node.width > 80 && node.height > 50 && (
+                      <span className={`text-[8.5px] font-sans tracking-tight block leading-tight ${
+                        percent >= 100 ? 'text-rose-300 font-extrabold' : percent >= 80 ? 'text-amber-250 font-bold' : 'text-slate-300 font-medium'
+                      }`}>
+                        {Math.round(totalLimit)} ₼ ({percent.toFixed(0)}%)
+                      </span>
+                    )}
                   </span>
                 )}
               </div>

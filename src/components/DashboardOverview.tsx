@@ -1503,8 +1503,43 @@ export function DashboardOverview({
   const donutCircumference = 2 * Math.PI * donutRadius;
 
   if (showMode === 'quick-records') {
+    const months = timeframeOptions.filter(opt => opt.type === 'month');
     return (
       <div className="space-y-6" id="dashboard-overview-view-quick">
+        {/* Unified Month Selection Header for Quick Records */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-2xl bg-slate-900/60 border border-white/5 shadow-xl animate-fade-in mb-3">
+          <div>
+            <h2 className="text-base font-display font-black text-white uppercase tracking-wider flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-teal-400 animate-pulse" />
+              Быстрые записи транзакций
+            </h2>
+            <p className="text-[11px] text-slate-400 mt-1">Перетащите счет на категорию, чтобы мгновенно совершить операцию</p>
+          </div>
+          
+          {/* horizontal capsule month controls */}
+          <div className="flex flex-wrap items-center gap-1 bg-slate-950/80 p-1 rounded-xl border border-white/5 shadow-inner">
+            {months.map(opt => {
+              const isActive = analyticsTimeframe === opt.value;
+              return (
+                <button
+                  key={opt.value}
+                  onClick={() => {
+                    setAnalyticsTimeframe(opt.value);
+                    localStorage.setItem('milli_analytics_timeframe', opt.value);
+                  }}
+                  className={`px-3 py-1.5 text-xs rounded-lg transition-all cursor-pointer font-bold select-none whitespace-nowrap ${
+                    isActive
+                      ? 'bg-gradient-to-r from-teal-500 to-emerald-500 text-slate-950 shadow-md font-extrabold transform scale-102'
+                      : 'text-slate-400 hover:text-white hover:bg-white/5'
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         {/* --- QUICK INTERACTIVE GESTURE TRANSACTION BUILDER --- */}
         <QuickDragDropBuilder
           accounts={visibleAccounts}
@@ -1707,6 +1742,8 @@ export function DashboardOverview({
                           onToggleSubcategories={() => setShowSubcategories(!showSubcategories)}
                           theme={theme}
                           height={315}
+                          budgets={budgets}
+                          timeframe={analyticsTimeframe}
                         />
                       ) : (
                         <div className="space-y-2.5 max-h-[315px] overflow-y-auto pr-1 select-none custom-scrollbar">
@@ -1809,6 +1846,8 @@ export function DashboardOverview({
                           onToggleSubcategories={() => setShowSubcategories(!showSubcategories)}
                           theme={theme}
                           height={315}
+                          budgets={budgets}
+                          timeframe={analyticsTimeframe}
                         />
                       ) : (
                         <div className="space-y-2.5 max-h-[315px] overflow-y-auto pr-1 select-none custom-scrollbar">
