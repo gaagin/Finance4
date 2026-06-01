@@ -1512,6 +1512,9 @@ export function DashboardOverview({
           onAddTransaction={onAddTransaction}
           onAddTransfer={onAddTransfer}
           addToast={addToast}
+          budgets={budgets}
+          transactions={transactions}
+          timeframe={analyticsTimeframe}
         />
       </div>
     );
@@ -1528,6 +1531,9 @@ export function DashboardOverview({
           onAddTransaction={onAddTransaction}
           onAddTransfer={onAddTransfer}
           addToast={addToast}
+          budgets={budgets}
+          transactions={transactions}
+          timeframe={analyticsTimeframe}
         />
       )}
 

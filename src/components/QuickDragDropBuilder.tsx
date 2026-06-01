@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Account, Category, Transaction, formatCategoryDisplayName } from '../types';
+import { Account, Category, Transaction, formatCategoryDisplayName, BudgetLimit } from '../types';
 import { IconComponent } from './IconComponent';
 import { Wallet, HelpCircle, CornerRightDown, Plus, X, Sparkles, Check, ChevronDown, ArrowRight, Search, SlidersHorizontal, ChevronLeft, ChevronRight, CreditCard, FileText } from 'lucide-react';
 
@@ -138,6 +138,9 @@ interface QuickDragDropBuilderProps {
     date: string;
   }) => void;
   addToast: (message: string, type: 'warning' | 'critical' | 'success') => void;
+  budgets?: BudgetLimit[];
+  transactions?: Transaction[];
+  timeframe?: string;
 }
 
 export function QuickDragDropBuilder({
@@ -146,6 +149,9 @@ export function QuickDragDropBuilder({
   onAddTransaction,
   onAddTransfer,
   addToast,
+  budgets = [],
+  transactions = [],
+  timeframe = '',
 }: QuickDragDropBuilderProps) {
   // Sorting / Reordering features
   const [isSortingMode, setIsSortingMode] = useState<boolean>(false);
@@ -779,6 +785,33 @@ export function QuickDragDropBuilder({
             <div className="grid grid-cols-3 xs:grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 gap-2 sm:gap-2.5">
               {expenseCategories.map(cat => {
                 const isOver = dragOverCategoryId === cat.id;
+
+                const targetMonth = (timeframe && timeframe.length === 7) ? timeframe : '2026-05';
+                
+                // Get budget limits
+                let baseVal = 0;
+                let adjVal = 0;
+                budgets.forEach(b => {
+                  if (b.categoryId === cat.id) {
+                    const isBase = !b.month || b.month === 'base' || b.month === '';
+                    if (isBase) {
+                      baseVal = b.limitAmount;
+                    } else if (b.month === targetMonth) {
+                      adjVal = b.limitAmount;
+                    }
+                  }
+                });
+                const totalLimit = baseVal + adjVal;
+                const hasBudget = totalLimit > 0;
+
+                // Get spent
+                const spent = transactions
+                  .filter(t => t.date.startsWith(targetMonth) && t.categoryId === cat.id && t.type === 'expense')
+                  .reduce((sum, t) => sum + t.amount, 0);
+
+                const percent = hasBudget ? (spent / totalLimit) * 100 : 0;
+                const boundedPercent = Math.min(100, Math.max(0, percent));
+
                 return (
                   <div
                     key={cat.id}
@@ -787,7 +820,7 @@ export function QuickDragDropBuilder({
                     onDragLeave={() => setDragOverCategoryId(null)}
                     onDrop={(e) => handleDropOnCategory(e, cat)}
                     onClick={() => !isSortingMode && handleCategoryClick(cat)}
-                    className={`relative p-2 xs:p-2.5 sm:p-2.5 md:p-3 rounded-xl border flex flex-col items-center justify-center text-center gap-1 sm:gap-1.5 transition-all select-none min-h-[46px] xs:min-h-[50px] sm:min-h-[52px] ${
+                    className={`relative overflow-hidden p-2 xs:p-2.5 sm:p-2.5 md:p-3 rounded-xl border flex flex-col items-center justify-center text-center gap-1 sm:gap-1.5 transition-all select-none min-h-[46px] xs:min-h-[50px] sm:min-h-[52px] ${
                       isOver 
                         ? 'border-rose-400 bg-rose-500/25 scale-[1.03] shadow-md shadow-rose-500/10 ring-1 ring-rose-400' 
                         : 'border-rose-500/15 bg-rose-500/10 hover:bg-rose-500/20 hover:border-rose-500/30'
@@ -796,9 +829,34 @@ export function QuickDragDropBuilder({
                     }`}
                     id={`drop-cat-${cat.id}`}
                   >
-                    <span className="text-[9.5px] xs:text-[11px] sm:text-[12px] md:text-[13px] font-bold sm:font-black font-sans tracking-tight leading-none sm:leading-normal text-white max-w-full px-0.5 pointer-events-none text-center uppercase break-words">
+                    {/* Liquid Rise Progress Level */}
+                    {hasBudget && spent > 0 && (
+                      <div
+                        className={`absolute bottom-0 left-0 right-0 w-full transition-all duration-700 ease-out pointer-events-none rounded-b-xl ${
+                          percent >= 100
+                            ? 'bg-rose-500/40 border-t border-rose-500/60'
+                            : percent >= 80
+                              ? 'bg-amber-500/25 border-t border-amber-500/35'
+                              : 'bg-emerald-500/20 border-t border-emerald-500/35'
+                        }`}
+                        style={{ height: `${boundedPercent}%`, zIndex: 0 }}
+                      />
+                    )}
+
+                    <span className="relative z-10 text-[9.5px] xs:text-[11px] sm:text-[12px] md:text-[13px] font-bold sm:font-black font-sans tracking-tight leading-none sm:leading-normal text-white max-w-full px-0.5 pointer-events-none text-center uppercase break-words">
                       {formatCategoryDisplayName(cat.name)}
                     </span>
+
+                    {/* Numeric breakdown details */}
+                    {hasBudget ? (
+                      <span className="relative z-10 text-[8px] sm:text-[9.5px] font-semibold font-mono text-white pointer-events-none mt-0.5 leading-none tracking-tight">
+                        {spent.toFixed(0)}/{totalLimit.toFixed(0)} ₼
+                      </span>
+                    ) : (
+                      <span className="relative z-10 text-[8px] sm:text-[9.5px] font-medium font-mono text-white/50 pointer-events-none mt-0.5 leading-none tracking-tight">
+                        {spent > 0 ? `${spent.toFixed(0)} ₼` : '0 ₼'}
+                      </span>
+                    )}
 
                     {isSortingMode && (
                       <div className="absolute inset-x-0 bottom-0 top-0 bg-slate-950/95 backdrop-blur-xs rounded-xl flex items-center justify-between px-1.5 z-[100]">
@@ -844,6 +902,12 @@ export function QuickDragDropBuilder({
               <div className="grid grid-cols-3 xs:grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 gap-2 sm:gap-2.5">
                 {incomeCategories.map(cat => {
                   const isOver = dragOverCategoryId === cat.id;
+
+                  const targetMonth = (timeframe && timeframe.length === 7) ? timeframe : '2026-05';
+                  const incomeSpent = transactions
+                    .filter(t => t.date.startsWith(targetMonth) && t.categoryId === cat.id && t.type === 'income')
+                    .reduce((sum, t) => sum + t.amount, 0);
+
                   return (
                     <div
                       key={cat.id}
@@ -852,7 +916,7 @@ export function QuickDragDropBuilder({
                       onDragLeave={() => setDragOverCategoryId(null)}
                       onDrop={(e) => handleDropOnCategory(e, cat)}
                       onClick={() => !isSortingMode && handleCategoryClick(cat)}
-                      className={`relative p-2 xs:p-2.5 sm:p-2.5 md:p-3 rounded-xl border flex flex-col items-center justify-center text-center gap-1 sm:gap-1.5 transition-all select-none min-h-[46px] xs:min-h-[50px] sm:min-h-[52px] ${
+                      className={`relative overflow-hidden p-2 xs:p-2.5 sm:p-2.5 md:p-3 rounded-xl border flex flex-col items-center justify-center text-center gap-1 sm:gap-1.5 transition-all select-none min-h-[46px] xs:min-h-[50px] sm:min-h-[52px] ${
                         isOver 
                           ? 'border-emerald-400 bg-emerald-500/25 scale-[1.03] shadow-md shadow-emerald-500/10 ring-1 ring-emerald-400' 
                           : 'border-emerald-500/15 bg-emerald-500/10 hover:bg-emerald-500/20 hover:border-emerald-500/30'
@@ -861,8 +925,12 @@ export function QuickDragDropBuilder({
                       }`}
                       id={`drop-cat-${cat.id}`}
                     >
-                      <span className="text-[9.5px] xs:text-[11px] sm:text-[12px] md:text-[13px] font-bold sm:font-black font-sans tracking-tight leading-none sm:leading-normal text-white max-w-full px-0.5 pointer-events-none text-center uppercase break-words">
+                      <span className="relative z-10 text-[9.5px] xs:text-[11px] sm:text-[12px] md:text-[13px] font-bold sm:font-black font-sans tracking-tight leading-none sm:leading-normal text-white max-w-full px-0.5 pointer-events-none text-center uppercase break-words">
                         {formatCategoryDisplayName(cat.name)}
+                      </span>
+
+                      <span className="relative z-10 text-[8px] sm:text-[9.5px] font-semibold font-mono text-emerald-400 pointer-events-none mt-0.5 leading-none tracking-tight">
+                        {incomeSpent > 0 ? `+${incomeSpent.toFixed(0)} ₼` : '0 ₼'}
                       </span>
 
                       {isSortingMode && (
