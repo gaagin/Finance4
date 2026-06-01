@@ -870,6 +870,7 @@ export default function App() {
     };
     setData(nextData);
     saveToFirebaseDirectly(nextData);
+    return newId;
   };
 
   const handleUpdateCategory = (updatedCat: Category) => {
@@ -1632,7 +1633,7 @@ export default function App() {
                 </button>
               </div>
 
-              {accountsSubTab === 'accounts' && (
+               {accountsSubTab === 'accounts' && (
                 <AccountsCategoriesPanel
                   accounts={data.accounts}
                   categories={data.categories}
@@ -1648,6 +1649,10 @@ export default function App() {
                   onDeleteCard={handleDeleteCard}
                   theme={theme}
                   onThemeChange={setTheme}
+                  budgets={data.budgets}
+                  onSaveBudget={handleSaveBudget}
+                  onDeleteBudget={handleDeleteBudget}
+                  transactions={data.transactions}
                 />
               )}
               {accountsSubTab === 'budget' && (
@@ -1837,17 +1842,7 @@ export default function App() {
         ))}
       </div>
 
-      {/* 4. Elegant footer */}
-      <footer className="bg-slate-950/40 backdrop-blur-md border-t border-white/5 py-6 mt-12 z-10">
-        <div className="max-w-none w-full px-4 sm:px-6 lg:px-8 mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
-          <div className="flex items-center gap-2">
-            <span>MilliFinance 🇦🇿 © 2026. Разработано на русском языке для жителей Азербайджана.</span>
-          </div>
-          <div className="flex items-center gap-1.5 font-medium text-slate-300">
-            <span>Валюта по умолчанию: Азербайджанский манат (₼, AZN)</span>
-          </div>
-        </div>
-      </footer>
+
 
     </div>
   );

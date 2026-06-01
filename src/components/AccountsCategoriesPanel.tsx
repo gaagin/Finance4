@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Account, Category, TransactionType, BankCard, formatCategoryDisplayName } from '../types';
+import { Account, Category, Transaction, TransactionType, BankCard, formatCategoryDisplayName, BudgetLimit } from '../types';
 import { IconComponent, AVAILABLE_ICONS } from './IconComponent';
-import { Plus, Trash2, Edit2, Wallet, PlusCircle, Check, Info, CreditCard, Sun, Moon, X, AlertTriangle } from 'lucide-react';
+import { Plus, Trash2, Edit2, Wallet, PlusCircle, Check, Info, CreditCard, Sun, Moon, X, AlertTriangle, TrendingUp } from 'lucide-react';
 
 interface AccountsCategoriesPanelProps {
   accounts: Account[];
@@ -10,7 +10,7 @@ interface AccountsCategoriesPanelProps {
   onAddAccount: (acc: Omit<Account, 'id'>) => void;
   onUpdateAccount: (acc: Account) => void;
   onDeleteAccount: (id: string) => void;
-  onAddCategory: (cat: Omit<Category, 'id'>) => void;
+  onAddCategory: (cat: Omit<Category, 'id'>) => string | void;
   onUpdateCategory: (cat: Category) => void;
   onDeleteCategory: (id: string) => void;
   onAddCard: (card: Omit<BankCard, 'id'>) => void;
@@ -18,6 +18,10 @@ interface AccountsCategoriesPanelProps {
   onDeleteCard: (id: string) => void;
   theme: 'light' | 'dark';
   onThemeChange: (theme: 'light' | 'dark') => void;
+  budgets?: BudgetLimit[];
+  onSaveBudget?: (categoryId: string, limitAmount: number) => void;
+  onDeleteBudget?: (categoryId: string) => void;
+  transactions?: Transaction[];
 }
 
 const COLOR_OPTIONS = [
@@ -47,7 +51,11 @@ export function AccountsCategoriesPanel({
   onUpdateCard,
   onDeleteCard,
   theme,
-  onThemeChange
+  onThemeChange,
+  budgets = [],
+  onSaveBudget,
+  onDeleteBudget,
+  transactions = []
 }: AccountsCategoriesPanelProps) {
   
   // Delete confirmation overlay state
@@ -86,6 +94,62 @@ export function AccountsCategoriesPanel({
   const [editingCategoryId, setEditingCategoryId] = useState<string | null>(null);
   const [catIsSub, setCatIsSub] = useState(false);
   const [catParentId, setCatParentId] = useState('none');
+  const [catBudgetLimit, setCatBudgetLimit] = useState('');
+
+  const formatMonthKey = (monthStr: string) => {
+    const [year, month] = monthStr.split('-');
+    const monthNames: { [key: string]: string } = {
+      '01': 'Янв', '02': 'Фев', '03': 'Мар', '04': 'Апр', '05': 'Май', '06': 'Июн',
+      '07': 'Июл', '08': 'Авг', '09': 'Сен', '10': 'Окт', '11': 'Ноя', '12': 'Дек'
+    };
+    return `${monthNames[month] || month} ${year}`;
+  };
+
+  const calculateAverage12Months = (catId?: string | null) => {
+    if (!catId) return { average: 0, totalSum: 0, monthlyDetails: [] };
+    
+    const today = new Date();
+    const months: string[] = [];
+    
+    for (let i = 0; i < 12; i++) {
+      const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
+      const yr = d.getFullYear();
+      const mo = String(d.getMonth() + 1).padStart(2, '0');
+      months.push(`${yr}-${mo}`);
+    }
+    
+    const catExpenses = (transactions || []).filter(t => 
+      t.categoryId === catId && t.type === 'expense'
+    );
+
+    const monthlySums: { [key: string]: number } = {};
+    months.forEach(m => {
+      monthlySums[m] = 0;
+    });
+
+    catExpenses.forEach(t => {
+      if (t.date && t.date.length >= 7) {
+        const transMonth = t.date.substring(0, 7);
+        if (months.includes(transMonth)) {
+          monthlySums[transMonth] += Math.abs(t.amount);
+        }
+      }
+    });
+
+    const totalSum = months.reduce((sum, m) => sum + monthlySums[m], 0);
+    const average = totalSum / 12;
+
+    const monthlyDetails = months.map(m => ({
+      month: m,
+      amount: monthlySums[m]
+    })).reverse(); // chronological
+
+    return {
+      average,
+      totalSum,
+      monthlyDetails
+    };
+  };
 
   // Group categories into parent -> subcategories for layout and select drops
   const getGroupedCategories = () => {
@@ -288,6 +352,8 @@ export function AccountsCategoriesPanel({
       }
     }
 
+    let targetCatId = editingCategoryId;
+
     if (editingCategoryId) {
       onUpdateCategory({
         id: editingCategoryId,
@@ -299,14 +365,27 @@ export function AccountsCategoriesPanel({
       });
       setEditingCategoryId(null);
     } else {
-      onAddCategory({
+      const result = onAddCategory({
         name: finalName,
         icon: finalIcon,
         color: finalColor,
         type: activeCategoryTab,
         quickEntry: catQuickEntry
       });
+      if (typeof result === 'string') {
+        targetCatId = result;
+      }
       setIsAddCategoryOpen(false);
+    }
+
+    // Save or delete budget limit if type is expense
+    if (activeCategoryTab === 'expense' && targetCatId && onSaveBudget && onDeleteBudget) {
+      const cleanLimit = catBudgetLimit.trim();
+      if (cleanLimit && !isNaN(Number(cleanLimit)) && Number(cleanLimit) > 0) {
+        onSaveBudget(targetCatId, Number(cleanLimit));
+      } else {
+        onDeleteBudget(targetCatId);
+      }
     }
 
     // Reset Form
@@ -316,6 +395,7 @@ export function AccountsCategoriesPanel({
     setCatQuickEntry(true);
     setCatIsSub(false);
     setCatParentId('none');
+    setCatBudgetLimit('');
   };
 
   const handleCancelAddCategory = () => {
@@ -326,6 +406,7 @@ export function AccountsCategoriesPanel({
     setCatQuickEntry(true);
     setCatIsSub(false);
     setCatParentId('none');
+    setCatBudgetLimit('');
   };
 
   const handleEditCategory = (cat: Category) => {
@@ -363,6 +444,10 @@ export function AccountsCategoriesPanel({
     setCatIcon(cat.icon);
     setCatColor(cat.color);
     setCatQuickEntry(cat.quickEntry !== false);
+
+    // Fetch budget limit for category
+    const existingBudget = budgets?.find(b => b.categoryId === cat.id);
+    setCatBudgetLimit(existingBudget ? existingBudget.limitAmount.toString() : '');
   };
 
   const handleCancelCategoryEdit = () => {
@@ -373,6 +458,7 @@ export function AccountsCategoriesPanel({
     setCatQuickEntry(true);
     setCatIsSub(false);
     setCatParentId('none');
+    setCatBudgetLimit('');
   };
 
   return (
@@ -772,8 +858,8 @@ export function AccountsCategoriesPanel({
       {/* CARD EDIT MODAL overlay */}
       {editingCardId && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
-          <div className="w-full max-w-md bg-slate-900 border border-white/10 rounded-3xl shadow-2xl overflow-hidden text-left" id="edit-card-modal">
-            <div className="flex items-center justify-between px-6 py-5 border-b border-white/10 bg-white/5">
+          <div className="w-full max-w-md max-h-[85vh] sm:max-h-[90vh] bg-slate-900 border border-white/10 rounded-3xl shadow-2xl overflow-hidden text-left flex flex-col" id="edit-card-modal">
+            <div className="flex items-center justify-between px-6 py-5 border-b border-white/10 bg-white/5 shrink-0">
               <div>
                 <h3 className="text-lg font-display font-extrabold text-white flex items-center gap-2">
                   <CreditCard className="text-teal-400" size={20} />
@@ -790,7 +876,7 @@ export function AccountsCategoriesPanel({
               </button>
             </div>
             
-            <form onSubmit={handleCardSubmit} className="p-6 space-y-4">
+            <form onSubmit={handleCardSubmit} className="p-6 space-y-4 overflow-y-auto flex-1 custom-scrollbar">
               <div className="space-y-4">
                 <div>
                   <label className="block text-[11px] font-semibold text-slate-400 mb-1">Название карты</label>
@@ -859,8 +945,8 @@ export function AccountsCategoriesPanel({
       {/* ACCOUNT EDIT MODAL overlay */}
       {editingAccountId && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
-          <div className="w-full max-w-md bg-slate-900 border border-white/10 rounded-3xl shadow-2xl overflow-hidden text-left" id="edit-account-modal">
-            <div className="flex items-center justify-between px-6 py-5 border-b border-white/10 bg-white/5">
+          <div className="w-full max-w-md max-h-[85vh] sm:max-h-[90vh] bg-slate-900 border border-white/10 rounded-3xl shadow-2xl overflow-hidden text-left flex flex-col" id="edit-account-modal">
+            <div className="flex items-center justify-between px-6 py-5 border-b border-white/10 bg-white/5 shrink-0">
               <div>
                 <h3 className="text-lg font-display font-extrabold text-white flex items-center gap-2">
                   <Wallet className="text-teal-300" size={20} />
@@ -877,7 +963,7 @@ export function AccountsCategoriesPanel({
               </button>
             </div>
             
-            <form onSubmit={handleAccountSubmit} className="p-6 space-y-4">
+            <form onSubmit={handleAccountSubmit} className="p-6 space-y-4 overflow-y-auto flex-1 custom-scrollbar">
               <div className="space-y-4">
                 <div>
                   <label className="block text-[11px] font-semibold text-slate-400 mb-1">Название счета</label>
@@ -975,8 +1061,8 @@ export function AccountsCategoriesPanel({
       {/* CATEGORY EDIT MODAL overlay */}
       {editingCategoryId && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
-          <div className="w-full max-w-md bg-slate-900 border border-white/10 rounded-3xl shadow-2xl overflow-hidden text-left" id="edit-category-modal">
-            <div className="flex items-center justify-between px-6 py-5 border-b border-white/10 bg-white/5">
+          <div className="w-full max-w-md max-h-[85vh] sm:max-h-[90vh] bg-slate-900 border border-white/10 rounded-3xl shadow-2xl overflow-hidden text-left flex flex-col" id="edit-category-modal">
+            <div className="flex items-center justify-between px-6 py-5 border-b border-white/10 bg-white/5 shrink-0">
               <div>
                 <h3 className="text-lg font-display font-extrabold text-white flex items-center gap-2">
                   <PlusCircle className="text-amber-400" size={20} />
@@ -993,7 +1079,7 @@ export function AccountsCategoriesPanel({
               </button>
             </div>
             
-            <form onSubmit={handleCategorySubmit} className="p-6 space-y-4">
+            <form onSubmit={handleCategorySubmit} className="p-6 space-y-4 overflow-y-auto flex-1 custom-scrollbar">
               <div className="space-y-4">
                 <div>
                   <label className="block text-[11px] font-semibold text-slate-400 mb-1">Название категории</label>
@@ -1117,6 +1203,68 @@ export function AccountsCategoriesPanel({
                     </label>
                   </div>
                 </div>
+
+                {activeCategoryTab === 'expense' && (() => {
+                  const avgData = calculateAverage12Months(editingCategoryId);
+                  return (
+                    <div className="pt-2 space-y-3">
+                      <div className="p-3 bg-slate-950/40 border border-white/10 rounded-xl space-y-2">
+                        <label className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                          Месячный лимит (Бюджет)
+                        </label>
+                        <div className="relative">
+                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs font-medium">
+                            ₼
+                          </span>
+                          <input
+                            type="number"
+                            step="any"
+                            min="0"
+                            placeholder="Без лимита (0)"
+                            value={catBudgetLimit}
+                            onChange={(e) => setCatBudgetLimit(e.target.value)}
+                            className="w-full pl-7 pr-3 py-2 bg-slate-950 border border-white/10 rounded-lg text-sm text-slate-200 focus:ring-1 focus:ring-amber-500 font-sans"
+                          />
+                        </div>
+                        <p className="text-[10px] text-slate-450 leading-relaxed">
+                          Введите сумму лимита. Оставьте пустым или введите 0, чтобы сбросить бюджет.
+                        </p>
+                      </div>
+
+                      <div className="p-3 bg-slate-950/45 border border-amber-500/10 rounded-xl space-y-2.5">
+                        <div className="flex justify-between items-center">
+                          <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1">
+                            <TrendingUp size={12} className="text-amber-400 shrink-0" />
+                            Средний расход за 12 месяцев
+                          </span>
+                          <span className="text-xs font-black text-amber-400">
+                            {avgData.average.toFixed(1)} ₼ <span className="text-[10px] text-slate-500 font-normal">/ мес</span>
+                          </span>
+                        </div>
+
+                        <div className="text-[10px] text-slate-350 space-y-2">
+                          <div className="flex justify-between items-center text-slate-400 border-b border-white/5 pb-1.5">
+                            <span>Всего за последние 12 мес:</span>
+                            <span className="font-bold text-slate-200">{avgData.totalSum.toFixed(1)} ₼</span>
+                          </div>
+                          
+                          {/* Mini breakdown of months with spending */}
+                          <div className="space-y-1 max-h-[105px] overflow-y-auto custom-scrollbar pr-1">
+                            <span className="text-[9px] text-slate-500 block font-semibold uppercase tracking-wider">Индивидуальный тренд по месяцам:</span>
+                            {avgData.monthlyDetails.slice(-6).map((det, idx) => (
+                              <div key={idx} className="flex justify-between items-center py-0.5">
+                                <span className="text-slate-400 text-[10px]">{formatMonthKey(det.month)}</span>
+                                <span className={det.amount > 0 ? "font-bold text-slate-300 text-[10px]" : "text-slate-600 text-[10px]"}>
+                                  {det.amount > 0 ? `${det.amount.toFixed(0)} ₼` : '0 ₼'}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })()}
               </div>
 
               <div className="flex gap-3 pt-4 border-t border-white/5">
@@ -1187,8 +1335,8 @@ export function AccountsCategoriesPanel({
       {/* ACCOUNT ADD MODAL overlay */}
       {isAddAccountOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
-          <div className="w-full max-w-md bg-slate-900 border border-white/10 rounded-3xl shadow-2xl overflow-hidden text-left animate-scale-up" id="add-account-modal">
-            <div className="flex items-center justify-between px-6 py-5 border-b border-white/10 bg-white/5">
+          <div className="w-full max-w-md max-h-[85vh] sm:max-h-[90vh] bg-slate-900 border border-white/10 rounded-3xl shadow-2xl overflow-hidden text-left flex flex-col animate-scale-up" id="add-account-modal">
+            <div className="flex items-center justify-between px-6 py-5 border-b border-white/10 bg-white/5 shrink-0">
               <div>
                 <h3 className="text-lg font-display font-extrabold text-white flex items-center gap-2">
                   <Wallet className="text-teal-300" size={20} />
@@ -1205,7 +1353,7 @@ export function AccountsCategoriesPanel({
               </button>
             </div>
             
-            <form onSubmit={handleAccountSubmit} className="p-6 space-y-4">
+            <form onSubmit={handleAccountSubmit} className="p-6 space-y-4 overflow-y-auto flex-1 custom-scrollbar">
               <div className="space-y-4">
                 <div>
                   <label className="block text-[11px] font-semibold text-slate-400 mb-1">Название счета</label>
@@ -1305,8 +1453,8 @@ export function AccountsCategoriesPanel({
       {/* CARD ADD MODAL overlay */}
       {isAddCardOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
-          <div className="w-full max-w-md bg-slate-900 border border-white/10 rounded-3xl shadow-2xl overflow-hidden text-left animate-scale-up" id="add-card-modal">
-            <div className="flex items-center justify-between px-6 py-5 border-b border-white/10 bg-white/5">
+          <div className="w-full max-w-md max-h-[85vh] sm:max-h-[90vh] bg-slate-900 border border-white/10 rounded-3xl shadow-2xl overflow-hidden text-left flex flex-col animate-scale-up" id="add-card-modal">
+            <div className="flex items-center justify-between px-6 py-5 border-b border-white/10 bg-white/5 shrink-0">
               <div>
                 <h3 className="text-lg font-display font-extrabold text-white flex items-center gap-2">
                   <CreditCard className="text-teal-300" size={20} />
@@ -1323,7 +1471,7 @@ export function AccountsCategoriesPanel({
               </button>
             </div>
             
-            <form onSubmit={handleCardSubmit} className="p-6 space-y-4">
+            <form onSubmit={handleCardSubmit} className="p-6 space-y-4 overflow-y-auto flex-1 custom-scrollbar">
               <div className="space-y-4">
                 <div>
                   <label className="block text-[11px] font-semibold text-slate-400 mb-1">Название карты</label>
@@ -1392,8 +1540,8 @@ export function AccountsCategoriesPanel({
       {/* CATEGORY ADD MODAL overlay */}
       {isAddCategoryOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
-          <div className="w-full max-w-md bg-slate-900 border border-white/10 rounded-3xl shadow-2xl overflow-hidden text-left animate-scale-up" id="add-category-modal">
-            <div className="flex items-center justify-between px-6 py-5 border-b border-white/10 bg-white/5">
+          <div className="w-full max-w-md max-h-[85vh] sm:max-h-[90vh] bg-slate-900 border border-white/10 rounded-3xl shadow-2xl overflow-hidden text-left flex flex-col animate-scale-up" id="add-category-modal">
+            <div className="flex items-center justify-between px-6 py-5 border-b border-white/10 bg-white/5 shrink-0">
               <div>
                 <h3 className="text-lg font-display font-extrabold text-white flex items-center gap-2">
                   <PlusCircle className="text-amber-400" size={20} />
@@ -1410,7 +1558,7 @@ export function AccountsCategoriesPanel({
               </button>
             </div>
             
-            <form onSubmit={handleCategorySubmit} className="p-6 space-y-4">
+            <form onSubmit={handleCategorySubmit} className="p-6 space-y-4 overflow-y-auto flex-1 custom-scrollbar">
               <div className="space-y-4">
                 <div>
                   <label className="block text-[11px] font-semibold text-slate-400 mb-1">Название категории</label>
@@ -1536,6 +1684,33 @@ export function AccountsCategoriesPanel({
                     </label>
                   </div>
                 </div>
+
+                {activeCategoryTab === 'expense' && (
+                  <div className="pt-2">
+                    <div className="p-3 bg-slate-950/40 border border-white/10 rounded-xl space-y-2">
+                      <label className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                        Месячный лимит (Бюджет)
+                      </label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs font-medium">
+                          ₼
+                        </span>
+                        <input
+                          type="number"
+                          step="any"
+                          min="0"
+                          placeholder="Без лимита (0)"
+                          value={catBudgetLimit}
+                          onChange={(e) => setCatBudgetLimit(e.target.value)}
+                          className="w-full pl-7 pr-3 py-2 bg-slate-950 border border-white/10 rounded-lg text-sm text-slate-200 focus:ring-1 focus:ring-amber-500 font-sans"
+                        />
+                      </div>
+                      <p className="text-[10px] text-slate-450 leading-relaxed">
+                        Введите сумму лимита. Оставьте поле пустым или введите 0, если лимит не требуется.
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div className="flex gap-3 pt-4 border-t border-white/5">
