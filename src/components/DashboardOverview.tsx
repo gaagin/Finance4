@@ -988,23 +988,48 @@ export function DashboardOverview({
     };
   }, [transactions, categories, donutTimeframe, donutAccount, donutType, categoryGroupingMode]);
 
-  // Determine budget warnings for active month May 2026
+  // Determine budget warnings for active month with support for base budgets & monthly adjustments
   const budgetWarnings = useMemo(() => {
     const warnings: Array<{ category: Category; limit: number; spent: number; percent: number }> = [];
+    const targetMonth = (analyticsTimeframe && analyticsTimeframe.length === 7) ? analyticsTimeframe : '2026-05';
+
+    // Map base budgets & monthly adjustments
+    const baseBudgetsMap = new Map<string, number>();
+    const adjustmentsMap = new Map<string, number>();
 
     budgets.forEach(b => {
-      const cat = categories.find(c => c.id === b.categoryId);
+      const isBase = !b.month || b.month === 'base' || b.month === '';
+      if (isBase) {
+        baseBudgetsMap.set(b.categoryId, b.limitAmount);
+      } else if (b.month === targetMonth) {
+        adjustmentsMap.set(b.categoryId, b.limitAmount);
+      }
+    });
+
+    const activeCategoryIds = new Set([
+      ...baseBudgetsMap.keys(),
+      ...adjustmentsMap.keys()
+    ]);
+
+    activeCategoryIds.forEach(catId => {
+      const cat = categories.find(c => c.id === catId);
       if (!cat) return;
 
+      const baseVal = baseBudgetsMap.get(catId) || 0;
+      const adjVal = adjustmentsMap.get(catId) || 0;
+      const totalLimit = baseVal + adjVal;
+
+      if (totalLimit <= 0) return;
+
       const spent = transactions
-        .filter(t => t.date.startsWith('2026-05') && t.categoryId === b.categoryId)
+        .filter(t => t.date.startsWith(targetMonth) && t.categoryId === catId && t.type === 'expense')
         .reduce((sum, t) => sum + t.amount, 0);
 
-      const percent = (spent / b.limitAmount) * 100;
+      const percent = (spent / totalLimit) * 100;
       if (percent >= 85) {
         warnings.push({
           category: cat,
-          limit: b.limitAmount,
+          limit: totalLimit,
           spent,
           percent
         });
@@ -1012,7 +1037,7 @@ export function DashboardOverview({
     });
 
     return warnings;
-  }, [budgets, categories, transactions]);
+  }, [budgets, categories, transactions, analyticsTimeframe]);
 
   // Donut chart interactive tracker
   const [hoveredDonutSlice, setHoveredDonutSlice] = useState<number | null>(null);

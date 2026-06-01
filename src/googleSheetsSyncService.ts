@@ -397,7 +397,8 @@ export function budgetToRow(b: BudgetLimit): any[] {
   return [
     b.categoryId || '',
     b.limitAmount || 0,
-    b.updatedAt || Date.now()
+    b.updatedAt || Date.now(),
+    b.month || ''
   ];
 }
 
@@ -405,7 +406,8 @@ export function rowToBudget(row: any[]): BudgetLimit {
   return {
     categoryId: String(row[0] || ''),
     limitAmount: parseSafeNumber(row[1], 0),
-    updatedAt: parseSafeTimestamp(row[2], undefined)
+    updatedAt: parseSafeTimestamp(row[2], undefined),
+    month: row[3] ? String(row[3]) : undefined
   };
 }
 
@@ -727,8 +729,8 @@ export async function syncWithGoogleSheets(
     remoteBudgets,
     new Set(deletedIds.budgets),
     globalDeletedBudget,
-    b => b.categoryId,
-    (l, r) => l.limitAmount === r.limitAmount
+    b => b.month ? `${b.categoryId}_${b.month}` : b.categoryId,
+    (l, r) => l.limitAmount === r.limitAmount && l.month === r.month
   );
   addedToSheet.budgets = budgetSync.addedToSheet;
   addedToLocal.budgets = budgetSync.addedToLocal;
@@ -757,7 +759,7 @@ export async function syncWithGoogleSheets(
         'Accounts!A2:G10000',
         'Categories!A2:G10000',
         'Cards!A2:E10000',
-        'Budgets!A2:C10000',
+        'Budgets!A2:D10000',
         'Deletions!A2:C10000'
       ]
     })
@@ -797,9 +799,9 @@ export async function syncWithGoogleSheets(
       ]
     },
     {
-      range: `Budgets!A1:C${budgetSync.merged.length + 1}`,
+      range: `Budgets!A1:D${budgetSync.merged.length + 1}`,
       values: [
-        ["categoryId", "limitAmount", "updatedAt"],
+        ["categoryId", "limitAmount", "updatedAt", "month"],
         ...budgetSync.merged.map(b => budgetToRow(b))
       ]
     },

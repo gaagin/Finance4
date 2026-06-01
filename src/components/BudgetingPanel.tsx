@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import { Transaction, Category, BudgetLimit, formatCategoryDisplayName } from '../types';
+import { Transaction, Category, BudgetLimit, formatCategoryDisplayName, getDynamicTimeframeOptions, formatTimeframeLabel } from '../types';
 import { IconComponent } from './IconComponent';
-import { Plus, Sliders, Trash2, Edit2, AlertCircle, CheckCircle2, TrendingUp, Info, X, AlertTriangle } from 'lucide-react';
+import { Plus, Sliders, Trash2, Edit2, AlertCircle, CheckCircle2, TrendingUp, Info, X, AlertTriangle, Calendar } from 'lucide-react';
 import { SearchableSelect } from './SearchableSelect';
 
 interface BudgetingPanelProps {
   transactions: Transaction[];
   categories: Category[];
   budgets: BudgetLimit[];
-  onSaveBudget: (categoryId: string, amount: number) => void;
-  onDeleteBudget: (categoryId: string) => void;
+  onSaveBudget: (categoryId: string, amount: number, month?: string) => void;
+  onDeleteBudget: (categoryId: string, month?: string) => void;
   theme?: 'light' | 'dark';
 }
 
@@ -21,17 +21,22 @@ export function BudgetingPanel({
   onDeleteBudget,
   theme = 'light'
 }: BudgetingPanelProps) {
+  const [selectedMonth, setSelectedMonth] = useState('2026-05');
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [limitAmount, setLimitAmount] = useState('');
+  const [baseAmountInput, setBaseAmountInput] = useState('');
+  const [adjAmountInput, setAdjAmountInput] = useState('');
   const [isEditing, setIsEditing] = useState<string | null>(null); // holds categoryId being edited
   const [isAddingBudget, setIsAddingBudget] = useState(false);
 
   // Budget delete confirmation state
   const [deleteConfirm, setDeleteConfirm] = useState<{ categoryId: string; categoryName: string } | null>(null);
 
-  // Budget calculations based on May 2026 operations (the "current" month context)
+  // Get dynamic months list for user selection
+  const monthOptions = getDynamicTimeframeOptions(transactions).filter(opt => opt.type === 'month');
+
+  // Budget calculations based on the currently selected month context
   const currentMonthTransactions = transactions.filter(t => {
-    return t.date.startsWith('2026-05') && t.type === 'expense';
+    return t.date.startsWith(selectedMonth) && t.type === 'expense';
   });
 
   const getSpentForCategory = (catId: string) => {
@@ -40,41 +45,97 @@ export function BudgetingPanel({
       .reduce((sum, t) => sum + t.amount, 0);
   };
 
+  // Find all configured budgets
+  // Active composite stats for the selected month
+  const compositeBudgets = React.useMemo(() => {
+    const baseMap = new Map<string, BudgetLimit>();
+    const adjustmentMap = new Map<string, BudgetLimit>();
+
+    budgets.forEach(b => {
+      const isBase = !b.month || b.month === 'base' || b.month === '';
+      if (isBase) {
+        baseMap.set(b.categoryId, b);
+      } else if (b.month === selectedMonth) {
+        adjustmentMap.set(b.categoryId, b);
+      }
+    });
+
+    const configuredCatIds = new Set([
+      ...baseMap.keys(),
+      ...adjustmentMap.keys()
+    ]);
+
+    return Array.from(configuredCatIds).map(catId => {
+      const base = baseMap.get(catId);
+      const adj = adjustmentMap.get(catId);
+      const baseAmount = base ? base.limitAmount : 0;
+      const adjAmount = adj ? adj.limitAmount : 0;
+      const totalAmount = baseAmount + adjAmount;
+
+      return {
+        categoryId: catId,
+        baseBudget: base,
+        adjustmentBudget: adj,
+        baseAmount,
+        adjAmount,
+        totalAmount
+      };
+    });
+  }, [budgets, selectedMonth]);
+
   const expenseCategories = categories.filter(c => c.type === 'expense');
 
-  // Categories that do NOT have a budget limit configured yet
+  // Categories that do NOT have a base budget or adjustment set for the selected month
   const unbudgetedCategories = expenseCategories.filter(
-    cat => !budgets.some(b => b.categoryId === cat.id)
+    cat => !compositeBudgets.some(b => b.categoryId === cat.id)
   );
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedCategory || !limitAmount || isNaN(Number(limitAmount)) || Number(limitAmount) <= 0) {
-      return;
+    const targetCatId = selectedCategory;
+    if (!targetCatId) return;
+
+    // 1. Process Base Budget
+    const cleanBase = baseAmountInput.trim();
+    if (cleanBase && !isNaN(Number(cleanBase)) && Number(cleanBase) > 0) {
+      onSaveBudget(targetCatId, Number(cleanBase), 'base');
+    } else {
+      onDeleteBudget(targetCatId, 'base');
     }
 
-    onSaveBudget(selectedCategory, Number(limitAmount));
+    // 2. Process Monthly Adjustment Budget
+    const cleanAdj = adjAmountInput.trim();
+    if (cleanAdj && !isNaN(Number(cleanAdj)) && Number(cleanAdj) !== 0) {
+      onSaveBudget(targetCatId, Number(cleanAdj), selectedMonth);
+    } else {
+      onDeleteBudget(targetCatId, selectedMonth);
+    }
+
+    // Reset fields
     setSelectedCategory('');
-    setLimitAmount('');
+    setBaseAmountInput('');
+    setAdjAmountInput('');
     setIsEditing(null);
     setIsAddingBudget(false);
   };
 
-  const handleStartEdit = (budget: BudgetLimit) => {
-    setIsEditing(budget.categoryId);
-    setSelectedCategory(budget.categoryId);
-    setLimitAmount(budget.limitAmount.toString());
+  const handleStartEdit = (b: { categoryId: string; baseAmount: number; adjAmount: number }) => {
+    setIsEditing(b.categoryId);
+    setSelectedCategory(b.categoryId);
+    setBaseAmountInput(b.baseAmount > 0 ? b.baseAmount.toString() : '');
+    setAdjAmountInput(b.adjAmount !== 0 ? b.adjAmount.toString() : '');
   };
 
   const handleCancelEdit = () => {
     setIsEditing(null);
     setSelectedCategory('');
-    setLimitAmount('');
+    setBaseAmountInput('');
+    setAdjAmountInput('');
   };
 
   // Aggregated statuses
-  const totalBudgeted = budgets.reduce((sum, b) => sum + b.limitAmount, 0);
-  const totalSpentInBudgeted = budgets.reduce((sum, b) => sum + getSpentForCategory(b.categoryId), 0);
+  const totalBudgeted = compositeBudgets.reduce((sum, item) => sum + Math.max(0, item.totalAmount), 0);
+  const totalSpentInBudgeted = compositeBudgets.reduce((sum, item) => sum + getSpentForCategory(item.categoryId), 0);
 
   return (
     <div className="w-full" id="budgeting-panel-root">
@@ -86,7 +147,7 @@ export function BudgetingPanel({
           : 'bg-white border-slate-200'
       }`}>
         <div>
-          <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b transition-colors duration-200 ${
+          <div className={`flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6 pb-4 border-b transition-colors duration-200 ${
             theme === 'dark' ? 'border-b border-white/5' : 'border-b border-slate-100'
           }`}>
             <div>
@@ -95,10 +156,38 @@ export function BudgetingPanel({
               }`}>Активные бюджетные лимиты</h2>
               <p className={`text-xs ${
                 theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
-              }`}>Свод показателей экономии по категориям за Май 2026</p>
+              }`}>
+                Свод показателей экономии по категориям за <span className="font-semibold text-teal-400">{formatTimeframeLabel(selectedMonth)}</span>
+              </p>
             </div>
             
             <div className="flex flex-wrap items-center gap-3">
+              {/* Month Selector Dropdown */}
+              <div className="relative inline-flex items-center gap-2">
+                <Calendar size={14} className={theme === 'dark' ? 'text-slate-400' : 'text-slate-500'} />
+                <select
+                  value={selectedMonth}
+                  onChange={(e) => setSelectedMonth(e.target.value)}
+                  className={`pl-2 pr-8 py-1.5 rounded-xl border text-xs font-semibold focus:outline-hidden focus:ring-1 focus:ring-teal-400 cursor-pointer appearance-none ${
+                    theme === 'dark'
+                      ? 'bg-slate-950 border-white/10 text-slate-200'
+                      : 'bg-slate-50 border-slate-200 text-slate-700'
+                  }`}
+                  style={{
+                    backgroundImage: `url("data:image/svg+xml;utf8,<svg fill='none' stroke='${theme === 'dark' ? '%2394a3b8' : '%23475569'}' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'><path d='m6 9 6 6 6-6'></path></svg>")`,
+                    backgroundPosition: 'right 0.5rem center',
+                    backgroundSize: '1rem',
+                    backgroundRepeat: 'no-repeat'
+                  }}
+                >
+                  {monthOptions.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               <div className={`flex items-center gap-3 px-4 py-2 rounded-xl border transition-colors ${
                 theme === 'dark'
                   ? 'bg-white/5 border-white/10'
@@ -124,7 +213,7 @@ export function BudgetingPanel({
             </div>
           </div>
 
-          {budgets.length === 0 ? (
+          {compositeBudgets.length === 0 ? (
             <div className="text-center py-12 flex flex-col items-center justify-center">
               <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-3 border transition-colors ${
                 theme === 'dark'
@@ -139,7 +228,7 @@ export function BudgetingPanel({
               <p className={`text-xs max-w-sm mt-1 mb-5 leading-relaxed ${
                 theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
               }`}>
-                Задайте месячный лимит по категориям расходов, чтобы отслеживать перерасходы и экономию.
+                Задайте месячный лимит по категориям расходов для <span className="font-semibold text-teal-400">{formatTimeframeLabel(selectedMonth)}</span>, чтобы отслеживать перерасходы и экономию.
               </p>
               <button
                 onClick={() => setIsAddingBudget(true)}
@@ -151,20 +240,26 @@ export function BudgetingPanel({
             </div>
           ) : (
             <div className="space-y-6 max-h-[380px] lg:max-h-[720px] overflow-y-auto pr-1 custom-scrollbar">
-              {budgets.map(b => {
+              {compositeBudgets.map(b => {
                 const cat = categories.find(c => c.id === b.categoryId);
                 if (!cat) return null;
 
                 const spent = getSpentForCategory(b.categoryId);
-                const percent = b.limitAmount > 0 ? (spent / b.limitAmount) * 100 : 0;
-                const remaining = b.limitAmount - spent;
+                const effectiveLimit = Math.max(0, b.totalAmount);
+                const percent = effectiveLimit > 0 ? (spent / effectiveLimit) * 100 : 0;
+                const remaining = effectiveLimit - spent;
 
                 let progressColor = 'bg-teal-500';
                 let textColor = 'text-teal-400';
                 let badgeStyle = 'bg-teal-500/10 text-teal-300 border-teal-500/20';
                 let statusLabel = 'В норме';
 
-                if (percent >= 100) {
+                if (b.totalAmount <= 0) {
+                  progressColor = 'bg-rose-500/60';
+                  textColor = 'text-rose-400';
+                  badgeStyle = 'bg-rose-500/10 text-rose-300 border-rose-500/25';
+                  statusLabel = 'Лимит равен 0';
+                } else if (percent >= 100) {
                   progressColor = 'bg-rose-500';
                   textColor = 'text-rose-400 font-bold';
                   badgeStyle = 'bg-rose-500/15 text-rose-400 border-rose-500/35';
@@ -234,13 +329,41 @@ export function BudgetingPanel({
                       </div>
                     </div>
 
+                    {/* Composite Budget Breakdown */}
+                    <div className={`mt-2.5 p-2.5 rounded-xl border text-[11px] grid grid-cols-1 xs:grid-cols-3 gap-2 align-middle transition-colors ${
+                      theme === 'dark'
+                        ? 'bg-slate-950/40 border-white/5'
+                        : 'bg-white border-slate-100'
+                    }`}>
+                      <div>
+                        <span className={theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}>Регулярный:</span>{' '}
+                        <span className={`font-semibold ${theme === 'dark' ? 'text-slate-200' : 'text-slate-705'}`}>
+                          {b.baseAmount > 0 ? `${b.baseAmount} ₼` : 'нет'}
+                        </span>
+                      </div>
+                      <div>
+                        <span className={theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}>Сдвиг в {formatTimeframeLabel(selectedMonth)}:</span>{' '}
+                        <span className={`font-bold ${
+                          b.adjAmount > 0 ? 'text-teal-400' : b.adjAmount < 0 ? 'text-rose-400' : (theme === 'dark' ? 'text-slate-500' : 'text-slate-400')
+                        }`}>
+                          {b.adjAmount > 0 ? `+${b.adjAmount} ₼` : b.adjAmount < 0 ? `${b.adjAmount} ₼` : 'нет'}
+                        </span>
+                      </div>
+                      <div className="xs:text-right">
+                        <span className={theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}>Итоговый лимит:</span>{' '}
+                        <span className="font-extrabold text-amber-500 font-display">
+                          {b.totalAmount} ₼
+                        </span>
+                      </div>
+                    </div>
+
                     {/* Progress Bar */}
                     <div className="mt-4">
                       <div className={`flex justify-between text-xs font-display font-medium mb-1.5 ${
                         theme === 'dark' ? 'text-slate-400' : 'text-slate-505'
                       }`}>
                         <span>Расход: <b className={theme === 'dark' ? 'text-white' : 'text-slate-800'}>{spent.toFixed(1)} ₼</b></span>
-                        <span>Лимит: <b className={theme === 'dark' ? 'text-white' : 'text-slate-800'}>{b.limitAmount.toFixed(0)} ₼</b></span>
+                        <span>Лимит: <b className={theme === 'dark' ? 'text-white' : 'text-slate-800'}>{effectiveLimit.toFixed(0)} ₼</b></span>
                       </div>
 
                       <div className={`w-full h-2.5 rounded-full overflow-hidden border ${
@@ -253,8 +376,10 @@ export function BudgetingPanel({
                       </div>
 
                       <div className="flex items-center justify-between text-[11px] mt-1.5">
-                        <span className={theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}>Использовано {percent.toFixed(0)}%</span>
-                        {remaining >= 0 ? (
+                        <span className={theme === 'dark' ? 'text-slate-400' : 'text-slate-505'}>Использовано {percent.toFixed(0)}%</span>
+                        {b.totalAmount <= 0 ? (
+                          <span className="text-rose-400 font-semibold">Лимит не задан или равен 0</span>
+                        ) : remaining >= 0 ? (
                           <span className="text-emerald-500 font-semibold">Осталось: +{remaining.toFixed(1)} ₼</span>
                         ) : (
                           <span className="text-rose-500 font-bold">Превышение: {Math.abs(remaining).toFixed(1)} ₼</span>
@@ -270,8 +395,6 @@ export function BudgetingPanel({
 
 
       </div>
-
-      {/* BUDGET EDIT MODAL */}
       {isEditing && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fade-in">
           <div className={`w-full max-w-sm border rounded-3xl shadow-2xl overflow-hidden text-left transition-colors duration-200 ${
@@ -289,11 +412,11 @@ export function BudgetingPanel({
                   theme === 'dark' ? 'text-white' : 'text-slate-900'
                 }`}>
                   <Sliders className="text-teal-400" size={18} />
-                  Редактировать бюджетный лимит
+                  Управление бюджетом
                 </h3>
                 <p className={`text-xs mt-1 ${
                   theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
-                }`}>Корректировка месячной суммы</p>
+                }`}>Настройка базового лимита и сдвига</p>
               </div>
               <button
                 type="button"
@@ -330,11 +453,12 @@ export function BudgetingPanel({
                 </select>
               </div>
 
+              {/* Standard Regular Budget */}
               <div>
                 <label className={`block text-[11px] font-semibold mb-1.5 uppercase tracking-wider ${
                   theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
                 }`}>
-                  Новый Лимит (₼, AZN)
+                  Регулярный бюджет на каждый месяц (₼, AZN)
                 </label>
                 <div className="relative">
                   <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 font-display font-medium text-xs">
@@ -343,17 +467,64 @@ export function BudgetingPanel({
                   <input
                     type="number"
                     step="any"
-                    min="1"
-                    placeholder="Сумма"
-                    value={limitAmount}
-                    onChange={(e) => setLimitAmount(e.target.value)}
+                    placeholder="Пример: 500"
+                    value={baseAmountInput}
+                    onChange={(e) => setBaseAmountInput(e.target.value)}
                     className={`w-full pl-8 pr-4 py-2.5 border rounded-xl text-sm font-display font-bold focus:outline-hidden focus:ring-2 focus:ring-teal-400 ${
                       theme === 'dark'
                         ? 'bg-slate-950/60 border-white/10 text-slate-200'
-                        : 'bg-slate-50 border-slate-200 text-slate-800'
+                        : 'bg-slate-50 border-slate-200 text-slate-850'
                     }`}
-                    required
                   />
+                </div>
+                <p className="text-[10px] text-slate-400 mt-1 leading-relaxed">
+                  Будет автоматически повторяться каждый месяц по умолчанию
+                </p>
+              </div>
+
+              {/* Monthly Adjustment Budget */}
+              <div>
+                <label className={`block text-[11px] font-semibold mb-1.5 uppercase tracking-wider ${
+                  theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
+                }`}>
+                  Сдвиг (плюс/минус) в {formatTimeframeLabel(selectedMonth)} (₼)
+                </label>
+                <div className="relative">
+                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 font-display font-medium text-xs">
+                    ₼
+                  </span>
+                  <input
+                    type="number"
+                    step="any"
+                    placeholder="Пример: +150 или -50"
+                    value={adjAmountInput}
+                    onChange={(e) => setAdjAmountInput(e.target.value)}
+                    className={`w-full pl-8 pr-4 py-2.5 border rounded-xl text-sm font-display font-bold focus:outline-hidden focus:ring-2 focus:ring-teal-400 ${
+                      theme === 'dark'
+                        ? 'bg-slate-950/60 border-white/10 text-slate-200'
+                        : 'bg-slate-50 border-slate-200 text-slate-850'
+                    }`}
+                  />
+                </div>
+                <p className="text-[10px] text-slate-400 mt-1 leading-relaxed">
+                  Увеличит или уменьшит бюджет только для выбранного месяца
+                </p>
+              </div>
+
+              {/* Total Calculation */}
+              <div className={`p-3 rounded-xl border text-[11px] transition-colors ${
+                theme === 'dark' ? 'bg-white/5 border-white/5' : 'bg-slate-50 border-slate-100'
+              }`}>
+                <div className="flex justify-between items-center animate-none">
+                  <span className={theme === 'dark' ? 'text-slate-400' : 'text-slate-505'}>Расчет итоговой суммы:</span>
+                  <span className="font-extrabold text-amber-500 font-display text-sm">
+                    {(Number(baseAmountInput) || 0) + (Number(adjAmountInput) || 0)} ₼
+                  </span>
+                </div>
+                <div className="mt-1 flex gap-2 text-slate-500 text-[10px]">
+                  <span>Регулярный: {Number(baseAmountInput) || 0}₼</span>
+                  <span>➕</span>
+                  <span>Сдвиг: {Number(adjAmountInput) || 0}₼</span>
                 </div>
               </div>
 
@@ -405,14 +576,15 @@ export function BudgetingPanel({
                 </h3>
                 <p className={`text-xs mt-1 ${
                   theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
-                }`}>Ограничение трат по категории</p>
+                }`}>Ограничение расходов по категории</p>
               </div>
               <button
                 type="button"
                 onClick={() => {
                   setIsAddingBudget(false);
                   setSelectedCategory('');
-                  setLimitAmount('');
+                  setBaseAmountInput('');
+                  setAdjAmountInput('');
                 }}
                 className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
                   theme === 'dark'
@@ -467,11 +639,12 @@ export function BudgetingPanel({
                 />
               </div>
 
+              {/* Standard Regular Budget */}
               <div>
                 <label className={`block text-[11px] font-semibold mb-1.5 uppercase tracking-wider ${
                   theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
                 }`}>
-                  Месячный Лимит (₼, AZN)
+                  Регулярный бюджет на каждый месяц (₼, AZN)
                 </label>
                 <div className="relative">
                   <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 font-display font-medium text-xs">
@@ -480,17 +653,64 @@ export function BudgetingPanel({
                   <input
                     type="number"
                     step="any"
-                    min="1"
-                    placeholder="Например: 250"
-                    value={limitAmount}
-                    onChange={(e) => setLimitAmount(e.target.value)}
+                    placeholder="Пример: 250"
+                    value={baseAmountInput}
+                    onChange={(e) => setBaseAmountInput(e.target.value)}
                     className={`w-full pl-8 pr-4 py-2.5 border rounded-xl text-sm font-display font-bold focus:outline-hidden focus:ring-2 focus:ring-teal-400 ${
                       theme === 'dark'
                         ? 'bg-slate-950/60 border-white/10 text-slate-200'
-                        : 'bg-slate-55 border-slate-200 text-slate-800'
+                        : 'bg-slate-50 border-slate-200 text-slate-805'
                     }`}
-                    required
                   />
+                </div>
+                <p className="text-[10px] text-slate-400 mt-1 leading-relaxed">
+                  Будет автоматически повторяться каждый месяц по умолчанию
+                </p>
+              </div>
+
+              {/* Monthly Adjustment Budget */}
+              <div>
+                <label className={`block text-[11px] font-semibold mb-1.5 uppercase tracking-wider ${
+                  theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
+                }`}>
+                  Сдвиг (плюс/минус) в {formatTimeframeLabel(selectedMonth)} (₼)
+                </label>
+                <div className="relative">
+                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 font-display font-medium text-xs">
+                    ₼
+                  </span>
+                  <input
+                    type="number"
+                    step="any"
+                    placeholder="Пример: +100 или -50"
+                    value={adjAmountInput}
+                    onChange={(e) => setAdjAmountInput(e.target.value)}
+                    className={`w-full pl-8 pr-4 py-2.5 border rounded-xl text-sm font-display font-bold focus:outline-hidden focus:ring-2 focus:ring-teal-400 ${
+                      theme === 'dark'
+                        ? 'bg-slate-950/60 border-white/10 text-slate-200'
+                        : 'bg-slate-50 border-slate-200 text-slate-805'
+                    }`}
+                  />
+                </div>
+                <p className="text-[10px] text-slate-400 mt-1 leading-relaxed">
+                  Увеличит или уменьшит бюджет только для выбранного месяца
+                </p>
+              </div>
+
+              {/* Total Calculation */}
+              <div className={`p-3 rounded-xl border text-[11px] transition-colors ${
+                theme === 'dark' ? 'bg-white/5 border-white/5' : 'bg-slate-50 border-slate-100'
+              }`}>
+                <div className="flex justify-between items-center">
+                  <span className={theme === 'dark' ? 'text-slate-400' : 'text-slate-505'}>Расчет итоговой суммы:</span>
+                  <span className="font-extrabold text-amber-500 font-display text-sm">
+                    {(Number(baseAmountInput) || 0) + (Number(adjAmountInput) || 0)} ₼
+                  </span>
+                </div>
+                <div className="mt-1 flex gap-2 text-slate-500 text-[10px]">
+                  <span>Регулярный: {Number(baseAmountInput) || 0}₼</span>
+                  <span>➕</span>
+                  <span>Сдвиг: {Number(adjAmountInput) || 0}₼</span>
                 </div>
               </div>
 
@@ -502,7 +722,8 @@ export function BudgetingPanel({
                   onClick={() => {
                     setIsAddingBudget(false);
                     setSelectedCategory('');
-                    setLimitAmount('');
+                    setBaseAmountInput('');
+                    setAdjAmountInput('');
                   }}
                   className={`flex-1 py-2 text-xs font-semibold rounded-xl border transition-colors cursor-pointer ${
                     theme === 'dark'
@@ -543,9 +764,9 @@ export function BudgetingPanel({
               <p className={`text-xs leading-relaxed text-balance text-center ${
                 theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
               }`}>
-                Вы действительно хотите удалить бюджетный лимит для категории <span className={`font-semibold ${
+                Вы действительно хотите удалить бюджетные лимиты (включая базовый регулярный лимит и любые месячные сдвиги) для категории <span className={`font-semibold ${
                   theme === 'dark' ? 'text-white' : 'text-slate-800'
-                }`}>"{deleteConfirm.categoryName}"</span>? Статистика расходов не исчезнет, но лимит больше не будет отслеживаться.
+                }`}>"{deleteConfirm.categoryName}"</span>? Статистика расходов не исчезнет, но лимиты будут полностью убраны.
               </p>
             </div>
 
@@ -566,12 +787,13 @@ export function BudgetingPanel({
               <button
                 type="button"
                 onClick={() => {
-                  onDeleteBudget(deleteConfirm.categoryId);
+                  onDeleteBudget(deleteConfirm.categoryId, 'base');
+                  onDeleteBudget(deleteConfirm.categoryId, selectedMonth);
                   setDeleteConfirm(null);
                 }}
                 className="flex-1 py-2.5 bg-rose-500 hover:bg-rose-600 text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-md shadow-rose-500/10 hover:shadow-rose-500/20 cursor-pointer"
               >
-                Удалить
+                Удалить всё
               </button>
             </div>
           </div>

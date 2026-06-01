@@ -45,6 +45,7 @@ export interface Transaction {
 export interface BudgetLimit {
   categoryId: string;
   limitAmount: number;
+  month?: string; // YYYY-MM (e.g., '2026-06')
   updatedAt?: number;
 }
 

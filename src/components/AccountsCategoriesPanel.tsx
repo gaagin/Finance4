@@ -19,8 +19,8 @@ interface AccountsCategoriesPanelProps {
   theme: 'light' | 'dark';
   onThemeChange: (theme: 'light' | 'dark') => void;
   budgets?: BudgetLimit[];
-  onSaveBudget?: (categoryId: string, limitAmount: number) => void;
-  onDeleteBudget?: (categoryId: string) => void;
+  onSaveBudget?: (categoryId: string, limitAmount: number, month?: string) => void;
+  onDeleteBudget?: (categoryId: string, month?: string) => void;
   transactions?: Transaction[];
 }
 
@@ -382,9 +382,9 @@ export function AccountsCategoriesPanel({
     if (activeCategoryTab === 'expense' && targetCatId && onSaveBudget && onDeleteBudget) {
       const cleanLimit = catBudgetLimit.trim();
       if (cleanLimit && !isNaN(Number(cleanLimit)) && Number(cleanLimit) > 0) {
-        onSaveBudget(targetCatId, Number(cleanLimit));
+        onSaveBudget(targetCatId, Number(cleanLimit), '2026-05');
       } else {
-        onDeleteBudget(targetCatId);
+        onDeleteBudget(targetCatId, '2026-05');
       }
     }
 
@@ -446,7 +446,7 @@ export function AccountsCategoriesPanel({
     setCatQuickEntry(cat.quickEntry !== false);
 
     // Fetch budget limit for category
-    const existingBudget = budgets?.find(b => b.categoryId === cat.id);
+    const existingBudget = budgets?.find(b => b.categoryId === cat.id && (!b.month || b.month === '2026-05'));
     setCatBudgetLimit(existingBudget ? existingBudget.limitAmount.toString() : '');
   };
 

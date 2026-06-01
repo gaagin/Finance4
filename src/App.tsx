@@ -1280,13 +1280,13 @@ export default function App() {
   };
 
   // --- BUSINESS LOGIC: BUDGETS ---
-  const handleSaveBudget = (categoryId: string, limitAmount: number) => {
-    const exists = data.budgets.some(b => b.categoryId === categoryId);
+  const handleSaveBudget = (categoryId: string, limitAmount: number, month?: string) => {
+    const exists = data.budgets.some(b => b.categoryId === categoryId && b.month === month);
     let newBudgets;
     if (exists) {
-      newBudgets = data.budgets.map(b => b.categoryId === categoryId ? { categoryId, limitAmount, updatedAt: Date.now() } : b);
+      newBudgets = data.budgets.map(b => (b.categoryId === categoryId && b.month === month) ? { categoryId, limitAmount, month, updatedAt: Date.now() } : b);
     } else {
-      newBudgets = [...data.budgets, { categoryId, limitAmount, updatedAt: Date.now() }];
+      newBudgets = [...data.budgets, { categoryId, limitAmount, month, updatedAt: Date.now() }];
     }
 
     const nextData = {
@@ -1298,12 +1298,13 @@ export default function App() {
     saveToFirebaseDirectly(nextData);
   };
 
-  const handleDeleteBudget = (categoryId: string) => {
+  const handleDeleteBudget = (categoryId: string, month?: string) => {
     const nextData = {
       ...data,
-      budgets: data.budgets.filter(b => b.categoryId !== categoryId)
+      budgets: data.budgets.filter(b => !(b.categoryId === categoryId && b.month === month))
     };
-    trackDeletedIds('milli_deleted_budget_ids', categoryId);
+    const deleteId = month ? `${categoryId}_${month}` : categoryId;
+    trackDeletedIds('milli_deleted_budget_ids', deleteId);
     setData(nextData);
     saveToFirebaseDirectly(nextData);
   };
