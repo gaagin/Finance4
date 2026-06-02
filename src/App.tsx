@@ -864,22 +864,26 @@ export default function App() {
   // --- BUSINESS LOGIC: CATEGORIES ---
   const handleAddCategory = (newCat: Omit<Category, 'id'>) => {
     const newId = `cat-${Date.now()}`;
-    const nextData = {
-      ...data,
-      categories: [...data.categories, { ...newCat, id: newId, updatedAt: Date.now() }]
-    };
-    setData(nextData);
-    saveToFirebaseDirectly(nextData);
+    setData(prev => {
+      const nextData = {
+        ...prev,
+        categories: [...prev.categories, { ...newCat, id: newId, updatedAt: Date.now() }]
+      };
+      saveToFirebaseDirectly(nextData);
+      return nextData;
+    });
     return newId;
   };
 
   const handleUpdateCategory = (updatedCat: Category) => {
-    const nextData = {
-      ...data,
-      categories: data.categories.map(c => c.id === updatedCat.id ? { ...updatedCat, updatedAt: Date.now() } : c)
-    };
-    setData(nextData);
-    saveToFirebaseDirectly(nextData);
+    setData(prev => {
+      const nextData = {
+        ...prev,
+        categories: prev.categories.map(c => c.id === updatedCat.id ? { ...updatedCat, updatedAt: Date.now() } : c)
+      };
+      saveToFirebaseDirectly(nextData);
+      return nextData;
+    });
   };
 
   const handleDeleteCategory = (id: string) => {
@@ -888,13 +892,15 @@ export default function App() {
       alert(`Невозможно удалить эту категорию. К ней привязано ${count} операций расходов или доходов.`);
       return;
     }
-    const nextData = {
-      ...data,
-      categories: data.categories.filter(c => c.id !== id)
-    };
+    setData(prev => {
+      const nextData = {
+        ...prev,
+        categories: prev.categories.filter(c => c.id !== id)
+      };
+      saveToFirebaseDirectly(nextData);
+      return nextData;
+    });
     trackDeletedIds('milli_deleted_category_ids', id);
-    setData(nextData);
-    saveToFirebaseDirectly(nextData);
   };
 
   // --- BUSINESS LOGIC: TRANSACTIONS & BALANCES (Delta Adjustment Engine) ---
@@ -1281,32 +1287,49 @@ export default function App() {
 
   // --- BUSINESS LOGIC: BUDGETS ---
   const handleSaveBudget = (categoryId: string, limitAmount: number, month?: string) => {
-    const exists = data.budgets.some(b => b.categoryId === categoryId && b.month === month);
-    let newBudgets;
-    if (exists) {
-      newBudgets = data.budgets.map(b => (b.categoryId === categoryId && b.month === month) ? { categoryId, limitAmount, month, updatedAt: Date.now() } : b);
-    } else {
-      newBudgets = [...data.budgets, { categoryId, limitAmount, month, updatedAt: Date.now() }];
-    }
+    const isBase = (m?: string) => !m || m === 'base' || m === '';
 
-    const nextData = {
-      ...data,
-      budgets: newBudgets
-    };
+    setData(prev => {
+      const exists = prev.budgets.some(b => 
+        b.categoryId === categoryId && 
+        (isBase(month) ? isBase(b.month) : b.month === month)
+      );
 
-    setData(nextData);
-    saveToFirebaseDirectly(nextData);
+      let newBudgets;
+      if (exists) {
+        newBudgets = prev.budgets.map(b => 
+          (b.categoryId === categoryId && (isBase(month) ? isBase(b.month) : b.month === month)) 
+            ? { ...b, limitAmount, month: month || 'base', updatedAt: Date.now() } 
+            : b
+        );
+      } else {
+        newBudgets = [...prev.budgets, { categoryId, limitAmount, month: month || 'base', updatedAt: Date.now() }];
+      }
+
+      const nextData = {
+        ...prev,
+        budgets: newBudgets
+      };
+      saveToFirebaseDirectly(nextData);
+      return nextData;
+    });
   };
 
   const handleDeleteBudget = (categoryId: string, month?: string) => {
-    const nextData = {
-      ...data,
-      budgets: data.budgets.filter(b => !(b.categoryId === categoryId && b.month === month))
-    };
+    const isBase = (m?: string) => !m || m === 'base' || m === '';
+
+    setData(prev => {
+      const nextData = {
+        ...prev,
+        budgets: prev.budgets.filter(b => 
+          !(b.categoryId === categoryId && (isBase(month) ? isBase(b.month) : b.month === month))
+        )
+      };
+      saveToFirebaseDirectly(nextData);
+      return nextData;
+    });
     const deleteId = month ? `${categoryId}_${month}` : categoryId;
     trackDeletedIds('milli_deleted_budget_ids', deleteId);
-    setData(nextData);
-    saveToFirebaseDirectly(nextData);
   };
 
   // Reset Helper to let user easily restore original HoneyMoney imported state
