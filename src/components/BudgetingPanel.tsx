@@ -453,12 +453,12 @@ export function BudgetingPanel({
       </div>
       {isEditing && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fade-in">
-          <div className={`w-full max-w-sm border rounded-3xl shadow-2xl overflow-hidden text-left transition-colors duration-200 ${
+          <div className={`w-full max-w-sm max-h-[85vh] sm:max-h-[90vh] flex flex-col border rounded-3xl shadow-2xl overflow-hidden text-left transition-colors duration-200 ${
             theme === 'dark'
               ? 'bg-slate-900 border-white/10'
               : 'bg-white border-slate-200'
           }`}>
-            <div className={`flex items-center justify-between px-6 py-5 border-b transition-colors duration-200 ${
+            <div className={`flex items-center justify-between px-5 py-4 border-b shrink-0 transition-colors duration-200 ${
               theme === 'dark'
                 ? 'border-white/10 bg-white/5'
                 : 'border-slate-100 bg-slate-50'
@@ -487,7 +487,7 @@ export function BudgetingPanel({
               </button>
             </div>
             
-            <form onSubmit={handleSubmit} className="p-6 space-y-4">
+            <form onSubmit={handleSubmit} className="p-5 overflow-y-auto custom-scrollbar space-y-3.5 flex-1">
               <div>
                 <label className={`block text-[11px] font-semibold mb-1.5 uppercase tracking-wider ${
                   theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
@@ -672,12 +672,12 @@ export function BudgetingPanel({
       {/* BUDGET ADD MODAL */}
       {isAddingBudget && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fade-in" id="add-budget-modal">
-          <div className={`w-full max-w-sm border rounded-3xl shadow-2xl overflow-hidden text-left transition-colors duration-200 ${
+          <div className={`w-full max-w-sm max-h-[85vh] sm:max-h-[90vh] flex flex-col border rounded-3xl shadow-2xl overflow-hidden text-left transition-colors duration-200 ${
             theme === 'dark'
               ? 'bg-slate-900 border-white/10'
               : 'bg-white border-slate-200'
           }`}>
-            <div className={`flex items-center justify-between px-6 py-5 border-b transition-colors duration-200 ${
+            <div className={`flex items-center justify-between px-5 py-4 border-b shrink-0 transition-colors duration-200 ${
               theme === 'dark'
                 ? 'border-white/10 bg-white/5'
                 : 'border-slate-100 bg-slate-50'
@@ -711,7 +711,7 @@ export function BudgetingPanel({
               </button>
             </div>
             
-            <form onSubmit={handleSubmit} className="p-6 space-y-4">
+            <form onSubmit={handleSubmit} className="p-5 overflow-y-auto custom-scrollbar space-y-3.5 flex-1">
               <div>
                 <label className={`block text-[11px] font-semibold mb-1.5 uppercase tracking-wider ${
                   theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
