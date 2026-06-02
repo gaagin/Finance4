@@ -305,7 +305,7 @@ export function BudgetingPanel({
               </button>
             </div>
           ) : (
-            <div className={`border rounded-2xl overflow-hidden divide-y max-h-[380px] lg:max-h-[720px] overflow-y-auto custom-scrollbar ${
+            <div className={`border rounded-2xl overflow-hidden divide-y max-h-[550px] xs:max-h-[620px] sm:max-h-[680px] lg:max-h-[780px] overflow-y-auto custom-scrollbar ${
               theme === 'dark'
                 ? 'bg-slate-950/40 border-white/10 divide-white/10'
                 : 'bg-white border-slate-200/80 divide-slate-100'
