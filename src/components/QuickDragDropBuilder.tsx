@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Account, Category, Transaction, formatCategoryDisplayName, BudgetLimit } from '../types';
+import { Account, Category, Transaction, formatCategoryDisplayName, BudgetLimit, getCurrentMonthYyyymm } from '../types';
 import { IconComponent } from './IconComponent';
 import { Wallet, HelpCircle, CornerRightDown, Plus, X, Sparkles, Check, ChevronDown, ArrowRight, Search, SlidersHorizontal, ChevronLeft, ChevronRight, CreditCard, FileText } from 'lucide-react';
 
@@ -786,7 +786,7 @@ export function QuickDragDropBuilder({
               {expenseCategories.map(cat => {
                 const isOver = dragOverCategoryId === cat.id;
 
-                const targetMonth = (timeframe && timeframe.length === 7) ? timeframe : '2026-05';
+                const targetMonth = (timeframe && timeframe.length === 7) ? timeframe : getCurrentMonthYyyymm();
                 
                 // Get budget limits
                 let baseVal = 0;
@@ -903,7 +903,7 @@ export function QuickDragDropBuilder({
                 {incomeCategories.map(cat => {
                   const isOver = dragOverCategoryId === cat.id;
 
-                  const targetMonth = (timeframe && timeframe.length === 7) ? timeframe : '2026-05';
+                  const targetMonth = (timeframe && timeframe.length === 7) ? timeframe : getCurrentMonthYyyymm();
                   const incomeSpent = transactions
                     .filter(t => t.date.startsWith(targetMonth) && t.categoryId === cat.id && t.type === 'income')
                     .reduce((sum, t) => sum + t.amount, 0);

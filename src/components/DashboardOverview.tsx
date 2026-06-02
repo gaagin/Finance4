@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useRef } from 'react';
-import { Transaction, Category, Account, BudgetLimit, formatCategoryDisplayName, getDynamicTimeframeOptions, formatTimeframeLabel, filterTransactionByTimeframe } from '../types';
+import { Transaction, Category, Account, BudgetLimit, formatCategoryDisplayName, getDynamicTimeframeOptions, formatTimeframeLabel, filterTransactionByTimeframe, getCurrentMonthYyyymm } from '../types';
 import { IconComponent } from './IconComponent';
 import { Wallet, ArrowUpRight, ArrowDownLeft, TrendingUp, AlertTriangle, Filter, Calendar, HelpCircle, FileSpreadsheet, Download, RefreshCw, LogIn, LogOut, CheckCircle, AlertCircle, ArrowUpDown, SlidersHorizontal, X, Edit2 } from 'lucide-react';
 import { exportToGoogleSheets } from '../googleSheetsService';
@@ -99,7 +99,7 @@ export function DashboardOverview({
 
   // Dynamic Charts Filtering
   const [analyticsTimeframe, setAnalyticsTimeframe] = useState<string>(
-    () => getSavedTimeframe('milli_analytics_timeframe', '2026-05')
+    () => getSavedTimeframe('milli_analytics_timeframe', getCurrentMonthYyyymm())
   );
   const [analyticsAccount, setAnalyticsAccount] = useState<string>(
     () => localStorage.getItem('milli_analytics_account') || 'all'
@@ -107,7 +107,7 @@ export function DashboardOverview({
 
   // Local discrete filters for each individual chart card
   const [lineTimeframe, setLineTimeframe] = useState<string>(
-    () => getSavedTimeframe('milli_line_timeframe', '2026-05')
+    () => getSavedTimeframe('milli_line_timeframe', getCurrentMonthYyyymm())
   );
   const [lineAccount, setLineAccount] = useState<string>(
     () => localStorage.getItem('milli_line_account') || 'all'
@@ -130,7 +130,7 @@ export function DashboardOverview({
     () => localStorage.getItem('milli_donut_account') || 'all'
   );
   const [donutTimeframe, setDonutTimeframe] = useState<string>(
-    () => getSavedTimeframe('milli_donut_timeframe', '2026-05')
+    () => getSavedTimeframe('milli_donut_timeframe', getCurrentMonthYyyymm())
   );
   const [donutType, setDonutType] = useState<'expense' | 'income'>(
     () => (localStorage.getItem('milli_donut_type') as any) || 'expense'
@@ -991,7 +991,7 @@ export function DashboardOverview({
   // Determine budget warnings for active month with support for base budgets & monthly adjustments
   const budgetWarnings = useMemo(() => {
     const warnings: Array<{ category: Category; limit: number; spent: number; percent: number }> = [];
-    const targetMonth = (analyticsTimeframe && analyticsTimeframe.length === 7) ? analyticsTimeframe : '2026-05';
+    const targetMonth = (analyticsTimeframe && analyticsTimeframe.length === 7) ? analyticsTimeframe : getCurrentMonthYyyymm();
 
     // Map base budgets & monthly adjustments
     const baseBudgetsMap = new Map<string, number>();

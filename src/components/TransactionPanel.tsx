@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Transaction, Category, Account, TransactionType, BankCard, formatCategoryDisplayName, getDynamicTimeframeOptions, formatTimeframeLabel, filterTransactionByTimeframe } from '../types';
+import { Transaction, Category, Account, TransactionType, BankCard, formatCategoryDisplayName, getDynamicTimeframeOptions, formatTimeframeLabel, filterTransactionByTimeframe, getCurrentMonthYyyymm } from '../types';
 import { IconComponent } from './IconComponent';
 import { PlusCircle, Edit2, Trash2, Search, Filter, Calendar, CreditCard, Tag, ArrowUpRight, ArrowDownLeft, X, ArrowUpDown, Info, ChevronDown, ChevronUp } from 'lucide-react';
 import { SearchableSelect } from './SearchableSelect';
@@ -264,9 +264,15 @@ export function TransactionPanel({
   const [filterType, setFilterType] = useState<'all' | 'expense' | 'income' | 'transfer'>(() => (localStorage.getItem('milli_filter_type') as any) || 'all');
   const [filterAccount, setFilterAccount] = useState(() => localStorage.getItem('milli_filter_account') || 'all');
   const [filterCategory, setFilterCategory] = useState(() => localStorage.getItem('milli_filter_category') || 'all');
-  const [filterDateRange, setFilterDateRange] = useState<string>(() => getSavedTimeframe('milli_filter_date_range', '2026-05'));
-  const [customStartDate, setCustomStartDate] = useState(() => localStorage.getItem('milli_filter_custom_start_date') || '2026-05-01');
-  const [customEndDate, setCustomEndDate] = useState(() => localStorage.getItem('milli_filter_custom_end_date') || '2026-05-31');
+  const [filterDateRange, setFilterDateRange] = useState<string>(() => getSavedTimeframe('milli_filter_date_range', getCurrentMonthYyyymm()));
+  const [customStartDate, setCustomStartDate] = useState(() => localStorage.getItem('milli_filter_custom_start_date') || `${getCurrentMonthYyyymm()}-01`);
+  const [customEndDate, setCustomEndDate] = useState(() => {
+    const saved = localStorage.getItem('milli_filter_custom_end_date');
+    if (saved) return saved;
+    const currentM = getCurrentMonthYyyymm();
+    const daysInMonth = currentM.endsWith('-02') ? '28' : (['-04', '-06', '-09', '-11'].some(x => currentM.endsWith(x)) ? '30' : '31');
+    return `${currentM}-${daysInMonth}`;
+  });
   const [isFiltersExpanded, setIsFiltersExpanded] = useState(() => localStorage.getItem('milli_filters_expanded') === 'true');
 
   useEffect(() => {
@@ -311,7 +317,7 @@ export function TransactionPanel({
     if (filterType !== 'all') count++;
     if (filterAccount !== 'all') count++;
     if (filterCategory !== 'all') count++;
-    if (filterDateRange !== 'may' && filterDateRange !== '2026-05') count++;
+    if (filterDateRange !== 'may' && filterDateRange !== '2026-05' && filterDateRange !== getCurrentMonthYyyymm()) count++;
     return count;
   }, [filterType, filterAccount, filterCategory, filterDateRange]);
 

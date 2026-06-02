@@ -112,6 +112,15 @@ export function formatTimeframeLabel(value: string): string {
   return value;
 }
 
+export function getCurrentMonthYyyymm(): string {
+  const now = new Date();
+  const year = now.getFullYear();
+  // Ensure that if the current year is less than 2026 (e.g. 2025), we treat 2026-06 as the active month because the workspace datasets are in 2026
+  const targetYear = year < 2026 ? 2026 : year;
+  const targetMonth = year < 2026 ? '06' : String(now.getMonth() + 1).padStart(2, '0');
+  return `${targetYear}-${targetMonth}`;
+}
+
 export function getDynamicTimeframeOptions(transactions: Transaction[]): TimeframeOption[] {
   const options: TimeframeOption[] = [];
   
@@ -129,13 +138,11 @@ export function getDynamicTimeframeOptions(transactions: Transaction[]): Timefra
   });
   
   // 2. Add current month to ensure it is always present
-  const now = new Date();
-  const currentYear = now.getFullYear();
-  const currentMonthNum = String(now.getMonth() + 1).padStart(2, '0');
-  const currentYyyymm = `${currentYear}-${currentMonthNum}`;
+  const currentYyyymm = getCurrentMonthYyyymm();
   monthSet.add(currentYyyymm);
   
-  // Guarantee seed months exist
+  // Guarantee seed months exist in 2026
+  monthSet.add('2026-06');
   monthSet.add('2026-05');
   monthSet.add('2026-04');
   
@@ -153,7 +160,7 @@ export function getDynamicTimeframeOptions(transactions: Transaction[]): Timefra
   // Assemble
   options.push({ value: 'all', label: 'Всё время (С 2022)', type: 'all' });
   
-  const currentYearStr = String(currentYear);
+  const currentYearStr = currentYyyymm.split('-')[0];
   sortedMonths.forEach(m => {
     const monthYear = m.split('-')[0];
     if (monthYear === currentYearStr) {

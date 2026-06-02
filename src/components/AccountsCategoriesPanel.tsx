@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Account, Category, Transaction, TransactionType, BankCard, formatCategoryDisplayName, BudgetLimit } from '../types';
+import { Account, Category, Transaction, TransactionType, BankCard, formatCategoryDisplayName, BudgetLimit, getCurrentMonthYyyymm } from '../types';
 import { IconComponent, AVAILABLE_ICONS } from './IconComponent';
 import { Plus, Trash2, Edit2, Wallet, PlusCircle, Check, Info, CreditCard, Sun, Moon, X, AlertTriangle, TrendingUp } from 'lucide-react';
 
@@ -381,10 +381,11 @@ export function AccountsCategoriesPanel({
     // Save or delete budget limit if type is expense
     if (activeCategoryTab === 'expense' && targetCatId && onSaveBudget && onDeleteBudget) {
       const cleanLimit = catBudgetLimit.trim();
+      const activeMonth = getCurrentMonthYyyymm();
       if (cleanLimit && !isNaN(Number(cleanLimit)) && Number(cleanLimit) > 0) {
-        onSaveBudget(targetCatId, Number(cleanLimit), '2026-05');
+        onSaveBudget(targetCatId, Number(cleanLimit), activeMonth);
       } else {
-        onDeleteBudget(targetCatId, '2026-05');
+        onDeleteBudget(targetCatId, activeMonth);
       }
     }
 
@@ -446,7 +447,7 @@ export function AccountsCategoriesPanel({
     setCatQuickEntry(cat.quickEntry !== false);
 
     // Fetch budget limit for category
-    const existingBudget = budgets?.find(b => b.categoryId === cat.id && (!b.month || b.month === '2026-05'));
+    const existingBudget = budgets?.find(b => b.categoryId === cat.id && (!b.month || b.month === getCurrentMonthYyyymm()));
     setCatBudgetLimit(existingBudget ? existingBudget.limitAmount.toString() : '');
   };
 

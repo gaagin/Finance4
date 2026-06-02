@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Transaction, Category, BudgetLimit, formatCategoryDisplayName, getDynamicTimeframeOptions, formatTimeframeLabel } from '../types';
+import { Transaction, Category, BudgetLimit, formatCategoryDisplayName, getDynamicTimeframeOptions, formatTimeframeLabel, getCurrentMonthYyyymm } from '../types';
 import { IconComponent } from './IconComponent';
 import { Plus, Sliders, Trash2, Edit2, AlertCircle, CheckCircle2, TrendingUp, Info, X, AlertTriangle, Calendar } from 'lucide-react';
 import { SearchableSelect } from './SearchableSelect';
@@ -21,7 +21,7 @@ export function BudgetingPanel({
   onDeleteBudget,
   theme = 'light'
 }: BudgetingPanelProps) {
-  const [selectedMonth, setSelectedMonth] = useState('2026-05');
+  const [selectedMonth, setSelectedMonth] = useState(() => getCurrentMonthYyyymm());
   const [selectedCategory, setSelectedCategory] = useState('');
   const [baseAmountInput, setBaseAmountInput] = useState('');
   const [adjAmountInput, setAdjAmountInput] = useState('');
