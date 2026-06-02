@@ -175,6 +175,19 @@ export function DashboardOverview({
 
   const [hoveredGroupType, setHoveredGroupType] = useState<'ordinary' | 'savings' | 'debt' | 'hidden' | null>(null);
   const [activeGroupMenuId, setActiveGroupMenuId] = useState<string | null>(null);
+  const [activeActionsAccountId, setActiveActionsAccountId] = useState<string | null>(null);
+
+  // Close mobile action overlay on click outside
+  React.useEffect(() => {
+    if (!activeActionsAccountId) return;
+    const handleOutsideClick = () => {
+      setActiveActionsAccountId(null);
+    };
+    document.addEventListener('pointerdown', handleOutsideClick);
+    return () => {
+      document.removeEventListener('pointerdown', handleOutsideClick);
+    };
+  }, [activeActionsAccountId]);
 
   // Close group menu if clicked outside
   React.useEffect(() => {
@@ -1734,25 +1747,39 @@ export function DashboardOverview({
         <div className="w-full mb-8" id="honeymoney-panels-container">
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
-              <div className="bg-slate-950/40 rounded-2xl p-3 sm:p-4 border border-white/5 flex flex-col justify-between" id="honey-expenses-panel">
+              <div className={`rounded-2xl p-3 sm:p-4 border flex flex-col justify-between transition-all duration-200 ${
+                theme === 'dark' 
+                  ? 'bg-slate-950/40 border-white/5 text-slate-200' 
+                  : 'bg-white border-slate-200/80 shadow-xs text-slate-800'
+              }`} id="honey-expenses-panel">
                 <div className="min-w-0">
-                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/5 pb-2 mb-3.5">
+                  <div className={`flex flex-wrap items-center justify-between gap-2 border-b pb-2 mb-3.5 ${
+                    theme === 'dark' ? 'border-white/5' : 'border-slate-100'
+                  }`}>
                     <div className="flex flex-wrap items-baseline gap-1.5 min-w-0">
-                      <h4 className="font-display font-black text-xs text-slate-350 uppercase tracking-wider">Расходы</h4>
-                      <span className="font-mono text-xs sm:text-sm font-black text-rose-450 select-all whitespace-nowrap">
+                      <h4 className={`font-display font-black text-xs uppercase tracking-wider ${
+                        theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
+                      }`}>Расходы</h4>
+                      <span className={`font-mono text-xs sm:text-sm font-black select-all whitespace-nowrap ${
+                        theme === 'dark' ? 'text-rose-400' : 'text-rose-600'
+                      }`}>
                         -{Math.round(expensesParentBreakdown.total).toLocaleString('ru-RU')} ₼
                       </span>
                     </div>
                     
-                    <div className="flex items-center gap-1.5 shrink-0">
+                    <div className="flex items-center gap-1.5 shrink-0 animate-fade-in">
                       {/* Категории vs Подкатегории Switcher */}
-                      <div className="flex bg-white/5 rounded-lg p-0.5 border border-white/5 shrink-0">
+                      <div className={`flex rounded-lg p-0.5 border shrink-0 ${
+                        theme === 'dark' ? 'bg-white/5 border-white/5' : 'bg-slate-100 border-slate-200'
+                      }`}>
                         <button
                           onClick={() => setExpensesGrouping('parent')}
-                          className={`text-[9.5px] font-black px-2 py-1 rounded-md transition-all cursor-pointer whitespace-nowrap ${
+                          className={`text-[10px] font-bold px-2.5 py-1 rounded-md transition-all cursor-pointer whitespace-nowrap ${
                             expensesGrouping === 'parent'
-                              ? 'bg-rose-500 text-white'
-                              : 'text-slate-400 hover:text-white'
+                              ? 'bg-rose-500 text-white shadow-xs'
+                              : theme === 'dark' 
+                                ? 'text-slate-400 hover:text-white' 
+                                : 'text-slate-650 hover:text-slate-900'
                           }`}
                           title="Показать основные родительские категории"
                         >
@@ -1760,10 +1787,12 @@ export function DashboardOverview({
                         </button>
                         <button
                           onClick={() => setExpensesGrouping('sub')}
-                          className={`text-[9.5px] font-black px-2 py-1 rounded-md transition-all cursor-pointer whitespace-nowrap ${
+                          className={`text-[10px] font-bold px-2.5 py-1 rounded-md transition-all cursor-pointer whitespace-nowrap ${
                             expensesGrouping === 'sub'
-                              ? 'bg-rose-500 text-white'
-                              : 'text-slate-400 hover:text-white'
+                              ? 'bg-rose-500 text-white shadow-xs'
+                              : theme === 'dark' 
+                                ? 'text-slate-400 hover:text-white' 
+                                : 'text-slate-650 hover:text-slate-900'
                           }`}
                           title="Показать детальные подкатегории"
                         >
@@ -1772,13 +1801,17 @@ export function DashboardOverview({
                       </div>
 
                       {/* Treemap vs List Switcher */}
-                      <div className="flex items-center bg-white/5 rounded-lg p-0.5 border border-white/5">
+                      <div className={`flex items-center rounded-lg p-0.5 border ${
+                        theme === 'dark' ? 'bg-white/5 border-white/5' : 'bg-slate-100 border-slate-200'
+                      }`}>
                         <button
                           onClick={() => setExpensesView('treemap')}
                           className={`p-1 rounded-md transition-colors cursor-pointer ${
                             expensesView === 'treemap'
-                              ? 'bg-rose-500 text-white'
-                              : 'text-slate-400 hover:text-slate-200'
+                              ? 'bg-rose-500 text-white shadow-xs'
+                              : theme === 'dark' 
+                                ? 'text-slate-400 hover:text-slate-200' 
+                                : 'text-slate-600 hover:text-slate-850'
                           }`}
                           title="Отобразить в виде плиток (Treemap)"
                         >
@@ -1790,8 +1823,10 @@ export function DashboardOverview({
                           onClick={() => setExpensesView('list')}
                           className={`p-1 rounded-md transition-colors cursor-pointer ${
                             expensesView === 'list'
-                              ? 'bg-rose-500 text-white'
-                              : 'text-slate-400 hover:text-slate-200'
+                              ? 'bg-rose-500 text-white shadow-xs'
+                              : theme === 'dark' 
+                                ? 'text-slate-400 hover:text-slate-200' 
+                                : 'text-slate-600 hover:text-slate-850'
                           }`}
                           title="Отобразить в виде списка"
                         >
@@ -1808,10 +1843,16 @@ export function DashboardOverview({
                   ) : (
                     <div>
                       <div className="flex justify-between items-center mb-3 px-1">
-                        <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-450">
+                        <span className={`text-[10px] font-extrabold uppercase tracking-wider ${
+                          theme === 'dark' ? 'text-slate-450' : 'text-slate-500'
+                        }`}>
                           {expensesGrouping === 'parent' ? 'Категории (Основные)' : 'Подкатегории (Детализация)'}
                         </span>
-                        <span className="font-mono text-[10px] text-rose-350 font-bold bg-rose-500/10 px-1.5 py-0.5 rounded">
+                        <span className={`font-mono text-[10px] font-bold px-1.5 py-0.5 rounded ${
+                          theme === 'dark'
+                            ? 'text-rose-300 bg-rose-500/10'
+                            : 'text-rose-600 bg-rose-550/10'
+                        }`}>
                           {(expensesGrouping === 'parent' ? expensesParentBreakdown : expensesSubBreakdown).list.length} классов
                         </span>
                       </div>
@@ -1830,30 +1871,51 @@ export function DashboardOverview({
                           timeframe={analyticsTimeframe}
                         />
                       ) : (
-                        <div className="space-y-2.5 max-h-[315px] overflow-y-auto pr-1 select-none custom-scrollbar">
+                        <div className="space-y-3.5 max-h-[315px] overflow-y-auto pr-1 select-none custom-scrollbar py-1">
                           {(expensesGrouping === 'parent' ? expensesParentBreakdown : expensesSubBreakdown).list.map((item) => {
                             const barWidth = item.percentage;
                             return (
                               <div 
                                 key={item.category.id} 
                                 onClick={() => setSelectedCategoryTransactions({ category: item.category, type: 'expense' })}
-                                className="group min-w-0 cursor-pointer hover:bg-white/5 p-1 -m-1 rounded-lg transition-all"
+                                className={`group min-w-0 cursor-pointer p-1.5 -m-1 rounded-xl transition-all ${
+                                  theme === 'dark' ? 'hover:bg-white/5' : 'hover:bg-slate-50'
+                                }`}
                                 title="Посмотреть транзакции"
                               >
-                                <div className="flex items-center justify-between text-[11px] mb-0.5 gap-3 min-w-0">
-                                  <span className="font-bold text-slate-200 flex items-center gap-1.5 min-w-0">
-                                    <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: item.category.color }} />
-                                    <span className="truncate">{formatCategoryDisplayName(item.category.name)}</span>
+                                <div className="flex items-center justify-between gap-3 min-w-0">
+                                  <span className="flex items-center gap-2 min-w-0">
+                                    <span 
+                                      className="w-2 h-2 rounded-full shrink-0 shadow-xs" 
+                                      style={{ backgroundColor: item.category.color }} 
+                                    />
+                                    <span className={`text-[13px] font-bold font-sans truncate ${
+                                      theme === 'dark' ? 'text-slate-205' : 'text-slate-800'
+                                    }`}>
+                                      {formatCategoryDisplayName(item.category.name)}
+                                    </span>
                                   </span>
-                                  <span className="font-mono font-bold text-rose-350 select-all shrink-0 whitespace-nowrap pl-1 flex items-center gap-1.5">
-                                    <span className="text-[9px] text-slate-450 font-black bg-white/5 px-1 py-0.5 rounded-sm">{(item.percentage || 0).toFixed(1)}%</span>
-                                    <span>-{Math.round(item.amount).toLocaleString('ru-RU')} ₼</span>
+                                  <span className="font-sans font-bold flex items-center gap-1.5 shrink-0 whitespace-nowrap ml-auto">
+                                    <span className={`text-[10px] font-extrabold px-1.5 py-0.5 rounded tracking-tight ${
+                                      theme === 'dark'
+                                        ? 'text-slate-400 bg-white/5 group-hover:bg-white/10'
+                                        : 'text-slate-500 bg-slate-100 group-hover:bg-slate-200/70'
+                                    }`}>
+                                      {(item.percentage || 0).toFixed(1)}%
+                                    </span>
+                                    <span className={`text-xs sm:text-[13px] font-black ${
+                                      theme === 'dark' ? 'text-slate-200' : 'text-slate-900'
+                                    }`}>
+                                      -{Math.round(item.amount).toLocaleString('ru-RU')} ₼
+                                    </span>
                                   </span>
                                 </div>
-                                <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
+                                <div className={`w-full mt-1.5 h-[3px] rounded-full overflow-hidden ${
+                                  theme === 'dark' ? 'bg-white/5' : 'bg-slate-100/60'
+                                }`}>
                                   <div
                                     style={{ width: `${barWidth}%` }}
-                                    className="h-full bg-rose-500 rounded-full transition-all duration-500 group-hover:bg-rose-450"
+                                    className="h-full bg-rose-500 rounded-full transition-all duration-500 group-hover:bg-rose-600"
                                   />
                                 </div>
                               </div>
@@ -1867,24 +1929,38 @@ export function DashboardOverview({
               </div>
 
               {/* PANEL 2: INCOMES (ДОХОДЫ) */}
-              <div className="bg-slate-950/40 rounded-2xl p-3 sm:p-4 border border-white/5 flex flex-col justify-between animate-fade-in" id="honey-incomes-panel">
+              <div className={`rounded-2xl p-3 sm:p-4 border flex flex-col justify-between animate-fade-in transition-all duration-200 ${
+                theme === 'dark' 
+                  ? 'bg-slate-950/40 border-white/5 text-slate-200' 
+                  : 'bg-white border-slate-200/80 shadow-xs text-slate-800'
+              }`} id="honey-incomes-panel">
                 <div className="min-w-0">
-                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/5 pb-2 mb-3.5">
+                  <div className={`flex flex-wrap items-center justify-between gap-2 border-b pb-2 mb-3.5 ${
+                    theme === 'dark' ? 'border-white/5' : 'border-slate-100'
+                  }`}>
                     <div className="flex flex-wrap items-baseline gap-1.5 min-w-0">
-                      <h4 className="font-display font-black text-xs text-slate-330 uppercase tracking-wider">Доходы</h4>
-                      <span className="font-mono text-xs sm:text-sm font-black text-emerald-400 select-all whitespace-nowrap">
+                      <h4 className={`font-display font-black text-xs uppercase tracking-wider ${
+                        theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
+                      }`}>Доходы</h4>
+                      <span className={`font-mono text-xs sm:text-sm font-black select-all whitespace-nowrap ${
+                        theme === 'dark' ? 'text-emerald-450' : 'text-emerald-600'
+                      }`}>
                         +{Math.round(incomesParentBreakdown.total).toLocaleString('ru-RU')} ₼
                       </span>
                     </div>
                     
-                    <div className="flex items-center gap-1.5 shrink-0">
-                      <div className="flex items-center bg-white/5 rounded-lg p-0.5 border border-white/5">
+                    <div className="flex items-center gap-1.5 shrink-0 animate-fade-in">
+                      <div className={`flex items-center rounded-lg p-0.5 border ${
+                        theme === 'dark' ? 'bg-white/5 border-white/5' : 'bg-slate-100 border-slate-200'
+                      }`}>
                         <button
                           onClick={() => setIncomesView('treemap')}
                           className={`p-1 rounded-md transition-colors cursor-pointer ${
                             incomesView === 'treemap'
-                              ? 'bg-emerald-500 text-white'
-                              : 'text-slate-400 hover:text-slate-200'
+                              ? 'bg-emerald-500 text-white shadow-xs'
+                              : theme === 'dark' 
+                                ? 'text-slate-400 hover:text-slate-200' 
+                                : 'text-slate-600 hover:text-slate-800'
                           }`}
                           title="Отобразить в виде плиток (Treemap)"
                         >
@@ -1896,8 +1972,10 @@ export function DashboardOverview({
                           onClick={() => setIncomesView('list')}
                           className={`p-1 rounded-md transition-colors cursor-pointer ${
                             incomesView === 'list'
-                              ? 'bg-emerald-500 text-white'
-                              : 'text-slate-400 hover:text-slate-200'
+                              ? 'bg-emerald-500 text-white shadow-xs'
+                              : theme === 'dark' 
+                                ? 'text-slate-400 hover:text-slate-200' 
+                                : 'text-slate-600 hover:text-slate-800'
                           }`}
                           title="Отобразить в виде списка"
                         >
@@ -1914,8 +1992,14 @@ export function DashboardOverview({
                   ) : (
                     <div>
                       <div className="flex justify-between items-center mb-3 px-1">
-                        <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-450">Категории (Основные)</span>
-                        <span className="font-mono text-[10px] text-emerald-350 font-bold bg-emerald-500/10 px-1.5 py-0.5 rounded">
+                        <span className={`text-[10px] font-extrabold uppercase tracking-wider ${
+                          theme === 'dark' ? 'text-slate-450' : 'text-slate-500'
+                        }`}>Категории (Основные)</span>
+                        <span className={`font-mono text-[10px] font-bold px-1.5 py-0.5 rounded ${
+                          theme === 'dark'
+                            ? 'text-emerald-300 bg-emerald-500/10'
+                            : 'text-emerald-600 bg-emerald-550/10'
+                        }`}>
                           {incomesParentBreakdown.list.length} классов
                         </span>
                       </div>
@@ -1934,30 +2018,51 @@ export function DashboardOverview({
                           timeframe={analyticsTimeframe}
                         />
                       ) : (
-                        <div className="space-y-2.5 max-h-[315px] overflow-y-auto pr-1 select-none custom-scrollbar">
+                        <div className="space-y-3.5 max-h-[315px] overflow-y-auto pr-1 select-none custom-scrollbar py-1">
                           {incomesParentBreakdown.list.map((item) => {
                             const barWidth = item.percentage;
                             return (
                               <div 
                                 key={item.category.id} 
                                 onClick={() => setSelectedCategoryTransactions({ category: item.category, type: 'income' })}
-                                className="group min-w-0 cursor-pointer hover:bg-white/5 p-1 -m-1 rounded-lg transition-all"
+                                className={`group min-w-0 cursor-pointer p-1.5 -m-1 rounded-xl transition-all ${
+                                  theme === 'dark' ? 'hover:bg-white/5' : 'hover:bg-slate-50'
+                                }`}
                                 title="Посмотреть транзакции"
                               >
-                                <div className="flex items-center justify-between text-[11px] mb-0.5 gap-3 min-w-0">
-                                  <span className="font-bold text-slate-200 flex items-center gap-1.5 min-w-0">
-                                    <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: item.category.color }} />
-                                    <span className="truncate">{formatCategoryDisplayName(item.category.name)}</span>
+                                <div className="flex items-center justify-between gap-3 min-w-0">
+                                  <span className="flex items-center gap-2 min-w-0">
+                                    <span 
+                                      className="w-2 h-2 rounded-full shrink-0 shadow-xs" 
+                                      style={{ backgroundColor: item.category.color }} 
+                                    />
+                                    <span className={`text-[13px] font-bold font-sans truncate ${
+                                      theme === 'dark' ? 'text-slate-205' : 'text-slate-800'
+                                    }`}>
+                                      {formatCategoryDisplayName(item.category.name)}
+                                    </span>
                                   </span>
-                                  <span className="font-mono font-bold text-emerald-450 select-all shrink-0 whitespace-nowrap pl-1 flex items-center gap-1.5">
-                                    <span className="text-[9px] text-slate-450 font-black bg-white/5 px-1 py-0.5 rounded-sm">{(item.percentage || 0).toFixed(1)}%</span>
-                                    <span>+{Math.round(item.amount).toLocaleString('ru-RU')} ₼</span>
+                                  <span className="font-sans font-bold flex items-center gap-1.5 shrink-0 whitespace-nowrap ml-auto">
+                                    <span className={`text-[10px] font-extrabold px-1.5 py-0.5 rounded tracking-tight ${
+                                      theme === 'dark'
+                                        ? 'text-slate-400 bg-white/5 group-hover:bg-white/10'
+                                        : 'text-slate-500 bg-slate-100 group-hover:bg-slate-200/70'
+                                    }`}>
+                                      {(item.percentage || 0).toFixed(1)}%
+                                    </span>
+                                    <span className={`text-xs sm:text-[13px] font-black ${
+                                      theme === 'dark' ? 'text-slate-200' : 'text-slate-900'
+                                    }`}>
+                                      +{Math.round(item.amount).toLocaleString('ru-RU')} ₼
+                                    </span>
                                   </span>
                                 </div>
-                                <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
+                                <div className={`w-full mt-1.5 h-[3px] rounded-full overflow-hidden ${
+                                  theme === 'dark' ? 'bg-white/5' : 'bg-slate-100/60'
+                                }`}>
                                   <div
                                     style={{ width: `${barWidth}%` }}
-                                    className="h-full bg-emerald-500 rounded-full transition-all duration-500 group-hover:bg-emerald-450"
+                                    className="h-full bg-emerald-500 rounded-full transition-all duration-500 group-hover:bg-emerald-600"
                                   />
                                 </div>
                               </div>
@@ -1971,12 +2076,22 @@ export function DashboardOverview({
               </div>
 
               {/* PANEL 3: ACCOUNTS (СЧЕТА) */}
-              <div className="bg-slate-950/40 rounded-2xl p-3 sm:p-4 border border-white/5 text-left flex flex-col justify-between" id="honey-accounts-panel">
+              <div className={`rounded-2xl p-3 sm:p-4 border text-left flex flex-col justify-between transition-all duration-200 ${
+                theme === 'dark' 
+                  ? 'bg-slate-950/40 border-white/5 text-slate-205' 
+                  : 'bg-white border-slate-200/80 shadow-xs text-slate-800'
+              }`} id="honey-accounts-panel">
                 <div className="min-w-0">
-                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/5 pb-2 mb-3.5">
+                  <div className={`flex flex-wrap items-center justify-between gap-2 border-b pb-2 mb-3.5 ${
+                    theme === 'dark' ? 'border-white/5' : 'border-slate-100'
+                  }`}>
                     <div className="flex flex-wrap items-baseline gap-1.5 min-w-0">
-                      <h4 className="font-display font-black text-xs text-slate-330 uppercase tracking-wider">Счета</h4>
-                      <span className="font-mono text-xs sm:text-sm font-black text-teal-300 select-all whitespace-nowrap">
+                      <h4 className={`font-display font-black text-xs uppercase tracking-wider ${
+                        theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
+                      }`}>Счета</h4>
+                      <span className={`font-mono text-xs sm:text-sm font-black select-all whitespace-nowrap ${
+                        theme === 'dark' ? 'text-teal-300' : 'text-teal-600 font-extrabold'
+                      }`}>
                         {Math.round(accounts.reduce((sum, a) => sum + a.balance, 0)).toLocaleString('ru-RU')} ₼
                       </span>
                     </div>
@@ -1984,10 +2099,12 @@ export function DashboardOverview({
                     <div className="flex items-center gap-1.5 shrink-0">
                       <button
                         onClick={() => setAccountsSortMode(prev => prev === 'desc' ? 'custom' : 'desc')}
-                        className={`text-[9px] font-bold px-2 py-1 rounded-lg transition-colors cursor-pointer uppercase tracking-wider flex items-center gap-1 ${
+                        className={`text-[9.5px] font-extrabold px-2 py-1 rounded-lg transition-colors cursor-pointer uppercase tracking-wider flex items-center gap-1 ${
                           accountsSortMode === 'desc'
-                            ? 'bg-teal-400 text-slate-950 font-black'
-                            : 'bg-white/5 hover:bg-white/10 text-teal-300 hover:text-white'
+                            ? 'bg-teal-500 text-slate-950 font-black'
+                            : theme === 'dark' 
+                              ? 'bg-white/5 hover:bg-white/10 text-teal-300 hover:text-white' 
+                              : 'bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900'
                         }`}
                         title={accountsSortMode === 'desc' ? 'Сортировка по балансу (от большего к меньшему)' : 'Своя ручная сортировка'}
                       >
@@ -1996,7 +2113,11 @@ export function DashboardOverview({
 
                       <button
                         onClick={() => onQuickNavigate('accounts-categories')}
-                        className="text-[9px] font-bold bg-white/5 hover:bg-white/10 text-teal-300 hover:text-white px-2 py-1 rounded-lg transition-colors cursor-pointer uppercase tracking-wider"
+                        className={`text-[9.5px] font-extrabold px-2 py-1 rounded-lg transition-colors cursor-pointer uppercase tracking-wider ${
+                          theme === 'dark'
+                            ? 'bg-white/5 hover:bg-white/10 text-teal-300 hover:text-white'
+                            : 'bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900'
+                        }`}
                       >
                         [+] Настроить
                       </button>
@@ -2078,13 +2199,21 @@ export function DashboardOverview({
                           {/* Group Header */}
                           <div 
                             onClick={() => setIsOrdinaryGroupExpanded(!isOrdinaryGroupExpanded)}
-                            className="flex items-center justify-between py-1 px-1.5 hover:bg-white/5 rounded-lg cursor-pointer transition-colors text-xs font-bold font-display tracking-wide uppercase select-none text-slate-400 gap-2 min-w-0"
+                            className={`flex items-center justify-between py-1 px-1.5 rounded-lg cursor-pointer transition-all text-xs font-bold font-display tracking-wide uppercase select-none gap-2 min-w-0 ${
+                              theme === 'dark'
+                                ? 'text-slate-400 hover:bg-white/5'
+                                : 'text-slate-500 hover:bg-slate-100'
+                            }`}
                           >
                             <div className="flex items-center gap-1.5 min-w-0">
                               <span>{isOrdinaryGroupExpanded ? '▼' : '►'}</span>
-                              <span className="text-slate-300 truncate font-semibold">Обычные</span>
+                              <span className={`truncate font-semibold ${
+                                theme === 'dark' ? 'text-slate-205' : 'text-slate-755 font-black'
+                              }`}>Обычные</span>
                             </div>
-                            <div className="font-mono text-[10px] sm:text-[11px] font-extrabold flex items-center gap-1 text-slate-355 leading-none shrink-0 whitespace-nowrap pl-1">
+                            <div className={`font-mono text-[10px] sm:text-[11px] font-extrabold flex items-center gap-1 leading-none shrink-0 whitespace-nowrap pl-1 ${
+                              theme === 'dark' ? 'text-slate-300' : 'text-slate-705'
+                            }`}>
                               <span>{Math.round(ordinarySumVal).toLocaleString('ru-RU')} ₼</span>
                               {kopilkaBalVal > 0 && (
                                 <span className="text-orange-400 flex items-center gap-0.5">
@@ -2102,29 +2231,7 @@ export function DashboardOverview({
                                 const isDraggingGroup = draggedAccountId && dragGroupType === 'ordinary';
                                 let translationY = 0;
                                 let transitionStyle = 'transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1)';
-                                
-                                if (isDraggingThis) {
-                                  translationY = currentY - startY;
-                                  transitionStyle = 'none';
-                                } else if (isDraggingGroup) {
-                                  const ITEM_HEIGHT = 35;
-                                  const diffY = currentY - startY;
-                                  const offset = Math.round(diffY / ITEM_HEIGHT);
-                                  let targetIndex = draggedInitialIndex + offset;
-                                  targetIndex = Math.max(0, Math.min(ordinaryAccs.length - 1, targetIndex));
-                                  
-                                  if (targetIndex > draggedInitialIndex) {
-                                    if (index > draggedInitialIndex && index <= targetIndex) {
-                                      translationY = -ITEM_HEIGHT;
-                                    }
-                                  } else if (targetIndex < draggedInitialIndex) {
-                                    if (index < draggedInitialIndex && index >= targetIndex) {
-                                      translationY = ITEM_HEIGHT;
-                                    }
-                                  }
-                                }
-
-                                return (
+                                   return (
                                   <div 
                                     key={acc.id}
                                     onPointerDown={(e) => handleAccountPointerDown(e, acc.id, index, 'ordinary', ordinaryAccsIds)}
@@ -2135,28 +2242,40 @@ export function DashboardOverview({
                                       transition: transitionStyle,
                                       touchAction: draggedAccountId === acc.id ? 'none' : 'pan-y',
                                     }}
-                                    className={`group flex items-center justify-between p-1.5 rounded-lg text-xs gap-3 min-w-0 select-none cursor-grab active:cursor-grabbing ${
+                                    className={`group relative overflow-hidden flex items-center justify-between p-1.5 rounded-lg text-xs gap-3 min-w-0 select-none cursor-grab active:cursor-grabbing ${
                                       isDraggingThis 
-                                        ? 'bg-teal-500/10 border border-teal-500/35 shadow-xl shadow-teal-500/10 relative z-50 scale-[1.033] transition-none!' 
-                                        : 'hover:bg-white/5 border border-transparent'
+                                        ? theme === 'dark'
+                                          ? 'bg-teal-500/15 border border-teal-500/35 shadow-xl shadow-teal-500/10 relative z-50 scale-[1.033] transition-all'
+                                          : 'bg-teal-50 border border-teal-300 shadow-lg relative z-50 scale-[1.033] transition-all'
+                                        : theme === 'dark'
+                                          ? 'hover:bg-white/5 border border-transparent'
+                                          : 'hover:bg-slate-100/70 border border-transparent'
                                     }`}
                                   >
-                                    <span className="font-semibold text-slate-400 group-hover:text-white flex items-center gap-1.5 min-w-0 pointer-events-none">
+                                    <span className={`font-semibold flex items-center gap-1.5 min-w-0 pointer-events-none ${
+                                      theme === 'dark'
+                                        ? 'text-slate-400 group-hover:text-white'
+                                        : 'text-slate-600 group-hover:text-slate-900 font-medium'
+                                    }`}>
                                       <span className="w-1 h-3 bg-amber-400 rounded-xs shrink-0" />
                                       <span className="truncate">{acc.name}</span>
                                     </span>
                                     <div className="flex items-center gap-2 shrink-0 pointer-events-none">
-                                      <span className="font-mono font-bold text-slate-200 select-all whitespace-nowrap">
+                                      <span className={`font-mono font-bold select-all whitespace-nowrap ${
+                                        theme === 'dark' ? 'text-slate-200' : 'text-slate-800'
+                                      }`}>
                                         {Math.round(acc.balance).toLocaleString('ru-RU')} ₼
                                       </span>
+                                      
+                                      {/* Desktop only buttons */}
                                       <div 
                                         onPointerDown={(e) => e.stopPropagation()}
-                                        className="opacity-75 md:opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 sm:gap-1.5 pr-1 shrink-0 pointer-events-auto"
+                                        className="hidden md:flex items-center gap-1 pr-1 shrink-0 pointer-events-auto"
                                       >
                                         <button 
                                           onPointerDown={(e) => e.stopPropagation()}
                                           onClick={() => onQuickNavigate('accounts-categories')} 
-                                          className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-white/10 active:scale-90 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer text-[11px]" 
+                                          className="w-7 h-7 flex items-center justify-center hover:bg-white/10 active:scale-90 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer text-[11px]" 
                                           title="Редактировать"
                                         >
                                           ✏️
@@ -2164,7 +2283,7 @@ export function DashboardOverview({
                                         <button 
                                           onPointerDown={(e) => e.stopPropagation()}
                                           onClick={() => onQuickNavigate('transactions')} 
-                                          className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-white/10 active:scale-90 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer text-[11px]" 
+                                          className="w-7 h-7 flex items-center justify-center hover:bg-white/10 active:scale-90 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer text-[11px]" 
                                           title="Журнал"
                                         >
                                           📋
@@ -2175,12 +2294,80 @@ export function DashboardOverview({
                                             e.stopPropagation();
                                             setActiveGroupMenuId(acc.id);
                                           }} 
-                                          className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-white/10 active:scale-90 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer text-[11px]" 
+                                          className="w-7 h-7 flex items-center justify-center hover:bg-white/10 active:scale-90 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer text-[11px]" 
                                           title="Перенести в группу..."
                                         >
                                           📁
                                         </button>
                                       </div>
+
+                                      {/* Mobile-only gear menu button */}
+                                      <button
+                                        onPointerDown={(e) => e.stopPropagation()}
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          setActiveActionsAccountId(activeActionsAccountId === acc.id ? null : acc.id);
+                                        }}
+                                        className={`md:hidden w-7 h-7 flex items-center justify-center rounded-lg transition-colors pointer-events-auto cursor-pointer ${
+                                          activeActionsAccountId === acc.id
+                                            ? 'bg-rose-500/20 text-rose-400'
+                                            : theme === 'dark' ? 'hover:bg-white/10 text-slate-500' : 'hover:bg-slate-200 text-slate-400'
+                                        }`}
+                                      >
+                                        ⚙️
+                                      </button>
+
+                                      {/* Mobile-only overlay */}
+                                      {activeActionsAccountId === acc.id && (
+                                        <div 
+                                          onPointerDown={(e) => e.stopPropagation()}
+                                          className={`absolute inset-y-0 right-0 z-10 flex items-center gap-1 px-2 rounded-lg shadow-lg pointer-events-auto border animate-fade-in ${
+                                            theme === 'dark' 
+                                              ? 'bg-slate-900 border-white/10 text-slate-205'
+                                              : 'bg-white border-slate-200 text-slate-800'
+                                          }`}
+                                        >
+                                          <button 
+                                            onClick={() => {
+                                              setActiveActionsAccountId(null);
+                                              onQuickNavigate('accounts-categories');
+                                            }} 
+                                            className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-white/10 active:scale-95 text-[11px]" 
+                                            title="Редактировать"
+                                          >
+                                            ✏️
+                                          </button>
+                                          <button 
+                                            onClick={() => {
+                                              setActiveActionsAccountId(null);
+                                              onQuickNavigate('transactions');
+                                            }} 
+                                            className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-white/10 active:scale-95 text-[11px]" 
+                                            title="Журнал"
+                                          >
+                                            📋
+                                          </button>
+                                          <button 
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              setActiveActionsAccountId(null);
+                                              setActiveGroupMenuId(acc.id);
+                                            }} 
+                                            className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-white/10 active:scale-95 text-[11px]" 
+                                            title="Группа"
+                                          >
+                                            📁
+                                          </button>
+                                          <div className={`w-0.5 h-3 mx-0.5 ${theme === 'dark' ? 'bg-white/10' : 'bg-slate-200'}`} />
+                                          <button 
+                                            onClick={() => setActiveActionsAccountId(null)}
+                                            className="w-6 h-6 flex items-center justify-center text-[10px] text-slate-400 hover:text-rose-500 rounded-full"
+                                            title="Закрыть"
+                                          >
+                                            ✕
+                                          </button>
+                                        </div>
+                                      )}
                                     </div>
                                   </div>
                                 );
@@ -2201,13 +2388,21 @@ export function DashboardOverview({
                           {/* Group Header */}
                           <div 
                             onClick={() => setIsSavingsGroupExpanded(!isSavingsGroupExpanded)}
-                            className="flex items-center justify-between py-1 px-1.5 hover:bg-white/5 rounded-lg cursor-pointer transition-colors text-xs font-bold font-display tracking-wide uppercase select-none text-slate-400 gap-2 min-w-0"
+                            className={`flex items-center justify-between py-1 px-1.5 rounded-lg cursor-pointer transition-colors text-xs font-bold font-display tracking-wide uppercase select-none gap-2 min-w-0 ${
+                              theme === 'dark' 
+                                ? 'text-slate-400 hover:bg-white/5' 
+                                : 'text-slate-500 hover:bg-slate-100'
+                            }`}
                           >
                             <div className="flex items-center gap-1.5 min-w-0">
                               <span>{isSavingsGroupExpanded ? '▼' : '►'}</span>
-                              <span className="text-slate-300 truncate font-semibold">Накопления</span>
+                              <span className={`truncate font-semibold ${
+                                theme === 'dark' ? 'text-slate-205' : 'text-slate-755 font-black'
+                              }`}>Накопления</span>
                             </div>
-                            <span className="font-mono text-[10px] sm:text-[11px] font-extrabold text-slate-305 shrink-0 pl-1">
+                            <span className={`font-mono text-[10px] sm:text-[11px] font-extrabold shrink-0 pl-1 ${
+                              theme === 'dark' ? 'text-slate-300' : 'text-slate-705'
+                            }`}>
                               {Math.round(savingsSumVal).toLocaleString('ru-RU')} ₼
                             </span>
                           </div>
@@ -2255,13 +2450,21 @@ export function DashboardOverview({
                                       transition: transitionStyle,
                                       touchAction: draggedAccountId === acc.id ? 'none' : 'pan-y',
                                     }}
-                                    className={`group flex items-center justify-between p-1.5 rounded-lg text-xs gap-3 min-w-0 select-none cursor-grab active:cursor-grabbing ${
+                                    className={`group relative overflow-hidden flex items-center justify-between p-1.5 rounded-lg text-xs gap-3 min-w-0 select-none cursor-grab active:cursor-grabbing ${
                                       isDraggingThis 
-                                        ? 'bg-teal-500/10 border border-teal-500/35 shadow-xl shadow-teal-500/10 relative z-50 scale-[1.033] transition-none!' 
-                                        : 'hover:bg-white/5 border border-transparent'
+                                        ? theme === 'dark'
+                                          ? 'bg-teal-500/15 border border-teal-500/35 shadow-xl shadow-teal-500/10 relative z-50 scale-[1.033] transition-all'
+                                          : 'bg-teal-50 border border-teal-300 shadow-lg relative z-50 scale-[1.033]'
+                                        : theme === 'dark'
+                                          ? 'hover:bg-white/5 border border-transparent'
+                                          : 'hover:bg-slate-100/70 border border-transparent'
                                     }`}
                                   >
-                                    <span className="font-semibold text-slate-400 group-hover:text-white flex items-center gap-1.5 min-w-0 pointer-events-none">
+                                    <span className={`font-semibold flex items-center gap-1.5 min-w-0 pointer-events-none ${
+                                      theme === 'dark'
+                                        ? 'text-slate-400 group-hover:text-white'
+                                        : 'text-slate-600 group-hover:text-slate-900 font-medium'
+                                    }`}>
                                       <span className="w-1 h-3 bg-lime-400 rounded-xs shrink-0" />
                                       <span className="truncate">{acc.name}</span>
                                     </span>
@@ -2278,17 +2481,21 @@ export function DashboardOverview({
                                           {((acc.balance / savingsSumVal) * 100).toFixed(1)}%
                                         </span>
                                       )}
-                                      <span className="font-mono font-bold text-slate-200 select-all whitespace-nowrap">
+                                      <span className={`font-mono font-bold select-all whitespace-nowrap ${
+                                        theme === 'dark' ? 'text-slate-200' : 'text-slate-800'
+                                      }`}>
                                         {Math.round(acc.balance).toLocaleString('ru-RU')} ₼
                                       </span>
+
+                                      {/* Desktop only buttons */}
                                       <div 
                                         onPointerDown={(e) => e.stopPropagation()}
-                                        className="opacity-75 md:opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 sm:gap-1.5 pr-1 shrink-0 pointer-events-auto"
+                                        className="hidden md:flex items-center gap-1 pr-1 shrink-0 pointer-events-auto"
                                       >
                                         <button 
                                           onPointerDown={(e) => e.stopPropagation()}
                                           onClick={() => onQuickNavigate('accounts-categories')} 
-                                          className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-white/10 active:scale-90 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer text-[11px]" 
+                                          className="w-7 h-7 flex items-center justify-center hover:bg-white/10 active:scale-90 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer text-[11px]" 
                                           title="Редактировать"
                                         >
                                           ✏️
@@ -2296,7 +2503,7 @@ export function DashboardOverview({
                                         <button 
                                           onPointerDown={(e) => e.stopPropagation()}
                                           onClick={() => onQuickNavigate('transactions')} 
-                                          className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-white/10 active:scale-90 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer text-[11px]" 
+                                          className="w-7 h-7 flex items-center justify-center hover:bg-white/10 active:scale-90 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer text-[11px]" 
                                           title="Журнал"
                                         >
                                           📋
@@ -2307,12 +2514,80 @@ export function DashboardOverview({
                                             e.stopPropagation();
                                             setActiveGroupMenuId(acc.id);
                                           }} 
-                                          className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-white/10 active:scale-90 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer text-[11px]" 
+                                          className="w-7 h-7 flex items-center justify-center hover:bg-white/10 active:scale-90 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer text-[11px]" 
                                           title="Перенести в группу..."
                                         >
                                           📁
                                         </button>
                                       </div>
+
+                                      {/* Mobile-only gear menu button */}
+                                      <button
+                                        onPointerDown={(e) => e.stopPropagation()}
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          setActiveActionsAccountId(activeActionsAccountId === acc.id ? null : acc.id);
+                                        }}
+                                        className={`md:hidden w-7 h-7 flex items-center justify-center rounded-lg transition-colors pointer-events-auto cursor-pointer ${
+                                          activeActionsAccountId === acc.id
+                                            ? 'bg-rose-500/20 text-rose-400'
+                                            : theme === 'dark' ? 'hover:bg-white/10 text-slate-500' : 'hover:bg-slate-200 text-slate-400'
+                                        }`}
+                                      >
+                                        ⚙️
+                                      </button>
+
+                                      {/* Mobile-only overlay */}
+                                      {activeActionsAccountId === acc.id && (
+                                        <div 
+                                          onPointerDown={(e) => e.stopPropagation()}
+                                          className={`absolute inset-y-0 right-0 z-10 flex items-center gap-1 px-2 rounded-lg shadow-lg pointer-events-auto border animate-fade-in ${
+                                            theme === 'dark' 
+                                              ? 'bg-slate-900 border-white/10 text-slate-205'
+                                              : 'bg-white border-slate-200 text-slate-800'
+                                          }`}
+                                        >
+                                          <button 
+                                            onClick={() => {
+                                              setActiveActionsAccountId(null);
+                                              onQuickNavigate('accounts-categories');
+                                            }} 
+                                            className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-white/10 active:scale-95 text-[11px]" 
+                                            title="Редактировать"
+                                          >
+                                            ✏️
+                                          </button>
+                                          <button 
+                                            onClick={() => {
+                                              setActiveActionsAccountId(null);
+                                              onQuickNavigate('transactions');
+                                            }} 
+                                            className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-white/10 active:scale-95 text-[11px]" 
+                                            title="Журнал"
+                                          >
+                                            📋
+                                          </button>
+                                          <button 
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              setActiveActionsAccountId(null);
+                                              setActiveGroupMenuId(acc.id);
+                                            }} 
+                                            className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-white/10 active:scale-95 text-[11px]" 
+                                            title="Группа"
+                                          >
+                                            📁
+                                          </button>
+                                          <div className={`w-0.5 h-3 mx-0.5 ${theme === 'dark' ? 'bg-white/10' : 'bg-slate-200'}`} />
+                                          <button 
+                                            onClick={() => setActiveActionsAccountId(null)}
+                                            className="w-6 h-6 flex items-center justify-center text-[10px] text-slate-400 hover:text-rose-500 rounded-full"
+                                            title="Закрыть"
+                                          >
+                                            ✕
+                                          </button>
+                                        </div>
+                                      )}
                                     </div>
                                   </div>
                                 );
@@ -2333,13 +2608,21 @@ export function DashboardOverview({
                           {/* Group Header */}
                           <div 
                             onClick={() => setIsDebtGroupExpanded(!isDebtGroupExpanded)}
-                            className="flex items-center justify-between py-1 px-1.5 hover:bg-white/5 rounded-lg cursor-pointer transition-colors text-xs font-bold font-display tracking-wide uppercase select-none text-slate-400 gap-2 min-w-0"
+                            className={`flex items-center justify-between py-1 px-1.5 rounded-lg cursor-pointer transition-colors text-xs font-bold font-display tracking-wide uppercase select-none gap-2 min-w-0 ${
+                              theme === 'dark' 
+                                ? 'text-slate-400 hover:bg-white/5' 
+                                : 'text-slate-500 hover:bg-slate-100'
+                            }`}
                           >
                             <div className="flex items-center gap-1.5 min-w-0">
                               <span>{isDebtGroupExpanded ? '▼' : '►'}</span>
-                              <span className="text-slate-300 truncate font-semibold">Долги</span>
+                              <span className={`truncate font-semibold ${
+                                theme === 'dark' ? 'text-slate-255' : 'text-slate-755 font-black'
+                              }`}>Долги</span>
                             </div>
-                            <span className="font-mono text-[10px] sm:text-[11px] font-extrabold text-rose-400 shrink-0 pl-1">
+                            <span className={`font-mono text-[10px] sm:text-[11px] font-extrabold shrink-0 pl-1 ${
+                              theme === 'dark' ? 'text-rose-450 font-black' : 'text-rose-600 font-black'
+                            }`}>
                               {Math.round(debtSumVal).toLocaleString('ru-RU')} ₼
                             </span>
                           </div>
@@ -2387,28 +2670,40 @@ export function DashboardOverview({
                                       transition: transitionStyle,
                                       touchAction: draggedAccountId === acc.id ? 'none' : 'pan-y',
                                     }}
-                                    className={`group flex items-center justify-between p-1.5 rounded-lg text-xs gap-3 min-w-0 select-none cursor-grab active:cursor-grabbing ${
+                                    className={`group relative overflow-hidden flex items-center justify-between p-1.5 rounded-lg text-xs gap-3 min-w-0 select-none cursor-grab active:cursor-grabbing ${
                                       isDraggingThis 
-                                        ? 'bg-rose-500/10 border border-rose-500/35 shadow-xl shadow-rose-500/10 relative z-50 scale-[1.033] transition-none!' 
-                                        : 'hover:bg-white/5 border border-transparent'
+                                        ? theme === 'dark'
+                                          ? 'bg-rose-500/15 border border-rose-500/35 shadow-xl shadow-rose-500/10 relative z-50 scale-[1.033] transition-all'
+                                          : 'bg-rose-50 border border-rose-300 shadow-lg relative z-50 scale-[1.033]'
+                                        : theme === 'dark'
+                                          ? 'hover:bg-white/5 border border-transparent'
+                                          : 'hover:bg-slate-100/70 border border-transparent'
                                     }`}
                                   >
-                                    <span className="font-semibold text-slate-400 group-hover:text-white flex items-center gap-1.5 min-w-0 pointer-events-none">
+                                    <span className={`font-semibold flex items-center gap-1.5 min-w-0 pointer-events-none ${
+                                      theme === 'dark'
+                                        ? 'text-slate-400 group-hover:text-white'
+                                        : 'text-slate-600 group-hover:text-slate-900 font-medium'
+                                    }`}>
                                       <span className="w-1 h-3 bg-rose-500 rounded-xs shrink-0" />
                                       <span className="truncate">{acc.name}</span>
                                     </span>
                                     <div className="flex items-center gap-2 shrink-0 pointer-events-none">
-                                      <span className="font-mono font-bold text-slate-200 select-all whitespace-nowrap">
+                                      <span className={`font-mono font-bold select-all whitespace-nowrap ${
+                                        theme === 'dark' ? 'text-slate-200' : 'text-slate-800'
+                                      }`}>
                                         {Math.round(acc.balance).toLocaleString('ru-RU')} ₼
                                       </span>
+
+                                      {/* Desktop only buttons */}
                                       <div 
                                         onPointerDown={(e) => e.stopPropagation()}
-                                        className="opacity-75 md:opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 sm:gap-1.5 pr-1 shrink-0 pointer-events-auto"
+                                        className="hidden md:flex items-center gap-1 pr-1 shrink-0 pointer-events-auto"
                                       >
                                         <button 
                                           onPointerDown={(e) => e.stopPropagation()}
                                           onClick={() => onQuickNavigate('accounts-categories')} 
-                                          className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-white/10 active:scale-90 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer text-[11px]" 
+                                          className="w-7 h-7 flex items-center justify-center hover:bg-white/10 active:scale-90 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer text-[11px]" 
                                           title="Редактировать"
                                         >
                                           ✏️
@@ -2416,7 +2711,7 @@ export function DashboardOverview({
                                         <button 
                                           onPointerDown={(e) => e.stopPropagation()}
                                           onClick={() => onQuickNavigate('transactions')} 
-                                          className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-white/10 active:scale-90 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer text-[11px]" 
+                                          className="w-7 h-7 flex items-center justify-center hover:bg-white/10 active:scale-90 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer text-[11px]" 
                                           title="Журнал"
                                         >
                                           📋
@@ -2427,12 +2722,80 @@ export function DashboardOverview({
                                             e.stopPropagation();
                                             setActiveGroupMenuId(acc.id);
                                           }} 
-                                          className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-white/10 active:scale-90 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer text-[11px]" 
+                                          className="w-7 h-7 flex items-center justify-center hover:bg-white/10 active:scale-90 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer text-[11px]" 
                                           title="Перенести в группу..."
                                         >
                                           📁
                                         </button>
                                       </div>
+
+                                      {/* Mobile-only gear menu button */}
+                                      <button
+                                        onPointerDown={(e) => e.stopPropagation()}
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          setActiveActionsAccountId(activeActionsAccountId === acc.id ? null : acc.id);
+                                        }}
+                                        className={`md:hidden w-7 h-7 flex items-center justify-center rounded-lg transition-colors pointer-events-auto cursor-pointer ${
+                                          activeActionsAccountId === acc.id
+                                            ? 'bg-rose-500/20 text-rose-400'
+                                            : theme === 'dark' ? 'hover:bg-white/10 text-slate-500' : 'hover:bg-slate-200 text-slate-400'
+                                        }`}
+                                      >
+                                        ⚙️
+                                      </button>
+
+                                      {/* Mobile-only overlay */}
+                                      {activeActionsAccountId === acc.id && (
+                                        <div 
+                                          onPointerDown={(e) => e.stopPropagation()}
+                                          className={`absolute inset-y-0 right-0 z-10 flex items-center gap-1 px-2 rounded-lg shadow-lg pointer-events-auto border animate-fade-in ${
+                                            theme === 'dark' 
+                                              ? 'bg-slate-900 border-white/10 text-slate-205'
+                                              : 'bg-white border-slate-200 text-slate-800'
+                                          }`}
+                                        >
+                                          <button 
+                                            onClick={() => {
+                                              setActiveActionsAccountId(null);
+                                              onQuickNavigate('accounts-categories');
+                                            }} 
+                                            className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-white/10 active:scale-95 text-[11px]" 
+                                            title="Редактировать"
+                                          >
+                                            ✏️
+                                          </button>
+                                          <button 
+                                            onClick={() => {
+                                              setActiveActionsAccountId(null);
+                                              onQuickNavigate('transactions');
+                                            }} 
+                                            className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-white/10 active:scale-95 text-[11px]" 
+                                            title="Журнал"
+                                          >
+                                            📋
+                                          </button>
+                                          <button 
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              setActiveActionsAccountId(null);
+                                              setActiveGroupMenuId(acc.id);
+                                            }} 
+                                            className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-white/10 active:scale-95 text-[11px]" 
+                                            title="Группа"
+                                          >
+                                            📁
+                                          </button>
+                                          <div className={`w-0.5 h-3 mx-0.5 ${theme === 'dark' ? 'bg-white/10' : 'bg-slate-200'}`} />
+                                          <button 
+                                            onClick={() => setActiveActionsAccountId(null)}
+                                            className="w-6 h-6 flex items-center justify-center text-[10px] text-slate-400 hover:text-rose-500 rounded-full"
+                                            title="Закрыть"
+                                          >
+                                            ✕
+                                          </button>
+                                        </div>
+                                      )}
                                     </div>
                                   </div>
                                 );
@@ -2453,13 +2816,21 @@ export function DashboardOverview({
                           {/* Group Header */}
                           <div 
                             onClick={() => setIsHiddenGroupExpanded(!isHiddenGroupExpanded)}
-                            className="flex items-center justify-between py-1 px-1.5 hover:bg-white/5 rounded-lg cursor-pointer transition-colors text-xs font-bold font-display tracking-wide uppercase select-none text-slate-400 gap-2 min-w-0"
+                            className={`flex items-center justify-between py-1 px-1.5 rounded-lg cursor-pointer transition-colors text-xs font-bold font-display tracking-wide uppercase select-none gap-2 min-w-0 ${
+                              theme === 'dark' 
+                                ? 'text-slate-400 hover:bg-white/5' 
+                                : 'text-slate-500 hover:bg-slate-100'
+                            }`}
                           >
                             <div className="flex items-center gap-1.5 min-w-0">
                               <span>{isHiddenGroupExpanded ? '▼' : '►'}</span>
-                              <span className="text-slate-300 truncate font-semibold">Скрытые</span>
+                              <span className={`truncate font-semibold ${
+                                theme === 'dark' ? 'text-slate-205' : 'text-slate-755 font-black'
+                              }`}>Скрытые</span>
                             </div>
-                            <span className="font-mono text-[10px] sm:text-[11px] font-extrabold text-slate-500 shrink-0 pl-1">
+                            <span className={`font-mono text-[10px] sm:text-[11px] font-extrabold shrink-0 pl-1 ${
+                              theme === 'dark' ? 'text-slate-400' : 'text-slate-600'
+                            }`}>
                               {Math.round(hiddenSumVal).toLocaleString('ru-RU')} ₼
                             </span>
                           </div>
@@ -2507,28 +2878,40 @@ export function DashboardOverview({
                                       transition: transitionStyle,
                                       touchAction: draggedAccountId === acc.id ? 'none' : 'pan-y',
                                     }}
-                                    className={`group flex items-center justify-between p-1.5 rounded-lg text-xs gap-3 min-w-0 select-none cursor-grab active:cursor-grabbing opacity-70 hover:opacity-100 transition-opacity ${
+                                    className={`group relative overflow-hidden flex items-center justify-between p-1.5 rounded-lg text-xs gap-3 min-w-0 select-none cursor-grab active:cursor-grabbing ${
                                       isDraggingThis 
-                                        ? 'bg-slate-500/10 border border-slate-500/35 shadow-xl shadow-slate-500/10 relative z-50 scale-[1.033] transition-none!' 
-                                        : 'hover:bg-white/5 border border-transparent'
+                                        ? theme === 'dark'
+                                          ? 'bg-slate-500/15 border border-slate-500/35 shadow-xl shadow-slate-500/10 relative z-50 scale-[1.033] transition-all'
+                                          : 'bg-slate-50 border border-slate-30 shadow-lg relative z-50 scale-[1.033]'
+                                        : theme === 'dark'
+                                          ? 'hover:bg-white/5 border border-transparent'
+                                          : 'hover:bg-slate-100/70 border border-transparent'
                                     }`}
                                   >
-                                    <span className="font-semibold text-slate-400 group-hover:text-white flex items-center gap-1.5 min-w-0 pointer-events-none">
+                                    <span className={`font-semibold flex items-center gap-1.5 min-w-0 pointer-events-none ${
+                                      theme === 'dark'
+                                        ? 'text-slate-400 group-hover:text-white'
+                                        : 'text-slate-600 group-hover:text-slate-900 font-medium'
+                                    }`}>
                                       <span className="w-1 h-3 bg-slate-500 rounded-xs shrink-0" />
                                       <span className="truncate">{acc.name}</span>
                                     </span>
                                     <div className="flex items-center gap-2 shrink-0 pointer-events-none">
-                                      <span className="font-mono font-bold text-slate-300 select-all whitespace-nowrap">
+                                      <span className={`font-mono font-bold select-all whitespace-nowrap ${
+                                        theme === 'dark' ? 'text-slate-200' : 'text-slate-800'
+                                      }`}>
                                         {Math.round(acc.balance).toLocaleString('ru-RU')} ₼
                                       </span>
+
+                                      {/* Desktop only buttons */}
                                       <div 
                                         onPointerDown={(e) => e.stopPropagation()}
-                                        className="opacity-75 md:opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 sm:gap-1.5 pr-1 shrink-0 pointer-events-auto"
+                                        className="hidden md:flex items-center gap-1 pr-1 shrink-0 pointer-events-auto"
                                       >
                                         <button 
                                           onPointerDown={(e) => e.stopPropagation()}
                                           onClick={() => onQuickNavigate('accounts-categories')} 
-                                          className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-white/10 active:scale-90 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer text-[11px]" 
+                                          className="w-7 h-7 flex items-center justify-center hover:bg-white/10 active:scale-90 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer text-[11px]" 
                                           title="Редактировать"
                                         >
                                           ✏️
@@ -2536,7 +2919,7 @@ export function DashboardOverview({
                                         <button 
                                           onPointerDown={(e) => e.stopPropagation()}
                                           onClick={() => onQuickNavigate('transactions')} 
-                                          className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-white/10 active:scale-90 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer text-[11px]" 
+                                          className="w-7 h-7 flex items-center justify-center hover:bg-white/10 active:scale-90 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer text-[11px]" 
                                           title="Журнал"
                                         >
                                           📋
@@ -2547,12 +2930,80 @@ export function DashboardOverview({
                                             e.stopPropagation();
                                             setActiveGroupMenuId(acc.id);
                                           }} 
-                                          className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-white/10 active:scale-90 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer text-[11px]" 
+                                          className="w-7 h-7 flex items-center justify-center hover:bg-white/10 active:scale-90 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer text-[11px]" 
                                           title="Перенести в группу..."
                                         >
                                           📁
                                         </button>
                                       </div>
+
+                                      {/* Mobile-only gear menu button */}
+                                      <button
+                                        onPointerDown={(e) => e.stopPropagation()}
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          setActiveActionsAccountId(activeActionsAccountId === acc.id ? null : acc.id);
+                                        }}
+                                        className={`md:hidden w-7 h-7 flex items-center justify-center rounded-lg transition-colors pointer-events-auto cursor-pointer ${
+                                          activeActionsAccountId === acc.id
+                                            ? 'bg-rose-500/20 text-rose-400'
+                                            : theme === 'dark' ? 'hover:bg-white/10 text-slate-500' : 'hover:bg-slate-200 text-slate-400'
+                                        }`}
+                                      >
+                                        ⚙️
+                                      </button>
+
+                                      {/* Mobile-only overlay */}
+                                      {activeActionsAccountId === acc.id && (
+                                        <div 
+                                          onPointerDown={(e) => e.stopPropagation()}
+                                          className={`absolute inset-y-0 right-0 z-10 flex items-center gap-1 px-2 rounded-lg shadow-lg pointer-events-auto border animate-fade-in ${
+                                            theme === 'dark' 
+                                              ? 'bg-slate-900 border-white/10 text-slate-205'
+                                              : 'bg-white border-slate-200 text-slate-800'
+                                          }`}
+                                        >
+                                          <button 
+                                            onClick={() => {
+                                              setActiveActionsAccountId(null);
+                                              onQuickNavigate('accounts-categories');
+                                            }} 
+                                            className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-white/10 active:scale-95 text-[11px]" 
+                                            title="Редактировать"
+                                          >
+                                            ✏️
+                                          </button>
+                                          <button 
+                                            onClick={() => {
+                                              setActiveActionsAccountId(null);
+                                              onQuickNavigate('transactions');
+                                            }} 
+                                            className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-white/10 active:scale-95 text-[11px]" 
+                                            title="Журнал"
+                                          >
+                                            📋
+                                          </button>
+                                          <button 
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              setActiveActionsAccountId(null);
+                                              setActiveGroupMenuId(acc.id);
+                                            }} 
+                                            className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-white/10 active:scale-95 text-[11px]" 
+                                            title="Группа"
+                                          >
+                                            📁
+                                          </button>
+                                          <div className={`w-0.5 h-3 mx-0.5 ${theme === 'dark' ? 'bg-white/10' : 'bg-slate-200'}`} />
+                                          <button 
+                                            onClick={() => setActiveActionsAccountId(null)}
+                                            className="w-6 h-6 flex items-center justify-center text-[10px] text-slate-400 hover:text-rose-500 rounded-full"
+                                            title="Закрыть"
+                                          >
+                                            ✕
+                                          </button>
+                                        </div>
+                                      )}
                                     </div>
                                   </div>
                                 );

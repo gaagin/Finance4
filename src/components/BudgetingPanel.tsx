@@ -197,42 +197,43 @@ export function BudgetingPanel({
     <div className="w-full" id="budgeting-panel-root">
       
       {/* 2-Columns layout removed: Budgets Progress & List now takes full width */}
-      <div className={`w-full backdrop-blur-md rounded-3xl p-6 border shadow-lg flex flex-col justify-between transition-colors duration-200 ${
+      <div className={`w-full backdrop-blur-md rounded-3xl p-4 sm:p-6 border shadow-lg flex flex-col justify-between transition-colors duration-200 ${
         theme === 'dark'
           ? 'bg-slate-900/40 border-white/10'
           : 'bg-white border-slate-200'
       }`}>
         <div>
-          <div className={`flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6 pb-4 border-b transition-colors duration-200 ${
+          <div className={`flex flex-col gap-3.5 mb-4 pb-3.5 border-b transition-colors duration-200 ${
             theme === 'dark' ? 'border-b border-white/5' : 'border-b border-slate-100'
           }`}>
-            <div>
-              <h2 className={`text-lg font-display font-bold ${
-                theme === 'dark' ? 'text-white' : 'text-slate-900'
-              }`}>Активные бюджетные лимиты</h2>
-              <p className={`text-xs ${
-                theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
-              }`}>
-                Свод показателей экономии по категориям за <span className="font-semibold text-teal-400">{formatTimeframeLabel(selectedMonth)}</span>
-              </p>
-            </div>
-            
-            <div className="flex flex-wrap items-center gap-3">
+            {/* Row 1: Title and compact Month Selector aligned side-by-side on mobile, too */}
+            <div className="flex items-center justify-between gap-2">
+              <div>
+                <h2 className={`text-base sm:text-lg font-display font-black tracking-tight ${
+                  theme === 'dark' ? 'text-white' : 'text-slate-900'
+                }`}>Активные лимиты</h2>
+                <p className={`text-[10px] sm:text-xs leading-none mt-0.5 ${
+                  theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
+                } hidden xs:block`}>
+                  Свод показателей экономии по категориям
+                </p>
+              </div>
+
               {/* Month Selector Dropdown */}
-              <div className="relative inline-flex items-center gap-2">
-                <Calendar size={14} className={theme === 'dark' ? 'text-slate-400' : 'text-slate-500'} />
+              <div className="relative inline-flex items-center gap-1.5">
+                <Calendar size={13} className={theme === 'dark' ? 'text-slate-400' : 'text-slate-500'} />
                 <select
                   value={selectedMonth}
                   onChange={(e) => setSelectedMonth(e.target.value)}
-                  className={`pl-2 pr-8 py-1.5 rounded-xl border text-xs font-semibold focus:outline-hidden focus:ring-1 focus:ring-teal-400 cursor-pointer appearance-none ${
+                  className={`pl-1.5 pr-7 py-1 rounded-lg border text-[11px] sm:text-xs font-bold focus:outline-hidden focus:ring-1 focus:ring-teal-400 cursor-pointer appearance-none ${
                     theme === 'dark'
-                      ? 'bg-slate-950 border-white/10 text-slate-200'
+                      ? 'bg-slate-950 border-white/5 text-slate-200'
                       : 'bg-slate-50 border-slate-200 text-slate-700'
                   }`}
                   style={{
                     backgroundImage: `url("data:image/svg+xml;utf8,<svg fill='none' stroke='${theme === 'dark' ? '%2394a3b8' : '%23475569'}' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'><path d='m6 9 6 6 6-6'></path></svg>")`,
-                    backgroundPosition: 'right 0.5rem center',
-                    backgroundSize: '1rem',
+                    backgroundPosition: 'right 0.35rem center',
+                    backgroundSize: '0.8rem',
                     backgroundRepeat: 'no-repeat'
                   }}
                 >
@@ -243,27 +244,36 @@ export function BudgetingPanel({
                   ))}
                 </select>
               </div>
+            </div>
 
-              <div className={`flex items-center gap-3 px-4 py-2 rounded-xl border transition-colors ${
+            {/* Row 2: Stats and Call To Action aligned side-by-side */}
+            <div className="flex items-center justify-between gap-2.5 flex-wrap sm:flex-nowrap">
+              {/* Compact "Общий бюджет" display badge */}
+              <div className={`flex items-center gap-2 px-2.5 py-1 rounded-lg border text-[11px] sm:text-xs transition-colors ${
                 theme === 'dark'
-                  ? 'bg-white/5 border-white/10'
-                  : 'bg-slate-50 border-slate-200'
+                  ? 'bg-white/5 border-white/8 text-slate-300'
+                  : 'bg-slate-50 border-slate-200 text-slate-600'
               }`}>
-                <span className={`text-xs ${
-                  theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
-                }`}>Общий бюджет:</span>
-                <span className={`font-display font-extrabold ${
+                <span className="opacity-80">Общий бюджет:</span>
+                <span className={`font-mono font-bold ${
+                  theme === 'dark' ? 'text-teal-400' : 'text-teal-650'
+                }`}>
+                  {totalSpentInBudgeted.toFixed(0)}₼
+                </span>
+                <span className="opacity-40">/</span>
+                <span className={`font-mono font-bold ${
                   theme === 'dark' ? 'text-white' : 'text-slate-900'
                 }`}>
-                  {totalSpentInBudgeted.toFixed(0)}₼ <span className="text-slate-400 font-normal">/</span> {totalBudgeted.toFixed(0)}₼
+                  {totalBudgeted.toFixed(0)}₼
                 </span>
               </div>
 
+              {/* Compact "+ лимит" button */}
               <button
                 onClick={() => setIsAddingBudget(true)}
-                className="px-4 py-2 bg-teal-500 hover:bg-teal-400 active:bg-teal-600 text-slate-950 text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-md cursor-pointer flex items-center gap-1.5 shrink-0"
+                className="px-2.5 py-1.5 bg-teal-500 hover:bg-teal-400 active:bg-teal-600 text-slate-950 text-[10.5px] sm:text-xs font-extrabold uppercase tracking-wider rounded-lg transition-all shadow-sm cursor-pointer flex items-center gap-1 shrink-0"
               >
-                <Plus size={14} className="stroke-[2.5px]" />
+                <Plus size={11} className="stroke-[3px]" />
                 Установить лимит
               </button>
             </div>
@@ -295,7 +305,11 @@ export function BudgetingPanel({
               </button>
             </div>
           ) : (
-            <div className="space-y-6 max-h-[380px] lg:max-h-[720px] overflow-y-auto pr-1 custom-scrollbar">
+            <div className={`border rounded-2xl overflow-hidden divide-y max-h-[380px] lg:max-h-[720px] overflow-y-auto custom-scrollbar ${
+              theme === 'dark'
+                ? 'bg-slate-950/40 border-white/10 divide-white/10'
+                : 'bg-white border-slate-200/80 divide-slate-100'
+            }`}>
               {compositeBudgets.map(b => {
                 const cat = categories.find(c => c.id === b.categoryId);
                 if (!cat) return null;
@@ -317,129 +331,132 @@ export function BudgetingPanel({
                   statusLabel = 'Лимит равен 0';
                 } else if (percent >= 100) {
                   progressColor = 'bg-rose-500';
-                  textColor = 'text-rose-400 font-bold';
+                  textColor = 'text-rose-450 font-bold';
                   badgeStyle = 'bg-rose-500/15 text-rose-400 border-rose-500/35';
                   statusLabel = 'Перерасход!';
                 } else if (percent >= 85) {
                   progressColor = 'bg-amber-500';
-                  textColor = 'text-amber-400 font-bold';
+                  textColor = 'text-amber-550 font-bold';
                   badgeStyle = 'bg-amber-500/15 text-amber-400 border-amber-500/35';
                   statusLabel = 'Близко к лимиту';
-                } else {
-                  progressColor = 'bg-emerald-500';
-                  textColor = 'text-emerald-400';
-                  badgeStyle = 'bg-emerald-500/15 text-emerald-400 border-emerald-500/35';
-                  statusLabel = 'Экономия';
                 }
 
                 return (
-                  <div key={b.categoryId} className={`p-4 border rounded-2xl transition-all ${
-                    theme === 'dark'
-                      ? 'bg-white/5 border-white/10 hover:bg-white/10'
-                      : 'bg-slate-50 border-slate-200 hover:bg-slate-100'
+                  <div key={b.categoryId} className={`group min-w-0 p-3 sm:px-4 sm:py-3.5 transition-all flex flex-col gap-1.5 ${
+                    theme === 'dark' ? 'hover:bg-white/5' : 'hover:bg-slate-50'
                   }`}>
-                    <div className="flex items-center justify-between gap-3 mb-2.5">
-                      <div className="flex items-center gap-3">
-                        <div
-                          className="w-10 h-10 rounded-xl flex items-center justify-center text-white shrink-0"
-                          style={{ backgroundColor: cat.color }}
-                        >
-                          <IconComponent name={cat.icon} size={20} />
-                        </div>
-                        <div>
-                          <h4 className={`font-semibold text-sm ${
-                            theme === 'dark' ? 'text-slate-200' : 'text-slate-800'
-                          }`}>{formatCategoryDisplayName(cat.name)}</h4>
-                          <span className={`inline-flex items-center text-[10px] uppercase tracking-wider font-extrabold px-2 py-0.5 rounded-md border ${badgeStyle} mt-0.5`}>
-                            {statusLabel}
+                    {/* Top Row: Color dot, Category Name, Badges, Values, & Actions */}
+                    <div className="flex items-center justify-between gap-3 min-w-0">
+                      {/* Left: Dot, Name, Status Badge */}
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span 
+                          className="w-2 h-2 rounded-full shrink-0 shadow-xs" 
+                          style={{ backgroundColor: cat.color }} 
+                        />
+                        <span className={`text-[13px] font-bold font-sans truncate ${
+                          theme === 'dark' ? 'text-slate-200' : 'text-slate-800'
+                        }`}>
+                          {formatCategoryDisplayName(cat.name)}
+                        </span>
+                        <span className={`hidden sm:inline-block text-[9px] font-extrabold px-1.5 py-0.5 rounded tracking-tight ${
+                          b.totalAmount <= 0
+                            ? (theme === 'dark' ? 'text-slate-400 bg-white/5 border border-white/5' : 'text-slate-500 bg-slate-150 border border-slate-200/50')
+                            : percent >= 100
+                              ? (theme === 'dark' ? 'text-rose-400 bg-rose-500/10 border border-rose-500/20' : 'text-rose-600 bg-rose-50 border border-rose-200/65')
+                              : percent >= 85
+                                ? (theme === 'dark' ? 'text-amber-400 bg-amber-500/15 border border-amber-500/20' : 'text-amber-600 bg-amber-50 border border-amber-200/65')
+                                : (theme === 'dark' ? 'text-teal-300 bg-teal-500/10 border border-teal-500/20' : 'text-teal-650 bg-teal-50/70 border border-teal-150')
+                        }`}>
+                          {statusLabel}
+                        </span>
+                      </div>
+
+                      {/* Right: Percent badge, values & Action buttons */}
+                      <div className="flex items-center gap-2.5 shrink-0 ml-auto">
+                        <div className="flex items-center gap-1.5 font-sans font-bold">
+                          <span className={`text-[10px] font-extrabold px-1.5 py-0.5 rounded tracking-tight ${
+                            theme === 'dark'
+                              ? 'text-slate-400 bg-white/5 group-hover:bg-white/10'
+                              : 'text-slate-500 bg-slate-100 group-hover:bg-slate-200'
+                          }`}>
+                            {percent.toFixed(0)}%
+                          </span>
+                          <span className={`text-[12px] sm:text-[13px] font-black ${
+                            theme === 'dark' ? 'text-slate-200' : 'text-slate-900'
+                          }`}>
+                            {Math.round(spent).toLocaleString('ru-RU')} ₼
+                            <span className="mx-1 text-[10px] text-slate-400 dark:text-slate-500 font-normal">из</span>
+                            {Math.round(effectiveLimit).toLocaleString('ru-RU')} ₼
                           </span>
                         </div>
-                      </div>
 
-                      <div className="flex items-center gap-3">
-                        <button
-                          onClick={() => handleStartEdit(b)}
-                          className={`p-2 border rounded-xl hover:bg-teal-500 hover:text-slate-950 transition-all cursor-pointer flex items-center justify-center shrink-0 ${
-                            theme === 'dark'
-                              ? 'bg-white/10 text-slate-200 border-white/10'
-                              : 'bg-slate-100 text-slate-700 border-slate-300'
-                          }`}
-                          title="Редактировать лимит"
-                        >
-                          <Edit2 size={13} />
-                        </button>
-                        <button
-                          onClick={() => {
-                            const categoryName = categories.find(c => c.id === b.categoryId)?.name || 'Категория';
-                            setDeleteConfirm({ categoryId: b.categoryId, categoryName });
-                          }}
-                          className={`p-1.5 border rounded-lg transition-colors cursor-pointer ${
-                            theme === 'dark'
-                              ? 'bg-white/5 border-white/5 text-slate-400 hover:bg-rose-500/15 hover:text-rose-400 hover:border-rose-500/35'
-                              : 'bg-slate-100 border-slate-300 text-slate-500 hover:bg-rose-100 hover:text-rose-600 hover:border-rose-250'
-                          }`}
-                          title="Удалить бюджетный лимит"
-                        >
-                          <Trash2 size={13} />
-                        </button>
+                        {/* Actions */}
+                        <div className="flex items-center gap-1 border-l pl-2 border-slate-200 dark:border-white/10">
+                          <button
+                            onClick={() => handleStartEdit(b)}
+                            className={`p-1.5 border rounded-lg hover:bg-teal-500 hover:text-slate-950 transition-colors cursor-pointer flex items-center justify-center shrink-0 ${
+                              theme === 'dark'
+                                ? 'bg-white/5 text-slate-300 border-white/5 hover:border-teal-400'
+                                : 'bg-slate-50 text-slate-600 border-slate-200 hover:border-teal-500'
+                            }`}
+                            title="Редактировать лимит"
+                          >
+                            <Edit2 size={11} />
+                          </button>
+                          <button
+                            onClick={() => {
+                              const categoryName = categories.find(c => c.id === b.categoryId)?.name || 'Категория';
+                              setDeleteConfirm({ categoryId: b.categoryId, categoryName });
+                            }}
+                            className={`p-1.5 border rounded-lg transition-colors cursor-pointer flex items-center justify-center shrink-0 ${
+                              theme === 'dark'
+                                ? 'bg-white/5 border-white/5 text-slate-400 hover:bg-rose-500/10 hover:text-rose-400 hover:border-rose-500/20'
+                                : 'bg-slate-50 border-slate-200 text-slate-500 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-220'
+                            }`}
+                            title="Удалить лимит"
+                          >
+                            <Trash2 size={11} />
+                          </button>
+                        </div>
                       </div>
                     </div>
 
-                    {/* Composite Budget Breakdown */}
-                    <div className={`mt-2.5 p-2.5 rounded-xl border text-[11px] grid grid-cols-1 xs:grid-cols-3 gap-2 align-middle transition-colors ${
-                      theme === 'dark'
-                        ? 'bg-slate-950/40 border-white/5'
-                        : 'bg-white border-slate-100'
+                    {/* Simple sleek progress line underneath */}
+                    <div className={`w-full mt-1.5 h-[3px] rounded-full overflow-hidden ${
+                      theme === 'dark' ? 'bg-white/5' : 'bg-slate-100/60'
                     }`}>
-                      <div>
-                        <span className={theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}>Регулярный:</span>{' '}
-                        <span className={`font-semibold ${theme === 'dark' ? 'text-slate-200' : 'text-slate-705'}`}>
-                          {b.baseAmount > 0 ? `${b.baseAmount} ₼` : 'нет'}
-                        </span>
-                      </div>
-                      <div>
-                        <span className={theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}>Сдвиг в {formatTimeframeLabel(selectedMonth)}:</span>{' '}
-                        <span className={`font-bold ${
-                          b.adjAmount > 0 ? 'text-teal-400' : b.adjAmount < 0 ? 'text-rose-400' : (theme === 'dark' ? 'text-slate-500' : 'text-slate-400')
-                        }`}>
-                          {b.adjAmount > 0 ? `+${b.adjAmount} ₼` : b.adjAmount < 0 ? `${b.adjAmount} ₼` : 'нет'}
-                        </span>
-                      </div>
-                      <div className="xs:text-right">
-                        <span className={theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}>Итоговый лимит:</span>{' '}
-                        <span className="font-extrabold text-amber-500 font-display">
-                          {b.totalAmount} ₼
-                        </span>
-                      </div>
+                      <div
+                        style={{ width: `${Math.min(percent, 100)}%` }}
+                        className={`h-full rounded-full transition-all duration-550 ${progressColor}`}
+                      />
                     </div>
 
-                    {/* Progress Bar */}
-                    <div className="mt-4">
-                      <div className={`flex justify-between text-xs font-display font-medium mb-1.5 ${
-                        theme === 'dark' ? 'text-slate-400' : 'text-slate-505'
-                      }`}>
-                        <span>Расход: <b className={theme === 'dark' ? 'text-white' : 'text-slate-800'}>{spent.toFixed(1)} ₼</b></span>
-                        <span>Лимит: <b className={theme === 'dark' ? 'text-white' : 'text-slate-800'}>{effectiveLimit.toFixed(0)} ₼</b></span>
-                      </div>
-
-                      <div className={`w-full h-2.5 rounded-full overflow-hidden border ${
-                        theme === 'dark' ? 'bg-white/10 border-white/5' : 'bg-slate-200 border-slate-200/50'
-                      }`}>
-                        <div
-                          className={`h-full rounded-full transition-all duration-500 ${progressColor}`}
-                          style={{ width: `${Math.min(percent, 100)}%` }}
-                        />
-                      </div>
-
-                      <div className="flex items-center justify-between text-[11px] mt-1.5">
-                        <span className={theme === 'dark' ? 'text-slate-400' : 'text-slate-505'}>Использовано {percent.toFixed(0)}%</span>
-                        {b.totalAmount <= 0 ? (
-                          <span className="text-rose-400 font-semibold">Лимит не задан или равен 0</span>
-                        ) : remaining >= 0 ? (
-                          <span className="text-emerald-500 font-semibold">Осталось: +{remaining.toFixed(1)} ₼</span>
-                        ) : (
-                          <span className="text-rose-500 font-bold">Превышение: {Math.abs(remaining).toFixed(1)} ₼</span>
+                    {/* Metadata Footer: Regular budget / adjusted / remaining / overlimit */}
+                    <div className="flex flex-wrap items-center justify-between text-[10px] text-slate-400 dark:text-slate-500 mt-1 leading-none select-none">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span>Базовый: <b className={`font-semibold ${theme === 'dark' ? 'text-slate-300' : 'text-slate-705'}`}>{b.baseAmount > 0 ? `${b.baseAmount} ₼` : 'нет'}</b></span>
+                        {b.adjAmount !== 0 && (
+                          <>
+                            <span className="opacity-40">•</span>
+                            <span>Сдвиг: <b className={`font-semibold ${b.adjAmount > 0 ? 'text-teal-400' : 'text-rose-500'}`}>
+                              {b.adjAmount > 0 ? `+${b.adjAmount}` : b.adjAmount} ₼
+                            </b></span>
+                          </>
                         )}
+                      </div>
+                      <div className={`font-bold ${
+                        b.totalAmount <= 0 
+                          ? (theme === 'dark' ? 'text-slate-500' : 'text-slate-400') 
+                          : remaining >= 0 
+                            ? 'text-emerald-500' 
+                            : 'text-rose-500'
+                      }`}>
+                        {b.totalAmount <= 0 
+                          ? 'Лимит равен 0' 
+                          : remaining >= 0 
+                            ? `Осталось: +${remaining.toFixed(0)} ₼` 
+                            : `Перерасход: ${Math.abs(remaining).toFixed(0)} ₼`
+                        }
                       </div>
                     </div>
                   </div>
@@ -487,164 +504,166 @@ export function BudgetingPanel({
               </button>
             </div>
             
-            <form onSubmit={handleSubmit} className="p-5 overflow-y-auto custom-scrollbar space-y-3.5 flex-1">
-              <div>
-                <label className={`block text-[11px] font-semibold mb-1.5 uppercase tracking-wider ${
-                  theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
-                }`}>
-                  Категория расходов
-                </label>
-                <select
-                  disabled
-                  value={selectedCategory}
-                  className={`w-full p-3 border rounded-xl text-xs cursor-not-allowed opacity-60 ${
-                    theme === 'dark'
-                      ? 'bg-slate-950/40 border-white/10 text-slate-400'
-                      : 'bg-slate-100 border-slate-200 text-slate-500'
-                  }`}
-                >
-                  <option value={isEditing}>
-                    {categories.find(c => c.id === isEditing)?.name || 'Текущая категория'}
-                  </option>
-                </select>
-              </div>
-
-              {/* Standard Regular Budget */}
-              <div>
-                <label className={`block text-[11px] font-semibold mb-1.5 uppercase tracking-wider ${
-                  theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
-                }`}>
-                  Регулярный бюджет на каждый месяц (₼, AZN)
-                </label>
-                <div className="relative">
-                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 font-display font-medium text-xs">
-                    ₼
-                  </span>
-                  <input
-                    type="number"
-                    step="any"
-                    placeholder="Пример: 500"
-                    value={baseAmountInput}
-                    onChange={(e) => setBaseAmountInput(e.target.value)}
-                    className={`w-full pl-8 pr-4 py-2.5 border rounded-xl text-sm font-display font-bold focus:outline-hidden focus:ring-2 focus:ring-teal-400 ${
+            <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-hidden">
+              <div className="p-5 overflow-y-auto custom-scrollbar space-y-3.5 flex-1">
+                <div>
+                  <label className={`block text-[11px] font-semibold mb-1.5 uppercase tracking-wider ${
+                    theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
+                  }`}>
+                    Категория расходов
+                  </label>
+                  <select
+                    disabled
+                    value={selectedCategory}
+                    className={`w-full p-3 border rounded-xl text-xs cursor-not-allowed opacity-60 ${
                       theme === 'dark'
-                        ? 'bg-slate-950/60 border-white/10 text-slate-200'
-                        : 'bg-slate-50 border-slate-200 text-slate-850'
+                        ? 'bg-slate-950/40 border-white/10 text-slate-400'
+                        : 'bg-slate-100 border-slate-200 text-slate-500'
                     }`}
-                  />
+                  >
+                    <option value={isEditing}>
+                      {categories.find(c => c.id === isEditing)?.name || 'Текущая категория'}
+                    </option>
+                  </select>
                 </div>
-                <p className="text-[10px] text-slate-400 mt-1 leading-relaxed">
-                  Будет автоматически повторяться каждый месяц по умолчанию
-                </p>
-              </div>
 
-              {/* Monthly Adjustment Budget */}
-              <div>
-                <label className={`block text-[11px] font-semibold mb-1.5 uppercase tracking-wider ${
-                  theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
+                {/* Standard Regular Budget */}
+                <div>
+                  <label className={`block text-[11px] font-semibold mb-1.5 uppercase tracking-wider ${
+                    theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
+                  }`}>
+                    Регулярный бюджет на каждый месяц (₼, AZN)
+                  </label>
+                  <div className="relative">
+                    <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 font-display font-medium text-xs">
+                      ₼
+                    </span>
+                    <input
+                      type="number"
+                      step="any"
+                      placeholder="Пример: 500"
+                      value={baseAmountInput}
+                      onChange={(e) => setBaseAmountInput(e.target.value)}
+                      className={`w-full pl-8 pr-4 py-2.5 border rounded-xl text-sm font-display font-bold focus:outline-hidden focus:ring-2 focus:ring-teal-400 ${
+                        theme === 'dark'
+                          ? 'bg-slate-950/60 border-white/10 text-slate-200'
+                          : 'bg-slate-50 border-slate-200 text-slate-850'
+                      }`}
+                    />
+                  </div>
+                  <p className="text-[10px] text-slate-400 mt-1 leading-relaxed">
+                    Будет автоматически повторяться каждый месяц по умолчанию
+                  </p>
+                </div>
+
+                {/* Monthly Adjustment Budget */}
+                <div>
+                  <label className={`block text-[11px] font-semibold mb-1.5 uppercase tracking-wider ${
+                    theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
+                  }`}>
+                    Сдвиг (плюс/минус) в {formatTimeframeLabel(selectedMonth)} (₼)
+                  </label>
+                  <div className="relative">
+                    <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 font-display font-medium text-xs">
+                      ₼
+                    </span>
+                    <input
+                      type="number"
+                      step="any"
+                      placeholder="Пример: +150 или -50"
+                      value={adjAmountInput}
+                      onChange={(e) => setAdjAmountInput(e.target.value)}
+                      className={`w-full pl-8 pr-4 py-2.5 border rounded-xl text-sm font-display font-bold focus:outline-hidden focus:ring-2 focus:ring-teal-400 ${
+                        theme === 'dark'
+                          ? 'bg-slate-950/60 border-white/10 text-slate-200'
+                          : 'bg-slate-50 border-slate-200 text-slate-850'
+                      }`}
+                    />
+                  </div>
+                  <p className="text-[10px] text-slate-400 mt-1 leading-relaxed">
+                    Увеличит или уменьшит бюджет только для выбранного месяца
+                  </p>
+                </div>
+
+                {/* Total Calculation */}
+                <div className={`p-3 rounded-xl border text-[11px] transition-colors ${
+                  theme === 'dark' ? 'bg-white/5 border-white/5' : 'bg-slate-50 border-slate-100'
                 }`}>
-                  Сдвиг (плюс/минус) в {formatTimeframeLabel(selectedMonth)} (₼)
-                </label>
-                <div className="relative">
-                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 font-display font-medium text-xs">
-                    ₼
-                  </span>
-                  <input
-                    type="number"
-                    step="any"
-                    placeholder="Пример: +150 или -50"
-                    value={adjAmountInput}
-                    onChange={(e) => setAdjAmountInput(e.target.value)}
-                    className={`w-full pl-8 pr-4 py-2.5 border rounded-xl text-sm font-display font-bold focus:outline-hidden focus:ring-2 focus:ring-teal-400 ${
-                      theme === 'dark'
-                        ? 'bg-slate-950/60 border-white/10 text-slate-200'
-                        : 'bg-slate-50 border-slate-200 text-slate-850'
-                    }`}
-                  />
+                  <div className="flex justify-between items-center animate-none">
+                    <span className={theme === 'dark' ? 'text-slate-400' : 'text-slate-505'}>Расчет итоговой суммы:</span>
+                    <span className="font-extrabold text-amber-500 font-display text-sm">
+                      {(Number(baseAmountInput) || 0) + (Number(adjAmountInput) || 0)} ₼
+                    </span>
+                  </div>
+                  <div className="mt-1 flex gap-2 text-slate-500 text-[10px]">
+                    <span>Регулярный: {Number(baseAmountInput) || 0}₼</span>
+                    <span>➕</span>
+                    <span>Сдвиг: {Number(adjAmountInput) || 0}₼</span>
+                  </div>
                 </div>
-                <p className="text-[10px] text-slate-400 mt-1 leading-relaxed">
-                  Увеличит или уменьшит бюджет только для выбранного месяца
-                </p>
-              </div>
 
-              {/* Total Calculation */}
-              <div className={`p-3 rounded-xl border text-[11px] transition-colors ${
-                theme === 'dark' ? 'bg-white/5 border-white/5' : 'bg-slate-50 border-slate-100'
-              }`}>
-                <div className="flex justify-between items-center animate-none">
-                  <span className={theme === 'dark' ? 'text-slate-400' : 'text-slate-505'}>Расчет итоговой суммы:</span>
-                  <span className="font-extrabold text-amber-500 font-display text-sm">
-                    {(Number(baseAmountInput) || 0) + (Number(adjAmountInput) || 0)} ₼
-                  </span>
-                </div>
-                <div className="mt-1 flex gap-2 text-slate-500 text-[10px]">
-                  <span>Регулярный: {Number(baseAmountInput) || 0}₼</span>
-                  <span>➕</span>
-                  <span>Сдвиг: {Number(adjAmountInput) || 0}₼</span>
-                </div>
-              </div>
-
-              {/* 12-Month Average Expenses Stats */}
-              {selectedCategory && (
-                (() => {
-                  const avgData = calculateAverage12Months(selectedCategory);
-                  return (
-                    <div className={`p-3 border rounded-xl space-y-2.5 transition-colors ${
-                      theme === 'dark'
-                        ? 'bg-slate-950/45 border-amber-500/10'
-                        : 'bg-amber-50/20 border-amber-500/15'
-                    }`}>
-                      <div className="flex justify-between items-center">
-                        <span className={`text-[11px] font-semibold uppercase tracking-wider flex items-center gap-1 ${
-                          theme === 'dark' ? 'text-slate-450' : 'text-slate-500'
-                        }`}>
-                          <TrendingUp size={12} className="text-amber-500 shrink-0" />
-                          Средний расход за 12 месяцев
-                        </span>
-                        <span className="text-xs font-black text-amber-550">
-                          {avgData.average.toFixed(1)} ₼ <span className={`text-[10px] font-normal ${
-                            theme === 'dark' ? 'text-slate-500' : 'text-slate-400'
-                          }`}>/ мес</span>
-                        </span>
-                      </div>
-
-                      <div className="text-[10px] space-y-2">
-                        <div className={`flex justify-between items-center border-b pb-1.5 ${
-                          theme === 'dark' ? 'text-slate-400 border-white/5' : 'text-slate-600 border-slate-100'
-                        }`}>
-                          <span>Всего за последние 12 мес:</span>
-                          <span className={`font-bold ${theme === 'dark' ? 'text-slate-200' : 'text-slate-800'}`}>
-                            {avgData.totalSum.toFixed(1)} ₼
+                {/* 12-Month Average Expenses Stats */}
+                {selectedCategory && (
+                  (() => {
+                    const avgData = calculateAverage12Months(selectedCategory);
+                    return (
+                      <div className={`p-3 border rounded-xl space-y-2.5 transition-colors ${
+                        theme === 'dark'
+                          ? 'bg-slate-950/45 border-amber-500/10'
+                          : 'bg-amber-50/20 border-amber-500/15'
+                      }`}>
+                        <div className="flex justify-between items-center">
+                          <span className={`text-[11px] font-semibold uppercase tracking-wider flex items-center gap-1 ${
+                            theme === 'dark' ? 'text-slate-450' : 'text-slate-500'
+                          }`}>
+                            <TrendingUp size={12} className="text-amber-500 shrink-0" />
+                            Средний расход за 12 месяцев
+                          </span>
+                          <span className="text-xs font-black text-amber-550">
+                            {avgData.average.toFixed(1)} ₼ <span className={`text-[10px] font-normal ${
+                              theme === 'dark' ? 'text-slate-500' : 'text-slate-400'
+                            }`}>/ мес</span>
                           </span>
                         </div>
-                        
-                        {/* Mini breakdown of months with spending */}
-                        <div className="space-y-1 max-h-[105px] overflow-y-auto custom-scrollbar pr-1">
-                          <span className={`text-[9px] block font-semibold uppercase tracking-wider ${
-                            theme === 'dark' ? 'text-slate-500' : 'text-slate-400'
-                          }`}>Индивидуальный тренд по месяцам:</span>
-                          {avgData.monthlyDetails.slice(-6).map((det, idx) => (
-                            <div key={idx} className="flex justify-between items-center py-0.5">
-                              <span className={`text-[10px] ${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
-                                {formatMonthKey(det.month)}
-                              </span>
-                              <span className={det.amount > 0 
-                                ? `font-bold text-[10px] ${theme === 'dark' ? 'text-slate-350' : 'text-slate-705'}` 
-                                : `text-[10px] ${theme === 'dark' ? 'text-slate-600' : 'text-slate-400'}`
-                              }>
-                                {det.amount > 0 ? `${det.amount.toFixed(0)} ₼` : '0 ₼'}
-                              </span>
-                            </div>
-                          ))}
+
+                        <div className="text-[10px] space-y-2">
+                          <div className={`flex justify-between items-center border-b pb-1.5 ${
+                            theme === 'dark' ? 'text-slate-400 border-white/5' : 'text-slate-600 border-slate-100'
+                          }`}>
+                            <span>Всего за последние 12 мес:</span>
+                            <span className={`font-bold ${theme === 'dark' ? 'text-slate-200' : 'text-slate-800'}`}>
+                              {avgData.totalSum.toFixed(1)} ₼
+                            </span>
+                          </div>
+                          
+                          {/* Mini breakdown of months with spending */}
+                          <div className="space-y-1 max-h-[105px] overflow-y-auto custom-scrollbar pr-1">
+                            <span className={`text-[9px] block font-semibold uppercase tracking-wider ${
+                              theme === 'dark' ? 'text-slate-500' : 'text-slate-400'
+                            }`}>Индивидуальный тренд по месяцам:</span>
+                            {avgData.monthlyDetails.slice(-6).map((det, idx) => (
+                              <div key={idx} className="flex justify-between items-center py-0.5">
+                                <span className={`text-[10px] ${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
+                                  {formatMonthKey(det.month)}
+                                </span>
+                                <span className={det.amount > 0 
+                                  ? `font-bold text-[10px] ${theme === 'dark' ? 'text-slate-350' : 'text-slate-705'}` 
+                                  : `text-[10px] ${theme === 'dark' ? 'text-slate-600' : 'text-slate-400'}`
+                                }>
+                                  {det.amount > 0 ? `${det.amount.toFixed(0)} ₼` : '0 ₼'}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })()
-              )}
+                    );
+                  })()
+                )}
+              </div>
 
-              <div className={`flex gap-3 pt-4 border-t ${
-                theme === 'dark' ? 'border-white/5' : 'border-slate-100'
+              <div className={`flex gap-3 p-5 pt-3.5 border-t shrink-0 ${
+                theme === 'dark' ? 'border-white/5 bg-slate-900/60' : 'border-slate-100 bg-slate-50/80'
               }`}>
                 <button
                   type="button"
@@ -711,7 +730,8 @@ export function BudgetingPanel({
               </button>
             </div>
             
-            <form onSubmit={handleSubmit} className="p-5 overflow-y-auto custom-scrollbar space-y-3.5 flex-1">
+            <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-hidden">
+              <div className="p-5 overflow-y-auto custom-scrollbar space-y-3.5 flex-1">
               <div>
                 <label className={`block text-[11px] font-semibold mb-1.5 uppercase tracking-wider ${
                   theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
@@ -888,8 +908,10 @@ export function BudgetingPanel({
                 })()
               )}
 
-              <div className={`flex gap-3 pt-4 border-t ${
-                theme === 'dark' ? 'border-white/5' : 'border-slate-100'
+              </div>
+
+              <div className={`flex gap-3 p-5 pt-3.5 border-t shrink-0 ${
+                theme === 'dark' ? 'border-white/5 bg-slate-900/60' : 'border-slate-100 bg-slate-50/80'
               }`}>
                 <button
                   type="button"
