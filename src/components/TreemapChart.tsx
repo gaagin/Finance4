@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
-import { Category, formatCategoryDisplayName, BudgetLimit } from '../types';
+import { Category, formatCategoryDisplayName, BudgetLimit, getCurrentMonthYyyymm } from '../types';
 
 interface TreemapItem {
   category: Category;
@@ -220,7 +220,7 @@ export const TreemapChart: React.FC<TreemapChartProps> = ({
           const area = node.width * node.height;
           
           // Determine budget limit for category
-          const targetMonth = (timeframe && timeframe.length === 7) ? timeframe : '2026-05';
+          const targetMonth = (timeframe && timeframe.length === 7) ? timeframe : getCurrentMonthYyyymm();
           let baseVal = 0;
           let adjVal = 0;
           budgets.forEach(b => {

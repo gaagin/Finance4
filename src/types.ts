@@ -115,9 +115,12 @@ export function formatTimeframeLabel(value: string): string {
 export function getCurrentMonthYyyymm(): string {
   const now = new Date();
   const year = now.getFullYear();
-  // Ensure that if the current year is less than 2026 (e.g. 2025), we treat 2026-06 as the active month because the workspace datasets are in 2026
-  const targetYear = year < 2026 ? 2026 : year;
-  const targetMonth = year < 2026 ? '06' : String(now.getMonth() + 1).padStart(2, '0');
+  // Ensure that if the current year/month is before June 2026, we treat 2026-06 as the active month because the workspace datasets are in 2026
+  if (year < 2026 || (year === 2026 && now.getMonth() < 5)) {
+    return '2026-06';
+  }
+  const targetYear = year;
+  const targetMonth = String(now.getMonth() + 1).padStart(2, '0');
   return `${targetYear}-${targetMonth}`;
 }
 
@@ -163,8 +166,10 @@ export function getDynamicTimeframeOptions(transactions: Transaction[]): Timefra
   const currentYearStr = currentYyyymm.split('-')[0];
   sortedMonths.forEach(m => {
     const monthYear = m.split('-')[0];
-    if (monthYear === currentYearStr) {
-      options.push({ value: m, label: formatTimeframeLabel(m), type: 'month' });
+    if (monthYear === currentYearStr || m === '2026-06' || m === '2026-05' || m === '2026-04') {
+      if (!options.some(opt => opt.value === m && opt.type === 'month')) {
+        options.push({ value: m, label: formatTimeframeLabel(m), type: 'month' });
+      }
     }
   });
   

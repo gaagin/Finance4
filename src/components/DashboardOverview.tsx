@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useRef } from 'react';
 import { Transaction, Category, Account, BudgetLimit, formatCategoryDisplayName, getDynamicTimeframeOptions, formatTimeframeLabel, filterTransactionByTimeframe, getCurrentMonthYyyymm } from '../types';
 import { IconComponent } from './IconComponent';
-import { Wallet, ArrowUpRight, ArrowDownLeft, TrendingUp, AlertTriangle, Filter, Calendar, HelpCircle, FileSpreadsheet, Download, RefreshCw, LogIn, LogOut, CheckCircle, AlertCircle, ArrowUpDown, SlidersHorizontal, X, Edit2 } from 'lucide-react';
+import { Wallet, ArrowUpRight, ArrowDownLeft, TrendingUp, AlertTriangle, Filter, Calendar, HelpCircle, FileSpreadsheet, Download, RefreshCw, LogIn, LogOut, CheckCircle, AlertCircle, ArrowUpDown, SlidersHorizontal, X, Edit2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { exportToGoogleSheets } from '../googleSheetsService';
 import { QuickDragDropBuilder } from './QuickDragDropBuilder';
 import { SearchableSelect } from './SearchableSelect';
@@ -101,6 +101,7 @@ export function DashboardOverview({
   const [analyticsTimeframe, setAnalyticsTimeframe] = useState<string>(
     () => getSavedTimeframe('milli_analytics_timeframe', getCurrentMonthYyyymm())
   );
+  const [showMonthDropdown, setShowMonthDropdown] = useState<boolean>(false);
   const [analyticsAccount, setAnalyticsAccount] = useState<string>(
     () => localStorage.getItem('milli_analytics_account') || 'all'
   );
@@ -186,6 +187,21 @@ export function DashboardOverview({
       document.removeEventListener('click', handleOutsideClick);
     };
   }, [activeGroupMenuId]);
+
+  // Close month selector dropdown if clicked outside
+  React.useEffect(() => {
+    if (!showMonthDropdown) return;
+    const handleOutsideClick = (e: MouseEvent) => {
+      const switcherEl = document.getElementById('month-arrow-switcher-container');
+      if (switcherEl && !switcherEl.contains(e.target as Node)) {
+        setShowMonthDropdown(false);
+      }
+    };
+    document.addEventListener('click', handleOutsideClick);
+    return () => {
+      document.removeEventListener('click', handleOutsideClick);
+    };
+  }, [showMonthDropdown]);
 
   // Synced state persistence to localStorage via React.useEffect hooks
   React.useEffect(() => {
@@ -1504,33 +1520,107 @@ export function DashboardOverview({
 
   if (showMode === 'quick-records') {
     const months = timeframeOptions.filter(opt => opt.type === 'month');
+    const activeMonthIndex = months.findIndex(opt => opt.value === analyticsTimeframe);
+
+    const handlePrevMonthOpt = () => {
+      if (activeMonthIndex > 0) {
+        const prevMonth = months[activeMonthIndex - 1];
+        setAnalyticsTimeframe(prevMonth.value);
+        localStorage.setItem('milli_analytics_timeframe', prevMonth.value);
+      }
+    };
+
+    const handleNextMonthOpt = () => {
+      if (activeMonthIndex < months.length - 1) {
+        const nextMonth = months[activeMonthIndex + 1];
+        setAnalyticsTimeframe(nextMonth.value);
+        localStorage.setItem('milli_analytics_timeframe', nextMonth.value);
+      }
+    };
+
     return (
       <div className="space-y-6" id="dashboard-overview-view-quick">
-        {/* Compact, Borderless and Sleek Month Selector */}
-        <div className="flex items-center justify-center p-1 rounded-xl bg-slate-900/40 border border-white/5 shadow-sm animate-fade-in mb-3 max-w-sm mx-auto w-full select-none">
+        {/* Compact, Pill-shaped Arrow Month Selector (Sleek App Design) */}
+        <div className="flex justify-center mb-5 animate-fade-in select-none">
           <div 
-            className="flex items-center gap-1 overflow-x-auto w-full py-0.5 justify-center"
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            id="month-arrow-switcher-container"
+            className={`relative flex items-center justify-between rounded-2xl border p-1 min-w-[240px] shadow-sm transition-all ${
+              theme === 'dark'
+                ? 'bg-slate-900/40 border-white/10 text-white shadow-slate-950/20'
+                : 'bg-white border-slate-200 text-slate-900 shadow-slate-100'
+            }`}
           >
-            {months.map(opt => {
-              const isActive = analyticsTimeframe === opt.value;
-              return (
-                <button
-                  key={opt.value}
-                  onClick={() => {
-                    setAnalyticsTimeframe(opt.value);
-                    localStorage.setItem('milli_analytics_timeframe', opt.value);
-                  }}
-                  className={`px-2.5 py-1 text-[11px] font-bold rounded-lg transition-all cursor-pointer select-none whitespace-nowrap leading-none ${
-                    isActive
-                      ? 'bg-gradient-to-r from-teal-500 to-emerald-500 text-slate-950 font-black shadow-inner transform scale-102'
-                      : 'text-slate-400 hover:text-white hover:bg-white/5'
+            <button
+              onClick={handlePrevMonthOpt}
+              disabled={activeMonthIndex <= 0}
+              className={`p-2 rounded-xl transition-all cursor-pointer select-none flex items-center justify-center ${
+                theme === 'dark'
+                  ? 'text-slate-400 hover:text-white hover:bg-white/5 disabled:opacity-20 disabled:pointer-events-none'
+                  : 'text-slate-500 hover:text-slate-950 hover:bg-slate-100 disabled:opacity-20 disabled:pointer-events-none'
+              }`}
+              title="Предыдущий месяц"
+            >
+              <ChevronLeft size={18} />
+            </button>
+
+            <div className="relative flex-1 flex justify-center">
+              <button
+                onClick={() => setShowMonthDropdown(!showMonthDropdown)}
+                className={`px-4 py-1.5 text-sm font-display font-bold text-center tracking-wide focus:outline-hidden hover:opacity-80 active:scale-95 transition-all cursor-pointer flex items-center gap-1.5 ${
+                  theme === 'dark' ? 'text-white' : 'text-slate-900'
+                }`}
+              >
+                {months[activeMonthIndex]?.label || formatTimeframeLabel(analyticsTimeframe)}
+                <span className={`text-[9px] transition-transform duration-200 ${showMonthDropdown ? 'rotate-180' : ''} ${
+                  theme === 'dark' ? 'text-slate-500' : 'text-slate-400'
+                }`}>▼</span>
+              </button>
+
+              {showMonthDropdown && (
+                <div 
+                  className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 max-h-60 overflow-y-auto rounded-2xl border p-1.5 shadow-xl backdrop-blur-md z-50 animate-fade-in ${
+                    theme === 'dark'
+                      ? 'bg-slate-950/95 border-white/10 text-white min-w-[180px]'
+                      : 'bg-white border-slate-200 text-slate-800 min-w-[180px]'
                   }`}
+                  style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
                 >
-                  {opt.label}
-                </button>
-              );
-            })}
+                  {months.map(opt => {
+                    const isSelected = analyticsTimeframe === opt.value;
+                    return (
+                      <button
+                        key={opt.value}
+                        onClick={() => {
+                          setAnalyticsTimeframe(opt.value);
+                          localStorage.setItem('milli_analytics_timeframe', opt.value);
+                          setShowMonthDropdown(false);
+                        }}
+                        className={`w-full text-left px-3 py-2 text-xs font-semibold rounded-xl transition-colors cursor-pointer ${
+                          isSelected
+                            ? (theme === 'dark' ? 'bg-teal-500/10 text-teal-300 font-extrabold' : 'bg-teal-50 text-teal-800 font-extrabold')
+                            : (theme === 'dark' ? 'hover:bg-white/5 text-slate-300' : 'hover:bg-slate-50 text-slate-600')
+                        }`}
+                      >
+                        {opt.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            <button
+              onClick={handleNextMonthOpt}
+              disabled={activeMonthIndex >= months.length - 1}
+              className={`p-2 rounded-xl transition-all cursor-pointer select-none flex items-center justify-center ${
+                theme === 'dark'
+                  ? 'text-slate-400 hover:text-white hover:bg-white/5 disabled:opacity-20 disabled:pointer-events-none'
+                  : 'text-slate-500 hover:text-slate-950 hover:bg-slate-100 disabled:opacity-20 disabled:pointer-events-none'
+              }`}
+              title="Следующий месяц"
+            >
+              <ChevronRight size={18} />
+            </button>
           </div>
         </div>
 
