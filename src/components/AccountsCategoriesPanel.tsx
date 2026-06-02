@@ -480,229 +480,305 @@ export function AccountsCategoriesPanel({
     <div className="grid grid-cols-1 xl:grid-cols-2 gap-8" id="accounts-categories-root">
       
       {/* COLUMN 1: Accounts Management */}
-      <div className={`backdrop-blur-md rounded-3xl p-6 border shadow-lg flex flex-col justify-between transition-colors duration-200 ${
+      <div className={`backdrop-blur-md rounded-3xl p-4 sm:p-6 border shadow-lg flex flex-col justify-between transition-colors duration-200 ${
         theme === 'dark'
           ? 'bg-slate-900/40 border-white/10'
           : 'bg-white border-slate-200'
       }`} id="accounts-management">
         <div>
-          <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-2 border-b transition-colors duration-200 ${
-            theme === 'dark' ? 'border-b border-white/5' : 'border-b border-slate-100'
-          }`}>
-            <div className="flex items-center gap-3">
-              <div className={`p-2 rounded-xl border transition-colors ${
+          <div className="flex flex-col gap-4 mb-5">
+            {/* Row 1: Title */}
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2.5">
+                <div className={`p-1.5 rounded-lg border transition-colors ${
+                  theme === 'dark'
+                    ? 'bg-white/10 border-white/10 text-teal-300'
+                    : 'bg-slate-100 border-slate-200 text-teal-600'
+                }`}>
+                  <Wallet size={16} />
+                </div>
+                <div>
+                  <h3 className={`text-base sm:text-lg font-display font-black tracking-tight ${
+                    theme === 'dark' ? 'text-white' : 'text-slate-900'
+                  }`}>Счета</h3>
+                  <p className={`text-[10px] sm:text-xs leading-none mt-0.5 ${
+                    theme === 'dark' ? 'text-slate-400' : 'text-slate-505'
+                  } hidden xs:block`}>
+                    Настройка банковских балансов и кошельков
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Row 2: Total Balance & Compact Add button */}
+            <div className="flex items-center justify-between gap-2.5 flex-wrap sm:flex-nowrap">
+              <div className={`flex items-center gap-2 px-2.5 py-1 rounded-lg border text-[11px] sm:text-xs transition-colors ${
                 theme === 'dark'
-                  ? 'bg-white/10 border-white/10 text-teal-300'
-                  : 'bg-slate-100 border-slate-200 text-teal-600'
+                  ? 'bg-white/5 border-white/8 text-slate-300'
+                  : 'bg-slate-550 border-slate-200 text-slate-600'
               }`}>
-                <Wallet size={20} />
+                <span className="opacity-85">Общий баланс:</span>
+                <span className="font-extrabold text-teal-500 text-[11.5px] sm:text-[13px] font-display">
+                  {accounts.reduce((sum, item) => sum + item.balance, 0).toFixed(2)} ₼
+                </span>
               </div>
-              <div>
-                <h3 className={`font-display font-bold text-lg ${
-                  theme === 'dark' ? 'text-white' : 'text-slate-900'
-                }`}>Счета</h3>
-                <p className={`text-xs ${
-                  theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
-                }`}>Настройка банковских балансов и кошельков</p>
-              </div>
+
+              <button
+                type="button"
+                onClick={() => setIsAddAccountOpen(true)}
+                className="px-2.5 py-1.5 bg-teal-500 hover:bg-teal-400 active:bg-teal-600 text-slate-950 text-[10.5px] sm:text-xs font-extrabold uppercase tracking-wider rounded-lg transition-all shadow-xs cursor-pointer flex items-center gap-1 shrink-0"
+              >
+                <Plus size={11} className="stroke-[3px]" />
+                Добавить счет
+              </button>
             </div>
           </div>
 
-          {/* Add Accounts Button trigger */}
-          <button
-            type="button"
-            onClick={() => setIsAddAccountOpen(true)}
-            className="w-full py-3 mb-6 bg-teal-500 hover:bg-teal-400 text-slate-950 font-extrabold text-sm rounded-2xl uppercase tracking-wider font-display flex items-center justify-center gap-2 cursor-pointer shadow-lg transition-all transform hover:scale-[1.01] active:scale-[0.98]"
-          >
-            <PlusCircle size={18} />
-            Добавить счет
-          </button>
-
           {/* Account list rendering */}
-          <div className="max-h-[360px] lg:max-h-[620px] overflow-y-auto pr-1 custom-scrollbar">
-            <div className="border border-slate-200 dark:border-white/10 rounded-2xl overflow-hidden bg-white dark:bg-slate-900/40 divide-y divide-slate-100 dark:divide-white/5 shadow-xs">
-              {accounts.map(acc => {
-                const totalUsed = acc.balance;
-                let typeLabel = 'Счет';
-                if (acc.type === 'cash') typeLabel = 'Наличные';
-                if (acc.type === 'savings') typeLabel = 'Копилка';
-                if (acc.type === 'debt') typeLabel = 'Долг / Кредит';
-                if (acc.type === 'hidden') typeLabel = 'Скрытый';
+          <div className="max-h-[550px] xs:max-h-[620px] sm:max-h-[680px] lg:max-h-[780px] overflow-y-auto pr-1 custom-scrollbar">
+            <div className={`border rounded-2xl overflow-hidden divide-y ${
+              theme === 'dark'
+                ? 'bg-slate-950/40 border-white/10 divide-white/10'
+                : 'bg-white border-slate-200/80 divide-slate-100'
+            }`}>
+              {(() => {
+                const totalBalance = accounts.reduce((sum, item) => sum + item.balance, 0);
+                return accounts.map(acc => {
+                  const balance = acc.balance;
+                  const percentage = totalBalance > 0 ? (balance / totalBalance) * 100 : 0;
+                  
+                  let typeLabel = 'Счет';
+                  if (acc.type === 'cash') typeLabel = 'Наличные';
+                  if (acc.type === 'savings') typeLabel = 'Копилка';
+                  if (acc.type === 'debt') typeLabel = 'Долг / Кредит';
+                  if (acc.type === 'hidden') typeLabel = 'Скрытый';
 
-                return (
-                  <div
-                    key={acc.id}
-                    className={`flex items-center justify-between p-3 bg-transparent transition-all border-b last:border-0 ${
-                      theme === 'dark'
-                        ? 'hover:bg-white/5 border-white/5'
-                        : 'hover:bg-slate-50/50 border-slate-150'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3 min-w-0">
-                      <div className={`w-10 h-10 rounded-xl border flex items-center justify-center shrink-0 transition-colors ${
-                        theme === 'dark'
-                          ? 'bg-slate-950 border-white/10'
-                          : 'bg-slate-100 border-slate-200'
-                      }`}>
-                        <span className={`font-display font-extrabold text-lg ${acc.color}`}>
-                          {acc.name[0]?.toUpperCase() || 'S'}
-                        </span>
-                      </div>
+                  let progressColor = 'bg-teal-500';
+                  if (acc.color.includes('amber')) progressColor = 'bg-amber-500';
+                  else if (acc.color.includes('red')) progressColor = 'bg-red-500';
+                  else if (acc.color.includes('sky')) progressColor = 'bg-sky-500';
+                  else if (acc.color.includes('teal')) progressColor = 'bg-teal-500';
+                  else if (acc.color.includes('indigo')) progressColor = 'bg-indigo-500';
+                  else if (acc.color.includes('slate')) progressColor = 'bg-slate-500';
+                  else if (acc.color.includes('emerald')) progressColor = 'bg-emerald-500';
+                  else if (acc.color.includes('rose')) progressColor = 'bg-rose-500';
 
-                      <div className="min-w-0">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <h4 className={`font-semibold text-sm leading-tight truncate ${
+                  return (
+                    <div key={acc.id} className={`group min-w-0 p-3 sm:px-4 sm:py-3.5 transition-all flex flex-col gap-1.5 ${
+                      theme === 'dark' ? 'hover:bg-white/5' : 'hover:bg-slate-100/40'
+                    }`}>
+                      {/* Top Row: Color dot, Acc Name, Badges, Values, & Actions */}
+                      <div className="flex items-center justify-between gap-3 min-w-0">
+                        {/* Left: Dot, Name, Status Badge */}
+                        <div className="flex items-center gap-2 min-w-0">
+                          <span 
+                            className={`w-2 h-2 rounded-full shrink-0 shadow-xs ${progressColor}`} 
+                          />
+                          <span className={`text-[13px] font-bold font-sans truncate ${
                             theme === 'dark' ? 'text-slate-200' : 'text-slate-800'
-                          }`}>{acc.name}</h4>
+                          }`}>
+                            {acc.name}
+                          </span>
+                          
                           {acc.quickEntry !== false ? (
-                            <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[9px] font-bold rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0">
-                              <Check size={8} className="stroke-[3px]" />
-                              <span>Быстрая</span>
+                            <span className={`hidden sm:inline-block text-[9px] font-extrabold px-1.5 py-0.5 rounded tracking-tight ${
+                              theme === 'dark' ? 'text-emerald-300 bg-emerald-500/10 border border-emerald-500/20' : 'text-emerald-650 bg-emerald-50/70 border border-emerald-150'
+                            }`}>
+                              Быстрая
                             </span>
                           ) : (
-                            <span className="inline-flex items-center px-1.5 py-0.5 text-[9px] font-bold rounded-md bg-slate-500/10 text-slate-400 border border-slate-500/20 shrink-0">
-                              <span>Скрыт</span>
+                            <span className={`hidden sm:inline-block text-[9px] font-extrabold px-1.5 py-0.5 rounded tracking-tight ${
+                              theme === 'dark' ? 'text-slate-400 bg-white/5 border border-white/5' : 'text-slate-500 bg-slate-100 border border-slate-200/50'
+                            }`}>
+                              Скрыт
                             </span>
                           )}
                         </div>
-                        <p className={`text-[10px] font-medium uppercase tracking-wider mt-0.5 ${
-                          theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
-                        }`}>{typeLabel}</p>
+
+                        {/* Right: Percent badge, balance & Action buttons */}
+                        <div className="flex items-center gap-2.5 shrink-0 ml-auto">
+                          <div className="flex items-center gap-1.5 font-sans font-bold">
+                            <span className={`text-[10px] font-extrabold px-1.5 py-0.5 rounded tracking-tight ${
+                              theme === 'dark'
+                                ? 'text-slate-400 bg-white/5 group-hover:bg-white/10'
+                                : 'text-slate-500 bg-slate-100 group-hover:bg-slate-200'
+                            }`}>
+                              {percentage.toFixed(0)}%
+                            </span>
+                            <span className={`text-[12px] sm:text-[13px] font-black ${
+                              theme === 'dark' ? 'text-slate-200' : 'text-slate-900'
+                            }`}>
+                              {acc.balance.toFixed(2)} ₼
+                            </span>
+                          </div>
+
+                          {/* Actions */}
+                          <div className="flex items-center gap-1 border-l pl-2 border-slate-200 dark:border-white/10">
+                            <button
+                              onClick={() => handleEditAccount(acc)}
+                              className={`p-1.5 border rounded-lg hover:bg-teal-500 hover:text-slate-950 transition-colors cursor-pointer flex items-center justify-center shrink-0 ${
+                                theme === 'dark'
+                                  ? 'bg-white/5 text-slate-300 border-white/5 hover:border-teal-400'
+                                  : 'bg-slate-50 text-slate-600 border-slate-200 hover:border-teal-500'
+                              }`}
+                              title="Редактировать счет"
+                            >
+                              <Edit2 size={11} />
+                            </button>
+                            <button
+                              onClick={() => {
+                                if (accounts.length > 1) {
+                                  setDeleteConfirm({ id: acc.id, type: 'account', name: acc.name });
+                                }
+                              }}
+                              disabled={accounts.length <= 1}
+                              className={`p-1.5 border rounded-lg transition-colors cursor-pointer flex items-center justify-center shrink-0 ${
+                                theme === 'dark'
+                                  ? 'bg-white/5 border-white/5 text-slate-400 hover:bg-rose-500/10 hover:text-rose-455 hover:border-rose-500/20'
+                                  : 'bg-slate-50 border-slate-200 text-slate-500 hover:bg-rose-50 hover:text-rose-650 hover:border-rose-220'
+                              }`}
+                              title={accounts.length === 1 ? 'Нельзя удалить единственный счет' : 'Удалить счет'}
+                            >
+                              <Trash2 size={11} />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Simple sleek progress line underneath for share of total */}
+                      <div className={`w-full mt-1.5 h-[3px] rounded-full overflow-hidden ${
+                        theme === 'dark' ? 'bg-white/5' : 'bg-slate-100/60'
+                      }`}>
+                        <div
+                          style={{ width: `${Math.min(percentage, 100)}%` }}
+                          className={`h-full rounded-full transition-all duration-550 ${progressColor}`}
+                        />
+                      </div>
+
+                      {/* Metadata Footer: Type, label info */}
+                      <div className="flex flex-wrap items-center justify-between text-[10px] text-slate-400 dark:text-slate-500 mt-1 leading-none select-none">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span>Тип: <b className={`font-semibold ${theme === 'dark' ? 'text-slate-300' : 'text-slate-705'}`}>{typeLabel}</b></span>
+                        </div>
+                        <div>
+                          <span className={`font-semibold ${theme === 'dark' ? 'text-slate-500' : 'text-slate-600'}`}>
+                            {acc.quickEntry !== false ? 'Включен в автовыбор' : 'Скрыт из меню'}
+                          </span>
+                        </div>
                       </div>
                     </div>
-
-                    <div className="flex items-center gap-3 shrink-0">
-                      <div className="text-right">
-                        <span className={`font-display font-extrabold text-sm ${
-                          theme === 'dark' ? 'text-slate-200' : 'text-slate-850'
-                        }`}>{totalUsed.toFixed(2)} ₼</span>
-                      </div>
-
-                      <div className="flex items-center gap-1.5 shrink-0">
-                        <button
-                          onClick={() => handleEditAccount(acc)}
-                          className={`p-1 px-1.5 rounded-lg transition-all cursor-pointer flex items-center justify-center shrink-0 ${
-                            theme === 'dark'
-                              ? 'hover:bg-white/10 text-slate-400 hover:text-white'
-                              : 'hover:bg-slate-150 text-slate-500 hover:text-slate-900'
-                          }`}
-                          title="Изменить счет"
-                        >
-                          <Edit2 size={13} />
-                        </button>
-                        
-                        <button
-                          onClick={() => {
-                            if (accounts.length > 1) {
-                              setDeleteConfirm({ id: acc.id, type: 'account', name: acc.name });
-                            }
-                          }}
-                          disabled={accounts.length <= 1} // Prevent deleting the last remaining account
-                          className={`p-1 disabled:opacity-30 rounded-lg transition-colors cursor-pointer shrink-0 ${
-                            theme === 'dark'
-                              ? 'hover:bg-rose-500/10 text-slate-400 hover:text-rose-450'
-                              : 'hover:bg-rose-100 text-slate-500 hover:text-rose-650'
-                          }`}
-                          title={accounts.length === 1 ? 'Нельзя удалить единственный счет' : 'Удалить счет'}
-                        >
-                          <Trash2 size={12} />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
+                  );
+                });
+              })()}
             </div>
           </div>
         </div>
-
-
       </div>
 
       {/* COLUMN 2: Categories Management with Internal Tabs (Expense vs Income) */}
-      <div className={`backdrop-blur-md rounded-3xl p-6 border shadow-lg flex flex-col justify-between transition-colors duration-200 ${
+      <div className={`backdrop-blur-md rounded-3xl p-4 sm:p-6 border shadow-lg flex flex-col justify-between transition-colors duration-200 ${
         theme === 'dark'
           ? 'bg-slate-900/40 border-white/10'
           : 'bg-white border-slate-200'
       }`} id="categories-management">
         <div>
-          <div className={`flex items-center justify-between gap-4 mb-6 pb-2 border-b transition-colors duration-200 ${
-            theme === 'dark' ? 'border-b border-white/5' : 'border-b border-slate-100'
-          }`}>
-            <div className="flex items-center gap-3">
-              <div className={`p-2 rounded-xl border transition-colors ${
-                theme === 'dark'
-                  ? 'bg-white/10 border-white/10 text-amber-400'
-                  : 'bg-slate-100 border-slate-200 text-amber-600'
-              }`}>
-                <PlusCircle size={20} />
+          <div className="flex flex-col gap-4 mb-5">
+            {/* Row 1: Title and Category Type Switcher side by side */}
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2.5">
+                <div className={`p-1.5 rounded-lg border transition-colors ${
+                  theme === 'dark'
+                    ? 'bg-white/10 border-white/10 text-amber-400'
+                    : 'bg-slate-100 border-slate-200 text-amber-600'
+                }`}>
+                  <PlusCircle size={16} />
+                </div>
+                <div>
+                  <h3 className={`text-base sm:text-lg font-display font-black tracking-tight ${
+                    theme === 'dark' ? 'text-white' : 'text-slate-900'
+                  }`}>Категории</h3>
+                  <p className={`text-[10px] sm:text-xs leading-none mt-0.5 ${
+                    theme === 'dark' ? 'text-slate-400' : 'text-slate-505'
+                  } hidden xs:block`}>
+                    Организуйте статьи трат и доходов
+                  </p>
+                </div>
               </div>
-              <div>
-                <h3 className={`font-display font-bold text-lg ${
-                  theme === 'dark' ? 'text-white' : 'text-slate-900'
-                }`}>Категории</h3>
-                <p className={`text-xs ${
-                  theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
-                }`}>Организуйте статьи трат и доходов</p>
+
+              {/* Exp vs Inc Subtabs */}
+              <div className={`flex p-1 rounded-xl border transition-colors duration-200 shrink-0 ${
+                theme === 'dark'
+                  ? 'bg-slate-950/60 border-white/10'
+                  : 'bg-slate-100 border-slate-200'
+              }`}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveCategoryTab('expense');
+                    setEditingCategoryId(null);
+                    setCatName('');
+                  }}
+                  className={`px-2.5 py-1 text-[11px] font-bold rounded-lg transition-all cursor-pointer ${
+                    activeCategoryTab === 'expense'
+                      ? theme === 'dark'
+                        ? 'bg-white/15 text-white border border-white/10 shadow-xs'
+                        : 'bg-white text-slate-900 shadow-sm border border-slate-200/50'
+                      : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
+                  }`}
+                >
+                  Расходы
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveCategoryTab('income');
+                    setEditingCategoryId(null);
+                    setCatName('');
+                  }}
+                  className={`px-2.5 py-1 text-[11px] font-bold rounded-lg transition-all cursor-pointer ${
+                    activeCategoryTab === 'income'
+                      ? theme === 'dark'
+                        ? 'bg-white/15 text-white border border-white/10 shadow-xs'
+                        : 'bg-white text-slate-900 shadow-sm border border-slate-200/50'
+                      : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
+                  }`}
+                >
+                  Доходы
+                </button>
               </div>
             </div>
 
-            {/* Exp vs Inc Tabs */}
-            <div className={`flex p-1 rounded-xl border transition-colors duration-200 ${
-              theme === 'dark'
-                ? 'bg-slate-950/60 border-white/10'
-                : 'bg-slate-100 border-slate-200'
-            }`}>
+            {/* Row 2: Stats Display and Add Button */}
+            <div className="flex items-center justify-between gap-2.5 flex-wrap sm:flex-nowrap">
+              <div className={`flex items-center gap-2 px-2.5 py-1 rounded-lg border text-[11px] sm:text-xs transition-colors ${
+                theme === 'dark'
+                  ? 'bg-white/5 border-white/8 text-slate-300'
+                  : 'bg-slate-50 border-slate-200 text-slate-605'
+              }`}>
+                <span className="opacity-85">Всего категорий:</span>
+                <span className="font-extrabold text-amber-550 text-[11.5px] sm:text-[13px] font-display">
+                  {categories.filter(c => c.type === activeCategoryTab).length}
+                </span>
+              </div>
+
               <button
                 type="button"
-                onClick={() => {
-                  setActiveCategoryTab('expense');
-                  setEditingCategoryId(null);
-                  setCatName('');
-                }}
-                className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
-                  activeCategoryTab === 'expense'
-                    ? theme === 'dark'
-                      ? 'bg-white/15 text-white border border-white/10 shadow-xs'
-                      : 'bg-white text-slate-900 shadow-md border border-slate-200/50'
-                    : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
-                }`}
+                onClick={() => setIsAddCategoryOpen(true)}
+                className="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-400 active:bg-amber-600 text-slate-950 text-[10.5px] sm:text-xs font-extrabold uppercase tracking-wider rounded-lg transition-all shadow-xs cursor-pointer flex items-center gap-1 shrink-0"
               >
-                Расходы
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setActiveCategoryTab('income');
-                  setEditingCategoryId(null);
-                  setCatName('');
-                }}
-                className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
-                  activeCategoryTab === 'income'
-                    ? theme === 'dark'
-                      ? 'bg-white/15 text-white border border-white/10 shadow-xs'
-                      : 'bg-white text-slate-900 shadow-md border border-slate-200/50'
-                    : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
-                }`}
-              >
-                Доходы
+                <Plus size={11} className="stroke-[3px]" />
+                Создать
               </button>
             </div>
           </div>
 
-          {/* Add Category Button trigger */}
-          <button
-            type="button"
-            onClick={() => setIsAddCategoryOpen(true)}
-            className="w-full py-3 mb-6 bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-sm rounded-2xl uppercase tracking-wider font-display flex items-center justify-center gap-2 cursor-pointer shadow-lg transition-all transform hover:scale-[1.01] active:scale-[0.98]"
-          >
-            <PlusCircle size={18} />
-            Создать категорию {activeCategoryTab === 'expense' ? 'расходов' : 'доходов'}
-          </button>
-
           {/* List categorized by Active selection */}
-          <div className="max-h-[320px] lg:max-h-[580px] overflow-y-auto pr-1 custom-scrollbar">
-            <div className="border border-slate-200 dark:border-white/10 rounded-2xl overflow-hidden bg-white dark:bg-slate-900/40 divide-y divide-slate-100 dark:divide-white/5 shadow-xs">
+          <div className="max-h-[550px] xs:max-h-[620px] sm:max-h-[680px] lg:max-h-[780px] overflow-y-auto pr-1 custom-scrollbar">
+            <div className={`border rounded-2xl overflow-hidden divide-y ${
+              theme === 'dark'
+                ? 'bg-slate-950/40 border-white/10 divide-white/10'
+                : 'bg-white border-slate-200/80 divide-slate-100'
+            }`}>
               {(() => {
                 const { topLevel, subCatsMap } = getGroupedCategories();
                 if (topLevel.length === 0) {
@@ -716,146 +792,265 @@ export function AccountsCategoriesPanel({
                 const elements: React.ReactNode[] = [];
                 
                 topLevel.forEach(parent => {
+                  const baseBudget = budgets?.find(b => b.categoryId === parent.id && (!b.month || b.month === 'base'));
+                  const activeMonth = getCurrentMonthYyyymm();
+                  const shiftBudget = budgets?.find(b => b.categoryId === parent.id && b.month === activeMonth);
+                  const limitAmount = (baseBudget?.limitAmount || 0) + (shiftBudget?.limitAmount || 0);
+
+                  const spent = transactions
+                    ? transactions
+                        .filter(t => t.categoryId === parent.id && t.type === 'expense' && t.date.startsWith(activeMonth))
+                        .reduce((sum, t) => sum + Math.abs(t.amount), 0)
+                    : 0;
+
+                  const earned = transactions
+                    ? transactions
+                        .filter(t => t.categoryId === parent.id && t.type === 'income' && t.date.startsWith(activeMonth))
+                        .reduce((sum, t) => sum + t.amount, 0)
+                    : 0;
+
+                  const percent = limitAmount > 0 ? (spent / limitAmount) * 100 : 0;
+
                   elements.push(
-                    <div
-                      key={parent.id}
-                      className={`flex items-center justify-between p-3 bg-transparent transition-all border-b last:border-0 ${
-                        theme === 'dark'
-                          ? 'hover:bg-white/5 border-white/5'
-                          : 'hover:bg-slate-50/50 border-slate-150'
-                      }`}
-                    >
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <div
-                          className="w-8 h-8 rounded-lg flex items-center justify-center text-white shrink-0 shadow-xs"
-                          style={{ backgroundColor: parent.color }}
-                        >
-                          <IconComponent name={parent.icon} size={15} />
+                    <div key={parent.id} className={`group min-w-0 p-3 sm:px-4 sm:py-3.5 transition-all flex flex-col gap-1.5 bg-transparent`}>
+                      {/* Top Row: Icon container, Category Name, Badges, Values, & Actions */}
+                      <div className="flex items-center justify-between gap-3 min-w-0">
+                        {/* Left: Icon, Name, Status Badge */}
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <div
+                            className="w-7 h-7 rounded-lg flex items-center justify-center text-white shrink-0 shadow-xs"
+                            style={{ backgroundColor: parent.color }}
+                          >
+                            <IconComponent name={parent.icon} size={14} />
+                          </div>
+                          
+                          <span className={`text-[13px] font-bold font-sans truncate ${
+                            theme === 'dark' ? 'text-slate-200' : 'text-slate-800'
+                          }`}>
+                            {parent.name}
+                          </span>
+                          
+                          {parent.quickEntry !== false ? (
+                            <span className={`hidden sm:inline-block text-[9px] font-extrabold px-1.5 py-0.5 rounded tracking-tight ${
+                              theme === 'dark' ? 'text-emerald-300 bg-emerald-500/10 border border-emerald-500/20' : 'text-emerald-650 bg-emerald-50/70 border border-emerald-150'
+                            }`}>
+                              Быстрая
+                            </span>
+                          ) : (
+                            <span className={`hidden sm:inline-block text-[9px] font-extrabold px-1.5 py-0.5 rounded tracking-tight ${
+                              theme === 'dark' ? 'text-slate-400 bg-white/5 border border-white/5' : 'text-slate-400 bg-slate-100 border border-slate-200'
+                            }`}>
+                              Скрыта
+                            </span>
+                          )}
                         </div>
-                        <div className="min-w-0">
-                          <div className="flex items-center gap-1.5 flex-wrap">
-                            <span className={`font-bold text-xs truncate ${
-                              theme === 'dark' ? 'text-slate-100' : 'text-slate-900'
-                            }`}>{parent.name}</span>
-                            {parent.quickEntry !== false ? (
-                              <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[9px] font-bold rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0">
-                                <Check size={8} className="stroke-[3px]" />
-                                <span>Быстрая</span>
-                              </span>
-                            ) : (
-                              <span className="inline-flex items-center px-1.5 py-0.5 text-[9px] font-bold rounded-md bg-slate-500/10 text-slate-400 border border-slate-500/20 shrink-0">
-                                <span>Скрыта</span>
-                              </span>
-                            )}
+
+                        {/* Right: Values, limits & action triggers */}
+                        <div className="flex items-center gap-2.5 shrink-0 ml-auto">
+                          {activeCategoryTab === 'expense' ? (
+                            <div className="flex items-center gap-1.5 font-sans font-bold">
+                              {limitAmount > 0 ? (
+                                <>
+                                  <span className={`text-[10px] font-extrabold px-1.5 py-0.5 rounded tracking-tight ${
+                                    theme === 'dark'
+                                      ? 'text-slate-400 bg-white/5 group-hover:bg-white/10'
+                                      : 'text-slate-500 bg-slate-100 group-hover:bg-slate-200'
+                                  }`}>
+                                    {percent.toFixed(0)}%
+                                  </span>
+                                  <span className={`text-[12px] sm:text-[13px] font-black ${
+                                    theme === 'dark' ? 'text-slate-200' : 'text-slate-900'
+                                  }`}>
+                                    {Math.round(spent).toLocaleString('ru-RU')} ₼
+                                    <span className="mx-1 text-[10px] text-slate-400 dark:text-slate-500 font-normal">из</span>
+                                    {Math.round(limitAmount).toLocaleString('ru-RU')} ₼
+                                  </span>
+                                </>
+                              ) : (
+                                <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400">
+                                  Без лимита ({Math.round(spent).toLocaleString('ru-RU')} ₼)
+                                </span>
+                              )}
+                            </div>
+                          ) : (
+                            <span className={`text-[12px] sm:text-[13px] font-black ${
+                              theme === 'dark' ? 'text-emerald-400' : 'text-emerald-600'
+                            }`}>
+                              +{Math.round(earned).toLocaleString('ru-RU')} ₼
+                            </span>
+                          )}
+
+                          {/* Actions */}
+                          <div className="flex items-center gap-1 border-l pl-2 border-slate-200 dark:border-white/10">
+                            <button
+                              onClick={() => handleEditCategory(parent)}
+                              className={`p-1.5 border rounded-lg hover:bg-teal-500 hover:text-slate-950 transition-colors cursor-pointer flex items-center justify-center shrink-0 ${
+                                theme === 'dark'
+                                  ? 'bg-white/5 text-slate-300 border-white/5 hover:border-teal-400'
+                                  : 'bg-slate-50 text-slate-600 border-slate-200 hover:border-teal-550'
+                              }`}
+                              title="Редактировать"
+                            >
+                              <Edit2 size={11} />
+                            </button>
+                            
+                            <button
+                              onClick={() => {
+                                const count = categories.filter(c => c.type === activeCategoryTab).length;
+                                if (count > 2) {
+                                  setDeleteConfirm({ id: parent.id, type: 'category', name: parent.name });
+                                }
+                              }}
+                              disabled={categories.filter(c => c.type === activeCategoryTab).length <= 2}
+                              className={`p-1.5 border rounded-lg transition-colors cursor-pointer shrink-0 ${
+                                theme === 'dark'
+                                  ? 'bg-white/5 border-white/5 text-slate-400 hover:bg-rose-500/10 hover:text-rose-455 hover:border-rose-500/20'
+                                  : 'bg-slate-50 border-slate-200 text-slate-505 hover:bg-rose-50 hover:text-rose-650 hover:border-rose-220'
+                              }`}
+                              title="Удалить категорию"
+                            >
+                              <Trash2 size={11} />
+                            </button>
                           </div>
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-1.5 shrink-0">
-                        <button
-                          onClick={() => handleEditCategory(parent)}
-                          className={`p-1 px-1.5 rounded-lg transition-all cursor-pointer flex items-center justify-center shrink-0 ${
-                            theme === 'dark'
-                              ? 'hover:bg-white/10 text-slate-400 hover:text-white'
-                              : 'hover:bg-slate-150 text-slate-500 hover:text-slate-900'
-                          }`}
-                          title="Изменить"
-                        >
-                          <Edit2 size={12} />
-                        </button>
-                        
-                        <button
-                          onClick={() => {
-                            const count = categories.filter(c => c.type === activeCategoryTab).length;
-                            if (count > 2) {
-                              setDeleteConfirm({ id: parent.id, type: 'category', name: parent.name });
-                            }
-                          }}
-                          disabled={categories.filter(c => c.type === activeCategoryTab).length <= 2}
-                          className={`p-1 disabled:opacity-30 rounded-lg transition-colors cursor-pointer shrink-0 ${
-                            theme === 'dark'
-                              ? 'hover:bg-rose-500/10 text-slate-400 hover:text-rose-450'
-                              : 'hover:bg-rose-100 text-slate-500 hover:text-rose-650'
-                          }`}
-                          title="Удалить категорию"
-                        >
-                          <Trash2 size={11} />
-                        </button>
-                      </div>
+                      {/* Simple sleek progress line or colored accent underneath is expense limits are active */}
+                      {activeCategoryTab === 'expense' && limitAmount > 0 && (
+                        <div className={`w-full mt-1.5 h-[3px] rounded-full overflow-hidden ${
+                          theme === 'dark' ? 'bg-white/5' : 'bg-slate-100/60'
+                        }`}>
+                          <div
+                            style={{ width: `${Math.min(percent, 100)}%` }}
+                            className={`h-full rounded-full transition-all duration-550 ${
+                              percent >= 100 ? 'bg-rose-500' : percent >= 85 ? 'bg-amber-500' : 'bg-teal-500'
+                            }`}
+                          />
+                        </div>
+                      )}
                     </div>
                   );
                   
                   const kids = subCatsMap[parent.id] || [];
                   kids.forEach(sub => {
+                    const subBase = budgets?.find(b => b.categoryId === sub.id && (!b.month || b.month === 'base'));
+                    const subShift = budgets?.find(b => b.categoryId === sub.id && b.month === activeMonth);
+                    const subLimit = (subBase?.limitAmount || 0) + (subShift?.limitAmount || 0);
+
+                    const subSpent = transactions
+                      ? transactions
+                          .filter(t => t.categoryId === sub.id && t.type === 'expense' && t.date.startsWith(activeMonth))
+                          .reduce((sum, t) => sum + Math.abs(t.amount), 0)
+                      : 0;
+
+                    const subEarned = transactions
+                      ? transactions
+                          .filter(t => t.categoryId === sub.id && t.type === 'income' && t.date.startsWith(activeMonth))
+                          .reduce((sum, t) => sum + t.amount, 0)
+                      : 0;
+
+                    const subPercent = subLimit > 0 ? (subSpent / subLimit) * 100 : 0;
+
                     elements.push(
-                      <div
-                        key={sub.id}
-                        className={`flex items-center justify-between p-2.5 pl-9 transition-all border-b last:border-0 ${
-                          theme === 'dark'
-                            ? 'hover:bg-white/7 border-white/5 bg-white/[0.01]'
-                            : 'hover:bg-slate-50/70 border-slate-150 bg-slate-50/30'
-                        }`}
-                      >
-                        <div className="flex items-center gap-2 min-w-0">
-                          <div className={`w-3 h-3 border-l-2 border-b-2 rounded-bl-md shrink-0 -mt-1.5 ${
-                            theme === 'dark' ? 'border-white/15' : 'border-slate-300'
-                          }`} />
-                          
-                          <div
-                            className="w-5.5 h-5.5 rounded-md flex items-center justify-center text-white shrink-0 shadow-xs"
-                            style={{ backgroundColor: sub.color }}
-                          >
-                            <span className="text-[9px] text-white">
+                      <div key={sub.id} className={`group min-w-0 p-3 pl-8 sm:pl-10 sm:py-3 transition-all flex flex-col gap-1.25 ${
+                        theme === 'dark' ? 'bg-slate-950/15' : 'bg-slate-50/40'
+                      }`}>
+                        {/* Top Row: Tree line symbol, Icon container, Name, Badges, Values, & Actions */}
+                        <div className="flex items-center justify-between gap-3 min-w-0">
+                          {/* Left: Tree branch line shape, Icon, Name */}
+                          <div className="flex items-center gap-2 min-w-0">
+                            <div className={`w-3 h-3 border-l-2 border-b-2 rounded-bl-md shrink-0 -mt-1 ${
+                              theme === 'dark' ? 'border-white/10' : 'border-slate-300'
+                            }`} />
+                            
+                            <div
+                              className="w-5.5 h-5.5 rounded-md flex items-center justify-center text-white shrink-0 shadow-xs"
+                              style={{ backgroundColor: sub.color }}
+                            >
                               <IconComponent name={sub.icon} size={11} />
+                            </div>
+                            
+                            <span className={`text-[11.5px] font-semibold truncate ${
+                              theme === 'dark' ? 'text-slate-300' : 'text-slate-700'
+                            }`}>
+                              {formatCategoryDisplayName(sub.name)}
                             </span>
                           </div>
-                          
-                          <div className="min-w-0">
-                            <div className="flex items-center gap-1.5 flex-wrap">
-                              <span className={`font-semibold text-xs truncate ${
-                                theme === 'dark' ? 'text-slate-300' : 'text-slate-705'
-                              }`}>{formatCategoryDisplayName(sub.name)}</span>
-                              {sub.quickEntry !== false ? (
-                                <span className="inline-flex items-center gap-0.5 px-1 py-0.5 text-[8px] font-bold rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0">
-                                  <Check size={6} className="stroke-[3px]" />
-                                  <span>Быстрая</span>
-                                </span>
-                              ) : null}
+
+                          {/* Right: Values & Action buttons */}
+                          <div className="flex items-center gap-2.5 shrink-0 ml-auto font-bold">
+                            {activeCategoryTab === 'expense' ? (
+                              <div className="flex items-center gap-1 font-sans text-[11px]">
+                                {subLimit > 0 ? (
+                                  <>
+                                    <span className={`text-[11px] ${
+                                      theme === 'dark' ? 'text-slate-300' : 'text-slate-800'
+                                    }`}>
+                                      {Math.round(subSpent)} / {Math.round(subLimit)} ₼
+                                    </span>
+                                  </>
+                                ) : (
+                                  <span className="text-slate-450 dark:text-slate-500 text-[10px]">
+                                    {Math.round(subSpent)} ₼
+                                  </span>
+                                )}
+                              </div>
+                            ) : (
+                              <span className={`text-xs font-bold ${
+                                theme === 'dark' ? 'text-emerald-400' : 'text-emerald-600'
+                              }`}>
+                                +{Math.round(subEarned)} ₼
+                              </span>
+                            )}
+
+                            {/* Actions */}
+                            <div className="flex items-center gap-1 border-l pl-2 border-slate-200 dark:border-white/10">
+                              <button
+                                onClick={() => handleEditCategory(sub)}
+                                className={`p-1 border rounded hover:bg-teal-500 hover:text-slate-950 transition-colors cursor-pointer flex items-center justify-center shrink-0 ${
+                                  theme === 'dark'
+                                    ? 'bg-white/5 text-slate-350 border-white/5 hover:border-teal-400'
+                                    : 'bg-slate-50 text-slate-550 border-slate-200 hover:border-teal-505'
+                                }`}
+                                title="Редактировать подкатегорию"
+                              >
+                                <Edit2 size={10} />
+                              </button>
+                              
+                              <button
+                                onClick={() => {
+                                  const count = categories.filter(c => c.type === activeCategoryTab).length;
+                                  if (count > 2) {
+                                    setDeleteConfirm({ id: sub.id, type: 'category', name: sub.name });
+                                  }
+                                }}
+                                disabled={categories.filter(c => c.type === activeCategoryTab).length <= 2}
+                                className={`p-1 border rounded transition-colors cursor-pointer flex items-center justify-center shrink-0 ${
+                                  theme === 'dark'
+                                    ? 'bg-white/5 border-white/5 text-slate-400 hover:bg-rose-500/10 hover:text-rose-450 hover:border-rose-500/20'
+                                    : 'bg-slate-50 border-slate-200 text-slate-505 hover:bg-rose-50 hover:text-rose-650 hover:border-rose-220'
+                                }`}
+                                title="Удалить подкатегорию"
+                              >
+                                <Trash2 size={10} />
+                              </button>
                             </div>
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-1.5 shrink-0">
-                          <button
-                            onClick={() => handleEditCategory(sub)}
-                            className={`p-1 px-1.5 rounded-lg transition-all cursor-pointer flex items-center justify-center shrink-0 ${
-                              theme === 'dark'
-                                ? 'hover:bg-white/10 text-slate-400 hover:text-white'
-                                : 'hover:bg-slate-150 text-slate-500 hover:text-slate-900'
-                            }`}
-                            title="Изменить подкатегорию"
-                          >
-                            <Edit2 size={11} />
-                          </button>
-                          
-                          <button
-                            onClick={() => {
-                              const count = categories.filter(c => c.type === activeCategoryTab).length;
-                              if (count > 2) {
-                                setDeleteConfirm({ id: sub.id, type: 'category', name: sub.name });
-                              }
-                            }}
-                            disabled={categories.filter(c => c.type === activeCategoryTab).length <= 2}
-                            className={`p-1 disabled:opacity-30 rounded-lg transition-colors cursor-pointer shrink-0 ${
-                              theme === 'dark'
-                                ? 'hover:bg-rose-500/10 text-slate-400 hover:text-rose-450'
-                                : 'hover:bg-rose-100 text-slate-500 hover:text-rose-650'
-                            }`}
-                            title="Удалить подкатегорию"
-                          >
-                            <Trash2 size={11} />
-                          </button>
-                        </div>
+                        {/* Mini indicator line for subcategory budget limit if any */}
+                        {activeCategoryTab === 'expense' && subLimit > 0 && (
+                          <div className={`w-full ml-5 mt-1 h-[2px] rounded-full overflow-hidden max-w-[calc(100%-20px)] ${
+                            theme === 'dark' ? 'bg-white/5' : 'bg-slate-100/60'
+                          }`}>
+                            <div
+                              style={{ width: `${Math.min(subPercent, 100)}%` }}
+                              className={`h-full rounded-full transition-all duration-550 ${
+                                subPercent >= 100 ? 'bg-rose-500' : subPercent >= 85 ? 'bg-amber-500' : 'bg-teal-500'
+                              }`}
+                            />
+                          </div>
+                        )}
                       </div>
                     );
                   });
@@ -866,8 +1061,6 @@ export function AccountsCategoriesPanel({
             </div>
           </div>
         </div>
-
-
       </div>
 
       {/* CARD EDIT MODAL overlay */}

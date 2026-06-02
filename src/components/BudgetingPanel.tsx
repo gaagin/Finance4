@@ -1,8 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Transaction, Category, BudgetLimit, formatCategoryDisplayName, getDynamicTimeframeOptions, formatTimeframeLabel, getCurrentMonthYyyymm } from '../types';
 import { IconComponent } from './IconComponent';
 import { Plus, Sliders, Trash2, Edit2, AlertCircle, CheckCircle2, TrendingUp, Info, X, AlertTriangle, Calendar } from 'lucide-react';
 import { SearchableSelect } from './SearchableSelect';
+
+const getParentCategory = (cat: Category, allCategories: Category[]): Category => {
+  const separators = ['/', '—', '–', '-', '−'];
+  for (const sep of separators) {
+    if (cat.name.includes(sep)) {
+      const parts = cat.name.split(sep);
+      const parentName = parts[0].trim();
+      const parentCat = allCategories.find(
+        c => c.name.trim().toLowerCase() === parentName.toLowerCase() && c.type === cat.type
+      );
+      if (parentCat) {
+        return parentCat;
+      } else {
+        return {
+          id: `virtual-parent-${parentName.toLowerCase().replace(/\s+/g, '-')}`,
+          name: parentName,
+          icon: cat.icon,
+          color: cat.color,
+          type: cat.type,
+          quickEntry: cat.quickEntry
+        };
+      }
+    }
+  }
+  return cat;
+};
 
 interface BudgetingPanelProps {
   transactions: Transaction[];
@@ -28,6 +54,15 @@ export function BudgetingPanel({
   const [isEditing, setIsEditing] = useState<string | null>(null); // holds categoryId being edited
   const [isAddingBudget, setIsAddingBudget] = useState(false);
 
+  // Grouping mode for budgets list - matching Analytics configuration
+  const [budgetGroupingMode, setBudgetGroupingMode] = useState<'parent' | 'sub'>(() => {
+    return (localStorage.getItem('milli_budget_grouping_mode') as 'parent' | 'sub') || 'parent';
+  });
+
+  useEffect(() => {
+    localStorage.setItem('milli_budget_grouping_mode', budgetGroupingMode);
+  }, [budgetGroupingMode]);
+
   // Budget delete confirmation state
   const [deleteConfirm, setDeleteConfirm] = useState<{ categoryId: string; categoryName: string } | null>(null);
 
@@ -42,6 +77,17 @@ export function BudgetingPanel({
   const getSpentForCategory = (catId: string) => {
     return currentMonthTransactions
       .filter(t => t.categoryId === catId)
+      .reduce((sum, t) => sum + t.amount, 0);
+  };
+
+  const getSpentForParentCategory = (parentCatId: string) => {
+    return currentMonthTransactions
+      .filter(t => {
+        const tCat = categories.find(c => c.id === t.categoryId);
+        if (!tCat) return false;
+        const parent = getParentCategory(tCat, categories);
+        return parent.id === parentCatId;
+      })
       .reduce((sum, t) => sum + t.amount, 0);
   };
 
@@ -138,6 +184,59 @@ export function BudgetingPanel({
       };
     });
   }, [budgets, selectedMonth]);
+
+  // Aggregate or detail the categories depending on budgetGroupingMode
+  const displayedBudgets = React.useMemo(() => {
+    if (budgetGroupingMode === 'sub') {
+      return compositeBudgets.map(b => ({
+        ...b,
+        spent: getSpentForCategory(b.categoryId),
+        subCategories: [] as string[],
+        isVirtual: false
+      }));
+    }
+
+    // In 'parent' grouping mode, we map category IDs to parent category IDs, and aggregate metrics!
+    const parentMap = new Map<string, {
+      categoryId: string; // ID of the parent category
+      baseAmount: number;
+      adjAmount: number;
+      totalAmount: number;
+      spent: number;
+      isVirtual: boolean;
+      subCategories: string[]; // original budgeted category IDs inside
+    }>();
+
+    compositeBudgets.forEach(b => {
+      const cat = categories.find(c => c.id === b.categoryId);
+      if (!cat) return;
+
+      const parentCat = getParentCategory(cat, categories);
+      const parentId = parentCat.id;
+
+      if (!parentMap.has(parentId)) {
+        parentMap.set(parentId, {
+          categoryId: parentId,
+          baseAmount: 0,
+          adjAmount: 0,
+          totalAmount: 0,
+          spent: getSpentForParentCategory(parentId),
+          isVirtual: parentCat.id.startsWith('virtual-'),
+          subCategories: []
+        });
+      }
+
+      const entry = parentMap.get(parentId)!;
+      entry.baseAmount += b.baseAmount;
+      entry.adjAmount += b.adjAmount;
+      entry.totalAmount += b.totalAmount;
+      if (!entry.subCategories.includes(b.categoryId)) {
+        entry.subCategories.push(b.categoryId);
+      }
+    });
+
+    return Array.from(parentMap.values());
+  }, [compositeBudgets, budgetGroupingMode, categories, currentMonthTransactions]);
 
   const expenseCategories = categories.filter(c => c.type === 'expense');
 

@@ -49,12 +49,23 @@ export interface BudgetLimit {
   updatedAt?: number;
 }
 
+export interface FinancialGoal {
+  id: string;
+  name: string;
+  targetAmount: number;
+  targetDate: string; // YYYY-MM-DD
+  accountId: string; // Linked account ID
+  createdAt: number;
+  updatedAt?: number;
+}
+
 export interface FinanceData {
   accounts: Account[];
   categories: Category[];
   transactions: Transaction[];
   budgets: BudgetLimit[];
   cards: BankCard[]; // Список банковских карт
+  goals?: FinancialGoal[]; // Финансовые цели
 }
 
 export function formatCategoryDisplayName(name: string): string {

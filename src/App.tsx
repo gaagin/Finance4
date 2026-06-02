@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, ChangeEvent } from 'react';
-import { FinanceData, Transaction, Account, Category, BankCard } from './types';
+import { FinanceData, Transaction, Account, Category, BankCard, FinancialGoal } from './types';
 import { initialFinanceData } from './initialData';
 import { DashboardOverview } from './components/DashboardOverview';
 import { TransactionPanel } from './components/TransactionPanel';
@@ -7,8 +7,8 @@ import { AccountsCategoriesPanel } from './components/AccountsCategoriesPanel';
 import { BudgetingPanel } from './components/BudgetingPanel';
 import { CalendarPanel } from './components/CalendarPanel';
 import { GoogleSheetsSyncPanel } from './components/GoogleSheetsSyncPanel';
-import { AiAssistantPanel } from './components/AiAssistantPanel';
-import { LayoutDashboard, ReceiptText, Calendar, SlidersHorizontal, Settings, Flame, Bell, AlertTriangle, XCircle, CheckCircle, Info, LogIn, LogOut, ShieldAlert, X, RefreshCw, FolderOpen, TrendingUp, Sun, Moon, Sparkles } from 'lucide-react';
+import { FinancialGoalsPanel } from './components/FinancialGoalsPanel';
+import { LayoutDashboard, ReceiptText, Calendar, SlidersHorizontal, Settings, Flame, Bell, AlertTriangle, XCircle, CheckCircle, Info, LogIn, LogOut, ShieldAlert, X, RefreshCw, FolderOpen, TrendingUp, Sun, Moon, Target } from 'lucide-react';
 import { initAuth, logout, googleSignIn } from './googleAuth';
 import { User } from 'firebase/auth';
 import { parseAndStandardizeJsonToFinanceData } from './honeyJsonConverter';
@@ -1332,6 +1332,51 @@ export default function App() {
     trackDeletedIds('milli_deleted_budget_ids', deleteId);
   };
 
+  // --- BUSINESS LOGIC: FINANCIAL GOALS ---
+  const handleSaveGoal = (goal: FinancialGoal) => {
+    setData(prev => {
+      const existingGoals = prev.goals || [];
+      const exists = existingGoals.some(g => g.id === goal.id);
+      
+      let nextGoals;
+      if (exists) {
+        nextGoals = existingGoals.map(g => g.id === goal.id ? goal : g);
+        addToast(`Финансовая цель "${goal.name}" успешно обновлена! 🎯`, "success");
+      } else {
+        nextGoals = [...existingGoals, goal];
+        addToast(`Создана новая финансовая цель "${goal.name}"! 🎯`, "success");
+      }
+
+      const nextData = {
+        ...prev,
+        goals: nextGoals
+      };
+      
+      localStorage.setItem('milli_finance_data_v8_realonly_clean', JSON.stringify(nextData));
+      return nextData;
+    });
+  };
+
+  const handleDeleteGoal = (id: string) => {
+    setData(prev => {
+      const existingGoals = prev.goals || [];
+      const goalToDelete = existingGoals.find(g => g.id === id);
+      const nextGoals = existingGoals.filter(g => g.id !== id);
+      
+      if (goalToDelete) {
+        addToast(`Цель "${goalToDelete.name}" удалена.`, "warning");
+      }
+
+      const nextData = {
+        ...prev,
+        goals: nextGoals
+      };
+
+      localStorage.setItem('milli_finance_data_v8_realonly_clean', JSON.stringify(nextData));
+      return nextData;
+    });
+  };
+
   // Reset Helper to let user easily restore original HoneyMoney imported state
   const handleResetData = () => {
     if (confirm('Вы уверены, что хотите сбросить все данные к вашим импортированным записям HoneyMoney? Все текущие временные изменения будут заменены исходным слепком экспорта.')) {
@@ -1708,11 +1753,13 @@ export default function App() {
             </div>
           )}
 
-          {activeTab === 'ai-assistant' && (
-            <AiAssistantPanel
-              financeData={data}
+          {activeTab === 'financial-goals' && (
+            <FinancialGoalsPanel
+              accounts={data.accounts}
+              goals={data.goals}
+              onSaveGoal={handleSaveGoal}
+              onDeleteGoal={handleDeleteGoal}
               theme={theme}
-              addToast={addToast}
             />
           )}
         </div>
@@ -1799,9 +1846,9 @@ export default function App() {
         </button>
 
         <button
-          onClick={() => handleQuickNavigate('ai-assistant')}
+          onClick={() => handleQuickNavigate('financial-goals')}
           className={`flex flex-col items-center justify-center py-0.5 px-0.5 rounded-lg transition-all flex-1 min-w-0 select-none cursor-pointer group ${
-            activeTab === 'ai-assistant'
+            activeTab === 'financial-goals'
               ? theme === 'dark'
                 ? 'bg-teal-500/15 text-teal-300 border border-teal-500/20 shadow-inner font-bold'
                 : 'bg-teal-500/10 text-teal-600 border border-teal-500/20 shadow-sm font-bold'
@@ -1810,8 +1857,8 @@ export default function App() {
                 : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100 border border-transparent'
           }`}
         >
-          <Sparkles size={16} className={`transition-transform group-active:scale-90 ${activeTab === 'ai-assistant' ? 'text-teal-400' : 'text-teal-400/85 animate-pulse'}`} />
-          <span className="text-[9px] sm:text-[10.5px] font-bold tracking-normal mt-0.5 truncate">ИИ Помощник</span>
+          <Target size={16} className="transition-transform group-active:scale-90" />
+          <span className="text-[9px] sm:text-[10.5px] font-bold tracking-normal mt-0.5 truncate">Цели</span>
         </button>
 
         <button
