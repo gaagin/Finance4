@@ -45,6 +45,62 @@ export function BudgetingPanel({
       .reduce((sum, t) => sum + t.amount, 0);
   };
 
+  const formatMonthKey = (monthStr: string) => {
+    if (!monthStr || !monthStr.includes('-')) return monthStr;
+    const [year, month] = monthStr.split('-');
+    const monthNames: { [key: string]: string } = {
+      '01': 'Янв', '02': 'Фев', '03': 'Мар', '04': 'Апр', '05': 'Май', '06': 'Июн',
+      '07': 'Июл', '08': 'Авг', '09': 'Сен', '10': 'Окт', '11': 'Ноя', '12': 'Дек'
+    };
+    return `${monthNames[month] || month} ${year}`;
+  };
+
+  const calculateAverage12Months = (catId?: string | null) => {
+    if (!catId) return { average: 0, totalSum: 0, monthlyDetails: [] };
+    
+    const today = new Date();
+    const months: string[] = [];
+    
+    for (let i = 0; i < 12; i++) {
+      const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
+      const yr = d.getFullYear();
+      const mo = String(d.getMonth() + 1).padStart(2, '0');
+      months.push(`${yr}-${mo}`);
+    }
+    
+    const catExpenses = (transactions || []).filter(t => 
+      t.categoryId === catId && t.type === 'expense'
+    );
+
+    const monthlySums: { [key: string]: number } = {};
+    months.forEach(m => {
+      monthlySums[m] = 0;
+    });
+
+    catExpenses.forEach(t => {
+      if (t.date && t.date.length >= 7) {
+        const transMonth = t.date.substring(0, 7);
+        if (months.includes(transMonth)) {
+          monthlySums[transMonth] += Math.abs(t.amount);
+        }
+      }
+    });
+
+    const totalSum = months.reduce((sum, m) => sum + monthlySums[m], 0);
+    const average = totalSum / 12;
+
+    const monthlyDetails = months.map(m => ({
+      month: m,
+      amount: monthlySums[m]
+    })).reverse(); // chronological
+
+    return {
+      average,
+      totalSum,
+      monthlyDetails
+    };
+  };
+
   // Find all configured budgets
   // Active composite stats for the selected month
   const compositeBudgets = React.useMemo(() => {
@@ -528,6 +584,65 @@ export function BudgetingPanel({
                 </div>
               </div>
 
+              {/* 12-Month Average Expenses Stats */}
+              {selectedCategory && (
+                (() => {
+                  const avgData = calculateAverage12Months(selectedCategory);
+                  return (
+                    <div className={`p-3 border rounded-xl space-y-2.5 transition-colors ${
+                      theme === 'dark'
+                        ? 'bg-slate-950/45 border-amber-500/10'
+                        : 'bg-amber-50/20 border-amber-500/15'
+                    }`}>
+                      <div className="flex justify-between items-center">
+                        <span className={`text-[11px] font-semibold uppercase tracking-wider flex items-center gap-1 ${
+                          theme === 'dark' ? 'text-slate-450' : 'text-slate-500'
+                        }`}>
+                          <TrendingUp size={12} className="text-amber-500 shrink-0" />
+                          Средний расход за 12 месяцев
+                        </span>
+                        <span className="text-xs font-black text-amber-550">
+                          {avgData.average.toFixed(1)} ₼ <span className={`text-[10px] font-normal ${
+                            theme === 'dark' ? 'text-slate-500' : 'text-slate-400'
+                          }`}>/ мес</span>
+                        </span>
+                      </div>
+
+                      <div className="text-[10px] space-y-2">
+                        <div className={`flex justify-between items-center border-b pb-1.5 ${
+                          theme === 'dark' ? 'text-slate-400 border-white/5' : 'text-slate-600 border-slate-100'
+                        }`}>
+                          <span>Всего за последние 12 мес:</span>
+                          <span className={`font-bold ${theme === 'dark' ? 'text-slate-200' : 'text-slate-800'}`}>
+                            {avgData.totalSum.toFixed(1)} ₼
+                          </span>
+                        </div>
+                        
+                        {/* Mini breakdown of months with spending */}
+                        <div className="space-y-1 max-h-[105px] overflow-y-auto custom-scrollbar pr-1">
+                          <span className={`text-[9px] block font-semibold uppercase tracking-wider ${
+                            theme === 'dark' ? 'text-slate-500' : 'text-slate-400'
+                          }`}>Индивидуальный тренд по месяцам:</span>
+                          {avgData.monthlyDetails.slice(-6).map((det, idx) => (
+                            <div key={idx} className="flex justify-between items-center py-0.5">
+                              <span className={`text-[10px] ${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
+                                {formatMonthKey(det.month)}
+                              </span>
+                              <span className={det.amount > 0 
+                                ? `font-bold text-[10px] ${theme === 'dark' ? 'text-slate-350' : 'text-slate-705'}` 
+                                : `text-[10px] ${theme === 'dark' ? 'text-slate-600' : 'text-slate-400'}`
+                              }>
+                                {det.amount > 0 ? `${det.amount.toFixed(0)} ₼` : '0 ₼'}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })()
+              )}
+
               <div className={`flex gap-3 pt-4 border-t ${
                 theme === 'dark' ? 'border-white/5' : 'border-slate-100'
               }`}>
@@ -713,6 +828,65 @@ export function BudgetingPanel({
                   <span>Сдвиг: {Number(adjAmountInput) || 0}₼</span>
                 </div>
               </div>
+
+              {/* 12-Month Average Expenses Stats */}
+              {selectedCategory && (
+                (() => {
+                  const avgData = calculateAverage12Months(selectedCategory);
+                  return (
+                    <div className={`p-3 border rounded-xl space-y-2.5 transition-colors ${
+                      theme === 'dark'
+                        ? 'bg-slate-950/45 border-amber-500/10'
+                        : 'bg-amber-50/20 border-amber-500/15'
+                    }`}>
+                      <div className="flex justify-between items-center">
+                        <span className={`text-[11px] font-semibold uppercase tracking-wider flex items-center gap-1 ${
+                          theme === 'dark' ? 'text-slate-450' : 'text-slate-500'
+                        }`}>
+                          <TrendingUp size={12} className="text-amber-500 shrink-0" />
+                          Средний расход за 12 месяцев
+                        </span>
+                        <span className="text-xs font-black text-amber-550">
+                          {avgData.average.toFixed(1)} ₼ <span className={`text-[10px] font-normal ${
+                            theme === 'dark' ? 'text-slate-500' : 'text-slate-400'
+                          }`}>/ мес</span>
+                        </span>
+                      </div>
+
+                      <div className="text-[10px] space-y-2">
+                        <div className={`flex justify-between items-center border-b pb-1.5 ${
+                          theme === 'dark' ? 'text-slate-400 border-white/5' : 'text-slate-600 border-slate-100'
+                        }`}>
+                          <span>Всего за последние 12 мес:</span>
+                          <span className={`font-bold ${theme === 'dark' ? 'text-slate-200' : 'text-slate-800'}`}>
+                            {avgData.totalSum.toFixed(1)} ₼
+                          </span>
+                        </div>
+                        
+                        {/* Mini breakdown of months with spending */}
+                        <div className="space-y-1 max-h-[105px] overflow-y-auto custom-scrollbar pr-1">
+                          <span className={`text-[9px] block font-semibold uppercase tracking-wider ${
+                            theme === 'dark' ? 'text-slate-500' : 'text-slate-400'
+                          }`}>Индивидуальный тренд по месяцам:</span>
+                          {avgData.monthlyDetails.slice(-6).map((det, idx) => (
+                            <div key={idx} className="flex justify-between items-center py-0.5">
+                              <span className={`text-[10px] ${theme === 'dark' ? 'text-slate-400' : 'text-slate-505'}`}>
+                                {formatMonthKey(det.month)}
+                              </span>
+                              <span className={det.amount > 0 
+                                ? `font-bold text-[10px] ${theme === 'dark' ? 'text-slate-350' : 'text-slate-705'}` 
+                                : `text-[10px] ${theme === 'dark' ? 'text-slate-600' : 'text-slate-400'}`
+                              }>
+                                {det.amount > 0 ? `${det.amount.toFixed(0)} ₼` : '0 ₼'}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })()
+              )}
 
               <div className={`flex gap-3 pt-4 border-t ${
                 theme === 'dark' ? 'border-white/5' : 'border-slate-100'
