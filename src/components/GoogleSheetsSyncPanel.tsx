@@ -63,7 +63,8 @@ export function GoogleSheetsSyncPanel({
       getDeletedCount('milli_deleted_account_ids') +
       getDeletedCount('milli_deleted_category_ids') +
       getDeletedCount('milli_deleted_card_ids') +
-      getDeletedCount('milli_deleted_budget_ids')
+      getDeletedCount('milli_deleted_budget_ids') +
+      getDeletedCount('milli_deleted_goal_ids')
     );
   };
 
@@ -73,6 +74,7 @@ export function GoogleSheetsSyncPanel({
     localStorage.removeItem('milli_deleted_category_ids');
     localStorage.removeItem('milli_deleted_card_ids');
     localStorage.removeItem('milli_deleted_budget_ids');
+    localStorage.removeItem('milli_deleted_goal_ids');
     addToast('Локальные логи удалений успешно сброшены', 'success');
   };
 
@@ -91,7 +93,8 @@ export function GoogleSheetsSyncPanel({
         accounts: [] as string[],
         categories: [] as string[],
         cards: [] as string[],
-        budgets: [] as string[]
+        budgets: [] as string[],
+        goals: [] as string[]
       };
 
       try {
@@ -109,6 +112,9 @@ export function GoogleSheetsSyncPanel({
 
         const bSaved = localStorage.getItem('milli_deleted_budget_ids');
         if (bSaved) deletedIds.budgets = JSON.parse(bSaved);
+
+        const goalsSaved = localStorage.getItem('milli_deleted_goal_ids');
+        if (goalsSaved) deletedIds.goals = JSON.parse(goalsSaved);
       } catch (e) {
         console.error('Error parsing deleted IDs', e);
       }
@@ -125,6 +131,7 @@ export function GoogleSheetsSyncPanel({
       localStorage.removeItem('milli_deleted_category_ids');
       localStorage.removeItem('milli_deleted_card_ids');
       localStorage.removeItem('milli_deleted_budget_ids');
+      localStorage.removeItem('milli_deleted_goal_ids');
 
       // 5. Update UI stats and persist details
       const nowStr = new Date().toLocaleString('ru-RU');

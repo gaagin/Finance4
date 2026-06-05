@@ -1,4 +1,4 @@
-import { Transaction, Account, Category, BudgetLimit, BankCard, FinanceData } from './types';
+import { Transaction, Account, Category, BudgetLimit, BankCard, FinanceData, FinancialGoal } from './types';
 
 export interface FullSyncResult {
   mergedData: FinanceData;
@@ -18,6 +18,7 @@ export interface DeletedIds {
   categories: string[];
   cards: string[];
   budgets: string[]; // categoryId of deleted budget limits
+  goals: string[]; // ids of deleted financial goals
 }
 
 /**
@@ -93,7 +94,7 @@ export async function findOrCreateSyncSpreadsheet(accessToken: string): Promise<
     const metaData = await metaResponse.json();
     const existingTitles = new Set(metaData.sheets?.map((s: any) => s.properties?.title) || []);
     
-    const requiredSheets = ['Transactions', 'Accounts', 'Categories', 'Cards', 'Budgets', 'Deletions'];
+    const requiredSheets = ['Transactions', 'Accounts', 'Categories', 'Cards', 'Budgets', 'Goals', 'Deletions'];
     const missingSheets = requiredSheets.filter(title => !existingTitles.has(title));
     
     if (missingSheets.length > 0) {
@@ -411,6 +412,31 @@ export function rowToBudget(row: any[]): BudgetLimit {
   };
 }
 
+// Map FinancialGoal
+export function goalToRow(g: FinancialGoal): any[] {
+  return [
+    g.id || '',
+    g.name || '',
+    g.targetAmount || 0,
+    g.targetDate || '',
+    g.accountId || '',
+    g.createdAt || Date.now(),
+    g.updatedAt || Date.now()
+  ];
+}
+
+export function rowToGoal(row: any[]): FinancialGoal {
+  return {
+    id: String(row[0] || ''),
+    name: String(row[1] || ''),
+    targetAmount: parseSafeNumber(row[2], 0),
+    targetDate: parseSafeDate(row[3]),
+    accountId: String(row[4] || ''),
+    createdAt: parseSafeTimestamp(row[5], Date.now()),
+    updatedAt: parseSafeTimestamp(row[6], undefined)
+  };
+}
+
 /**
  * Symmetrically merges lists based on target fields and timestamps
  */
@@ -544,7 +570,8 @@ export async function syncWithGoogleSheets(
     'Accounts!A:G',
     'Categories!A:G',
     'Cards!A:E',
-    'Budgets!A:C',
+    'Budgets!A:D',
+    'Goals!A:G',
     'Deletions!A:C'
   ];
   const rangesParams = ranges.map(r => `ranges=${encodeURIComponent(r)}`).join('&');
@@ -573,13 +600,15 @@ export async function syncWithGoogleSheets(
   const catRows = valueRanges[2]?.values || [];
   const cardRows = valueRanges[3]?.values || [];
   const budgetRows = valueRanges[4]?.values || [];
-  const deletionRows = valueRanges[5]?.values || [];
+  const goalRows = valueRanges[5]?.values || [];
+  const deletionRows = valueRanges[6]?.values || [];
 
   const remoteTransactions: Transaction[] = txRows.slice(1).map((r: any[]) => rowToTransaction(r)).filter((t: Transaction) => t.id);
   const remoteAccounts: Account[] = accRows.slice(1).map((r: any[]) => rowToAccount(r)).filter((a: Account) => a.id);
   const remoteCategories: Category[] = catRows.slice(1).map((r: any[]) => rowToCategory(r)).filter((c: Category) => c.id);
   const remoteCards: BankCard[] = cardRows.slice(1).map((r: any[]) => rowToCard(r)).filter((c: BankCard) => c.id);
   const remoteBudgets: BudgetLimit[] = budgetRows.slice(1).map((r: any[]) => rowToBudget(r)).filter((b: BudgetLimit) => b.categoryId);
+  const remoteGoals: FinancialGoal[] = goalRows.slice(1).map((r: any[]) => rowToGoal(r)).filter((g: FinancialGoal) => g.id);
 
   const remoteDeletions = deletionRows.slice(1).map((r: any[]) => ({
     id: String(r[0] || ''),
@@ -609,6 +638,7 @@ export async function syncWithGoogleSheets(
   mergeLocalDeletions(deletedIds.categories, 'categories');
   mergeLocalDeletions(deletedIds.cards, 'cards');
   mergeLocalDeletions(deletedIds.budgets, 'budgets');
+  mergeLocalDeletions(deletedIds.goals || [], 'goals');
 
   // 3. Partition deletions by entity type for easy set lookup
   const globalDeletedTx = new Set<string>();
@@ -616,6 +646,7 @@ export async function syncWithGoogleSheets(
   const globalDeletedCat = new Set<string>();
   const globalDeletedCard = new Set<string>();
   const globalDeletedBudget = new Set<string>();
+  const globalDeletedGoal = new Set<string>();
 
   for (const [id, value] of allDeletionsMap.entries()) {
     if (value.type === 'transactions') globalDeletedTx.add(id);
@@ -623,6 +654,7 @@ export async function syncWithGoogleSheets(
     else if (value.type === 'categories') globalDeletedCat.add(id);
     else if (value.type === 'cards') globalDeletedCard.add(id);
     else if (value.type === 'budgets') globalDeletedBudget.add(id);
+    else if (value.type === 'goals') globalDeletedGoal.add(id);
   }
 
   // Initialize stats tracking
@@ -729,8 +761,19 @@ export async function syncWithGoogleSheets(
     remoteBudgets,
     new Set(deletedIds.budgets),
     globalDeletedBudget,
-    b => b.month ? `${b.categoryId}_${b.month}` : b.categoryId,
-    (l, r) => l.limitAmount === r.limitAmount && l.month === r.month
+    b => {
+      const isBase = !b.month || b.month === 'base' || b.month === '';
+      return isBase ? `${b.categoryId}_base` : `${b.categoryId}_${b.month}`;
+    },
+    (l, r) => {
+      const lIsBase = !l.month || l.month === 'base' || l.month === '';
+      const rIsBase = !r.month || r.month === 'base' || r.month === '';
+      if (lIsBase !== rIsBase) return false;
+      if (lIsBase) {
+        return l.limitAmount === r.limitAmount;
+      }
+      return l.limitAmount === r.limitAmount && l.month === r.month;
+    }
   );
   addedToSheet.budgets = budgetSync.addedToSheet;
   addedToLocal.budgets = budgetSync.addedToLocal;
@@ -738,6 +781,27 @@ export async function syncWithGoogleSheets(
   updatedOnLocal.budgets = budgetSync.updatedOnLocal;
   deletedFromSheet.budgets = budgetSync.deletedFromSheet;
   deletedFromLocal.budgets = budgetSync.deletedFromLocal;
+
+  // Sync Financial Goals symmetrically
+  const goalSync = mergeEntityList(
+    localData.goals || [],
+    remoteGoals,
+    new Set(deletedIds.goals || []),
+    globalDeletedGoal,
+    g => g.id,
+    (l, r) =>
+      l.name === r.name &&
+      l.targetAmount === r.targetAmount &&
+      l.targetDate === r.targetDate &&
+      l.accountId === r.accountId &&
+      l.createdAt === r.createdAt
+  );
+  addedToSheet.goals = goalSync.addedToSheet;
+  addedToLocal.goals = goalSync.addedToLocal;
+  updatedOnSheet.goals = goalSync.updatedOnSheet;
+  updatedOnLocal.goals = goalSync.updatedOnLocal;
+  deletedFromSheet.goals = goalSync.deletedFromSheet;
+  deletedFromLocal.goals = goalSync.deletedFromLocal;
 
   // Keep the latest 5000 deletions to avoid growing the spreadsheet infinitely
   const sortedDeletions = Array.from(allDeletionsMap.entries()).map(([id, d]) => ({
@@ -760,6 +824,7 @@ export async function syncWithGoogleSheets(
         'Categories!A2:G10000',
         'Cards!A2:E10000',
         'Budgets!A2:D10000',
+        'Goals!A2:G10000',
         'Deletions!A2:C10000'
       ]
     })
@@ -806,6 +871,13 @@ export async function syncWithGoogleSheets(
       ]
     },
     {
+      range: `Goals!A1:G${goalSync.merged.length + 1}`,
+      values: [
+        ["id", "name", "targetAmount", "targetDate", "accountId", "createdAt", "updatedAt"],
+        ...goalSync.merged.map(g => goalToRow(g))
+      ]
+    },
+    {
       range: `Deletions!A1:C${sortedDeletions.length + 1}`,
       values: [
         ["id", "type", "deletedAt"],
@@ -837,7 +909,8 @@ export async function syncWithGoogleSheets(
       accounts: accSync.merged,
       categories: catSync.merged,
       cards: cardSync.merged,
-      budgets: budgetSync.merged
+      budgets: budgetSync.merged,
+      goals: goalSync.merged
     },
     addedToSheet,
     addedToLocal,

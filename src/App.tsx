@@ -309,7 +309,8 @@ export default function App() {
         accounts: [] as string[],
         categories: [] as string[],
         cards: [] as string[],
-        budgets: [] as string[]
+        budgets: [] as string[],
+        goals: [] as string[]
       };
 
       try {
@@ -327,6 +328,9 @@ export default function App() {
 
         const bSaved = localStorage.getItem('milli_deleted_budget_ids');
         if (bSaved) deletedIds.budgets = JSON.parse(bSaved);
+
+        const goalsSaved = localStorage.getItem('milli_deleted_goal_ids');
+        if (goalsSaved) deletedIds.goals = JSON.parse(goalsSaved);
       } catch {}
 
       try {
@@ -343,6 +347,7 @@ export default function App() {
         localStorage.removeItem('milli_deleted_category_ids');
         localStorage.removeItem('milli_deleted_card_ids');
         localStorage.removeItem('milli_deleted_budget_ids');
+        localStorage.removeItem('milli_deleted_goal_ids');
 
         const nowStr = new Date().toLocaleString('ru-RU');
         localStorage.setItem('milli_last_sync_time', nowStr);
@@ -428,7 +433,8 @@ export default function App() {
         accounts: [] as string[],
         categories: [] as string[],
         cards: [] as string[],
-        budgets: [] as string[]
+        budgets: [] as string[],
+        goals: [] as string[]
       };
 
       try {
@@ -446,6 +452,9 @@ export default function App() {
 
         const bSaved = localStorage.getItem('milli_deleted_budget_ids');
         if (bSaved) deletedIds.budgets = JSON.parse(bSaved);
+
+        const goalsSaved = localStorage.getItem('milli_deleted_goal_ids');
+        if (goalsSaved) deletedIds.goals = JSON.parse(goalsSaved);
       } catch {}
 
       import('./googleSheetsSyncService').then(async ({ syncWithGoogleSheets }) => {
@@ -473,6 +482,7 @@ export default function App() {
           localStorage.removeItem('milli_deleted_category_ids');
           localStorage.removeItem('milli_deleted_card_ids');
           localStorage.removeItem('milli_deleted_budget_ids');
+          localStorage.removeItem('milli_deleted_goal_ids');
 
           const nowStr = new Date().toLocaleString('ru-RU');
           localStorage.setItem('milli_last_sync_time', nowStr);
@@ -517,7 +527,8 @@ export default function App() {
         accounts: [] as string[],
         categories: [] as string[],
         cards: [] as string[],
-        budgets: [] as string[]
+        budgets: [] as string[],
+        goals: [] as string[]
       };
 
       try {
@@ -535,6 +546,9 @@ export default function App() {
 
         const bSaved = localStorage.getItem('milli_deleted_budget_ids');
         if (bSaved) deletedIds.budgets = JSON.parse(bSaved);
+
+        const goalsSaved = localStorage.getItem('milli_deleted_goal_ids');
+        if (goalsSaved) deletedIds.goals = JSON.parse(goalsSaved);
       } catch {}
 
       import('./googleSheetsSyncService').then(async ({ syncWithGoogleSheets }) => {
@@ -548,6 +562,7 @@ export default function App() {
           localStorage.removeItem('milli_deleted_category_ids');
           localStorage.removeItem('milli_deleted_card_ids');
           localStorage.removeItem('milli_deleted_budget_ids');
+          localStorage.removeItem('milli_deleted_goal_ids');
 
           const nowStr = new Date().toLocaleString('ru-RU');
           localStorage.setItem('milli_last_sync_time', nowStr);
@@ -1353,6 +1368,7 @@ export default function App() {
       };
       
       localStorage.setItem('milli_finance_data_v8_realonly_clean', JSON.stringify(nextData));
+      saveToFirebaseDirectly(nextData);
       return nextData;
     });
   };
@@ -1373,8 +1389,10 @@ export default function App() {
       };
 
       localStorage.setItem('milli_finance_data_v8_realonly_clean', JSON.stringify(nextData));
+      saveToFirebaseDirectly(nextData);
       return nextData;
     });
+    trackDeletedIds('milli_deleted_goal_ids', id);
   };
 
   // Reset Helper to let user easily restore original HoneyMoney imported state

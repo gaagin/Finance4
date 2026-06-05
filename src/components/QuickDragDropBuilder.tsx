@@ -385,6 +385,17 @@ export function QuickDragDropBuilder({
     toAccount: Account;
   } | null>(null);
 
+  // Account inside modal switcher state
+  const [accountSelectorTarget, setAccountSelectorTarget] = useState<'tx_acc' | 'tf_from' | 'tf_to' | 'tx_cat' | null>(null);
+
+  // New state variable to allow searching accounts/categories
+  const [modalSearchQuery, setModalSearchQuery] = useState<string>('');
+
+  // Clear query on target switch
+  useEffect(() => {
+    setModalSearchQuery('');
+  }, [accountSelectorTarget]);
+
   const [amount, setAmount] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [date, setDate] = useState<string>(() => {
@@ -558,6 +569,7 @@ export function QuickDragDropBuilder({
 
   const triggerQuickAmountModal = (account: Account, category: Category) => {
     setSelectedAccountSeq(null);
+    setAccountSelectorTarget(null);
     setActiveTxData({ account, category });
     setAmount('0');
     setDescription('');
@@ -572,6 +584,7 @@ export function QuickDragDropBuilder({
 
   const triggerQuickTransferModal = (fromAccount: Account, toAccount: Account) => {
     setSelectedAccountSeq(null);
+    setAccountSelectorTarget(null);
     setActiveTransferData({ fromAccount, toAccount });
     setAmount('0');
     setDescription('');
@@ -582,6 +595,167 @@ export function QuickDragDropBuilder({
     const month = String(d.getMonth() + 1).padStart(2, '0');
     const day = String(d.getDate()).padStart(2, '0');
     setDate(`${year}-${month}-${day}`);
+  };
+
+  // Helper to render inline account selection inside modal
+  const renderAccountSelector = (
+    currentTarget: 'tx_acc' | 'tf_from' | 'tf_to',
+    onSelect: (acc: Account) => void,
+    onCancel: () => void
+  ) => {
+    const filteredAccounts = accounts.filter(acc =>
+      acc.name.toLowerCase().includes(modalSearchQuery.toLowerCase())
+    );
+
+    return (
+      <div className="flex flex-col gap-2.5 animate-fade-in py-1">
+        <div className="flex items-center justify-between px-1">
+          <span className="text-[10px] font-black uppercase tracking-wider text-slate-500">
+            Выберите счет
+          </span>
+          <button
+            type="button"
+            onClick={onCancel}
+            className="text-[11px] font-bold text-indigo-600 hover:text-indigo-800 cursor-pointer active:scale-95 transition-all text-slate-500"
+          >
+            Отмена
+          </button>
+        </div>
+
+        {/* Search Input */}
+        <div className="relative px-1 pb-1">
+          <input
+            type="text"
+            className="w-full px-2.5 py-1.5 text-[11px] border border-slate-200 rounded-xl bg-slate-50/50 focus:bg-white focus:outline-hidden focus:ring-1 focus:ring-indigo-300 font-sans font-semibold text-slate-800 placeholder-slate-400"
+            placeholder="🔎 Найти счет..."
+            value={modalSearchQuery}
+            onChange={(e) => setModalSearchQuery(e.target.value)}
+            autoFocus
+          />
+        </div>
+
+        <div className="grid grid-cols-2 gap-2 max-h-[160px] overflow-y-auto pr-1">
+          {filteredAccounts.length > 0 ? (
+            filteredAccounts.map(acc => {
+              const isSelected = 
+                currentTarget === 'tx_acc' ? activeTxData?.account.id === acc.id :
+                currentTarget === 'tf_from' ? activeTransferData?.fromAccount.id === acc.id :
+                activeTransferData?.toAccount.id === acc.id;
+                
+              const isCard = acc.type === 'card';
+              
+              return (
+                <button
+                  key={acc.id}
+                  type="button"
+                  onClick={() => onSelect(acc)}
+                  className={`p-2 rounded-xl border-2 flex items-center gap-2 transition-all text-left cursor-pointer active:scale-[0.97] min-h-[44px] min-w-0 ${
+                    isSelected
+                      ? 'border-indigo-505 bg-indigo-50 text-indigo-950 font-black shadow-xs border-indigo-500'
+                      : 'border-slate-100 bg-slate-50/50 hover:bg-slate-50 text-slate-700 hover:border-slate-200'
+                  }`}
+                >
+                  <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 ${
+                    isCard 
+                      ? 'bg-indigo-100 text-indigo-600' 
+                      : 'bg-emerald-100 text-emerald-600'
+                  }`}>
+                    <CreditCard size={13} className="stroke-[2.5]" />
+                  </div>
+                  <div className="min-w-0 flex-1 leading-tight">
+                    <span className="block text-[10px] font-bold truncate">
+                      {acc.name}
+                    </span>
+                    <span className="block text-[8px] font-mono font-bold text-slate-500 mt-0.5 whitespace-nowrap">
+                      {Math.round(acc.balance).toLocaleString('ru-RU')} ₼
+                    </span>
+                  </div>
+                </button>
+              );
+            })
+          ) : (
+            <div className="col-span-2 text-center text-slate-400 text-[10px] py-4 font-bold">
+              Счета не найдены
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  // Helper to render inline category selection inside modal
+  const renderCategorySelector = (
+    onSelect: (cat: Category) => void,
+    onCancel: () => void,
+    type: 'income' | 'expense'
+  ) => {
+    const filteredCategories = categories.filter(c => 
+      c.type === type &&
+      c.name.toLowerCase().includes(modalSearchQuery.toLowerCase())
+    );
+
+    return (
+      <div className="flex flex-col gap-2.5 animate-fade-in py-1">
+        <div className="flex items-center justify-between px-1 border-b border-slate-100 pb-1.5">
+          <span className="text-[10px] font-black uppercase tracking-wider text-slate-500">
+            Выберите категорию ({type === 'income' ? 'Доход' : 'Расход'})
+          </span>
+          <button
+            type="button"
+            onClick={onCancel}
+            className="text-[11px] font-bold text-indigo-600 hover:text-indigo-800 cursor-pointer active:scale-95 transition-all text-slate-500"
+          >
+            Отмена
+          </button>
+        </div>
+
+        {/* Search Input */}
+        <div className="relative px-1 pb-1">
+          <input
+            type="text"
+            className="w-full px-2.5 py-1.5 text-[11px] border border-slate-200 rounded-xl bg-slate-50/50 focus:bg-white focus:outline-hidden focus:ring-1 focus:ring-amber-400 font-sans font-semibold text-slate-800 placeholder-slate-400"
+            placeholder="🔎 Найти категорию..."
+            value={modalSearchQuery}
+            onChange={(e) => setModalSearchQuery(e.target.value)}
+            autoFocus
+          />
+        </div>
+
+        <div className="grid grid-cols-2 gap-2 max-h-[160px] overflow-y-auto pr-1">
+          {filteredCategories.length > 0 ? (
+            filteredCategories.map(cat => {
+              const isSelected = activeTxData?.category.id === cat.id;
+              
+              return (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => onSelect(cat)}
+                  className={`p-2 rounded-xl border-2 flex items-center gap-2 transition-all text-left cursor-pointer active:scale-[0.97] min-h-[44px] min-w-0 ${
+                    isSelected
+                      ? 'border-amber-500 bg-amber-50 text-slate-900 font-extrabold shadow-xs'
+                      : 'border-slate-100 bg-slate-50/50 hover:bg-slate-50 text-slate-700 hover:border-slate-200'
+                  }`}
+                >
+                  <div className="w-7 h-7 rounded-full bg-amber-500 text-white flex items-center justify-center shrink-0">
+                    <IconComponent name={cat.icon} size={13} className="stroke-[2.5]" />
+                  </div>
+                  <div className="min-w-0 flex-1 leading-tight">
+                    <span className="block text-[10.5px] font-bold truncate">
+                      {formatCategoryDisplayName(cat.name)}
+                    </span>
+                  </div>
+                </button>
+              );
+            })
+          ) : (
+            <div className="col-span-2 text-center text-slate-400 text-[10px] py-4 font-bold">
+              Категории не найдены
+            </div>
+          )}
+        </div>
+      </div>
+    );
   };
 
   const handleDialClick = (val: string) => {
@@ -992,7 +1166,7 @@ export function QuickDragDropBuilder({
         <div 
           className="fixed inset-0 bg-slate-950/80 backdrop-blur-xs z-[10000] flex items-center justify-center p-2 xs:p-4 overflow-y-auto font-sans"
           id="quick-transaction-modal"
-          onClick={() => setActiveTxData(null)}
+          onClick={() => { setActiveTxData(null); setAccountSelectorTarget(null); }}
         >
           <div 
             className="w-full max-w-[340px] bg-white text-slate-900 rounded-3xl p-4 sm:p-5 shadow-2xl border border-slate-100 relative animate-scale-up my-auto flex flex-col gap-3.5 select-none"
@@ -1006,7 +1180,7 @@ export function QuickDragDropBuilder({
                 </span>
               </div>
               <button
-                onClick={() => setActiveTxData(null)}
+                onClick={() => { setActiveTxData(null); setAccountSelectorTarget(null); }}
                 className="absolute right-0 top-1/2 -translate-y-1/2 bg-slate-100 hover:bg-slate-200 text-slate-400 hover:text-slate-600 p-1.5 rounded-full transition-colors cursor-pointer"
               >
                 <X size={12} className="stroke-[2.5]" />
@@ -1023,132 +1197,178 @@ export function QuickDragDropBuilder({
                 {activeTxData.category.type === 'income' ? 'ПОЛУЧИТЬ' : 'ПОТРАТИТЬ'}
               </div>
 
-              {/* Source Account Bubble */}
-              <div className="flex flex-col items-center flex-1 z-10 min-w-0">
-                <div className="w-11 h-11 rounded-full bg-indigo-500 text-white flex items-center justify-center shadow-md shadow-indigo-500/20 shrink-0">
+              {/* Source Account Bubble (Interactive) */}
+              <button
+                type="button"
+                onClick={() => setAccountSelectorTarget(prev => prev === 'tx_acc' ? null : 'tx_acc')}
+                className={`flex flex-col items-center flex-1 z-10 min-w-0 p-1 rounded-2xl transition-all cursor-pointer active:scale-95 group ${
+                  accountSelectorTarget === 'tx_acc'
+                    ? 'bg-indigo-50 ring-2 ring-indigo-500/30'
+                    : 'hover:bg-slate-50'
+                }`}
+                title="Сменить счет"
+              >
+                <div className="w-11 h-11 rounded-full bg-indigo-500 text-white flex items-center justify-center shadow-md shadow-indigo-500/20 shrink-0 relative group-hover:scale-105 transition-transform">
                   <CreditCard size={18} className="stroke-[2]" />
+                  <div className="absolute -bottom-1 -right-1 bg-white text-indigo-600 rounded-full p-0.5 border border-slate-200 shadow-xs">
+                    <ChevronDown size={8} className="stroke-[3]" />
+                  </div>
                 </div>
-                <span className="mt-1 font-bold text-slate-800 text-[10px] sm:text-[11px] text-center leading-tight truncate w-full px-0.5">
+                <span className="mt-1 font-bold text-slate-800 text-[10px] sm:text-[11px] text-center leading-tight truncate w-full px-0.5 flex items-center justify-center gap-0.5">
                   {activeTxData.account.name}
                 </span>
-                <span className="text-[8.5px] text-slate-400 font-bold font-mono mt-0.5 whitespace-nowrap">
+                <span className="text-[8.5px] text-slate-455 font-bold font-mono mt-0.5 whitespace-nowrap text-slate-500">
                   {Math.round(activeTxData.account.balance).toLocaleString('ru-RU')} ₼
                 </span>
-              </div>
+              </button>
 
               {/* Space in between */}
               <div className="w-8 shrink-0 h-4" />
 
-              {/* Destination Category Bubble */}
-              <div className="flex flex-col items-center flex-1 z-10 min-w-0">
-                <div className="w-11 h-11 rounded-full bg-amber-500 text-white flex items-center justify-center shadow-md shadow-amber-500/20 shrink-0">
+              {/* Destination Category Bubble (Interactive) */}
+              <button
+                type="button"
+                onClick={() => setAccountSelectorTarget(prev => prev === 'tx_cat' ? null : 'tx_cat')}
+                className={`flex flex-col items-center flex-1 z-10 min-w-0 p-1 rounded-2xl transition-all cursor-pointer active:scale-95 group ${
+                  accountSelectorTarget === 'tx_cat'
+                    ? 'bg-amber-50 ring-2 ring-amber-500/30'
+                    : 'hover:bg-slate-50'
+                }`}
+                title="Сменить категорию"
+              >
+                <div className="w-11 h-11 rounded-full bg-amber-500 text-white flex items-center justify-center shadow-md shadow-amber-500/20 shrink-0 relative group-hover:scale-105 transition-transform">
                   <IconComponent name={activeTxData.category.icon} size={18} className="stroke-[2]" />
+                  <div className="absolute -bottom-1 -right-1 bg-white text-amber-600 rounded-full p-0.5 border border-slate-200 shadow-xs">
+                    <ChevronDown size={8} className="stroke-[3]" />
+                  </div>
                 </div>
-                <span className="mt-1 font-bold text-slate-800 text-[10px] sm:text-[11px] text-center leading-tight truncate w-full px-0.5">
+                <span className="mt-1 font-bold text-slate-800 text-[10px] sm:text-[11px] text-center leading-tight truncate w-full px-0.5 flex items-center justify-center gap-0.5">
                   {formatCategoryDisplayName(activeTxData.category.name)}
                 </span>
                 <span className="text-[8.5px] text-slate-400 font-bold mt-0.5 whitespace-nowrap truncate max-w-full uppercase tracking-wider">
                   {activeTxData.category.type === 'income' ? 'Пополнение' : 'Расход'}
                 </span>
-              </div>
+              </button>
             </div>
 
-            {/* Input container: СУММА ТРАНЗАКЦИИ */}
-            <div className="bg-[#f8fafc] rounded-xl py-2 px-3 border border-[#f1f5f9] flex flex-col mt-0.5">
-              <label className="text-[8px] font-black text-slate-400 uppercase tracking-wider text-right mb-0.5 select-none self-end">
-                СУММА ТРАНЗАКЦИИ
-              </label>
-              <div className="flex items-center justify-between gap-2">
-                <span className="text-2xl font-display font-light text-[#94a3b8] select-none">
-                  ₼
-                </span>
-                <div className="flex-1 text-right min-w-0 relative">
-                  <input
-                    ref={inputRef}
-                    type="text"
-                    inputMode="none"
-                    value={amount === '0' || amount === '' ? '0' : amount}
-                    onChange={(e) => {
-                      const val = e.target.value.replace(/[^0-9.]/g, '');
-                      setAmount(val === '' ? '0' : val);
-                    }}
-                    className="w-full bg-transparent border-none p-0 text-right font-display font-black text-emerald-600 text-2xl sm:text-3xl focus:outline-hidden focus:ring-0 placeholder-emerald-600/30"
-                  />
+            {accountSelectorTarget === 'tx_acc' ? (
+              renderAccountSelector(
+                'tx_acc',
+                (selectedAcc) => {
+                  setActiveTxData(prev => prev ? { ...prev, account: selectedAcc } : null);
+                  setAccountSelectorTarget(null);
+                },
+                () => setAccountSelectorTarget(null)
+              )
+            ) : accountSelectorTarget === 'tx_cat' ? (
+              renderCategorySelector(
+                (selectedCat) => {
+                  setActiveTxData(prev => prev ? { ...prev, category: selectedCat } : null);
+                  setAccountSelectorTarget(null);
+                },
+                () => setAccountSelectorTarget(null),
+                activeTxData.category.type
+              )
+            ) : (
+              <>
+                {/* Input container: СУММА ТРАНЗАКЦИИ */}
+                <div className="bg-[#f8fafc] rounded-xl py-2 px-3 border border-[#f1f5f9] flex flex-col mt-0.5">
+                  <label className="text-[8px] font-black text-slate-400 uppercase tracking-wider text-right mb-0.5 select-none self-end">
+                    СУММА ТРАНЗАКЦИИ
+                  </label>
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-2xl font-display font-light text-[#94a3b8] select-none">
+                      ₼
+                    </span>
+                    <div className="flex-1 text-right min-w-0 relative">
+                      <input
+                        ref={inputRef}
+                        type="text"
+                        inputMode="none"
+                        value={amount === '0' || amount === '' ? '0' : amount}
+                        onChange={(e) => {
+                          const val = e.target.value.replace(/[^0-9.]/g, '');
+                          setAmount(val === '' ? '0' : val);
+                        }}
+                        className="w-full bg-transparent border-none p-0 text-right font-display font-black text-emerald-600 text-2xl sm:text-3xl focus:outline-hidden focus:ring-0 placeholder-emerald-600/30"
+                      />
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
 
-            {/* Custom Keypad dialer */}
-            <div className="grid grid-cols-3 gap-1.5 my-1">
-              {['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0', 'Стереть'].map((keyVal) => {
-                const isErase = keyVal === 'Стереть';
-                return (
+                {/* Custom Keypad dialer */}
+                <div className="grid grid-cols-3 gap-1.5 my-1">
+                  {['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0', 'Стереть'].map((keyVal) => {
+                    const isErase = keyVal === 'Стереть';
+                    return (
+                      <button
+                        key={keyVal}
+                        type="button"
+                        onClick={() => handleDialClick(keyVal)}
+                        className={`h-10 sm:h-11 font-sans font-black text-sm sm:text-base rounded-xl flex items-center justify-center transition-all cursor-pointer select-none border-2 active:scale-95 active:translate-y-[1.5px] active:shadow-none ${
+                          isErase 
+                            ? 'bg-rose-50 border-rose-200 hover:bg-rose-100/90 hover:border-rose-300 text-rose-600 shadow-[0_2.5px_0_rgba(244,63,94,0.18)] text-[11px]' 
+                            : 'bg-white border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-800 shadow-[0_2.5px_0_rgba(148,163,184,0.18)] text-base'
+                        }`}
+                      >
+                        {isErase ? '⌫ Стер.' : keyVal}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Date Input with Calendar icon & Optional Comment Input with Document icon */}
+                <div className="grid grid-cols-2 gap-2 border-t border-slate-100 pt-2">
+                  <div className="space-y-1 text-left">
+                    <label className="flex items-center gap-1.5 text-[#64748b] text-[8.5px] font-black uppercase tracking-wider">
+                      <span className="text-[10px] shrink-0">📅</span>
+                      <span>ДАТА ОПЕРАЦИИ</span>
+                    </label>
+                    <input
+                      type="date"
+                      value={date}
+                      onChange={(e) => setDate(e.target.value)}
+                      className="w-full px-2.5 py-1.5 bg-[#f8fafc] border border-[#f1f5f9] hover:border-[#e2e8f0] rounded-lg text-[10px] text-slate-700 font-sans font-semibold focus:outline-hidden focus:ring-1 focus:ring-slate-300 focus:bg-white transition-all"
+                    />
+                  </div>
+
+                  <div className="space-y-1 text-left">
+                    <label className="flex items-center gap-1.5 text-[#64748b] text-[8.5px] font-black uppercase tracking-wider">
+                      <FileText size={10} className="text-[#94a3b8] shrink-0" />
+                      <span>КОММЕНТАРИЙ</span>
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Комментарий..."
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      className="w-full px-2.5 py-1.5 bg-[#f8fafc] border border-[#f1f5f9] hover:border-[#e2e8f0] rounded-lg text-[10px] text-slate-700 placeholder-slate-400 focus:outline-hidden focus:ring-1 focus:ring-slate-300 focus:bg-white transition-all font-sans"
+                    />
+                  </div>
+                </div>
+
+                {/* Form Bottom Actions */}
+                <div className="flex gap-2.5 pt-0.5">
                   <button
-                    key={keyVal}
                     type="button"
-                    onClick={() => handleDialClick(keyVal)}
-                    className={`h-10 sm:h-11 font-sans font-black text-sm sm:text-base rounded-xl flex items-center justify-center transition-all cursor-pointer select-none border-2 active:scale-95 active:translate-y-[1.5px] active:shadow-none ${
-                      isErase 
-                        ? 'bg-rose-50 border-rose-200 hover:bg-rose-100/90 hover:border-rose-300 text-rose-600 shadow-[0_2.5px_0_rgba(244,63,94,0.18)] text-[11px]' 
-                        : 'bg-white border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-800 shadow-[0_2.5px_0_rgba(148,163,184,0.18)] text-base'
-                    }`}
+                    onClick={() => {
+                      setAmount('0');
+                      setDescription('');
+                    }}
+                    className="flex-1 py-2 bg-[#f1f5f9] hover:bg-[#e2e8f0] text-[#475569] font-sans font-semibold text-[10.5px] uppercase tracking-wider rounded-xl cursor-pointer transition-all active:scale-[0.97] text-center"
                   >
-                    {isErase ? '⌫ Стер.' : keyVal}
+                    Очистить
                   </button>
-                );
-              })}
-            </div>
-
-            {/* Date Input with Calendar icon & Optional Comment Input with Document icon */}
-            <div className="grid grid-cols-2 gap-2 border-t border-slate-100 pt-2">
-              <div className="space-y-1 text-left">
-                <label className="flex items-center gap-1.5 text-[#64748b] text-[8.5px] font-black uppercase tracking-wider">
-                  <span className="text-[10px] shrink-0">📅</span>
-                  <span>ДАТА ОПЕРАЦИИ</span>
-                </label>
-                <input
-                  type="date"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                  className="w-full px-2.5 py-1.5 bg-[#f8fafc] border border-[#f1f5f9] hover:border-[#e2e8f0] rounded-lg text-[10px] text-slate-700 font-sans font-semibold focus:outline-hidden focus:ring-1 focus:ring-slate-300 focus:bg-white transition-all"
-                />
-              </div>
-
-              <div className="space-y-1 text-left">
-                <label className="flex items-center gap-1.5 text-[#64748b] text-[8.5px] font-black uppercase tracking-wider">
-                  <FileText size={10} className="text-[#94a3b8] shrink-0" />
-                  <span>КОММЕНТАРИЙ</span>
-                </label>
-                <input
-                  type="text"
-                  placeholder="Комментарий..."
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  className="w-full px-2.5 py-1.5 bg-[#f8fafc] border border-[#f1f5f9] hover:border-[#e2e8f0] rounded-lg text-[10px] text-slate-700 placeholder-slate-400 focus:outline-hidden focus:ring-1 focus:ring-slate-300 focus:bg-white transition-all font-sans"
-                />
-              </div>
-            </div>
-
-            {/* Form Bottom Actions */}
-            <div className="flex gap-2.5 pt-0.5">
-              <button
-                type="button"
-                onClick={() => {
-                  setAmount('0');
-                  setDescription('');
-                }}
-                className="flex-1 py-2 bg-[#f1f5f9] hover:bg-[#e2e8f0] text-[#475569] font-sans font-semibold text-[10.5px] uppercase tracking-wider rounded-xl cursor-pointer transition-all active:scale-[0.97] text-center"
-              >
-                Очистить
-              </button>
-              <button
-                type="button"
-                onClick={() => handleSaveTransaction()}
-                className="flex-1 py-2 bg-[#f1f5f9] hover:bg-[#e2e8f0] text-[#475569] font-sans font-extrabold text-[10.5px] uppercase tracking-wider rounded-xl cursor-pointer transition-all active:scale-[0.97] text-center"
-              >
-                ✓ Сохранить
-              </button>
-            </div>
+                  <button
+                    type="button"
+                    onClick={() => handleSaveTransaction()}
+                    className="flex-1 py-2 bg-[#f1f5f9] hover:bg-[#e2e8f0] text-[#475569] font-sans font-extrabold text-[10.5px] uppercase tracking-wider rounded-xl cursor-pointer transition-all active:scale-[0.97] text-center"
+                  >
+                    ✓ Сохранить
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}
@@ -1158,7 +1378,7 @@ export function QuickDragDropBuilder({
         <div 
           className="fixed inset-0 bg-slate-950/80 backdrop-blur-xs z-[10000] flex items-center justify-center p-2 xs:p-4 overflow-y-auto font-sans"
           id="quick-transfer-modal"
-          onClick={() => setActiveTransferData(null)}
+          onClick={() => { setActiveTransferData(null); setAccountSelectorTarget(null); }}
         >
           <div 
             className="w-full max-w-[340px] bg-white text-slate-900 rounded-3xl p-4 sm:p-5 shadow-2xl border border-slate-100 relative animate-scale-up my-auto flex flex-col gap-3.5 select-none"
@@ -1172,7 +1392,7 @@ export function QuickDragDropBuilder({
                 </span>
               </div>
               <button
-                onClick={() => setActiveTransferData(null)}
+                onClick={() => { setActiveTransferData(null); setAccountSelectorTarget(null); }}
                 className="absolute right-0 top-1/2 -translate-y-1/2 bg-slate-100 hover:bg-slate-200 text-slate-400 hover:text-slate-600 p-1.5 rounded-full transition-colors cursor-pointer"
               >
                 <X size={12} className="stroke-[2.5]" />
@@ -1189,132 +1409,173 @@ export function QuickDragDropBuilder({
                 ПЕРЕВЕСТИ
               </div>
 
-              {/* Source Account Bubble */}
-              <div className="flex flex-col items-center flex-1 z-10 min-w-0">
-                <div className="w-11 h-11 rounded-full bg-indigo-500 text-white flex items-center justify-center shadow-md shadow-indigo-500/20 shrink-0">
+              {/* Source Account Bubble (fromAccount) (Interactive) */}
+              <button
+                type="button"
+                onClick={() => setAccountSelectorTarget(prev => prev === 'tf_from' ? null : 'tf_from')}
+                className={`flex flex-col items-center flex-1 z-10 min-w-0 p-1 rounded-2xl transition-all cursor-pointer active:scale-95 group ${
+                  accountSelectorTarget === 'tf_from'
+                    ? 'bg-indigo-50 ring-2 ring-indigo-500/30'
+                    : 'hover:bg-slate-50'
+                }`}
+                title="Сменить счет списания"
+              >
+                <div className="w-11 h-11 rounded-full bg-indigo-500 text-white flex items-center justify-center shadow-md shadow-indigo-500/20 shrink-0 relative group-hover:scale-105 transition-transform">
                   <CreditCard size={18} className="stroke-[2]" />
+                  <div className="absolute -bottom-1 -right-1 bg-white text-indigo-600 rounded-full p-0.5 border border-slate-200 shadow-xs">
+                    <ChevronDown size={8} className="stroke-[3]" />
+                  </div>
                 </div>
-                <span className="mt-1 font-bold text-slate-800 text-[10px] sm:text-[11px] text-center leading-tight truncate w-full px-0.5">
+                <span className="mt-1 font-bold text-slate-800 text-[10px] sm:text-[11px] text-center leading-tight truncate w-full px-0.5 flex items-center justify-center gap-0.5">
                   {activeTransferData.fromAccount.name}
                 </span>
-                <span className="text-[8.5px] text-slate-400 font-bold font-mono mt-0.5 whitespace-nowrap">
+                <span className="text-[8.5px] text-slate-455 font-bold font-mono mt-0.5 whitespace-nowrap text-slate-500">
                   {Math.round(activeTransferData.fromAccount.balance).toLocaleString('ru-RU')} ₼
                 </span>
-              </div>
+              </button>
 
               {/* Space in between */}
               <div className="w-8 shrink-0 h-4" />
 
-              {/* Destination Account Bubble */}
-              <div className="flex flex-col items-center flex-1 z-10 min-w-0">
-                <div className="w-11 h-11 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-md shadow-emerald-500/20 shrink-0">
+              {/* Destination Account Bubble (toAccount) (Interactive) */}
+              <button
+                type="button"
+                onClick={() => setAccountSelectorTarget(prev => prev === 'tf_to' ? null : 'tf_to')}
+                className={`flex flex-col items-center flex-1 z-10 min-w-0 p-1 rounded-2xl transition-all cursor-pointer active:scale-95 group ${
+                  accountSelectorTarget === 'tf_to'
+                    ? 'bg-emerald-50 ring-2 ring-emerald-500/30'
+                    : 'hover:bg-slate-50'
+                }`}
+                title="Сменить счет зачисления"
+              >
+                <div className="w-11 h-11 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-md shadow-emerald-500/20 shrink-0 relative group-hover:scale-105 transition-transform">
                   <CreditCard size={18} className="stroke-[2]" />
+                  <div className="absolute -bottom-1 -right-1 bg-white text-emerald-600 rounded-full p-0.5 border border-slate-200 shadow-xs">
+                    <ChevronDown size={8} className="stroke-[3]" />
+                  </div>
                 </div>
-                <span className="mt-1 font-bold text-slate-800 text-[10px] sm:text-[11px] text-center leading-tight truncate w-full px-0.5">
+                <span className="mt-1 font-bold text-slate-800 text-[10px] sm:text-[11px] text-center leading-tight truncate w-full px-0.5 flex items-center justify-center gap-0.5">
                   {activeTransferData.toAccount.name}
                 </span>
-                <span className="text-[8.5px] text-slate-400 font-bold font-mono mt-0.5 whitespace-nowrap">
+                <span className="text-[8.5px] text-slate-455 font-bold font-mono mt-0.5 whitespace-nowrap text-slate-500">
                   {Math.round(activeTransferData.toAccount.balance).toLocaleString('ru-RU')} ₼
                 </span>
-              </div>
+              </button>
             </div>
 
-            {/* Input container: СУММА ТРАНЗАКЦИИ */}
-            <div className="bg-[#f8fafc] rounded-xl py-2 px-3 border border-[#f1f5f9] flex flex-col mt-0.5">
-              <label className="text-[8px] font-black text-slate-400 uppercase tracking-wider text-right mb-0.5 select-none self-end">
-                СУММА ТРАНЗАКЦИИ
-              </label>
-              <div className="flex items-center justify-between gap-2">
-                <span className="text-2xl font-display font-light text-[#94a3b8] select-none">
-                  ₼
-                </span>
-                <div className="flex-1 text-right min-w-0 relative">
-                  <input
-                    ref={transferInputRef}
-                    type="text"
-                    inputMode="none"
-                    value={amount === '0' || amount === '' ? '0' : amount}
-                    onChange={(e) => {
-                      const val = e.target.value.replace(/[^0-9.]/g, '');
-                      setAmount(val === '' ? '0' : val);
-                    }}
-                    className="w-full bg-transparent border-none p-0 text-right font-display font-black text-indigo-600 text-2xl sm:text-3xl focus:outline-hidden focus:ring-0 placeholder-indigo-600/30"
-                  />
+            {accountSelectorTarget && (accountSelectorTarget === 'tf_from' || accountSelectorTarget === 'tf_to') ? (
+              renderAccountSelector(
+                accountSelectorTarget,
+                (selectedAcc) => {
+                  if (accountSelectorTarget === 'tf_from') {
+                    setActiveTransferData(prev => prev ? { ...prev, fromAccount: selectedAcc } : null);
+                  } else {
+                    setActiveTransferData(prev => prev ? { ...prev, toAccount: selectedAcc } : null);
+                  }
+                  setAccountSelectorTarget(null);
+                },
+                () => setAccountSelectorTarget(null)
+              )
+            ) : (
+              <>
+                {/* Input container: СУММА ТРАНЗАКЦИИ */}
+                <div className="bg-[#f8fafc] rounded-xl py-2 px-3 border border-[#f1f5f9] flex flex-col mt-0.5">
+                  <label className="text-[8px] font-black text-slate-400 uppercase tracking-wider text-right mb-0.5 select-none self-end">
+                    СУММА ТРАНЗАКЦИИ
+                  </label>
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-2xl font-display font-light text-[#94a3b8] select-none">
+                      ₼
+                    </span>
+                    <div className="flex-1 text-right min-w-0 relative">
+                      <input
+                        ref={transferInputRef}
+                        type="text"
+                        inputMode="none"
+                        value={amount === '0' || amount === '' ? '0' : amount}
+                        onChange={(e) => {
+                          const val = e.target.value.replace(/[^0-9.]/g, '');
+                          setAmount(val === '' ? '0' : val);
+                        }}
+                        className="w-full bg-transparent border-none p-0 text-right font-display font-black text-indigo-600 text-2xl sm:text-3xl focus:outline-hidden focus:ring-0 placeholder-indigo-600/30"
+                      />
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
 
-            {/* Custom Keypad dialer */}
-            <div className="grid grid-cols-3 gap-1.5 my-1">
-              {['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0', 'Стереть'].map((keyVal) => {
-                const isErase = keyVal === 'Стереть';
-                return (
+                {/* Custom Keypad dialer */}
+                <div className="grid grid-cols-3 gap-1.5 my-1">
+                  {['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0', 'Стереть'].map((keyVal) => {
+                    const isErase = keyVal === 'Стереть';
+                    return (
+                      <button
+                        key={keyVal}
+                        type="button"
+                        onClick={() => handleDialClick(keyVal)}
+                        className={`h-10 sm:h-11 font-sans font-black text-sm sm:text-base rounded-xl flex items-center justify-center transition-all cursor-pointer select-none border-2 active:scale-95 active:translate-y-[1.5px] active:shadow-none ${
+                          isErase 
+                            ? 'bg-rose-50 border-rose-200 hover:bg-rose-100/90 hover:border-rose-300 text-rose-600 shadow-[0_2.5px_0_rgba(244,63,94,0.18)] text-[11px]' 
+                            : 'bg-white border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-800 shadow-[0_2.5px_0_rgba(148,163,184,0.18)] text-base'
+                        }`}
+                      >
+                        {isErase ? '⌫ Стер.' : keyVal}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Date Input with Calendar icon & Optional Comment Input with Document icon */}
+                <div className="grid grid-cols-2 gap-2 border-t border-slate-100 pt-2">
+                  <div className="space-y-1 text-left">
+                    <label className="flex items-center gap-1.5 text-[#64748b] text-[8.5px] font-black uppercase tracking-wider">
+                      <span className="text-[10px] shrink-0">📅</span>
+                      <span>ДАТА ПЕРЕВОДА</span>
+                    </label>
+                    <input
+                      type="date"
+                      value={date}
+                      onChange={(e) => setDate(e.target.value)}
+                      className="w-full px-2.5 py-1.5 bg-[#f8fafc] border border-[#f1f5f9] hover:border-[#e2e8f0] rounded-lg text-[10px] text-slate-700 font-sans font-semibold focus:outline-hidden focus:ring-1 focus:ring-slate-300 focus:bg-white transition-all"
+                    />
+                  </div>
+
+                  <div className="space-y-1 text-left">
+                    <label className="flex items-center gap-1.5 text-[#64748b] text-[8.5px] font-black uppercase tracking-wider">
+                      <FileText size={10} className="text-[#94a3b8] shrink-0" />
+                      <span>КОММЕНТАРИЙ</span>
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Комментарий..."
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      className="w-full px-2.5 py-1.5 bg-[#f8fafc] border border-[#f1f5f9] hover:border-[#e2e8f0] rounded-lg text-[10px] text-slate-700 placeholder-slate-400 focus:outline-hidden focus:ring-1 focus:ring-slate-300 focus:bg-white transition-all font-sans"
+                    />
+                  </div>
+                </div>
+
+                {/* Form Bottom Actions */}
+                <div className="flex gap-2.5 pt-0.5">
                   <button
-                    key={keyVal}
                     type="button"
-                    onClick={() => handleDialClick(keyVal)}
-                    className={`h-10 sm:h-11 font-sans font-black text-sm sm:text-base rounded-xl flex items-center justify-center transition-all cursor-pointer select-none border-2 active:scale-95 active:translate-y-[1.5px] active:shadow-none ${
-                      isErase 
-                        ? 'bg-rose-50 border-rose-200 hover:bg-rose-100/90 hover:border-rose-300 text-rose-600 shadow-[0_2.5px_0_rgba(244,63,94,0.18)] text-[11px]' 
-                        : 'bg-white border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-800 shadow-[0_2.5px_0_rgba(148,163,184,0.18)] text-base'
-                    }`}
+                    onClick={() => {
+                      setAmount('0');
+                      setDescription('');
+                    }}
+                    className="flex-1 py-2 bg-[#f1f5f9] hover:bg-[#e2e8f0] text-[#475569] font-sans font-semibold text-[10.5px] uppercase tracking-wider rounded-xl cursor-pointer transition-all active:scale-[0.97] text-center"
                   >
-                    {isErase ? '⌫ Стер.' : keyVal}
+                    Очистить
                   </button>
-                );
-              })}
-            </div>
-
-            {/* Date Input with Calendar icon & Optional Comment Input with Document icon */}
-            <div className="grid grid-cols-2 gap-2 border-t border-slate-100 pt-2">
-              <div className="space-y-1 text-left">
-                <label className="flex items-center gap-1.5 text-[#64748b] text-[8.5px] font-black uppercase tracking-wider">
-                  <span className="text-[10px] shrink-0">📅</span>
-                  <span>ДАТА ПЕРЕВОДА</span>
-                </label>
-                <input
-                  type="date"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                  className="w-full px-2.5 py-1.5 bg-[#f8fafc] border border-[#f1f5f9] hover:border-[#e2e8f0] rounded-lg text-[10px] text-slate-700 font-sans font-semibold focus:outline-hidden focus:ring-1 focus:ring-slate-300 focus:bg-white transition-all"
-                />
-              </div>
-
-              <div className="space-y-1 text-left">
-                <label className="flex items-center gap-1.5 text-[#64748b] text-[8.5px] font-black uppercase tracking-wider">
-                  <FileText size={10} className="text-[#94a3b8] shrink-0" />
-                  <span>КОММЕНТАРИЙ</span>
-                </label>
-                <input
-                  type="text"
-                  placeholder="Комментарий..."
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  className="w-full px-2.5 py-1.5 bg-[#f8fafc] border border-[#f1f5f9] hover:border-[#e2e8f0] rounded-lg text-[10px] text-slate-700 placeholder-slate-400 focus:outline-hidden focus:ring-1 focus:ring-slate-300 focus:bg-white transition-all font-sans"
-                />
-              </div>
-            </div>
-
-            {/* Form Bottom Actions */}
-            <div className="flex gap-2.5 pt-0.5">
-              <button
-                type="button"
-                onClick={() => {
-                  setAmount('0');
-                  setDescription('');
-                }}
-                className="flex-1 py-2 bg-[#f1f5f9] hover:bg-[#e2e8f0] text-[#475569] font-sans font-semibold text-[10.5px] uppercase tracking-wider rounded-xl cursor-pointer transition-all active:scale-[0.97] text-center"
-              >
-                Очистить
-              </button>
-              <button
-                type="button"
-                onClick={() => handleSaveTransfer()}
-                className="flex-1 py-2 bg-[#f1f5f9] hover:bg-[#e2e8f0] text-[#475569] font-sans font-extrabold text-[10.5px] uppercase tracking-wider rounded-xl cursor-pointer transition-all active:scale-[0.97] text-center"
-              >
-                ✓ Сохранить
-              </button>
-            </div>
+                  <button
+                    type="button"
+                    onClick={() => handleSaveTransfer()}
+                    className="flex-1 py-2 bg-[#f1f5f9] hover:bg-[#e2e8f0] text-[#475569] font-sans font-extrabold text-[10.5px] uppercase tracking-wider rounded-xl cursor-pointer transition-all active:scale-[0.97] text-center"
+                  >
+                    ✓ Сохранить
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}
