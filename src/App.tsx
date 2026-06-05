@@ -192,13 +192,24 @@ export default function App() {
               updatedAt: parseLocalTimestamp(card.updatedAt)
             }));
           }
+          if (Array.isArray(parsed.goals)) {
+            parsed.goals = parsed.goals.map((g: any) => ({
+              ...g,
+              updatedAt: parseLocalTimestamp(g.updatedAt)
+            }));
+          } else {
+            parsed.goals = [];
+          }
           return parsed;
         }
       } catch (e) {
         console.error('Ошибка чтения локального хранилища:', e);
       }
     }
-    return initialFinanceData;
+    return {
+      ...initialFinanceData,
+      goals: []
+    };
   });
 
   const [isFirebaseLoading, setIsFirebaseLoading] = useState(false);

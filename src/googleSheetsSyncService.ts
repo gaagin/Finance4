@@ -70,6 +70,7 @@ export async function findOrCreateSyncSpreadsheet(accessToken: string): Promise<
           { properties: { title: 'Categories' } },
           { properties: { title: 'Cards' } },
           { properties: { title: 'Budgets' } },
+          { properties: { title: 'Goals' } },
           { properties: { title: 'Deletions' } }
         ]
       })

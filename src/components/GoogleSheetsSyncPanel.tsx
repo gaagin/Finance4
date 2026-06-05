@@ -401,6 +401,18 @@ export function GoogleSheetsSyncPanel({
                 {getEntityCount(lastResult.addedToSheet, 'cards') + getEntityCount(lastResult.addedToLocal, 'cards')}+ / {getEntityCount(lastResult.updatedOnSheet, 'cards') + getEntityCount(lastResult.updatedOnLocal, 'cards')}~
               </span>
             </div>
+            <div className="flex justify-between">
+              <span>Бюджеты (доб / обн):</span>
+              <span>
+                {getEntityCount(lastResult.addedToSheet, 'budgets') + getEntityCount(lastResult.addedToLocal, 'budgets')}+ / {getEntityCount(lastResult.updatedOnSheet, 'budgets') + getEntityCount(lastResult.updatedOnLocal, 'budgets')}~
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span>Цели (доб / обн):</span>
+              <span>
+                {getEntityCount(lastResult.addedToSheet, 'goals') + getEntityCount(lastResult.addedToLocal, 'goals')}+ / {getEntityCount(lastResult.updatedOnSheet, 'goals') + getEntityCount(lastResult.updatedOnLocal, 'goals')}~
+              </span>
+            </div>
           </div>
 
           {lastResult.spreadsheetUrl && (

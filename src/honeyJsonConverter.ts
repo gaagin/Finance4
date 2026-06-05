@@ -57,7 +57,8 @@ export function parseAndStandardizeJsonToFinanceData(rawText: string): FinanceDa
         categories: parsed.categories || [],
         transactions: parsed.transactions,
         budgets: parsed.budgets || [],
-        cards: parsed.cards || []
+        cards: parsed.cards || [],
+        goals: parsed.goals || []
       };
     }
     throw new Error("Файл содержит объект JSON, но в нём отсутствуют поля accounts или transactions.");
