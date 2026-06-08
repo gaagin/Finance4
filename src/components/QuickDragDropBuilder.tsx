@@ -1188,67 +1188,66 @@ export function QuickDragDropBuilder({
             </div>
 
             {/* Visual connector of accounts and categories */}
-            <div className="flex items-center justify-between relative mt-1 px-1">
+            <div className="relative mt-1 px-1">
               {/* Connector line behind */}
-              <div className="absolute left-1/2 top-5.5 -translate-y-1/2 w-[55%] -translate-x-1/2 h-[1px] bg-slate-100 z-0" />
+              <div className="absolute left-1/2 top-[26px] -translate-y-1/2 w-[55%] -translate-x-1/2 h-[1px] bg-slate-200 z-0" />
               
               {/* Connector pill */}
-              <div className="absolute left-1/2 top-5.5 -translate-y-1/2 -translate-x-1/2 px-2 py-0.5 bg-white border border-slate-200 rounded-full text-[8px] font-black uppercase tracking-widest text-slate-500 z-10 select-none shadow-xs whitespace-nowrap">
+              <div className="absolute left-1/2 top-[26px] -translate-y-1/2 -translate-x-1/2 px-2.5 py-0.5 bg-white border border-slate-200 rounded-full text-[8.5px] font-black uppercase tracking-widest text-[#475569] z-10 select-none shadow-xs whitespace-nowrap">
                 {activeTxData.category.type === 'income' ? 'ПОЛУЧИТЬ' : 'ПОТРАТИТЬ'}
               </div>
 
-              {/* Source Account Bubble (Interactive) */}
-              <button
-                type="button"
-                onClick={() => setAccountSelectorTarget(prev => prev === 'tx_acc' ? null : 'tx_acc')}
-                className={`flex flex-col items-center flex-1 z-10 min-w-0 p-1 rounded-2xl transition-all cursor-pointer active:scale-95 group ${
-                  accountSelectorTarget === 'tx_acc'
-                    ? 'bg-indigo-50 ring-2 ring-indigo-500/30'
-                    : 'hover:bg-slate-50'
-                }`}
-                title="Сменить счет"
-              >
-                <div className="w-11 h-11 rounded-full bg-indigo-500 text-white flex items-center justify-center shadow-md shadow-indigo-500/20 shrink-0 relative group-hover:scale-105 transition-transform">
-                  <CreditCard size={18} className="stroke-[2]" />
-                  <div className="absolute -bottom-1 -right-1 bg-white text-indigo-600 rounded-full p-0.5 border border-slate-200 shadow-xs">
-                    <ChevronDown size={8} className="stroke-[3]" />
+              <div className="grid grid-cols-2 gap-8 relative z-10 w-full">
+                {/* Source Account Bubble (Interactive) */}
+                <button
+                  type="button"
+                  onClick={() => setAccountSelectorTarget(prev => prev === 'tx_acc' ? null : 'tx_acc')}
+                  className={`flex flex-col items-center min-w-0 p-1 rounded-2xl transition-all cursor-pointer active:scale-95 group ${
+                    accountSelectorTarget === 'tx_acc'
+                      ? 'bg-indigo-50 ring-2 ring-indigo-500/30'
+                      : 'hover:bg-slate-50'
+                  }`}
+                  title="Сменить счет"
+                >
+                  <div className="w-11 h-11 rounded-full bg-indigo-500 text-white flex items-center justify-center shadow-md shadow-indigo-500/20 shrink-0 relative group-hover:scale-105 transition-transform mx-auto">
+                    <CreditCard size={18} className="stroke-[2]" />
+                    <div className="absolute -bottom-1 -right-1 bg-white text-indigo-600 rounded-full p-0.5 border border-slate-200 shadow-xs">
+                      <ChevronDown size={8} className="stroke-[3]" />
+                    </div>
                   </div>
-                </div>
-                <span className="mt-1 font-bold text-slate-800 text-[10px] sm:text-[11px] text-center leading-tight truncate w-full px-0.5 flex items-center justify-center gap-0.5">
-                  {activeTxData.account.name}
-                </span>
-                <span className="text-[8.5px] text-slate-455 font-bold font-mono mt-0.5 whitespace-nowrap text-slate-500">
-                  {Math.round(activeTxData.account.balance).toLocaleString('ru-RU')} ₼
-                </span>
-              </button>
+                  <span className="mt-1 font-bold text-slate-800 text-[10px] sm:text-[11px] text-center leading-tight truncate w-full px-0.5 flex items-center justify-center gap-0.5">
+                    {activeTxData.account.name}
+                  </span>
+                  <span className="text-[8.5px] text-[#475569] font-bold font-mono mt-0.5 whitespace-nowrap">
+                    {Math.round(activeTxData.account.balance).toLocaleString('ru-RU')} ₼
+                  </span>
+                </button>
 
-              {/* Space in between */}
-              <div className="w-8 shrink-0 h-4" />
-
-              {/* Destination Category Bubble (Interactive) */}
-              <button
-                type="button"
-                onClick={() => setAccountSelectorTarget(prev => prev === 'tx_cat' ? null : 'tx_cat')}
-                className={`flex flex-col items-center flex-1 z-10 min-w-0 p-1 rounded-2xl transition-all cursor-pointer active:scale-95 group ${
-                  accountSelectorTarget === 'tx_cat'
-                    ? 'bg-amber-50 ring-2 ring-amber-500/30'
-                    : 'hover:bg-slate-50'
-                }`}
-                title="Сменить категорию"
-              >
-                <div className="w-11 h-11 rounded-full bg-amber-500 text-white flex items-center justify-center shadow-md shadow-amber-500/20 shrink-0 relative group-hover:scale-105 transition-transform">
-                  <IconComponent name={activeTxData.category.icon} size={18} className="stroke-[2]" />
-                  <div className="absolute -bottom-1 -right-1 bg-white text-amber-600 rounded-full p-0.5 border border-slate-200 shadow-xs">
-                    <ChevronDown size={8} className="stroke-[3]" />
+                {/* Destination Category Bubble (Interactive) */}
+                <button
+                  type="button"
+                  onClick={() => setAccountSelectorTarget(prev => prev === 'tx_cat' ? null : 'tx_cat')}
+                  className={`flex flex-col items-center min-w-0 p-1 rounded-2xl transition-all cursor-pointer active:scale-95 group ${
+                    accountSelectorTarget === 'tx_cat'
+                      ? 'bg-amber-50 ring-2 ring-amber-500/30'
+                      : 'hover:bg-slate-50'
+                  }`}
+                  title="Сменить категорию"
+                >
+                  <div className="w-11 h-11 rounded-full bg-amber-500 text-white flex items-center justify-center shadow-md shadow-amber-500/20 shrink-0 relative group-hover:scale-105 transition-transform mx-auto">
+                    <IconComponent name={activeTxData.category.icon} size={18} className="stroke-[2]" />
+                    <div className="absolute -bottom-1 -right-1 bg-white text-amber-600 rounded-full p-0.5 border border-slate-200 shadow-xs">
+                      <ChevronDown size={8} className="stroke-[3]" />
+                    </div>
                   </div>
-                </div>
-                <span className="mt-1 font-bold text-slate-800 text-[10px] sm:text-[11px] text-center leading-tight truncate w-full px-0.5 flex items-center justify-center gap-0.5">
-                  {formatCategoryDisplayName(activeTxData.category.name)}
-                </span>
-                <span className="text-[8.5px] text-slate-400 font-bold mt-0.5 whitespace-nowrap truncate max-w-full uppercase tracking-wider">
-                  {activeTxData.category.type === 'income' ? 'Пополнение' : 'Расход'}
-                </span>
-              </button>
+                  <span className="mt-1 font-bold text-slate-800 text-[10px] sm:text-[11px] text-center leading-tight truncate w-full px-0.5 flex items-center justify-center gap-0.5">
+                    {formatCategoryDisplayName(activeTxData.category.name)}
+                  </span>
+                  <span className="text-[8.5px] text-slate-400 font-bold mt-0.5 whitespace-nowrap truncate max-w-full uppercase tracking-wider">
+                    {activeTxData.category.type === 'income' ? 'Пополнение' : 'Расход'}
+                  </span>
+                </button>
+              </div>
             </div>
 
             {accountSelectorTarget === 'tx_acc' ? (
@@ -1400,67 +1399,66 @@ export function QuickDragDropBuilder({
             </div>
 
             {/* Visual connector of accounts */}
-            <div className="flex items-center justify-between relative mt-1 px-1">
+            <div className="relative mt-1 px-1">
               {/* Connector line behind */}
-              <div className="absolute left-1/2 top-5.5 -translate-y-1/2 w-[55%] -translate-x-1/2 h-[1px] bg-slate-100 z-0" />
+              <div className="absolute left-1/2 top-[26px] -translate-y-1/2 w-[55%] -translate-x-1/2 h-[1px] bg-slate-200 z-0" />
               
               {/* Connector pill */}
-              <div className="absolute left-1/2 top-5.5 -translate-y-1/2 -translate-x-1/2 px-2 py-0.5 bg-white border border-slate-200 rounded-full text-[8px] font-black uppercase tracking-widest text-slate-500 z-10 select-none shadow-xs whitespace-nowrap">
+              <div className="absolute left-1/2 top-[26px] -translate-y-1/2 -translate-x-1/2 px-2.5 py-0.5 bg-white border border-slate-200 rounded-full text-[8.5px] font-black uppercase tracking-widest text-[#475569] z-10 select-none shadow-xs whitespace-nowrap">
                 ПЕРЕВЕСТИ
               </div>
 
-              {/* Source Account Bubble (fromAccount) (Interactive) */}
-              <button
-                type="button"
-                onClick={() => setAccountSelectorTarget(prev => prev === 'tf_from' ? null : 'tf_from')}
-                className={`flex flex-col items-center flex-1 z-10 min-w-0 p-1 rounded-2xl transition-all cursor-pointer active:scale-95 group ${
-                  accountSelectorTarget === 'tf_from'
-                    ? 'bg-indigo-50 ring-2 ring-indigo-500/30'
-                    : 'hover:bg-slate-50'
-                }`}
-                title="Сменить счет списания"
-              >
-                <div className="w-11 h-11 rounded-full bg-indigo-500 text-white flex items-center justify-center shadow-md shadow-indigo-500/20 shrink-0 relative group-hover:scale-105 transition-transform">
-                  <CreditCard size={18} className="stroke-[2]" />
-                  <div className="absolute -bottom-1 -right-1 bg-white text-indigo-600 rounded-full p-0.5 border border-slate-200 shadow-xs">
-                    <ChevronDown size={8} className="stroke-[3]" />
+              <div className="grid grid-cols-2 gap-8 relative z-10 w-full">
+                {/* Source Account Bubble (fromAccount) (Interactive) */}
+                <button
+                  type="button"
+                  onClick={() => setAccountSelectorTarget(prev => prev === 'tf_from' ? null : 'tf_from')}
+                  className={`flex flex-col items-center min-w-0 p-1 rounded-2xl transition-all cursor-pointer active:scale-95 group ${
+                    accountSelectorTarget === 'tf_from'
+                      ? 'bg-indigo-50 ring-2 ring-indigo-500/30'
+                      : 'hover:bg-slate-50'
+                  }`}
+                  title="Сменить счет списания"
+                >
+                  <div className="w-11 h-11 rounded-full bg-indigo-500 text-white flex items-center justify-center shadow-md shadow-indigo-500/20 shrink-0 relative group-hover:scale-105 transition-transform mx-auto">
+                    <CreditCard size={18} className="stroke-[2]" />
+                    <div className="absolute -bottom-1 -right-1 bg-white text-indigo-600 rounded-full p-0.5 border border-slate-200 shadow-xs">
+                      <ChevronDown size={8} className="stroke-[3]" />
+                    </div>
                   </div>
-                </div>
-                <span className="mt-1 font-bold text-slate-800 text-[10px] sm:text-[11px] text-center leading-tight truncate w-full px-0.5 flex items-center justify-center gap-0.5">
-                  {activeTransferData.fromAccount.name}
-                </span>
-                <span className="text-[8.5px] text-slate-455 font-bold font-mono mt-0.5 whitespace-nowrap text-slate-500">
-                  {Math.round(activeTransferData.fromAccount.balance).toLocaleString('ru-RU')} ₼
-                </span>
-              </button>
+                  <span className="mt-1 font-bold text-slate-800 text-[10px] sm:text-[11px] text-center leading-tight truncate w-full px-0.5 flex items-center justify-center gap-0.5">
+                    {activeTransferData.fromAccount.name}
+                  </span>
+                  <span className="text-[8.5px] text-[#475569] font-bold font-mono mt-0.5 whitespace-nowrap">
+                    {Math.round(activeTransferData.fromAccount.balance).toLocaleString('ru-RU')} ₼
+                  </span>
+                </button>
 
-              {/* Space in between */}
-              <div className="w-8 shrink-0 h-4" />
-
-              {/* Destination Account Bubble (toAccount) (Interactive) */}
-              <button
-                type="button"
-                onClick={() => setAccountSelectorTarget(prev => prev === 'tf_to' ? null : 'tf_to')}
-                className={`flex flex-col items-center flex-1 z-10 min-w-0 p-1 rounded-2xl transition-all cursor-pointer active:scale-95 group ${
-                  accountSelectorTarget === 'tf_to'
-                    ? 'bg-emerald-50 ring-2 ring-emerald-500/30'
-                    : 'hover:bg-slate-50'
-                }`}
-                title="Сменить счет зачисления"
-              >
-                <div className="w-11 h-11 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-md shadow-emerald-500/20 shrink-0 relative group-hover:scale-105 transition-transform">
-                  <CreditCard size={18} className="stroke-[2]" />
-                  <div className="absolute -bottom-1 -right-1 bg-white text-emerald-600 rounded-full p-0.5 border border-slate-200 shadow-xs">
-                    <ChevronDown size={8} className="stroke-[3]" />
+                {/* Destination Account Bubble (toAccount) (Interactive) */}
+                <button
+                  type="button"
+                  onClick={() => setAccountSelectorTarget(prev => prev === 'tf_to' ? null : 'tf_to')}
+                  className={`flex flex-col items-center min-w-0 p-1 rounded-2xl transition-all cursor-pointer active:scale-95 group ${
+                    accountSelectorTarget === 'tf_to'
+                      ? 'bg-emerald-50 ring-2 ring-emerald-500/30'
+                      : 'hover:bg-slate-50'
+                  }`}
+                  title="Сменить счет зачисления"
+                >
+                  <div className="w-11 h-11 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-md shadow-emerald-500/20 shrink-0 relative group-hover:scale-105 transition-transform mx-auto">
+                    <CreditCard size={18} className="stroke-[2]" />
+                    <div className="absolute -bottom-1 -right-1 bg-white text-emerald-600 rounded-full p-0.5 border border-slate-200 shadow-xs">
+                      <ChevronDown size={8} className="stroke-[3]" />
+                    </div>
                   </div>
-                </div>
-                <span className="mt-1 font-bold text-slate-800 text-[10px] sm:text-[11px] text-center leading-tight truncate w-full px-0.5 flex items-center justify-center gap-0.5">
-                  {activeTransferData.toAccount.name}
-                </span>
-                <span className="text-[8.5px] text-slate-455 font-bold font-mono mt-0.5 whitespace-nowrap text-slate-500">
-                  {Math.round(activeTransferData.toAccount.balance).toLocaleString('ru-RU')} ₼
-                </span>
-              </button>
+                  <span className="mt-1 font-bold text-slate-800 text-[10px] sm:text-[11px] text-center leading-tight truncate w-full px-0.5 flex items-center justify-center gap-0.5">
+                    {activeTransferData.toAccount.name}
+                  </span>
+                  <span className="text-[8.5px] text-[#475569] font-bold font-mono mt-0.5 whitespace-nowrap">
+                    {Math.round(activeTransferData.toAccount.balance).toLocaleString('ru-RU')} ₼
+                  </span>
+                </button>
+              </div>
             </div>
 
             {accountSelectorTarget && (accountSelectorTarget === 'tf_from' || accountSelectorTarget === 'tf_to') ? (
