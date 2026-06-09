@@ -1164,14 +1164,15 @@ export function QuickDragDropBuilder({
       {/* THE QUICK TRANSACTION RECORDING MODAL */}
       {activeTxData && (
         <div 
-          className="fixed inset-0 bg-slate-950/80 backdrop-blur-xs z-[10000] flex items-center justify-center p-2 xs:p-4 overflow-y-auto font-sans"
+          className="fixed inset-0 bg-slate-950/80 backdrop-blur-xs z-[10000] overflow-y-auto font-sans p-4"
           id="quick-transaction-modal"
           onClick={() => { setActiveTxData(null); setAccountSelectorTarget(null); }}
         >
-          <div 
-            className="w-full max-w-[340px] bg-white text-slate-900 rounded-3xl p-4 sm:p-5 shadow-2xl border border-slate-100 relative animate-scale-up my-auto flex flex-col gap-3.5 select-none"
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div className="flex items-center justify-center min-h-full w-full pointer-events-none">
+            <div 
+              className="w-full max-w-[340px] bg-white text-slate-900 rounded-3xl p-4 sm:p-5 shadow-2xl border border-slate-100 relative animate-scale-up flex flex-col gap-3.5 select-none pointer-events-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
             {/* Header */}
             <div className="flex items-center justify-between relative">
               <div className="w-full text-center">
@@ -1370,19 +1371,21 @@ export function QuickDragDropBuilder({
             )}
           </div>
         </div>
+      </div>
       )}
 
       {/* THE QUICK TRANSFER RECORDING MODAL */}
       {activeTransferData && (
         <div 
-          className="fixed inset-0 bg-slate-950/80 backdrop-blur-xs z-[10000] flex items-center justify-center p-2 xs:p-4 overflow-y-auto font-sans"
+          className="fixed inset-0 bg-slate-950/80 backdrop-blur-xs z-[10000] overflow-y-auto font-sans p-4"
           id="quick-transfer-modal"
           onClick={() => { setActiveTransferData(null); setAccountSelectorTarget(null); }}
         >
-          <div 
-            className="w-full max-w-[340px] bg-white text-slate-900 rounded-3xl p-4 sm:p-5 shadow-2xl border border-slate-100 relative animate-scale-up my-auto flex flex-col gap-3.5 select-none"
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div className="flex items-center justify-center min-h-full w-full pointer-events-none">
+            <div 
+              className="w-full max-w-[340px] bg-white text-slate-900 rounded-3xl p-4 sm:p-5 shadow-2xl border border-slate-100 relative animate-scale-up flex flex-col gap-3.5 select-none pointer-events-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
             {/* Header */}
             <div className="flex items-center justify-between relative">
               <div className="w-full text-center">
@@ -1576,6 +1579,7 @@ export function QuickDragDropBuilder({
             )}
           </div>
         </div>
+      </div>
       )}
     </div>
   );
