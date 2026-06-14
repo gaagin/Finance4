@@ -1170,7 +1170,7 @@ export function QuickDragDropBuilder({
         >
           <div className="flex items-center justify-center min-h-screen w-full p-4 pointer-events-none">
             <div 
-              className="w-full max-w-[500px] bg-white text-slate-900 rounded-3xl p-5 sm:p-6 shadow-2xl border border-slate-100 relative animate-scale-up flex flex-col gap-4 select-none pointer-events-auto"
+              className="w-full max-w-[420px] max-h-[calc(100dvh-2rem)] overflow-y-auto bg-white text-slate-900 rounded-3xl p-4 sm:p-5 shadow-2xl border border-slate-100 relative animate-scale-up flex flex-col gap-3 select-none pointer-events-auto"
               onClick={(e) => e.stopPropagation()}
             >
             {/* Header */}
@@ -1182,23 +1182,23 @@ export function QuickDragDropBuilder({
               </div>
               <button
                 onClick={() => { setActiveTxData(null); setAccountSelectorTarget(null); }}
-                className="absolute right-0 top-1/2 -translate-y-1/2 bg-slate-100 hover:bg-slate-200 text-slate-400 hover:text-slate-600 p-1.5 rounded-full transition-colors cursor-pointer"
+                className="absolute right-0 top-1/2 -translate-y-1/2 bg-slate-100 hover:bg-slate-200 text-slate-400 hover:text-slate-600 p-1 rounded-full transition-colors cursor-pointer"
               >
-                <X size={12} className="stroke-[2.5]" />
+                <X size={11} className="stroke-[2.5]" />
               </button>
             </div>
-
+ 
             {/* Visual connector of accounts and categories */}
-            <div className="relative mt-1 px-1">
+            <div className="relative px-1">
               {/* Connector line behind */}
-              <div className="absolute left-1/2 top-[26px] -translate-y-1/2 w-[55%] -translate-x-1/2 h-[1px] bg-slate-200 z-0" />
+              <div className="absolute left-1/2 top-[22px] -translate-y-1/2 w-[55%] -translate-x-1/2 h-[1px] bg-slate-200 z-0" />
               
               {/* Connector pill */}
-              <div className="absolute left-1/2 top-[26px] -translate-y-1/2 -translate-x-1/2 px-2.5 py-0.5 bg-white border border-slate-200 rounded-full text-[8.5px] font-black uppercase tracking-widest text-[#475569] z-10 select-none shadow-xs whitespace-nowrap">
+              <div className="absolute left-1/2 top-[22px] -translate-y-1/2 -translate-x-1/2 px-2 py-0.5 bg-white border border-slate-200 rounded-full text-[8px] font-black uppercase tracking-widest text-[#475569] z-10 select-none shadow-xs whitespace-nowrap">
                 {activeTxData.category.type === 'income' ? 'ПОЛУЧИТЬ' : 'ПОТРАТИТЬ'}
               </div>
-
-              <div className="grid grid-cols-2 gap-8 relative z-10 w-full">
+ 
+              <div className="grid grid-cols-2 gap-4 relative z-10 w-full">
                 {/* Source Account Bubble (Interactive) */}
                 <button
                   type="button"
@@ -1210,20 +1210,20 @@ export function QuickDragDropBuilder({
                   }`}
                   title="Сменить счет"
                 >
-                  <div className="w-11 h-11 rounded-full bg-indigo-500 text-white flex items-center justify-center shadow-md shadow-indigo-500/20 shrink-0 relative group-hover:scale-105 transition-transform mx-auto">
-                    <CreditCard size={18} className="stroke-[2]" />
+                  <div className="w-10 h-10 rounded-full bg-indigo-500 text-white flex items-center justify-center shadow-md shadow-indigo-500/20 shrink-0 relative group-hover:scale-105 transition-transform mx-auto">
+                    <CreditCard size={16} className="stroke-[2]" />
                     <div className="absolute -bottom-1 -right-1 bg-white text-indigo-600 rounded-full p-0.5 border border-slate-200 shadow-xs">
                       <ChevronDown size={8} className="stroke-[3]" />
                     </div>
                   </div>
-                  <span className="mt-1 font-bold text-slate-800 text-[10px] sm:text-[11px] text-center leading-tight truncate w-full px-0.5 flex items-center justify-center gap-0.5">
+                  <span className="mt-1 font-bold text-slate-800 text-[9.5px] sm:text-[10.5px] text-center leading-tight truncate w-full px-0.5 flex items-center justify-center gap-0.5">
                     {activeTxData.account.name}
                   </span>
-                  <span className="text-[8.5px] text-[#475569] font-bold font-mono mt-0.5 whitespace-nowrap">
+                  <span className="text-[8px] text-[#475569] font-bold font-mono mt-0.5 whitespace-nowrap">
                     {Math.round(activeTxData.account.balance).toLocaleString('ru-RU')} ₼
                   </span>
                 </button>
-
+ 
                 {/* Destination Category Bubble (Interactive) */}
                 <button
                   type="button"
@@ -1235,22 +1235,22 @@ export function QuickDragDropBuilder({
                   }`}
                   title="Сменить категорию"
                 >
-                  <div className="w-11 h-11 rounded-full bg-amber-500 text-white flex items-center justify-center shadow-md shadow-amber-500/20 shrink-0 relative group-hover:scale-105 transition-transform mx-auto">
-                    <IconComponent name={activeTxData.category.icon} size={18} className="stroke-[2]" />
+                  <div className="w-10 h-10 rounded-full bg-amber-500 text-white flex items-center justify-center shadow-md shadow-amber-500/20 shrink-0 relative group-hover:scale-105 transition-transform mx-auto">
+                    <IconComponent name={activeTxData.category.icon} size={16} className="stroke-[2]" />
                     <div className="absolute -bottom-1 -right-1 bg-white text-amber-600 rounded-full p-0.5 border border-slate-200 shadow-xs">
                       <ChevronDown size={8} className="stroke-[3]" />
                     </div>
                   </div>
-                  <span className="mt-1 font-bold text-slate-800 text-[10px] sm:text-[11px] text-center leading-tight truncate w-full px-0.5 flex items-center justify-center gap-0.5">
+                  <span className="mt-1 font-bold text-slate-800 text-[9.5px] sm:text-[10.5px] text-center leading-tight truncate w-full px-0.5 flex items-center justify-center gap-0.5">
                     {formatCategoryDisplayName(activeTxData.category.name)}
                   </span>
-                  <span className="text-[8.5px] text-slate-400 font-bold mt-0.5 whitespace-nowrap truncate max-w-full uppercase tracking-wider">
+                  <span className="text-[8px] text-slate-400 font-bold mt-0.5 whitespace-nowrap truncate max-w-full uppercase tracking-wider">
                     {activeTxData.category.type === 'income' ? 'Пополнение' : 'Расход'}
                   </span>
                 </button>
               </div>
             </div>
-
+ 
             {accountSelectorTarget === 'tx_acc' ? (
               renderAccountSelector(
                 'tx_acc',
@@ -1272,12 +1272,12 @@ export function QuickDragDropBuilder({
             ) : (
               <>
                 {/* Input container: СУММА ТРАНЗАКЦИИ */}
-                <div className="bg-[#f8fafc] rounded-xl py-2 px-3 border border-[#f1f5f9] flex flex-col mt-0.5">
-                  <label className="text-[8px] font-black text-slate-400 uppercase tracking-wider text-right mb-0.5 select-none self-end">
+                <div className="bg-[#f8fafc] rounded-xl py-1.5 px-3 border border-[#f1f5f9] flex flex-col">
+                  <label className="text-[7.5px] font-black text-slate-400 uppercase tracking-wider text-right mb-0.5 select-none self-end">
                     СУММА ТРАНЗАКЦИИ
                   </label>
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="text-2xl font-display font-light text-[#94a3b8] select-none">
+                  <div className="flex items-center justify-between gap-1.5">
+                    <span className="text-xl sm:text-2xl font-display font-light text-[#94a3b8] select-none">
                       ₼
                     </span>
                     <div className="flex-1 text-right min-w-0 relative">
@@ -1290,14 +1290,14 @@ export function QuickDragDropBuilder({
                           const val = e.target.value.replace(/[^0-9.]/g, '');
                           setAmount(val === '' ? '0' : val);
                         }}
-                        className="w-full bg-transparent border-none p-0 text-right font-display font-black text-emerald-600 text-2xl sm:text-3xl focus:outline-hidden focus:ring-0 placeholder-emerald-600/30"
+                        className="w-full bg-transparent border-none p-0 text-right font-display font-black text-emerald-600 text-xl sm:text-2xl focus:outline-hidden focus:ring-0 placeholder-emerald-600/30"
                       />
                     </div>
                   </div>
                 </div>
-
+ 
                 {/* Custom Keypad dialer */}
-                <div className="grid grid-cols-3 gap-1.5 my-1">
+                <div className="grid grid-cols-3 gap-1 my-0.5">
                   {['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0', 'Стереть'].map((keyVal) => {
                     const isErase = keyVal === 'Стереть';
                     return (
@@ -1305,10 +1305,10 @@ export function QuickDragDropBuilder({
                         key={keyVal}
                         type="button"
                         onClick={() => handleDialClick(keyVal)}
-                        className={`h-10 sm:h-11 font-sans font-black text-sm sm:text-base rounded-xl flex items-center justify-center transition-all cursor-pointer select-none border-2 active:scale-95 active:translate-y-[1.5px] active:shadow-none ${
+                        className={`h-9 sm:h-10 font-sans font-black text-sm rounded-xl flex items-center justify-center transition-all cursor-pointer select-none border-2 active:scale-95 active:translate-y-[1.5px] active:shadow-none ${
                           isErase 
-                            ? 'bg-rose-50 border-rose-200 hover:bg-rose-100/90 hover:border-rose-300 text-rose-600 shadow-[0_2.5px_0_rgba(244,63,94,0.18)] text-[11px]' 
-                            : 'bg-white border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-800 shadow-[0_2.5px_0_rgba(148,163,184,0.18)] text-base'
+                            ? 'bg-rose-50 border-rose-200 hover:bg-rose-100/90 hover:border-rose-300 text-rose-600 shadow-[0_2px_0_rgba(244,63,94,0.15)] text-[10.5px]' 
+                            : 'bg-white border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-800 shadow-[0_2px_0_rgba(148,163,184,0.15)] text-sm sm:text-base'
                         }`}
                       >
                         {isErase ? '⌫ Стер.' : keyVal}
@@ -1316,25 +1316,25 @@ export function QuickDragDropBuilder({
                     );
                   })}
                 </div>
-
+ 
                 {/* Date Input with Calendar icon & Optional Comment Input with Document icon */}
-                <div className="grid grid-cols-2 gap-2 border-t border-slate-100 pt-2">
-                  <div className="space-y-1 text-left">
-                    <label className="flex items-center gap-1.5 text-[#64748b] text-[8.5px] font-black uppercase tracking-wider">
-                      <span className="text-[10px] shrink-0">📅</span>
+                <div className="grid grid-cols-2 gap-2 border-t border-slate-100 pt-1.5">
+                  <div className="space-y-0.5 text-left">
+                    <label className="flex items-center gap-1 text-[#64748b] text-[8px] sm:text-[8.5px] font-black uppercase tracking-wider">
+                      <span className="text-[9px] sm:text-[10px] shrink-0">📅</span>
                       <span>ДАТА ОПЕРАЦИИ</span>
                     </label>
                     <input
                       type="date"
                       value={date}
                       onChange={(e) => setDate(e.target.value)}
-                      className="w-full px-2.5 py-1.5 bg-[#f8fafc] border border-[#f1f5f9] hover:border-[#e2e8f0] rounded-lg text-[10px] text-slate-700 font-sans font-semibold focus:outline-hidden focus:ring-1 focus:ring-slate-300 focus:bg-white transition-all"
+                      className="w-full px-2 py-1 bg-[#f8fafc] border border-[#f1f5f9] hover:border-[#e2e8f0] rounded-lg text-[9px] sm:text-[10px] text-slate-700 font-sans font-semibold focus:outline-hidden focus:ring-1 focus:ring-slate-300 focus:bg-white transition-all"
                     />
                   </div>
-
-                  <div className="space-y-1 text-left">
-                    <label className="flex items-center gap-1.5 text-[#64748b] text-[8.5px] font-black uppercase tracking-wider">
-                      <FileText size={10} className="text-[#94a3b8] shrink-0" />
+ 
+                  <div className="space-y-0.5 text-left">
+                    <label className="flex items-center gap-1 text-[#64748b] text-[8px] sm:text-[8.5px] font-black uppercase tracking-wider">
+                      <FileText size={9} className="text-[#94a3b8] shrink-0" />
                       <span>КОММЕНТАРИЙ</span>
                     </label>
                     <input
@@ -1342,38 +1342,38 @@ export function QuickDragDropBuilder({
                       placeholder="Комментарий..."
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
-                      className="w-full px-2.5 py-1.5 bg-[#f8fafc] border border-[#f1f5f9] hover:border-[#e2e8f0] rounded-lg text-[10px] text-slate-700 placeholder-slate-400 focus:outline-hidden focus:ring-1 focus:ring-slate-300 focus:bg-white transition-all font-sans"
+                      className="w-full px-2 py-1 bg-[#f8fafc] border border-[#f1f5f9] hover:border-[#e2e8f0] rounded-lg text-[9px] sm:text-[10px] text-slate-700 placeholder-slate-400 focus:outline-hidden focus:ring-1 focus:ring-slate-300 focus:bg-white transition-all font-sans"
                     />
                   </div>
                 </div>
-
+ 
                 {/* Form Bottom Actions */}
-                <div className="flex gap-2.5 pt-0.5">
+                <div className="flex gap-2 pt-1">
                   <button
                     type="button"
                     onClick={() => {
                       setAmount('0');
                       setDescription('');
                     }}
-                    className="flex-1 py-2 bg-[#f1f5f9] hover:bg-[#e2e8f0] text-[#475569] font-sans font-semibold text-[10.5px] uppercase tracking-wider rounded-xl cursor-pointer transition-all active:scale-[0.97] text-center"
+                    className="flex-1 py-1.5 sm:py-2 bg-[#f1f5f9] hover:bg-[#e2e8f0] text-[#475569] font-sans font-semibold text-[10px] sm:text-[10.5px] uppercase tracking-wider rounded-xl cursor-pointer transition-all active:scale-[0.97] text-center"
                   >
                     Очистить
                   </button>
                   <button
                     type="button"
                     onClick={() => handleSaveTransaction()}
-                    className="flex-1 py-2 bg-[#f1f5f9] hover:bg-[#e2e8f0] text-[#475569] font-sans font-extrabold text-[10.5px] uppercase tracking-wider rounded-xl cursor-pointer transition-all active:scale-[0.97] text-center"
+                    className="flex-1 py-1.5 sm:py-2 bg-[#f1f5f9] hover:bg-[#e2e8f0] text-[#475569] font-sans font-extrabold text-[10px] sm:text-[10.5px] uppercase tracking-wider rounded-xl cursor-pointer transition-all active:scale-[0.97] text-center"
                   >
                     ✓ Сохранить
                   </button>
                 </div>
               </>
             )}
+            </div>
           </div>
         </div>
-      </div>
       )}
-
+ 
       {/* THE QUICK TRANSFER RECORDING MODAL */}
       {activeTransferData && (
         <div 
@@ -1383,7 +1383,7 @@ export function QuickDragDropBuilder({
         >
           <div className="flex items-center justify-center min-h-screen w-full p-4 pointer-events-none">
             <div 
-              className="w-full max-w-[500px] bg-white text-slate-900 rounded-3xl p-5 sm:p-6 shadow-2xl border border-slate-100 relative animate-scale-up flex flex-col gap-4 select-none pointer-events-auto"
+              className="w-full max-w-[420px] max-h-[calc(100dvh-2rem)] overflow-y-auto bg-white text-slate-900 rounded-3xl p-4 sm:p-5 shadow-2xl border border-slate-100 relative animate-scale-up flex flex-col gap-3 select-none pointer-events-auto"
               onClick={(e) => e.stopPropagation()}
             >
             {/* Header */}
@@ -1395,23 +1395,23 @@ export function QuickDragDropBuilder({
               </div>
               <button
                 onClick={() => { setActiveTransferData(null); setAccountSelectorTarget(null); }}
-                className="absolute right-0 top-1/2 -translate-y-1/2 bg-slate-100 hover:bg-slate-200 text-slate-400 hover:text-slate-600 p-1.5 rounded-full transition-colors cursor-pointer"
+                className="absolute right-0 top-1/2 -translate-y-1/2 bg-slate-100 hover:bg-slate-200 text-slate-400 hover:text-slate-600 p-1 rounded-full transition-colors cursor-pointer"
               >
-                <X size={12} className="stroke-[2.5]" />
+                <X size={11} className="stroke-[2.5]" />
               </button>
             </div>
-
+ 
             {/* Visual connector of accounts */}
-            <div className="relative mt-1 px-1">
+            <div className="relative px-1">
               {/* Connector line behind */}
-              <div className="absolute left-1/2 top-[26px] -translate-y-1/2 w-[55%] -translate-x-1/2 h-[1px] bg-slate-200 z-0" />
+              <div className="absolute left-1/2 top-[22px] -translate-y-1/2 w-[55%] -translate-x-1/2 h-[1px] bg-slate-200 z-0" />
               
               {/* Connector pill */}
-              <div className="absolute left-1/2 top-[26px] -translate-y-1/2 -translate-x-1/2 px-2.5 py-0.5 bg-white border border-slate-200 rounded-full text-[8.5px] font-black uppercase tracking-widest text-[#475569] z-10 select-none shadow-xs whitespace-nowrap">
+              <div className="absolute left-1/2 top-[22px] -translate-y-1/2 -translate-x-1/2 px-2 py-0.5 bg-white border border-slate-200 rounded-full text-[8px] font-black uppercase tracking-widest text-[#475569] z-10 select-none shadow-xs whitespace-nowrap">
                 ПЕРЕВЕСТИ
               </div>
-
-              <div className="grid grid-cols-2 gap-8 relative z-10 w-full">
+ 
+              <div className="grid grid-cols-2 gap-4 relative z-10 w-full">
                 {/* Source Account Bubble (fromAccount) (Interactive) */}
                 <button
                   type="button"
@@ -1423,20 +1423,20 @@ export function QuickDragDropBuilder({
                   }`}
                   title="Сменить счет списания"
                 >
-                  <div className="w-11 h-11 rounded-full bg-indigo-500 text-white flex items-center justify-center shadow-md shadow-indigo-500/20 shrink-0 relative group-hover:scale-105 transition-transform mx-auto">
-                    <CreditCard size={18} className="stroke-[2]" />
+                  <div className="w-10 h-10 rounded-full bg-indigo-500 text-white flex items-center justify-center shadow-md shadow-indigo-500/20 shrink-0 relative group-hover:scale-105 transition-transform mx-auto">
+                    <CreditCard size={16} className="stroke-[2]" />
                     <div className="absolute -bottom-1 -right-1 bg-white text-indigo-600 rounded-full p-0.5 border border-slate-200 shadow-xs">
                       <ChevronDown size={8} className="stroke-[3]" />
                     </div>
                   </div>
-                  <span className="mt-1 font-bold text-slate-800 text-[10px] sm:text-[11px] text-center leading-tight truncate w-full px-0.5 flex items-center justify-center gap-0.5">
+                  <span className="mt-1 font-bold text-slate-800 text-[9.5px] sm:text-[10.5px] text-center leading-tight truncate w-full px-0.5 flex items-center justify-center gap-0.5">
                     {activeTransferData.fromAccount.name}
                   </span>
-                  <span className="text-[8.5px] text-[#475569] font-bold font-mono mt-0.5 whitespace-nowrap">
+                  <span className="text-[8px] text-[#475569] font-bold font-mono mt-0.5 whitespace-nowrap">
                     {Math.round(activeTransferData.fromAccount.balance).toLocaleString('ru-RU')} ₼
                   </span>
                 </button>
-
+ 
                 {/* Destination Account Bubble (toAccount) (Interactive) */}
                 <button
                   type="button"
@@ -1448,22 +1448,22 @@ export function QuickDragDropBuilder({
                   }`}
                   title="Сменить счет зачисления"
                 >
-                  <div className="w-11 h-11 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-md shadow-emerald-500/20 shrink-0 relative group-hover:scale-105 transition-transform mx-auto">
-                    <CreditCard size={18} className="stroke-[2]" />
+                  <div className="w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-md shadow-emerald-500/20 shrink-0 relative group-hover:scale-105 transition-transform mx-auto">
+                    <CreditCard size={16} className="stroke-[2]" />
                     <div className="absolute -bottom-1 -right-1 bg-white text-emerald-600 rounded-full p-0.5 border border-slate-200 shadow-xs">
                       <ChevronDown size={8} className="stroke-[3]" />
                     </div>
                   </div>
-                  <span className="mt-1 font-bold text-slate-800 text-[10px] sm:text-[11px] text-center leading-tight truncate w-full px-0.5 flex items-center justify-center gap-0.5">
+                  <span className="mt-1 font-bold text-slate-800 text-[9.5px] sm:text-[10.5px] text-center leading-tight truncate w-full px-0.5 flex items-center justify-center gap-0.5">
                     {activeTransferData.toAccount.name}
                   </span>
-                  <span className="text-[8.5px] text-[#475569] font-bold font-mono mt-0.5 whitespace-nowrap">
+                  <span className="text-[8px] text-[#475569] font-bold font-mono mt-0.5 whitespace-nowrap">
                     {Math.round(activeTransferData.toAccount.balance).toLocaleString('ru-RU')} ₼
                   </span>
                 </button>
               </div>
             </div>
-
+ 
             {accountSelectorTarget && (accountSelectorTarget === 'tf_from' || accountSelectorTarget === 'tf_to') ? (
               renderAccountSelector(
                 accountSelectorTarget,
@@ -1480,12 +1480,12 @@ export function QuickDragDropBuilder({
             ) : (
               <>
                 {/* Input container: СУММА ТРАНЗАКЦИИ */}
-                <div className="bg-[#f8fafc] rounded-xl py-2 px-3 border border-[#f1f5f9] flex flex-col mt-0.5">
-                  <label className="text-[8px] font-black text-slate-400 uppercase tracking-wider text-right mb-0.5 select-none self-end">
+                <div className="bg-[#f8fafc] rounded-xl py-1.5 px-3 border border-[#f1f5f9] flex flex-col">
+                  <label className="text-[7.5px] font-black text-slate-400 uppercase tracking-wider text-right mb-0.5 select-none self-end">
                     СУММА ТРАНЗАКЦИИ
                   </label>
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="text-2xl font-display font-light text-[#94a3b8] select-none">
+                  <div className="flex items-center justify-between gap-1.5">
+                    <span className="text-xl sm:text-2xl font-display font-light text-[#94a3b8] select-none">
                       ₼
                     </span>
                     <div className="flex-1 text-right min-w-0 relative">
@@ -1498,14 +1498,14 @@ export function QuickDragDropBuilder({
                           const val = e.target.value.replace(/[^0-9.]/g, '');
                           setAmount(val === '' ? '0' : val);
                         }}
-                        className="w-full bg-transparent border-none p-0 text-right font-display font-black text-indigo-600 text-2xl sm:text-3xl focus:outline-hidden focus:ring-0 placeholder-indigo-600/30"
+                        className="w-full bg-transparent border-none p-0 text-right font-display font-black text-indigo-600 text-xl sm:text-2xl focus:outline-hidden focus:ring-0 placeholder-indigo-600/30"
                       />
                     </div>
                   </div>
                 </div>
-
+ 
                 {/* Custom Keypad dialer */}
-                <div className="grid grid-cols-3 gap-1.5 my-1">
+                <div className="grid grid-cols-3 gap-1 my-0.5">
                   {['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0', 'Стереть'].map((keyVal) => {
                     const isErase = keyVal === 'Стереть';
                     return (
@@ -1513,10 +1513,10 @@ export function QuickDragDropBuilder({
                         key={keyVal}
                         type="button"
                         onClick={() => handleDialClick(keyVal)}
-                        className={`h-10 sm:h-11 font-sans font-black text-sm sm:text-base rounded-xl flex items-center justify-center transition-all cursor-pointer select-none border-2 active:scale-95 active:translate-y-[1.5px] active:shadow-none ${
+                        className={`h-9 sm:h-10 font-sans font-black text-sm rounded-xl flex items-center justify-center transition-all cursor-pointer select-none border-2 active:scale-95 active:translate-y-[1.5px] active:shadow-none ${
                           isErase 
-                            ? 'bg-rose-50 border-rose-200 hover:bg-rose-100/90 hover:border-rose-300 text-rose-600 shadow-[0_2.5px_0_rgba(244,63,94,0.18)] text-[11px]' 
-                            : 'bg-white border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-800 shadow-[0_2.5px_0_rgba(148,163,184,0.18)] text-base'
+                            ? 'bg-rose-50 border-rose-200 hover:bg-rose-100/90 hover:border-rose-300 text-rose-600 shadow-[0_2px_0_rgba(244,63,94,0.15)] text-[10.5px]' 
+                            : 'bg-white border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-800 shadow-[0_2px_0_rgba(148,163,184,0.15)] text-sm sm:text-base'
                         }`}
                       >
                         {isErase ? '⌫ Стер.' : keyVal}
@@ -1524,25 +1524,25 @@ export function QuickDragDropBuilder({
                     );
                   })}
                 </div>
-
+ 
                 {/* Date Input with Calendar icon & Optional Comment Input with Document icon */}
-                <div className="grid grid-cols-2 gap-2 border-t border-slate-100 pt-2">
-                  <div className="space-y-1 text-left">
-                    <label className="flex items-center gap-1.5 text-[#64748b] text-[8.5px] font-black uppercase tracking-wider">
-                      <span className="text-[10px] shrink-0">📅</span>
+                <div className="grid grid-cols-2 gap-2 border-t border-slate-100 pt-1.5">
+                  <div className="space-y-0.5 text-left">
+                    <label className="flex items-center gap-1 text-[#64748b] text-[8px] sm:text-[8.5px] font-black uppercase tracking-wider">
+                      <span className="text-[9px] sm:text-[10px] shrink-0">📅</span>
                       <span>ДАТА ПЕРЕВОДА</span>
                     </label>
                     <input
                       type="date"
                       value={date}
                       onChange={(e) => setDate(e.target.value)}
-                      className="w-full px-2.5 py-1.5 bg-[#f8fafc] border border-[#f1f5f9] hover:border-[#e2e8f0] rounded-lg text-[10px] text-slate-700 font-sans font-semibold focus:outline-hidden focus:ring-1 focus:ring-slate-300 focus:bg-white transition-all"
+                      className="w-full px-2 py-1 bg-[#f8fafc] border border-[#f1f5f9] hover:border-[#e2e8f0] rounded-lg text-[9px] sm:text-[10px] text-slate-700 font-sans font-semibold focus:outline-hidden focus:ring-1 focus:ring-slate-300 focus:bg-white transition-all"
                     />
                   </div>
-
-                  <div className="space-y-1 text-left">
-                    <label className="flex items-center gap-1.5 text-[#64748b] text-[8.5px] font-black uppercase tracking-wider">
-                      <FileText size={10} className="text-[#94a3b8] shrink-0" />
+ 
+                  <div className="space-y-0.5 text-left">
+                    <label className="flex items-center gap-1 text-[#64748b] text-[8px] sm:text-[8.5px] font-black uppercase tracking-wider">
+                      <FileText size={9} className="text-[#94a3b8] shrink-0" />
                       <span>КОММЕНТАРИЙ</span>
                     </label>
                     <input
@@ -1550,36 +1550,36 @@ export function QuickDragDropBuilder({
                       placeholder="Комментарий..."
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
-                      className="w-full px-2.5 py-1.5 bg-[#f8fafc] border border-[#f1f5f9] hover:border-[#e2e8f0] rounded-lg text-[10px] text-slate-700 placeholder-slate-400 focus:outline-hidden focus:ring-1 focus:ring-slate-300 focus:bg-white transition-all font-sans"
+                      className="w-full px-2 py-1 bg-[#f8fafc] border border-[#f1f5f9] hover:border-[#e2e8f0] rounded-lg text-[9px] sm:text-[10px] text-slate-700 placeholder-slate-400 focus:outline-hidden focus:ring-1 focus:ring-slate-300 focus:bg-white transition-all font-sans"
                     />
                   </div>
                 </div>
-
+ 
                 {/* Form Bottom Actions */}
-                <div className="flex gap-2.5 pt-0.5">
+                <div className="flex gap-2 pt-1">
                   <button
                     type="button"
                     onClick={() => {
                       setAmount('0');
                       setDescription('');
                     }}
-                    className="flex-1 py-2 bg-[#f1f5f9] hover:bg-[#e2e8f0] text-[#475569] font-sans font-semibold text-[10.5px] uppercase tracking-wider rounded-xl cursor-pointer transition-all active:scale-[0.97] text-center"
+                    className="flex-1 py-1.5 sm:py-2 bg-[#f1f5f9] hover:bg-[#e2e8f0] text-[#475569] font-sans font-semibold text-[10px] sm:text-[10.5px] uppercase tracking-wider rounded-xl cursor-pointer transition-all active:scale-[0.97] text-center"
                   >
                     Очистить
                   </button>
                   <button
                     type="button"
                     onClick={() => handleSaveTransfer()}
-                    className="flex-1 py-2 bg-[#f1f5f9] hover:bg-[#e2e8f0] text-[#475569] font-sans font-extrabold text-[10.5px] uppercase tracking-wider rounded-xl cursor-pointer transition-all active:scale-[0.97] text-center"
+                    className="flex-1 py-1.5 sm:py-2 bg-[#f1f5f9] hover:bg-[#e2e8f0] text-[#475569] font-sans font-extrabold text-[10px] sm:text-[10.5px] uppercase tracking-wider rounded-xl cursor-pointer transition-all active:scale-[0.97] text-center"
                   >
                     ✓ Сохранить
                   </button>
                 </div>
               </>
             )}
+            </div>
           </div>
         </div>
-      </div>
       )}
     </div>
   );
