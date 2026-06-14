@@ -1168,7 +1168,7 @@ export function QuickDragDropBuilder({
           id="quick-transaction-modal"
           onClick={() => { setActiveTxData(null); setAccountSelectorTarget(null); }}
         >
-          <div className="flex items-center justify-center min-h-screen w-full p-4 pointer-events-none">
+          <div className="flex items-start justify-center min-h-screen w-full p-4 pt-10 sm:pt-16 pointer-events-none">
             <div 
               className="w-full max-w-[420px] max-h-[calc(100dvh-2rem)] overflow-y-auto bg-white text-slate-900 rounded-3xl p-4 sm:p-5 shadow-2xl border border-slate-100 relative animate-scale-up flex flex-col gap-3 select-none pointer-events-auto"
               onClick={(e) => e.stopPropagation()}
@@ -1381,7 +1381,7 @@ export function QuickDragDropBuilder({
           id="quick-transfer-modal"
           onClick={() => { setActiveTransferData(null); setAccountSelectorTarget(null); }}
         >
-          <div className="flex items-center justify-center min-h-screen w-full p-4 pointer-events-none">
+          <div className="flex items-start justify-center min-h-screen w-full p-4 pt-10 sm:pt-16 pointer-events-none">
             <div 
               className="w-full max-w-[420px] max-h-[calc(100dvh-2rem)] overflow-y-auto bg-white text-slate-900 rounded-3xl p-4 sm:p-5 shadow-2xl border border-slate-100 relative animate-scale-up flex flex-col gap-3 select-none pointer-events-auto"
               onClick={(e) => e.stopPropagation()}
