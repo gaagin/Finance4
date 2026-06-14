@@ -1549,19 +1549,6 @@ export default function App() {
           >
             {theme === 'dark' ? <Sun size={12} className="text-amber-400" /> : <Moon size={12} className="text-indigo-600" />}
           </button>
-
-          <button
-            onClick={handleResetData}
-            className={`flex items-center justify-center gap-0.5 p-1 sm:px-2 py-1 border text-[9px] sm:text-[10.5px] font-semibold rounded-lg transition-all cursor-pointer ${
-              theme === 'dark'
-                ? 'border-white/10 hover:border-rose-500/50 bg-white/5 hover:bg-rose-500/10 text-slate-350 hover:text-rose-400'
-                : 'border-slate-200 hover:border-rose-500/50 bg-white hover:bg-rose-550/10 text-slate-600 hover:text-rose-600 shadow-xs'
-            }`}
-            title="Сбросить все до реального экспорта HoneyMoney"
-          >
-            <Flame size={11} className="text-rose-500" />
-            <span className="hidden sm:inline">Сбросить</span>
-          </button>
         </div>
 
       </header>

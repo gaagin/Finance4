@@ -1164,13 +1164,13 @@ export function QuickDragDropBuilder({
       {/* THE QUICK TRANSACTION RECORDING MODAL */}
       {activeTxData && (
         <div 
-          className="fixed inset-0 bg-slate-950/80 backdrop-blur-xs z-[10000] overflow-y-auto font-sans p-4"
+          className="fixed inset-0 bg-slate-950/80 backdrop-blur-xs z-[10000] overflow-y-auto font-sans"
           id="quick-transaction-modal"
           onClick={() => { setActiveTxData(null); setAccountSelectorTarget(null); }}
         >
-          <div className="flex items-center justify-center min-h-full w-full pointer-events-none">
+          <div className="flex items-center justify-center min-h-screen w-full p-4 pointer-events-none">
             <div 
-              className="w-full max-w-[340px] bg-white text-slate-900 rounded-3xl p-4 sm:p-5 shadow-2xl border border-slate-100 relative animate-scale-up flex flex-col gap-3.5 select-none pointer-events-auto"
+              className="w-full max-w-[500px] bg-white text-slate-900 rounded-3xl p-5 sm:p-6 shadow-2xl border border-slate-100 relative animate-scale-up flex flex-col gap-4 select-none pointer-events-auto"
               onClick={(e) => e.stopPropagation()}
             >
             {/* Header */}
@@ -1377,13 +1377,13 @@ export function QuickDragDropBuilder({
       {/* THE QUICK TRANSFER RECORDING MODAL */}
       {activeTransferData && (
         <div 
-          className="fixed inset-0 bg-slate-950/80 backdrop-blur-xs z-[10000] overflow-y-auto font-sans p-4"
+          className="fixed inset-0 bg-slate-950/80 backdrop-blur-xs z-[10000] overflow-y-auto font-sans"
           id="quick-transfer-modal"
           onClick={() => { setActiveTransferData(null); setAccountSelectorTarget(null); }}
         >
-          <div className="flex items-center justify-center min-h-full w-full pointer-events-none">
+          <div className="flex items-center justify-center min-h-screen w-full p-4 pointer-events-none">
             <div 
-              className="w-full max-w-[340px] bg-white text-slate-900 rounded-3xl p-4 sm:p-5 shadow-2xl border border-slate-100 relative animate-scale-up flex flex-col gap-3.5 select-none pointer-events-auto"
+              className="w-full max-w-[500px] bg-white text-slate-900 rounded-3xl p-5 sm:p-6 shadow-2xl border border-slate-100 relative animate-scale-up flex flex-col gap-4 select-none pointer-events-auto"
               onClick={(e) => e.stopPropagation()}
             >
             {/* Header */}
